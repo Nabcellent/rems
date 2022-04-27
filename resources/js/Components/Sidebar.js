@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "@inertiajs/inertia-react";
 
-//i18n
 import SidebarContent from "./SidebarContent";
 
 import logo from "../assets/images/logo.svg";

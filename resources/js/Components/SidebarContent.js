@@ -111,18 +111,12 @@ class SidebarContent extends Component {
                             <li>
                                 <Link href="/#">
                                     <i className="bx bx-home-circle" />
-                                    <span className="badge rounded-pill bg-info float-end">
-                    02
-                  </span>
+                                    <span className="badge rounded-pill bg-info float-end">02</span>
                                     <span>{("Dashboards")}</span>
                                 </Link>
                                 <ul className="sub-menu" aria-expanded="false">
-                                    <li>
-                                        <Link href="/dashboard">{("Default")}</Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/dashboard/analytics">{("Analytics")}</Link>
-                                    </li>
+                                    <li><Link href="/dashboard">{("Default")}</Link></li>
+                                    <li><Link href="/dashboard/analytics">{("Analytics")}</Link></li>
                                 </ul>
                             </li>
 
