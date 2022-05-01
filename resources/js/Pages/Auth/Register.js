@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import Button from '@/Components/Button';
 import Guest from '@/Layouts/Guest';
-import Input from '@/Components/Input';
-import Label from '@/Components/Label';
 import ValidationErrors from '@/Components/ValidationErrors';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { LoadingButton } from '@mui/lab';
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const {data, setData, post, processing, errors, reset} = useForm({
         name: '',
         email: '',
         password: '',
@@ -32,75 +30,75 @@ export default function Register() {
 
     return (
         <Guest>
-            <Head title="Register" />
+            <Head title="Register"/>
 
-            <ValidationErrors errors={errors} />
+            <ValidationErrors errors={errors}/>
 
-            <form onSubmit={submit}>
-                <div>
-                    <Label forInput="name" value="Name" />
+            <form onSubmit={submit} className={'row'}>
+                <div className={'col-12'}>
+                    <label htmlFor="name">Name</label>
 
-                    <Input
+                    <input
                         type="text"
                         name="name"
                         value={data.name}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         autoComplete="name"
-                        isFocused={true}
-                        handleChange={onHandleChange}
+                        autoFocus={true}
+                        onChange={onHandleChange}
                         required
                     />
                 </div>
 
-                <div className="mt-4">
-                    <Label forInput="email" value="Email" />
+                <div className="col-12 mt-3">
+                    <label htmlFor="email">Email</label>
 
-                    <Input
+                    <input
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         autoComplete="username"
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                         required
                     />
                 </div>
 
-                <div className="mt-4">
-                    <Label forInput="password" value="Password" />
+                <div className="col-12 col-lg-6 mt-3">
+                    <label htmlFor="password">Password</label>
 
-                    <Input
+                    <input
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         autoComplete="new-password"
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                         required
                     />
                 </div>
 
-                <div className="mt-4">
-                    <Label forInput="password_confirmation" value="Confirm Password" />
+                <div className="col-12 col-lg-6 mt-3">
+                    <label htmlFor="password_confirmation">Confirm Password</label>
 
-                    <Input
+                    <input
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        handleChange={onHandleChange}
+                        className="shadow-sm rounded-md form-control"
+                        onChange={onHandleChange}
                         required
                     />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
+                <div className="d-flex align-items-center justify-content-between mt-3">
                     <Link href={route('login')} className="underline text-sm text-gray-600 hover:text-gray-900">
                         Already registered?
                     </Link>
 
-                    <Button className="ml-4" processing={processing}>
+                    <LoadingButton size={'small'} variant={'contained'} className="ml-4" loading={processing}>
                         Register
-                    </Button>
+                    </LoadingButton>
                 </div>
             </form>
         </Guest>

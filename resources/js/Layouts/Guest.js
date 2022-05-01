@@ -1,13 +1,16 @@
 import React from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/inertia-react';
+import '../assets/css/guest.css';
+import logo from '@/assets/images/logo.svg';
+import logoDarkSvg from '@/assets/images/logo-dark.svg';
 
 export default function Guest({ children }) {
     return (
-        <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div className="min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
-                <Link href="/">
-                    <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+                <Link href="/" className="logo logo-dark">
+                    <span className="logo-sm"><img src={logo} alt="" height="37"/></span>
+                    <span className="logo-lg"><img src={logoDarkSvg} alt="" height="30"/></span>
                 </Link>
             </div>
 
