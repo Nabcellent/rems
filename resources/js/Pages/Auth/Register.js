@@ -96,7 +96,7 @@ export default function Register() {
                         Already registered?
                     </Link>
 
-                    <LoadingButton size={'small'} variant={'contained'} className="ml-4" loading={processing}>
+                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4" loading={processing}>
                         Register
                     </LoadingButton>
                 </div>

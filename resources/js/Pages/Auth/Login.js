@@ -80,7 +80,8 @@ export default function Login({status, canResetPassword}) {
                         </Link>
                     )}
 
-                    <LoadingButton size={'small'} variant={'contained'} className="ml-4" loading={processing}>
+                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4"
+                                   loading={processing}>
                         Sign in
                     </LoadingButton>
                 </div>

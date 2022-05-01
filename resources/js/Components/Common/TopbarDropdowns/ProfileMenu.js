@@ -39,7 +39,7 @@ const ProfileMenu = () => {
                     {("Lock screen")}
                 </DropdownItem>
                 <div className="dropdown-divider"/>
-                <Link href={route('logout')} method="post" className="dropdown-item">
+                <Link href={route('logout')} method="post" as={'button'} className="dropdown-item">
                     <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger"/>
                     <span>Logout</span>
                 </Link>
