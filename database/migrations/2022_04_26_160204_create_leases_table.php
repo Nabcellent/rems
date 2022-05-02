@@ -12,13 +12,13 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('leases', function(Blueprint $table) {
             $table->id();
             $table->morphs("leasable");
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
-                "Property Manager or Owner"
+                "Tenant"
             );
             $table->integer("deposit")->default(0);
             $table->integer("rent_amount");
@@ -34,7 +34,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('leases');
     }
