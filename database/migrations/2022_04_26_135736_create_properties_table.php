@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('estate_id')->constrained()->cascadeOnUpdate()->cascadeOnUpdate();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnUpdate()->comment(
-                    'Property manager'
+                    'Property Manager'
                 );
             $table->string('type', 50);
             $table->timestamps();
