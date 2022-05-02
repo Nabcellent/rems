@@ -78,4 +78,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Service::class, 'service_provider');
     }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

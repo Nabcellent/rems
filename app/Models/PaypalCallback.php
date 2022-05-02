@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Ticket extends Model
+class PaypalCallback extends Model
 {
     use HasFactory;
 
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function user(): BelongsTo
+    public function payments(): MorphMany
     {
-        return $this->belongsTo(User::class);
+        return $this->morphMany(Payment::class, 'payable');
     }
 }
