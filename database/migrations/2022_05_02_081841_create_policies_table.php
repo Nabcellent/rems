@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('policies', function(Blueprint $table) {
             $table->id();
             $table->morphs("entity"); // Estate/Property/Unit ID
-            $table->fullText("description");
+            $table->text("description")->fullText();
             $table->timestamps();
         });
     }
