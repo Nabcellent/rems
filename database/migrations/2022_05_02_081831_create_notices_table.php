@@ -11,10 +11,15 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('notices', function (Blueprint $table) {
+        Schema::create('notices', function(Blueprint $table) {
             $table->id();
+            $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
+                "Tenant ID or Owner ID"
+            );
+            $table->text("description");
+            $table->timestamp("vacate_date");
             $table->timestamps();
         });
     }
@@ -24,7 +29,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('notices');
     }

@@ -11,10 +11,12 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('policies', function (Blueprint $table) {
+        Schema::create('policies', function(Blueprint $table) {
             $table->id();
+            $table->morphs("entity"); // Estate/Property/Unit ID
+            $table->fullText("description");
             $table->timestamps();
         });
     }
@@ -24,7 +26,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('policies');
     }
