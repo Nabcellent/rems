@@ -33,4 +33,9 @@ class Property extends Model
     {
         return $this->morphMany(Image::class, 'imageable');
     }
+
+    public function policies(): MorphMany
+    {
+        return $this->morphMany(Policy::class, 'property');
+    }
 }
