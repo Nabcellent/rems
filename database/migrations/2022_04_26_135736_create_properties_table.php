@@ -13,8 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('estates', function (Blueprint $table) {
+        Schema::create('properties', function(Blueprint $table) {
             $table->id();
+            $table->foreignId('estate_id')->constrained()->cascadeOnUpdate()->cascadeOnUpdate();
+            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnUpdate()->comment(
+                    'Property manager'
+                );
+            $table->string('type', 50);
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estates');
+        Schema::dropIfExists('properties');
     }
 };
