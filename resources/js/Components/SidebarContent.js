@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { useEffect, useRef } from "react";
 
 //Simple bar
 import SimpleBar from "simplebar-react";
@@ -8,53 +8,55 @@ import SimpleBar from "simplebar-react";
 import MetisMenu from "metismenujs";
 import { Link } from "@inertiajs/inertia-react";
 
-//i18n
+function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+}
 
-class SidebarContent extends Component {
-    constructor(props) {
-        super(props);
-        this.refDiv = React.createRef();
-    }
+const Section = ({title, menu}) => {
+    return (
+        <>
+            <li className="menu-title">{title}</li>
 
-    componentDidMount() {
-        this.initMenu();
-    }
-
-    // eslint-disable-next-line no-unused-vars
-    componentDidUpdate(prevProps, prevState, ss) {
-        if (this.props.type !== prevProps.type) {
-            this.initMenu();
-        }
-    }
-
-    initMenu() {
-        new MetisMenu("#side-menu");
-
-        let matchingMenuItem = null;
-        const ul = document.getElementById("side-menu");
-        const items = ul.getElementsByTagName("a");
-
-        for (let i = 0; i < items.length; ++i) {
-            if (this.props.location?.pathname === items[i].pathname) {
-                matchingMenuItem = items[i];
-                break;
+            {
+                menu.map((item, i) => (
+                    <li key={`menu-${i}`}>
+                        <Link href={item.link} className={item.subMenu && 'has-arrow'}>
+                            {item.startIcon}<span>{item.title}</span>{item.endIcon}
+                        </Link>
+                        {
+                            item.subMenu &&
+                            <ul className="sub-menu" aria-expanded="false">
+                                {
+                                    item.subMenu.map((subMenu, i) => (
+                                        <li key={`sub-menu-${i}`}><Link href={subMenu.link}>{subMenu.title}</Link></li>
+                                    ))
+                                }
+                            </ul>
+                        }
+                    </li>
+                ))
             }
-        }
-        if (matchingMenuItem) {
-            this.activateParentDropdown(matchingMenuItem);
-        }
-    }
+        </>
+    );
+};
 
-    // componentDidUpdate() {}
+//i18n
+const SidebarContent = ({type, location}) => {
+    const refDiv = useRef();
+    const prevType = usePrevious(type);
 
-    scrollElement = item => {
+    const scrollElement = item => {
         setTimeout(() => {
-            if (this.refDiv.current !== null) {
+            if (refDiv.current !== null) {
                 if (item) {
                     const currentPosition = item.offsetTop;
                     if (currentPosition > window.innerHeight) {
-                        if (this.refDiv.current)
-                            this.refDiv.current.getScrollElement().scrollTop =
+                        if (refDiv.current)
+                            refDiv.current.getScrollElement().scrollTop =
                                 currentPosition - 300;
                     }
                 }
@@ -62,14 +64,13 @@ class SidebarContent extends Component {
         }, 300);
     };
 
-    activateParentDropdown = item => {
+    const activateParentDropdown = item => {
         item.classList.add("active");
         const parent = item.parentElement;
 
         const parent2El = parent.childNodes[1];
-        if (parent2El && parent2El.id !== "side-menu") {
-            parent2El.classList.add("mm-show");
-        }
+
+        if (parent2El && parent2El.id !== "side-menu") parent2El.classList.add("mm-show");
 
         if (parent) {
             parent.classList.add("mm-active");
@@ -83,7 +84,9 @@ class SidebarContent extends Component {
                 if (parent3) {
                     parent3.classList.add("mm-active"); // li
                     parent3.childNodes[0].classList.add("mm-active"); //a
+
                     const parent4 = parent3.parentElement; // ul
+
                     if (parent4) {
                         parent4.classList.add("mm-show"); // ul
                         const parent5 = parent4.parentElement;
@@ -94,82 +97,112 @@ class SidebarContent extends Component {
                     }
                 }
             }
-            this.scrollElement(item);
+            scrollElement(item);
             return false;
         }
-        this.scrollElement(item);
+        scrollElement(item);
         return false;
     };
 
-    render() {
-        return (
-            <React.Fragment>
-                <SimpleBar className="h-100" ref={this.refDiv}>
-                    <div id="sidebar-menu">
-                        <ul className="metismenu list-unstyled" id="side-menu">
-                            <li className="menu-title">{("Menu")}</li>
-                            <li>
-                                <Link href="/#">
-                                    <i className="bx bx-home-circle" />
-                                    <span className="badge rounded-pill bg-info float-end">02</span>
-                                    <span>{("Dashboards")}</span>
-                                </Link>
-                                <ul className="sub-menu" aria-expanded="false">
-                                    <li><Link href="/dashboard">{("Default")}</Link></li>
-                                    <li><Link href="/dashboard/analytics">{("Analytics")}</Link></li>
-                                </ul>
-                            </li>
+    const initMenu = () => {
+        new MetisMenu("#side-menu");
 
-                            <li className="menu-title">{("Apps")}</li>
+        let matchingMenuItem = null;
+        const ul = document.getElementById("side-menu");
+        const items = ul.getElementsByTagName("a");
 
-                            <li>
-                                <Link href="/calendar" className="">
-                                    <i className="bx bx-calendar" />
-                                    <span>{("Calendar")}</span>
-                                </Link>
-                            </li>
+        for (let i = 0; i < items.length; ++i) {
+            if (location?.pathname === items[i].pathname) {
+                matchingMenuItem = items[i];
+                break;
+            }
+        }
 
-                            <li>
-                                <Link href="/#" className="has-arrow">
-                                    <i className="bx bxs-user-detail" />
-                                    <span>{("Contacts")}</span>
-                                </Link>
-                                <ul className="sub-menu" aria-expanded="false">
-                                    <li><Link href="/contacts">{("User List")}</Link></li>
-                                    <li><Link href="/contacts-profile">Profile</Link></li>
-                                </ul>
-                            </li>
+        if (matchingMenuItem) activateParentDropdown(matchingMenuItem);
+    };
 
-                            <li>
-                                <Link href="/#" className="has-arrow">
-                                    <i className="bx bxs-detail" />
-                                    <span>Leases</span>
-                                </Link>
-                                <ul className="sub-menu" aria-expanded="false">
-                                    <li><Link href="/list">List</Link></li>
-                                    <li><Link href="/leases/leaseId">Details</Link></li>
-                                </ul>
-                            </li>
+    useEffect(() => {
+        initMenu();
 
-                            <li className="menu-title">System</li>
+        if (type !== prevType) initMenu();
+    }, [type]);
 
-                            <li>
-                                <Link href="/settings" className="">
-                                    <i className="bx bx-cog" />
-                                    <span>Settings</span>
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                </SimpleBar>
-            </React.Fragment>
-        );
-    }
-}
+    const sections = [
+        {
+            title: 'Menu',
+            menu: [
+                {
+                    startIcon: <i className="bx bx-home-circle"/>,
+                    title: 'Dashboard',
+                    endIcon: <span className="badge rounded-pill bg-info m-0 ms-2">02</span>,
+                    subMenu: [
+                        {link: route('dashboard'), title: 'Default'},
+                        {link: route('dashboard'), title: 'Analytics'}
+                    ]
+                }
+            ]
+        },
+        {
+            title: 'Entities',
+            menu: [
+                {
+                    startIcon: <i className="bx bxs-detail"/>, title: 'Leases', subMenu: [
+                        {link: '/leases', title: 'list'},
+                        {link: '/leases', title: 'create'}
+                    ]
+                },
+                {
+                    startIcon: <i className="bx bxs-home"/>, title: 'Units', subMenu: [
+                        {link: '/units', title: 'list'},
+                        {link: '/units', title: 'create'}
+                    ]
+                },
+                {
+                    startIcon: <i className="bx bxs-home-alt-2"/>, title: 'Estates', subMenu: [
+                        {link: '/estates', title: 'list'},
+                        {link: '/estates', title: 'create'}
+                    ]
+                },
+            ]
+        },
+        {
+            title: 'Apps',
+            menu: [
+                {startIcon: <i className="bx bx-calendar"/>, title: 'Calendar', link: '/calendar'},
+                {
+                    startIcon: <i className="bx bxs-user-detail"/>, title: 'Contacts', subMenu: [
+                        {link: '/contacts', title: 'list'},
+                        {link: '/notify', title: 'Notify'}
+                    ]
+                }
+            ]
+        },
+        {
+            title: 'System',
+            menu: [
+                {startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings'}
+            ]
+        }
+    ];
+
+    return (
+        <React.Fragment>
+            <SimpleBar className="h-100" ref={refDiv}>
+                <div id="sidebar-menu">
+                    <ul className="metismenu list-unstyled" id="side-menu">
+                        {
+                            sections.map((section, i) => <Section key={`section-${i}`} title={section.title}
+                                                                  menu={section.menu}/>)
+                        }
+                    </ul>
+                </div>
+            </SimpleBar>
+        </React.Fragment>
+    );
+};
 
 SidebarContent.propTypes = {
     location: PropTypes.object,
-    t: PropTypes.any,
     type: PropTypes.string,
 };
 

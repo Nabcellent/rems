@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Image extends Model
+class PaypalCallback extends Model
 {
     use HasFactory;
 
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function imageable(): MorphTo
+    public function payments(): MorphMany
     {
-        return $this->morphTo();
+        return $this->morphMany(Payment::class, 'payable');
     }
 }

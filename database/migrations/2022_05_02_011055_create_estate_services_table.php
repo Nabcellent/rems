@@ -11,13 +11,12 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('services', function(Blueprint $table) {
+        Schema::create('estate_services', function(Blueprint $table) {
             $table->id();
-            $table->string("name", 100);
-            $table->string("description")->nullable();
-            $table->string("icon")->nullable();
+            $table->foreignId("estate_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId("service_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,8 +26,8 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('services');
+        Schema::dropIfExists('estate_services');
     }
 };

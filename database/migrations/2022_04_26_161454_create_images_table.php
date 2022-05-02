@@ -11,10 +11,12 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
+            $table->morphs("payable"); // ESTATE ID or PROPERTY ID or UNIT ID
+            $table->string("image", 20);
             $table->timestamps();
         });
     }
@@ -24,7 +26,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('images');
     }
