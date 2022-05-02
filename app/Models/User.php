@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Estate::class);
     }
+
+    public function property(): HasMany
+    {
+        return $this->hasMany(Property::class);
+    }
 }

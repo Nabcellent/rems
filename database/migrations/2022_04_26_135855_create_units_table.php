@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('units', function(Blueprint $table) {
             $table->id();
-            $table->morphs('unitable'); // Property ID or Estate ID
+            $table->morphs('property'); // Property ID or Estate ID
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
                 'Property Manager or Owner'
             );
