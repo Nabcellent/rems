@@ -2,6 +2,9 @@
 
 namespace App\Enums;
 
-enum PropertyType {
-
+enum PropertyType: string
+{
+    case BUNGALOW = 'BUNGALOW';
+    case APARTMENT = 'APARTMENT';
+    case MAISONETTE = 'MAISONETTE';
 }
