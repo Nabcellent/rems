@@ -16,7 +16,6 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('transaction_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->morphs("payable"); // WALLET ID or MPESA CALLBACK ID or PAYPAL ID
             $table->bigInteger("amount");
