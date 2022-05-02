@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -46,10 +47,9 @@ class User extends Authenticatable
     ];
 
 
-
     /**
      * .....................    _____________________RELATIONSHIPS
-    */
+     */
     public function estates(): HasMany
     {
         return $this->hasMany(Estate::class);
@@ -63,5 +63,10 @@ class User extends Authenticatable
     public function unit(): HasMany
     {
         return $this->hasMany(Unit::class);
+    }
+
+    public function lease(): HasOne
+    {
+        return $this->hasOne(Lease::class);
     }
 }

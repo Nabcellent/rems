@@ -16,10 +16,10 @@ return new class extends Migration
     {
         Schema::create('leases', function(Blueprint $table) {
             $table->id();
-            $table->morphs("leasable");
+            $table->foreignId("unit_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
                 "Tenant"
-            );
+            )->nullable();
             $table->integer("deposit")->default(0);
             $table->integer("rent_amount");
             $table->timestamp("start_date");
