@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
-import Button from '@/Components/Button';
-import Guest from '@/Layouts/Guest';
 import Input from '@/Components/Input';
 import Label from '@/Components/Label';
 import ValidationErrors from '@/Components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
+import { LoadingButton } from '@mui/lab';
 
 export default function ResetPassword({ token, email }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -31,7 +30,7 @@ export default function ResetPassword({ token, email }) {
     };
 
     return (
-        <Guest>
+        <>
             <Head title="Reset Password" />
 
             <ValidationErrors errors={errors} />
@@ -44,7 +43,7 @@ export default function ResetPassword({ token, email }) {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         autoComplete="username"
                         handleChange={onHandleChange}
                     />
@@ -57,7 +56,7 @@ export default function ResetPassword({ token, email }) {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         autoComplete="new-password"
                         isFocused={true}
                         handleChange={onHandleChange}
@@ -71,18 +70,18 @@ export default function ResetPassword({ token, email }) {
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         autoComplete="new-password"
                         handleChange={onHandleChange}
                     />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    <Button className="ml-4" processing={processing}>
+                <div className="d-flex align-items-center justify-content-end mt-4">
+                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4" loading={processing}>
                         Reset Password
-                    </Button>
+                    </LoadingButton>
                 </div>
             </form>
-        </Guest>
+        </>
     );
 }

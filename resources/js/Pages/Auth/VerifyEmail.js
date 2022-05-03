@@ -1,6 +1,5 @@
 import React from 'react';
-import Button from '@/Components/Button';
-import Guest from '@/Layouts/Guest';
+import { LoadingButton } from '@mui/lab';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 
 export default function VerifyEmail({ status }) {
@@ -13,7 +12,7 @@ export default function VerifyEmail({ status }) {
     };
 
     return (
-        <Guest>
+        <>
             <Head title="Email Verification" />
 
             <div className="mb-4 text-sm text-gray-600">
@@ -28,19 +27,21 @@ export default function VerifyEmail({ status }) {
             )}
 
             <form onSubmit={submit}>
-                <div className="mt-4 flex items-center justify-between">
-                    <Button processing={processing}>Resend Verification Email</Button>
+                <div className="mt-4 d-flex align-items-center justify-content-between">
+                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4" loading={processing}>
+                        Resend Verification Email
+                    </LoadingButton>
 
                     <Link
                         href={route('logout')}
                         method="post"
                         as="button"
-                        className="underline text-sm text-gray-600 hover:text-gray-900"
+                        className="text-sm text-gray-600 hover:text-gray-900 no-decoration"
                     >
                         Log Out
                     </Link>
                 </div>
             </form>
-        </Guest>
+        </>
     );
 }

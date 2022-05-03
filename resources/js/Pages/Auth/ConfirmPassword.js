@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import Button from '@/Components/Button';
-import Guest from '@/Layouts/Guest';
+import { LoadingButton } from '@mui/lab';
 import Input from '@/Components/Input';
 import Label from '@/Components/Label';
 import ValidationErrors from '@/Components/ValidationErrors';
@@ -28,7 +27,7 @@ export default function ConfirmPassword() {
     };
 
     return (
-        <Guest>
+        <>
             <Head title="Confirm Password" />
 
             <div className="mb-4 text-sm text-gray-600">
@@ -45,18 +44,18 @@ export default function ConfirmPassword() {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="shadow-sm rounded-md form-control"
                         isFocused={true}
                         handleChange={onHandleChange}
                     />
                 </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    <Button className="ml-4" processing={processing}>
-                        Confirm
-                    </Button>
+                <div className="d-flex align-items-center justify-content-end mt-4">
+                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4" loading={processing}>
+                        Confirm Password
+                    </LoadingButton>
                 </div>
             </form>
-        </Guest>
+        </>
     );
 }

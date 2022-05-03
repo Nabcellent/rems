@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leases', function(Blueprint $table) {
+        Schema::create('leases', function (Blueprint $table) {
             $table->id();
             $table->foreignId("unit_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer("deposit")->default(0);
             $table->integer("rent_amount");
             $table->timestamp("start_date");
-            $table->timestamp("end_date");
+            $table->timestamp("end_date")->nullable();
             $table->string("status")->default(Status::INACTIVE->value);
             $table->timestamps();
         });

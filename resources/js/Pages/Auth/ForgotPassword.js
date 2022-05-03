@@ -1,11 +1,10 @@
 import React from 'react';
-import Guest from '@/Layouts/Guest';
 import ValidationErrors from '@/Components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 
-export default function ForgotPassword({status}) {
-    const {data, setData, post, processing, errors} = useForm({
+export default function ForgotPassword({ status }) {
+    const { data, setData, post, processing, errors } = useForm({
         email: '',
     });
 
@@ -20,8 +19,8 @@ export default function ForgotPassword({status}) {
     };
 
     return (
-        <Guest>
-            <Head title="Forgot Password"/>
+        <>
+            <Head title="Forgot Password" />
 
             <div className="mb-4 text-sm text-secondary">
                 Forgot your password? No problem. Just let us know your email address and we will email you a password
@@ -30,7 +29,7 @@ export default function ForgotPassword({status}) {
 
             {status && <div className="mb-4 font-weight-semibold text-sm">{status}</div>}
 
-            <ValidationErrors errors={errors}/>
+            <ValidationErrors errors={errors} />
 
             <form onSubmit={submit}>
                 <input
@@ -48,6 +47,6 @@ export default function ForgotPassword({status}) {
                     </LoadingButton>
                 </div>
             </form>
-        </Guest>
+        </>
     );
 }
