@@ -1,6 +1,5 @@
-import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "@inertiajs/inertia-react";
+import { Link, usePage } from "@inertiajs/inertia-react";
 
 import SidebarContent from "./SidebarContent";
 
@@ -10,8 +9,10 @@ import logoLightSvg from "../assets/images/logo-light.svg";
 import logoDarkSvg from "../assets/images/logo-dark.svg";
 
 const Sidebar = ({type}) => {
+    const {auth: {user}} = usePage().props;
+
     return (
-        <React.Fragment>
+        <>
             <div className="vertical-menu">
                 <div className="navbar-brand-box">
                     <Link href="/" className="logo logo-dark">
@@ -29,12 +30,20 @@ const Sidebar = ({type}) => {
                     </Link>
                 </div>
 
+                <div className={'row justify-content-center'}>
+                    <div className="col-auto">
+                        {/* TODO: Make the greeting dynamic */}
+                        <h6>Good Morning {user.last_name}</h6>
+                        <hr className={'mb-0'}/>
+                    </div>
+                </div>
+
                 <div data-simplebar className="h-100">
                     {type !== "condensed" ? <SidebarContent/> : <SidebarContent/>}
                 </div>
                 <div className="sidebar-background"></div>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 
