@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 
 // Layout Related Components
@@ -6,7 +6,7 @@ import Header from "../Components/Header";
 import Sidebar from "../Components/Sidebar";
 import Footer from "../Components/Footer";
 
-const Layout = ({
+const Dashboard = ({
     children,
     leftSideBarTheme,
     leftSideBarType,
@@ -80,15 +80,13 @@ const Layout = ({
         let rightBar = document.getElementById("right-bar");
 
         //if clicked in inside right bar, then do nothing
-        if (rightBar && rightBar.contains(event.target)) {
-            return;
-        } else {
+        if (!(rightBar && rightBar.contains(event.target))) {
             if (document.body.classList.contains('right-bar-enabled')) toggleRightSidebar(false);
         }
     };
 
     return (
-        <React.Fragment>
+        <>
             <div id="preloader">
                 <div id="status">
                     <div className="spinner-chase">
@@ -112,11 +110,11 @@ const Layout = ({
                 <div className="main-content">{children}</div>
                 <Footer/>
             </div>
-        </React.Fragment>
+        </>
     );
 };
 
-Layout.propTypes = {
+Dashboard.propTypes = {
     changeLayoutWidth: PropTypes.func,
     changeSidebarTheme: PropTypes.func,
     changeSidebarThemeImage: PropTypes.func,
@@ -134,4 +132,4 @@ Layout.propTypes = {
     topbarTheme: PropTypes.any
 };
 
-export default Layout;
+export default Dashboard;

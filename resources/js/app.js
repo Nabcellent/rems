@@ -1,19 +1,26 @@
-require('./bootstrap');
-
+import Guest from '@/Layouts/Guest';
 import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
 import { InertiaProgress } from '@inertiajs/progress';
 import 'boxicons/css/boxicons.min.css';
+
+import('./bootstrap');
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) => require(`./Pages/${name}`),
-    setup({ el, App, props }) {
-        return render(<App {...props} />, el);
+    resolve: (name) => {
+        const page = require(`./Pages/${name}`).default;
+
+        if (page.layout === undefined && name.startsWith('Auth/')) page.layout = page => <Guest children={page}/>;
+
+        return page;
+    },
+    setup({el, App, props}) {
+        return createRoot(el).render(<App {...props}/>)
     },
 });
 
-InertiaProgress.init({ color: '#4B5563' });
+InertiaProgress.init({color: '#4B5563'});

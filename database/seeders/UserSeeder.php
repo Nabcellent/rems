@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         $users = [
             [
                 "first_name" => "Lil",
-                "last_name"  => "Lil",
+                "last_name"  => "Nabz",
                 "email"      => "nabcellent.dev@yopmail.com",
                 "phone"      => 110039317,
                 "gender"     => "male",

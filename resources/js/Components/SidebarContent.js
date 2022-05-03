@@ -132,7 +132,7 @@ const SidebarContent = ({type, location}) => {
             title: 'Menu',
             menu: [
                 {
-                    startIcon: <i className="bx bx-home-circle"/>,
+                    startIcon: <i className="bx bxs-dashboard"/>,
                     title: 'Dashboard',
                     endIcon: <span className="badge rounded-pill bg-info m-0 ms-2">02</span>,
                     subMenu: [
@@ -158,7 +158,7 @@ const SidebarContent = ({type, location}) => {
                     ]
                 },
                 {
-                    startIcon: <i className="bx bxs-home-alt-2"/>, title: 'Estates', subMenu: [
+                    startIcon: <i className="bx bxs-home-circle"/>, title: 'Estates', subMenu: [
                         {link: '/estates', title: 'list'},
                         {link: '/estates', title: 'create'}
                     ]

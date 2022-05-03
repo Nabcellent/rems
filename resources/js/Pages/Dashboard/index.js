@@ -1,21 +1,22 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Container } from "reactstrap";
 
 //Import Breadcrumb
-import Breadcrumbs from "../../Components/Common/Breadcrumb";
-import Admin from '@/Layouts/Admin';
+import Dashboard from '@/Layouts/Dashboard';
 
-const Dashboard = () => {
+const Breadcrumbs = lazy(() => import('../../Components/Common/Breadcrumb'))
+
+const Default = ({auth, errors}) => {
     return (
-        <Admin>
+        <Dashboard auth={auth} errors={errors}>
             <div className="page-content">
                 <Container fluid>
                     {/* Render Breadcrumbs */}
-                    <Breadcrumbs title="Utility" breadcrumbItem="Starter Page" />
+                    <Breadcrumbs title="Dashboards" breadcrumbItem="Default" />
                 </Container>
             </div>
-        </Admin>
+        </Dashboard>
     )
 }
 
-export default Dashboard
+export default Default
