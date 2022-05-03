@@ -31,13 +31,13 @@ export default function ResetPassword({ token, email }) {
 
     return (
         <>
-            <Head title="Reset Password" />
+            <Head title="Reset Password"/>
 
-            <ValidationErrors errors={errors} />
+            <ValidationErrors errors={errors}/>
 
             <form onSubmit={submit}>
                 <div>
-                    <Label forInput="email" value="Email" />
+                    <Label forInput="email" value="Email"/>
 
                     <Input
                         type="email"
@@ -50,7 +50,7 @@ export default function ResetPassword({ token, email }) {
                 </div>
 
                 <div className="mt-4">
-                    <Label forInput="password" value="Password" />
+                    <Label forInput="password" value="Password"/>
 
                     <Input
                         type="password"
@@ -64,7 +64,7 @@ export default function ResetPassword({ token, email }) {
                 </div>
 
                 <div className="mt-4">
-                    <Label forInput="password_confirmation" value="Confirm Password" />
+                    <Label forInput="password_confirmation" value="Confirm Password"/>
 
                     <Input
                         type="password"
@@ -77,7 +77,8 @@ export default function ResetPassword({ token, email }) {
                 </div>
 
                 <div className="d-flex align-items-center justify-content-end mt-4">
-                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4" loading={processing}>
+                    <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4"
+                                   loading={processing}>
                         Reset Password
                     </LoadingButton>
                 </div>
