@@ -3,11 +3,13 @@
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Auth\Events\Lockout;
+use Illuminate\Contracts\Validation\Factory;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use JetBrains\PhpStorm\ArrayShape;
 
 class LoginRequest extends FormRequest
 {
@@ -16,7 +18,7 @@ class LoginRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -24,32 +26,46 @@ class LoginRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @return array
      */
-    public function rules()
+    #[ArrayShape(['username' => "string[]", 'password' => "string[]"])] public function rules(): array
+    {
+        $usernameRules = ['required'];
+        $usernameRules[] = $this->isEmail() ? 'email' : 'phone:KE';
+
+        return [
+            'username' => $usernameRules,
+            'password' => ['required', 'string'],
+        ];
+    }
+
+    #[ArrayShape(["username.required" => "string"])] public function messages(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
+            "username.required" => "Email or phone number is required."
         ];
     }
 
     /**
      * Attempt to authenticate the request's credentials.
      *
+     * @throws \Illuminate\Validation\ValidationException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @return void
      *
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function authenticate()
+    public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $credentials = $this->getCredentials();
+
+        if(!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => trans('auth.failed'),
+                'username' => trans('auth.failed'),
             ]);
         }
 
@@ -59,13 +75,13 @@ class LoginRequest extends FormRequest
     /**
      * Ensure the login request is not rate limited.
      *
+     * @throws \Illuminate\Validation\ValidationException
      * @return void
      *
-     * @throws \Illuminate\Validation\ValidationException
      */
-    public function ensureIsNotRateLimited()
+    public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if(!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -74,7 +90,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => trans('auth.throttle', [
+            'username' => trans('auth.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -86,8 +102,52 @@ class LoginRequest extends FormRequest
      *
      * @return string
      */
-    public function throttleKey()
+    public function throttleKey(): string
     {
-        return Str::lower($this->input('email')).'|'.$this->ip();
+        return Str::lower($this->input('username')) . '|' . $this->ip();
     }
+
+    /**
+     * Get the needed authorization credentials from the request.
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @return array
+     */
+    public function getCredentials(): array
+    {
+        // The form field for providing username or password
+        // have named of "username", however, in order to support
+        // logging users in with both (username and email)
+        // we have to check if user has entered one or another
+        $username = $this->input('username');
+
+        if($this->isEmail($username)) {
+            return [
+                'email'    => $username,
+                'password' => $this->input('password')
+            ];
+        }
+
+        return [
+            'phone'    => $username,
+            'password' => $this->input('password')
+        ];
+    }
+
+    /**
+     * Validate if provided parameter is valid email.
+     *
+     * @param $param
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @return bool
+     */
+    private function isEmail($param = null): bool
+    {
+        $username = $param ?? $this->input('username');
+
+        $factory = $this->container->make(Factory::class);
+
+        return !$factory->make(['username' => $username], ['username' => 'email'])->fails();
+    }
+
 }

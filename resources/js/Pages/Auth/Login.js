@@ -7,7 +7,7 @@ import { LoadingButton } from '@mui/lab';
 
 export default function Login({status, canResetPassword}) {
     const {data, setData, post, processing, errors, reset} = useForm({
-        email: '',
+        username: '',
         password: '',
         remember: '',
     });
@@ -30,7 +30,7 @@ export default function Login({status, canResetPassword}) {
 
     return (
         <Guest>
-            <Head title="Log in"/>
+            <Head><title>Sign In</title></Head>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
@@ -38,12 +38,12 @@ export default function Login({status, canResetPassword}) {
 
             <form onSubmit={submit}>
                 <div>
-                    <label htmlFor="email" className={'block font-medium text-sm text-gray-700'}>Email</label>
+                    <label htmlFor="username" className={'block font-medium text-sm text-gray-700'}>Email or Phone number</label>
 
                     <input
                         type="text"
-                        name="email"
-                        value={data.email}
+                        name="username"
+                        value={data.username}
                         className="shadow-sm rounded-md form-control"
                         autoComplete="username"
                         autoFocus={true}
