@@ -7,10 +7,10 @@ import 'boxicons/css/boxicons.min.css';
 
 import('./bootstrap');
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'REMS';
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} | ${appName}`,
     resolve: (name) => {
         const page = require(`./Pages/${name}`).default;
 
