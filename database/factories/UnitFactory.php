@@ -2,6 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Enums\Purpose;
+use App\Models\Estate;
+use App\Models\Property;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,10 +18,16 @@ class UnitFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
+        $property = $this->faker->randomElement([Property::factory(), Estate::factory()]);
+
         return [
-            //
+            "user_id"      => User::factory(),
+            "property_id" => $property->create()->id,
+            "property_type" => $property->modelName(),
+            "house_number" => $this->faker->buildingNumber(),
+            "purpose"      => $this->faker->randomElement(Purpose::cases())
         ];
     }
 }

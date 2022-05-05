@@ -23,7 +23,7 @@ class Estate extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function estate(): HasMany
+    public function properties(): HasMany
     {
         return $this->hasMany(Property::class);
     }
