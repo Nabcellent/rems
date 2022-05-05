@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
 //        Property::factory(5)->hasUnits(4)->create();
 //        Unit::factory(5)->hasLease()->create();
 //        Service::factory(7)->create();
-        ServiceProvider::factory(3)->create();
+        Service::factory(7)->hasProviders(3)->create();
+//        ServiceProvider::factory(3)->create();
     }
 }
