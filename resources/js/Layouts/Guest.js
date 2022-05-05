@@ -6,7 +6,7 @@ import logoDarkSvg from '@/assets/images/logo-dark.svg';
 
 export default function Guest({ children }) {
     return (
-        <div className="min-h-screen flex flex-col justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        <div className="min-h-screen flex flex-col justify-center items-center sm:pt-0 bg-gray-100">
             <div>
                 <Link href="/" className="logo logo-dark">
                     <span className="logo-sm"><img src={logo} alt="" height="37"/></span>

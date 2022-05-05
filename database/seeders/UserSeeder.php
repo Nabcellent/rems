@@ -27,6 +27,13 @@ class UserSeeder extends Seeder
                 "email"      => "nabcellent.dev@yopmail.com",
                 "phone"      => 110039317,
                 "gender"     => "male",
+            ],
+            [
+                "first_name" => "Khalifa",
+                "last_name"  => "Fumo",
+                "email"      => "khalifa47@yopmail.com",
+                "phone"      => 711144488,
+                "gender"     => "male",
             ]
         ];
 
