@@ -11,4 +11,6 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ServiceProvider extends Pivot
 {
     use HasFactory;
+
+    protected $table = "service_providers";
 }

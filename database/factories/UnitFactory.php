@@ -24,8 +24,8 @@ class UnitFactory extends Factory
 
         return [
             "user_id"      => User::factory(),
-            "property_id" => $property->create()->id,
-            "property_type" => $property->modelName(),
+            "unitable_id" => $property->create()->id,
+            "unitable_type" => $property->modelName(),
             "house_number" => $this->faker->buildingNumber(),
             "purpose"      => $this->faker->randomElement(Purpose::cases())
         ];
