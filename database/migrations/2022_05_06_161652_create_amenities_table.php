@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('amenities', function (Blueprint $table) {
+        Schema::create('amenities', function(Blueprint $table) {
             $table->id();
+            $table->morphs("property");
+            $table->string("title", 100);
+            $table->text("description");
             $table->timestamps();
         });
     }

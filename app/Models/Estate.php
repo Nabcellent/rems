@@ -42,4 +42,9 @@ class Estate extends Model
     {
         return $this->morphMany(Policy::class, 'property');
     }
+
+    public function amenities(): MorphMany
+    {
+        return $this->morphMany(Amenity::class, 'property');
+    }
 }
