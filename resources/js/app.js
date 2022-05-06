@@ -1,4 +1,4 @@
-import Guest from '@/Layouts/Guest';
+import Guest from '@/layouts/Guest';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
@@ -12,9 +12,9 @@ const appName = window.document.getElementsByTagName('title')[0]?.innerText || '
 createInertiaApp({
     title: (title) => `${title} | ${appName}`,
     resolve: (name) => {
-        const page = require(`./Pages/${name}`).default;
+        const page = require(`./pages/${name}`).default;
 
-        if (page.layout === undefined && name.startsWith('Auth/')) page.layout = page => <Guest children={page}/>;
+        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Guest children={page}/>;
 
         return page;
     },

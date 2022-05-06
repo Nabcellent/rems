@@ -16,7 +16,7 @@ function usePrevious(value) {
     return ref.current;
 }
 
-const Section = ({title, menu}) => {
+const Section = ({ title, menu }) => {
     return (
         <>
             <li className="menu-title">{title}</li>
@@ -45,7 +45,7 @@ const Section = ({title, menu}) => {
 };
 
 //i18n
-const SidebarContent = ({type, location}) => {
+const SidebarContent = ({ type, location }) => {
     const refDiv = useRef();
     const prevType = usePrevious(type);
 
@@ -55,9 +55,7 @@ const SidebarContent = ({type, location}) => {
                 if (item) {
                     const currentPosition = item.offsetTop;
                     if (currentPosition > window.innerHeight) {
-                        if (refDiv.current)
-                            refDiv.current.getScrollElement().scrollTop =
-                                currentPosition - 300;
+                        if (refDiv.current) refDiv.current.getScrollElement().scrollTop = currentPosition - 300;
                     }
                 }
             }
@@ -136,8 +134,8 @@ const SidebarContent = ({type, location}) => {
                     title: 'Dashboard',
                     endIcon: <span className="badge rounded-pill bg-info m-0 ms-2">02</span>,
                     subMenu: [
-                        {link: route('dashboard'), title: 'Default'},
-                        {link: route('dashboard'), title: 'Analytics'}
+                        { link: route('dashboard.default'), title: 'Default' },
+                        { link: route('dashboard.analytics'), title: 'Analytics' }
                     ]
                 }
             ]
@@ -147,20 +145,20 @@ const SidebarContent = ({type, location}) => {
             menu: [
                 {
                     startIcon: <i className="bx bxs-detail"/>, title: 'Leases', subMenu: [
-                        {link: '/leases', title: 'list'},
-                        {link: '/leases', title: 'create'}
+                        { link: '/leases', title: 'list' },
+                        { link: '/leases', title: 'create' }
                     ]
                 },
                 {
                     startIcon: <i className="bx bxs-home"/>, title: 'Units', subMenu: [
-                        {link: '/units', title: 'list'},
-                        {link: '/units', title: 'create'}
+                        { link: '/units', title: 'list' },
+                        { link: '/units', title: 'create' }
                     ]
                 },
                 {
                     startIcon: <i className="bx bxs-home-circle"/>, title: 'Estates', subMenu: [
-                        {link: '/estates', title: 'list'},
-                        {link: '/estates', title: 'create'}
+                        { link: route('dashboard.estates.index'), title: 'list' },
+                        { link: '/estates', title: 'create' }
                     ]
                 },
             ]
@@ -168,11 +166,11 @@ const SidebarContent = ({type, location}) => {
         {
             title: 'Apps',
             menu: [
-                {startIcon: <i className="bx bx-calendar"/>, title: 'Calendar', link: '/calendar'},
+                { startIcon: <i className="bx bx-calendar"/>, title: 'Calendar', link: '/calendar' },
                 {
                     startIcon: <i className="bx bxs-user-detail"/>, title: 'Contacts', subMenu: [
-                        {link: '/contacts', title: 'list'},
-                        {link: '/notify', title: 'Notify'}
+                        { link: '/contacts', title: 'list' },
+                        { link: '/notify', title: 'Notify' }
                     ]
                 }
             ]
@@ -180,7 +178,7 @@ const SidebarContent = ({type, location}) => {
         {
             title: 'System',
             menu: [
-                {startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings'}
+                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings' }
             ]
         }
     ];

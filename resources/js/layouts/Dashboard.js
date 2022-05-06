@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 
 // Layout Related Components
-import Header from "../Components/Header";
-import Sidebar from "../Components/Sidebar";
-import Footer from "../Components/Footer";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+
+const Footer = lazy(() => import('../components/Footer'))
 
 const Dashboard = ({
     children,

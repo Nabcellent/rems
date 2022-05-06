@@ -2,10 +2,10 @@ import React, { lazy } from "react";
 import { Container } from "reactstrap";
 
 //Import Breadcrumb
-import Dashboard from '@/Layouts/Dashboard';
+import Dashboard from '@/layouts/Dashboard';
 import { Head } from '@inertiajs/inertia-react';
 
-const Breadcrumbs = lazy(() => import('../../Components/Common/Breadcrumb'))
+const Breadcrumbs = lazy(() => import('../../components/common/Breadcrumb'))
 
 const Default = ({auth, errors}) => {
     return (

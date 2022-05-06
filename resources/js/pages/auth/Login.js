@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import Checkbox from '@/Components/Checkbox';
-import ValidationErrors from '@/Components/ValidationErrors';
+import Checkbox from '@/components/Checkbox';
+import ValidationErrors from '@/components/ValidationErrors';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 import { VpnKey } from '@mui/icons-material';
