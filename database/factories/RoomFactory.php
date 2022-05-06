@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\RoomType;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,10 +16,11 @@ class RoomFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            "unit_id" => Unit::factory(),
+            "type" => $this->faker->randomElement(RoomType::cases()),
         ];
     }
 }

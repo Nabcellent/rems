@@ -7,6 +7,7 @@ use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\Payment;
 use App\Models\Property;
+use App\Models\Room;
 use App\Models\Service;
 use App\Models\ServiceProvider;
 use App\Models\Transaction;
@@ -30,15 +31,20 @@ class DatabaseSeeder extends Seeder
         ]);
 
 //        User::factory(5)->create()->each(fn(User $user) => $user->assignRole(Arr::random(Role::cases())->value));
+
 //        Estate::factory(5)->hasProperties(3)->create();
 //        Estate::factory(5)->hasUnits(2)->create();
 //        Property::factory(5)->create();
 //        Property::factory(5)->hasUnits(4)->create();
 //        Unit::factory(5)->hasLease()->create();
+//        Unit::factory()->hasRooms(3)->create();
+//        Room::factory(3)->forUnit()->create(); // Same as the above
+
 //        Service::factory(7)->create();
 //        Service::factory(7)->hasProviders(3)->create();
 //        ServiceProvider::factory(3)->create();
+
 //        Transaction::factory(10)->create();
-        Payment::factory(5)->forPayable()->create();
+//        Payment::factory(5)->forPayable()->create();
     }
 }
