@@ -16953,6 +16953,369 @@
      
 }
 
+    namespace DrH\Mpesa\Facades { 
+            /**
+     * 
+     *
+     * @see \DrH\Mpesa\Library\BulkSender
+     */ 
+        class B2C {
+                    /**
+         * Set number to receive the funds
+         *
+         * @param string $number
+         * @return \DrH\Mpesa\Library\BulkSender 
+         * @static 
+         */ 
+        public static function to($number)
+        {
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->to($number);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function withRemarks($remarks)
+        {
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->withRemarks($remarks);
+        }
+                    /**
+         * The amount to transact
+         *
+         * @param int $amount
+         * @return \DrH\Mpesa\Library\BulkSender 
+         * @static 
+         */ 
+        public static function amount($amount)
+        {
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->amount($amount);
+        }
+                    /**
+         * 
+         *
+         * @param string|null $number
+         * @param int|null $amount
+         * @param string|null $remarks
+         * @return \DrH\Mpesa\Entities\MpesaBulkPaymentRequest 
+         * @throws ExternalServiceException
+         * @throws GuzzleException|ClientException
+         * @static 
+         */ 
+        public static function send($number = null, $amount = null, $remarks = null)
+        {
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->send($number, $amount, $remarks);
+        }
+                    /**
+         * 
+         *
+         * @return array 
+         * @throws ExternalServiceException
+         * @throws Exception
+         * @throws GuzzleException
+         * @static 
+         */ 
+        public static function balance()
+        {
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->balance();
+        }
+                    /**
+         * 
+         *
+         * @param string $number
+         * @param bool $strip_plus
+         * @return string 
+         * @static 
+         */ 
+        public static function formatPhoneNumber($number, $strip_plus = true)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->formatPhoneNumber($number, $strip_plus);
+        }
+                    /**
+         * 
+         *
+         * @param array $body
+         * @param string $endpoint
+         * @param \DrH\Mpesa\Library\MpesaAccount|null $account
+         * @return array 
+         * @throws GuzzleException
+         * @throws ExternalServiceException|\DrH\Mpesa\Exceptions\ClientException
+         * @static 
+         */ 
+        public static function sendRequest($body, $endpoint, $account = null)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\BulkSender $instance */
+                        return $instance->sendRequest($body, $endpoint, $account);
+        }
+         
+    }
+            /**
+     * 
+     *
+     * @see \DrH\Mpesa\Library\IdCheck
+     */ 
+        class Identity {
+                    /**
+         * 
+         *
+         * @param string $number
+         * @param string|null $callback
+         * @return mixed 
+         * @throws Exception
+         * @throws GuzzleException
+         * @static 
+         */ 
+        public static function validate($number, $callback = null)
+        {
+                        /** @var \DrH\Mpesa\Library\IdCheck $instance */
+                        return $instance->validate($number, $callback);
+        }
+                    /**
+         * 
+         *
+         * @param string $number
+         * @param bool $strip_plus
+         * @return string 
+         * @static 
+         */ 
+        public static function formatPhoneNumber($number, $strip_plus = true)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\IdCheck $instance */
+                        return $instance->formatPhoneNumber($number, $strip_plus);
+        }
+                    /**
+         * 
+         *
+         * @param array $body
+         * @param string $endpoint
+         * @param \DrH\Mpesa\Library\MpesaAccount|null $account
+         * @return array 
+         * @throws GuzzleException
+         * @throws ExternalServiceException|\DrH\Mpesa\Exceptions\ClientException
+         * @static 
+         */ 
+        public static function sendRequest($body, $endpoint, $account = null)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\IdCheck $instance */
+                        return $instance->sendRequest($body, $endpoint, $account);
+        }
+         
+    }
+            /**
+     * 
+     *
+     */ 
+        class Registrar {
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function shortcode($shortCode)
+        {
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->shortcode($shortCode);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function onValidation($validationURL)
+        {
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->onValidation($validationURL);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function onConfirmation($confirmationURL)
+        {
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->onConfirmation($confirmationURL);
+        }
+                    /**
+         * 
+         *
+         * @param string $onTimeout
+         * @return \DrH\Mpesa\Library\C2bRegister 
+         * @throws Exception
+         * @throws ClientException
+         * @static 
+         */ 
+        public static function onTimeout($onTimeout = 'Cancelled')
+        {
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->onTimeout($onTimeout);
+        }
+                    /**
+         * 
+         *
+         * @param string|null $shortCode
+         * @param string|null $confirmationURL
+         * @param string|null $validationURL
+         * @param string|null $onTimeout
+         * @return array 
+         * @throws ClientException
+         * @throws Exception
+         * @throws GuzzleException
+         * @static 
+         */ 
+        public static function submit($shortCode = null, $confirmationURL = null, $validationURL = null, $onTimeout = null)
+        {
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->submit($shortCode, $confirmationURL, $validationURL, $onTimeout);
+        }
+                    /**
+         * 
+         *
+         * @param string $number
+         * @param bool $strip_plus
+         * @return string 
+         * @static 
+         */ 
+        public static function formatPhoneNumber($number, $strip_plus = true)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->formatPhoneNumber($number, $strip_plus);
+        }
+                    /**
+         * 
+         *
+         * @param array $body
+         * @param string $endpoint
+         * @param \DrH\Mpesa\Library\MpesaAccount|null $account
+         * @return array 
+         * @throws GuzzleException
+         * @throws ExternalServiceException|\DrH\Mpesa\Exceptions\ClientException
+         * @static 
+         */ 
+        public static function sendRequest($body, $endpoint, $account = null)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\C2bRegister $instance */
+                        return $instance->sendRequest($body, $endpoint, $account);
+        }
+         
+    }
+            /**
+     * 
+     *
+     * @see \DrH\Mpesa\Library\StkPush
+     */ 
+        class STK {
+                    /**
+         * 
+         *
+         * @param int $amount
+         * @return \DrH\Mpesa\Library\StkPush 
+         * @throws Exception
+         * @static 
+         */ 
+        public static function amount($amount)
+        {
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->amount($amount);
+        }
+                    /**
+         * 
+         *
+         * @param string $number
+         * @return \DrH\Mpesa\Library\StkPush 
+         * @static 
+         */ 
+        public static function from($number)
+        {
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->from($number);
+        }
+                    /**
+         * Set the mpesa reference
+         *
+         * @param string $reference
+         * @param string $description
+         * @return \DrH\Mpesa\Library\StkPush 
+         * @throws ClientException
+         * @static 
+         */ 
+        public static function usingReference($reference, $description)
+        {
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->usingReference($reference, $description);
+        }
+                    /**
+         * Send a payment request
+         *
+         * @param int|null $amount
+         * @param string|null $number
+         * @param string|null $reference
+         * @param string|null $description
+         * @param \DrH\Mpesa\Library\MpesaAccount|null $account
+         * @return \DrH\Mpesa\Entities\MpesaStkRequest 
+         * @throws ExternalServiceException|ClientException
+         * @throws GuzzleException
+         * @static 
+         */ 
+        public static function push($amount = null, $number = null, $reference = null, $description = null, $account = null)
+        {
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->push($amount, $number, $reference, $description, $account);
+        }
+                    /**
+         * Query a transaction.
+         *
+         * @param int $stkRequestId
+         * @return array 
+         * @throws GuzzleException
+         * @throws ExternalServiceException|ClientException
+         * @static 
+         */ 
+        public static function status($stkRequestId)
+        {
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->status($stkRequestId);
+        }
+                    /**
+         * 
+         *
+         * @param string $number
+         * @param bool $strip_plus
+         * @return string 
+         * @static 
+         */ 
+        public static function formatPhoneNumber($number, $strip_plus = true)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->formatPhoneNumber($number, $strip_plus);
+        }
+                    /**
+         * 
+         *
+         * @param array $body
+         * @param string $endpoint
+         * @param \DrH\Mpesa\Library\MpesaAccount|null $account
+         * @return array 
+         * @throws GuzzleException
+         * @throws ExternalServiceException|\DrH\Mpesa\Exceptions\ClientException
+         * @static 
+         */ 
+        public static function sendRequest($body, $endpoint, $account = null)
+        {            //Method inherited from \DrH\Mpesa\Library\ApiCore         
+                        /** @var \DrH\Mpesa\Library\StkPush $instance */
+                        return $instance->sendRequest($body, $endpoint, $account);
+        }
+         
+    }
+     
+}
+
     namespace Spatie\LaravelIgnition\Facades { 
             /**
      * 
@@ -21211,6 +21574,10 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
+            class B2C extends \DrH\Mpesa\Facades\B2C {}
+            class Identity extends \DrH\Mpesa\Facades\Identity {}
+            class Registrar extends \DrH\Mpesa\Facades\Registrar {}
+            class STK extends \DrH\Mpesa\Facades\STK {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
      
 }
