@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notices', function(Blueprint $table) {
+        Schema::create('amenities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string("type", 50);
-            $table->text("description");
-            $table->timestamp("start_date")->nullable();
-            $table->timestamp("end_date")->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notices');
+        Schema::dropIfExists('amenities');
     }
 };
