@@ -13,10 +13,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service_providers', function (Blueprint $table) {
+        Schema::create('user_settings_metadata', function(Blueprint $table): void {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('service_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+
+            $table->string('name')->unique();
+            $table->string('type');
+            $table->string('default')->nullable();
+            $table->boolean('is_enabled')->default(true);
+
+            $table->string('group')->default('default');
+            $table->string('bag')->default(config('laraset.default', 'users'));
+
             $table->timestamps();
         });
     }
@@ -28,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_providers');
+        Schema::dropIfExists('user_settings_metadata');
     }
 };

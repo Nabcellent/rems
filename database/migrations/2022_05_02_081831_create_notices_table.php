@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('notices', function(Blueprint $table) {
             $table->id();
-            $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
-                "Tenant ID or Owner ID"
-            );
+            $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string("type", 50);
             $table->text("description");
-            $table->timestamp("vacate_date");
+            $table->timestamp("start_date")->nullable();
+            $table->timestamp("end_date")->nullable();
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
@@ -41,5 +42,18 @@ class Estate extends Model
     public function policies(): MorphMany
     {
         return $this->morphMany(Policy::class, 'property');
+    }
+
+    public function amenities(): MorphMany
+    {
+        return $this->morphMany(Amenity::class, 'property');
+    }
+
+    /**
+     * The services that belong to the user(provider).
+     */
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class, 'estate_services');
     }
 }
