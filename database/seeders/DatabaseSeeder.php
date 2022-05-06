@@ -26,11 +26,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            //  RoleSeeder::class,
-            //  UserSeeder::class
+            RoleSeeder::class,
+            UserSeeder::class
         ]);
 
-//        User::factory(5)->create()->each(fn(User $user) => $user->assignRole(Arr::random(Role::cases())->value));
+        User::factory(5)->create()->each(fn(User $user) => $user->assignRole(Arr::random(Role::cases())->value));
 
 //        Estate::factory(5)->hasProperties(3)->create();
 //        Estate::factory(5)->hasUnits(2)->create();

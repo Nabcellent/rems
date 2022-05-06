@@ -21,6 +21,14 @@ class Service extends Model
      */
     public function providers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, "service_provider");
+        return $this->belongsToMany(User::class, "service_providers");
+    }
+
+    /**
+     * The users(providers) that belong to the service.
+     */
+    public function estates(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, "estate_services");
     }
 }
