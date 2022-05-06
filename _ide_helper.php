@@ -17316,6 +17316,63 @@
      
 }
 
+    namespace Nabcellent\Laraconfig\Facades { 
+            /**
+     * 
+     *
+     * @method static Collection|\Nabcellent\Laraconfig\Eloquent\Setting[] getSettings()
+     */ 
+        class Setting {
+                    /**
+         * Load the declarations from the manifests.
+         *
+         * @return void 
+         * @static 
+         */ 
+        public static function loadDeclarations()
+        {
+                        /** @var \Nabcellent\Laraconfig\Registrar\SettingRegistrar $instance */
+                        $instance->loadDeclarations();
+        }
+                    /**
+         * Returns the settings collection.
+         *
+         * @return \Illuminate\Support\Collection 
+         * @static 
+         */ 
+        public static function getDeclarations()
+        {
+                        /** @var \Nabcellent\Laraconfig\Registrar\SettingRegistrar $instance */
+                        return $instance->getDeclarations();
+        }
+                    /**
+         * Returns a collection of declaration that migrates to another.
+         *
+         * @return \Illuminate\Support\Collection|\Nabcellent\Laraconfig\Registrar\Declaration[] 
+         * @static 
+         */ 
+        public static function getMigrable()
+        {
+                        /** @var \Nabcellent\Laraconfig\Registrar\SettingRegistrar $instance */
+                        return $instance->getMigrable();
+        }
+                    /**
+         * Creates a new declaration.
+         *
+         * @param string $name
+         * @return \Nabcellent\Laraconfig\Registrar\Declaration 
+         * @static 
+         */ 
+        public static function name($name)
+        {
+                        /** @var \Nabcellent\Laraconfig\Registrar\SettingRegistrar $instance */
+                        return $instance->name($name);
+        }
+         
+    }
+     
+}
+
     namespace Spatie\LaravelIgnition\Facades { 
             /**
      * 
@@ -21578,6 +21635,7 @@ namespace  {
             class Identity extends \DrH\Mpesa\Facades\Identity {}
             class Registrar extends \DrH\Mpesa\Facades\Registrar {}
             class STK extends \DrH\Mpesa\Facades\STK {}
+            class Setting extends \Nabcellent\Laraconfig\Facades\Setting {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
      
 }
