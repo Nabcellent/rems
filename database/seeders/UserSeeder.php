@@ -2,7 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
@@ -46,5 +49,11 @@ class UserSeeder extends Seeder
         ], $users);
 
         DB::table("users")->insert($users);
+
+
+        /**
+         * .....................    FACTORIES
+         */
+        User::factory(5)->create()->each(fn(User $user) => $user->assignRole(Arr::random(Role::cases())->value));
     }
 }

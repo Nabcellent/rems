@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Service;
 use Illuminate\Database\Seeder;
 
 class ServiceSeeder extends Seeder
@@ -11,8 +12,12 @@ class ServiceSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        /**
+         * .....................    FACTORIES
+         */
+        Service::factory(7)->create();
+        Service::factory(7)->hasProviders(3)->create();
     }
 }

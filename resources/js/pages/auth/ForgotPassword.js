@@ -1,5 +1,5 @@
 import React from 'react';
-import ValidationErrors from '@/Components/ValidationErrors';
+import ValidationErrors from '@/components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 

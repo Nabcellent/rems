@@ -1,3 +1,5 @@
+import Toastify from 'toastify-js';
+
 window._ = require('lodash');
 
 /**
@@ -9,6 +11,21 @@ window._ = require('lodash');
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+window.toast = (data) => {
+    let duration = (data.duration ?? 7) * 1000,
+        type = data.type ?? 'success',
+        close = data.close ?? true;
+
+    Toastify({
+        text: data.msg,
+        duration: duration,
+        close: close,
+        gravity: data.gravity ?? 'bottom',
+        position: data.position ?? 'right',
+        className: type,
+    }).showToast();
+};
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

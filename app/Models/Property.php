@@ -29,7 +29,7 @@ class Property extends Model
 
     public function units(): MorphMany
     {
-        return $this->morphMany(Unit::class, 'property');
+        return $this->morphMany(Unit::class, 'unitable');
     }
 
     public function images(): MorphMany

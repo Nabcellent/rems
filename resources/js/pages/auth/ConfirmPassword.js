@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
-import Input from '@/Components/Input';
-import Label from '@/Components/Label';
-import ValidationErrors from '@/Components/ValidationErrors';
+import Input from '@/components/Input';
+import Label from '@/components/Label';
+import ValidationErrors from '@/components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
 
 export default function ConfirmPassword() {

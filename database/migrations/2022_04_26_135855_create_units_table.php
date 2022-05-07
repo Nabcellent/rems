@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
                 'Property Manager or Owner'
             );
-            $table->morphs('property'); // Property ID or Estate ID
+            $table->morphs('unitable'); // Property ID or Estate ID
             $table->string('house_number');
             $table->string("purpose")->comment("For Rent or For Sale");
             $table->text("description")->nullable();

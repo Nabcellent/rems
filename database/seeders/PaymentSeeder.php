@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Payment;
 use Illuminate\Database\Seeder;
 
 class PaymentSeeder extends Seeder
@@ -11,8 +12,11 @@ class PaymentSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        /**
+         * .....................    FACTORIES
+         */
+        Payment::factory(5)->forPayable()->create();
     }
 }

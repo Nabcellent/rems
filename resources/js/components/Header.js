@@ -1,7 +1,7 @@
 import logo from "../assets/images/logo.svg";
 import { Link } from "@inertiajs/inertia-react";
-import NotificationDropdown from '@/Components/Common/TopbarDropdowns/NotificationDropdown';
-import ProfileMenu from '@/Components/Common/TopbarDropdowns/ProfileMenu';
+import NotificationDropdown from '@/components/common/topbar-dropdowns/NotificationDropdown';
+import ProfileMenu from '@/components/common/topbar-dropdowns/ProfileMenu';
 
 const Header = ({toggleMenuCallback, isSearch}) => {
     const toggleMenu = () => toggleMenuCallback();

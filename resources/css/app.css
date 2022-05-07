@@ -20385,10 +20385,6 @@ body[data-layout=horizontal] .page-content {
     }
 }
 
-.page-title-box {
-    padding-bottom: 24px
-}
-
 .page-title-box .breadcrumb {
     background-color: transparent;
     padding: 0
@@ -24044,12 +24040,16 @@ div.dataTables_wrapper div.dataTables_filter input {
     padding-left: 40px
 }
 
+.search-box .form-control-sm {
+    padding-left: 30px
+}
+
 .search-box .search-icon {
-    font-size: 16px;
+    font-size: 14px;
     position: absolute;
     left: 13px;
     top: 0;
-    line-height: 38px
+    transform: translateY(50%);
 }
 
 .product-list li a {

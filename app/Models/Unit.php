@@ -20,7 +20,7 @@ class Unit extends Model
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function property(): MorphTo
+    public function unitable(): MorphTo
     {
         return $this->morphTo();
     }

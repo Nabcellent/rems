@@ -1,24 +1,28 @@
-import Guest from '@/Layouts/Guest';
+import Guest from '@/layouts/Guest';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
 import { InertiaProgress } from '@inertiajs/progress';
 import 'boxicons/css/boxicons.min.css';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from '@/theme';
 
 import('./bootstrap');
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'REMS';
 
 createInertiaApp({
-    title: (title) => `${title} | ${appName}`,
+    title: (title) => `${title && title + ' |'} ${appName}`,
     resolve: (name) => {
-        const page = require(`./Pages/${name}`).default;
+        const page = require(`./pages/${name}`).default;
 
-        if (page.layout === undefined && name.startsWith('Auth/')) page.layout = page => <Guest children={page}/>;
+        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Guest children={page}/>;
 
         return page;
     },
-    setup: ({el, App, props}) => createRoot(el).render(<App {...props}/>)
+    setup: ({ el, App, props }) => {
+        return createRoot(el).render(<ThemeProvider theme={theme}><App {...props}/></ThemeProvider>);
+    }
 });
 
-InertiaProgress.init({color: '#4B5563'});
+InertiaProgress.init({ color: '#4B5563' });

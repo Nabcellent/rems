@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 
 // Layout Related Components
-import Header from "../Components/Header";
-import Sidebar from "../Components/Sidebar";
-import Footer from "../Components/Footer";
+import Header from "../components/Header";
+import Sidebar from "../components/Sidebar";
+import { Head } from '@inertiajs/inertia-react';
+
+const Footer = lazy(() => import('../components/Footer'));
 
 const Dashboard = ({
+    title,
     children,
     leftSideBarTheme,
     leftSideBarType,
@@ -67,6 +70,7 @@ const Dashboard = ({
 
     const toggleMenuCallback = () => {
         let body = document.body;
+
         if (window.screen.width <= 998) {
             body.classList.toggle("sidebar-enable");
         } else {
@@ -87,6 +91,8 @@ const Dashboard = ({
 
     return (
         <>
+            <Head><title>{title}</title></Head>
+
             <div id="preloader">
                 <div id="status">
                     <div className="spinner-chase">
@@ -107,7 +113,11 @@ const Dashboard = ({
                     type={leftSideBarType}
                     isMobile={isMobile}
                 />
-                <div className="main-content">{children}</div>
+                <div className="main-content">
+                    <div className="page-content">
+                        {children}
+                    </div>
+                </div>
                 <Footer/>
             </div>
         </>
@@ -115,6 +125,7 @@ const Dashboard = ({
 };
 
 Dashboard.propTypes = {
+    title: PropTypes.string,
     changeLayoutWidth: PropTypes.func,
     changeSidebarTheme: PropTypes.func,
     changeSidebarThemeImage: PropTypes.func,

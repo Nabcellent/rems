@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Property;
 use Illuminate\Database\Seeder;
 
 class PropertySeeder extends Seeder
@@ -11,8 +12,12 @@ class PropertySeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        /**
+         * .....................    FACTORIES
+         */
+        Property::factory(5)->create();
+        Property::factory(5)->hasUnits(4)->create();
     }
 }

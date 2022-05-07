@@ -19,7 +19,7 @@ class Estate extends Model
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function owner(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -31,7 +31,7 @@ class Estate extends Model
 
     public function units(): MorphMany
     {
-        return $this->morphMany(Unit::class, 'property');
+        return $this->morphMany(Unit::class, 'unitable');
     }
 
     public function images(): MorphMany

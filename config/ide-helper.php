@@ -107,7 +107,7 @@ return [
     |
     */
 
-    'write_eloquent_model_mixins' => false,
+    'write_eloquent_model_mixins' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -313,7 +313,7 @@ return [
     |
     */
     'post_migrate' => [
-        // 'ide-helper:models --nowrite',
+         'ide-helper:models -M',
     ],
 
 ];
