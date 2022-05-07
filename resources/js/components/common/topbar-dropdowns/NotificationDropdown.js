@@ -1,4 +1,4 @@
-import { Col, Dropdown, DropdownMenu, DropdownToggle, Row } from 'reactstrap';
+import { Col, Dropdown, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import { Link } from '@inertiajs/inertia-react';
@@ -7,29 +7,19 @@ import { Link } from '@inertiajs/inertia-react';
 import avatar3 from "../../../assets/images/users/avatar-3.jpg";
 import avatar4 from "../../../assets/images/users/avatar-4.jpg";
 
-
 const NotificationDropdown = () => {
     const [menu, setMenu] = useState(false);
 
     const toggle = () => setMenu(!menu);
 
     return (
-        <Dropdown
-            isOpen={menu}
-            toggle={toggle}
-            className="dropdown d-inline-block"
-            tag="li"
-        >
-            <DropdownToggle
-                className="btn header-item noti-icon"
-                tag="button"
-                id="page-header-notifications-dropdown"
-            >
+        <Dropdown className="dropdown d-inline-block" tag="li">
+            <Dropdown.Toggle className="header-item noti-icon border-0 bg-transparent" id="page-header-notifications-dropdown">
                 <i className="bx bx-bell bx-tada"/>
                 <span className="badge bg-danger rounded-pill">3</span>
-            </DropdownToggle>
+            </Dropdown.Toggle>
 
-            <DropdownMenu className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+            <Dropdown.Menu className="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
                 <div className="p-3">
                     <Row className="align-items-center">
                         <Col>
@@ -148,7 +138,7 @@ const NotificationDropdown = () => {
                         key="t-view-more">{("View More..")}</span>
                     </Link>
                 </div>
-            </DropdownMenu>
+            </Dropdown.Menu>
         </Dropdown>
     );
 };

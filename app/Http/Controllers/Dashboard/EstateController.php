@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Estate;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class EstateController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        return inertia('dashboard/estates', [
+            'estates' => Estate::select(["id", "name", "location"])->with("owner")->get()
+        ]);
     }
 
     /**
@@ -31,7 +35,7 @@ class EstateController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -42,7 +46,7 @@ class EstateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Estate  $estate
+     * @param \App\Models\Estate $estate
      * @return \Illuminate\Http\Response
      */
     public function show(Estate $estate)
@@ -53,7 +57,7 @@ class EstateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Estate  $estate
+     * @param \App\Models\Estate $estate
      * @return \Illuminate\Http\Response
      */
     public function edit(Estate $estate)
@@ -64,8 +68,8 @@ class EstateController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Estate  $estate
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Estate       $estate
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Estate $estate)
@@ -76,7 +80,7 @@ class EstateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Estate  $estate
+     * @param \App\Models\Estate $estate
      * @return \Illuminate\Http\Response
      */
     public function destroy(Estate $estate)

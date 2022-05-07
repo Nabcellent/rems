@@ -10,7 +10,7 @@ import('./bootstrap');
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'REMS';
 
 createInertiaApp({
-    title: (title) => `${title} | ${appName}`,
+    title: (title) => `${title && title + ' |'} ${appName}`,
     resolve: (name) => {
         const page = require(`./pages/${name}`).default;
 
@@ -18,7 +18,7 @@ createInertiaApp({
 
         return page;
     },
-    setup: ({el, App, props}) => createRoot(el).render(<App {...props}/>)
+    setup: ({ el, App, props }) => createRoot(el).render(<App {...props}/>)
 });
 
-InertiaProgress.init({color: '#4B5563'});
+InertiaProgress.init({ color: '#4B5563' });
