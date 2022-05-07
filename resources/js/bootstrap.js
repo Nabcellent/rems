@@ -12,7 +12,7 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.toast = (data) => {
+window.toast = data => {
     let duration = (data.duration ?? 7) * 1000,
         type = data.type ?? 'success',
         close = data.close ?? true;

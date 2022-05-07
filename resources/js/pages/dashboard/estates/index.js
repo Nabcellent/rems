@@ -22,6 +22,7 @@ const validationSchema = yup.object({
 });
 
 const Index = ({ estates }) => {
+    console.log(estates);
     const [showModal, setShowModal] = useState(false);
     const [formAction, setFormAction] = useState("create");
     const [isLoading, setIsLoading] = useState(false);
