@@ -125,34 +125,7 @@ const AdvanceTableWrapper = ({
         });
     };
 
-    return (
-        // <>
-        //   {Children.map(children, child => {
-        //     if (child.props.table) {
-        //       return cloneElement(child, {
-        //         ...child.props,
-        //         getTableProps,
-        //         headers,
-        //         page,
-        //         prepareRow,
-        //         canPreviousPage,
-        //         canNextPage,
-        //         nextPage,
-        //         previousPage,
-        //         gotoPage,
-        //         pageCount,
-        //         pageIndex,
-        //         selectedRowIds,
-        //         pageSize,
-        //         setPageSize
-        //       });
-        //     } else {
-        //       return child;
-        //     }
-        //   })}
-        // </>
-        <>{recursiveMap(children)}</>
-    );
+    return <>{recursiveMap(children)}</>;
 };
 
 export default memo(AdvanceTableWrapper);

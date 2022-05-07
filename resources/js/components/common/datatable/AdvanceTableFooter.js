@@ -1,7 +1,8 @@
 import { memo } from 'react';
 import classNames from 'classnames';
-import { Button, Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import Flex from '../Flex';
+import { Button } from '@mui/material';
 
 export const AdvanceTableFooter = ({
     table = true,
@@ -27,7 +28,7 @@ export const AdvanceTableFooter = ({
                     <p className="mb-0">
                         <span className="d-none d-sm-inline-block me-2">
                             {pageSize * pageIndex + 1} to {pageSize * pageIndex + page.length}{' '}
-                                of {rowCount}
+                            of {rowCount}
                         </span>
                     </p>
                 )}
@@ -51,22 +52,12 @@ export const AdvanceTableFooter = ({
             </Flex>
             {navButtons && (
                 <Flex>
-                    <Button
-                        size="sm"
-                        variant={canPreviousPage ? 'primary' : 'light'}
-                        onClick={() => previousPage()}
-                        className={classNames({ disabled: !canPreviousPage })}
-                    >
+                    <Button size="small" variant={canPreviousPage ? 'contained' : 'outlined'}
+                            disabled={!canPreviousPage} onClick={() => previousPage()}>
                         Previous
                     </Button>
-                    <Button
-                        size="sm"
-                        variant={canNextPage ? 'primary' : 'light'}
-                        className={classNames('px-4 ms-2', {
-                            disabled: !canNextPage
-                        })}
-                        onClick={() => nextPage()}
-                    >
+                    <Button disabled={!canNextPage} size="small" variant={canNextPage ? 'contained' : 'outlined'}
+                            className={'ms-2'} onClick={() => nextPage()}>
                         Next
                     </Button>
                 </Flex>

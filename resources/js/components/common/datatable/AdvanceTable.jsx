@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { Table } from 'react-bootstrap';
 
+// Create a default prop getter
+const defaultPropGetter = () => ({});
+
 const AdvanceTable = ({
     getTableProps,
     headers,
@@ -10,7 +13,10 @@ const AdvanceTable = ({
     prepareRow,
     headerClassName,
     rowClassName,
-    tableProps
+    tableProps,
+    getColumnProps = defaultPropGetter,
+    getRowProps = defaultPropGetter,
+    getCellProps = defaultPropGetter,
 }) => {
     return (
         <SimpleBarReact>
@@ -36,8 +42,8 @@ const AdvanceTable = ({
                                     <span className="sort"/>
                                 )
                             ) : (
-                                 ''
-                             )}
+                                ''
+                            )}
                         </th>
                     ))}
                 </tr>
@@ -50,9 +56,15 @@ const AdvanceTable = ({
                             {row.cells.map((cell, index) => {
                                 return (
                                     <td
-                                        key={index}
-                                        {...cell.getCellProps(cell.column.cellProps)}
-                                    >
+                                        // Return an array of prop objects and react-table will merge them appropriately
+                                        {...cell.getCellProps([
+                                            {
+                                                className: cell.column.className,
+                                                style: cell.column.style,
+                                            },
+                                            getColumnProps(cell.column),
+                                            getCellProps(cell),
+                                        ])}>
                                         {cell.render('Cell')}
                                     </td>
                                 );

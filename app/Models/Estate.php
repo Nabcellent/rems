@@ -19,7 +19,7 @@ class Estate extends Model
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function owner(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

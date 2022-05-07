@@ -70,6 +70,7 @@ const Dashboard = ({
 
     const toggleMenuCallback = () => {
         let body = document.body;
+
         if (window.screen.width <= 998) {
             body.classList.toggle("sidebar-enable");
         } else {

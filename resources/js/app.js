@@ -4,6 +4,8 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
 import { InertiaProgress } from '@inertiajs/progress';
 import 'boxicons/css/boxicons.min.css';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from '@/theme';
 
 import('./bootstrap');
 
@@ -18,7 +20,9 @@ createInertiaApp({
 
         return page;
     },
-    setup: ({ el, App, props }) => createRoot(el).render(<App {...props}/>)
+    setup: ({ el, App, props }) => {
+        return createRoot(el).render(<ThemeProvider theme={theme}><App {...props}/></ThemeProvider>);
+    }
 });
 
 InertiaProgress.init({ color: '#4B5563' });

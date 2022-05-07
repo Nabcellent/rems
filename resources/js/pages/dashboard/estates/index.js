@@ -81,21 +81,31 @@ const Index = ({ estates }) => {
                                     Header: 'Location',
                                 },
                                 {
+                                    accessor: 'owner',
+                                    Header: 'Owner',
+                                    Cell: ({ row }) => row.original.user.last_name
+                                },
+                                {
+                                    accessor: 'properties_count',
+                                    Header: 'Properties',
+                                    Cell: ({ row }) => row.original.properties_count + row.original.units_count
+                                },
+                                {
                                     accessor: 'actions',
                                     disableSortBy: true,
                                     className: 'text-end',
-                                    Cell: (rowData) => {
+                                    Cell: ({ row }) => {
                                         return (
-                                            <div className={'text-end'}>
-                                                <IconButton onClick={() => handleUpdate(rowData.row.original)}
+                                            <>
+                                                <IconButton onClick={() => handleUpdate(row.original)}
                                                             size={"small"} color={"primary"}>
                                                     <Edit fontSize={'small'}/>
                                                 </IconButton>
-                                                <IconButton onClick={() => handleDelete(rowData.row.original)}
+                                                <IconButton onClick={() => handleDelete(row.original)}
                                                             size={"small"} color={"error"}>
                                                     <Delete fontSize={'small'}/>
                                                 </IconButton>
-                                            </div>
+                                            </>
                                         );
                                     }
                                 }

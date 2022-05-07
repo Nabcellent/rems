@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Estate;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,7 +19,8 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates', [
-            'estates' => Estate::select(["id", "name", "location"])->with("owner")->get()
+            'estates' => Estate::select(["id", "user_id", "name", "location"])->with("user:id,last_name")
+                ->withCount(["properties", "units"])->get()
         ]);
     }
 
