@@ -48,8 +48,13 @@ class UserSeeder extends Seeder
             "updated_at"        => now()
         ], $users);
 
-        DB::table("users")->insert($users);
-
+        array_map(fn($user) => User::create([
+            ...$user,
+            "password"          => Hash::make(12345678),
+            "email_verified_at" => now(),
+            "created_at"        => now(),
+            "updated_at"        => now()
+        ])->assignRole(Role::SUPER_ADMIN->value), $users);
 
         /**
          * .....................    FACTORIES

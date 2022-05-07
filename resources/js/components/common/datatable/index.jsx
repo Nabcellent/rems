@@ -4,7 +4,8 @@ import AdvanceTable from './AdvanceTable';
 import AdvanceTableFooter from './AdvanceTableFooter';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import AdvanceTableSearchBox from './AdvanceTableSearchBox';
-import { Button, IconButton } from '@mui/material';
+import { Button } from '@mui/material';
+import { Add } from '@mui/icons-material';
 
 function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions }) {
     return (
@@ -36,7 +37,7 @@ function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions }) {
                         <div className={'d-flex align-items-center'}>
                             {
                                 onCreateRow &&
-                                <Button size="small" icon="plus" transform="shrink-3" className="me-2"
+                                <Button size="small" startIcon={<Add/>} transform="shrink-3" className="me-2"
                                         onClick={onCreateRow} variant={'contained'}>
                                     <span className="d-none d-sm-inline-block ms-1">New</span>
                                 </Button>

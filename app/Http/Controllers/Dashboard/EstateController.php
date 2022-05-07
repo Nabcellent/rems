@@ -3,14 +3,27 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEstateRequest;
 use App\Models\Estate;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class EstateController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Estate::class, 'estate');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +33,7 @@ class EstateController extends Controller
     {
         return inertia('dashboard/estates', [
             'estates' => Estate::select(["id", "user_id", "name", "location"])->with("user:id,last_name")
-                ->withCount(["properties", "units"])->get()
+                ->withCount(["properties", "units"])->latest()->get()
         ]);
     }
 
@@ -31,18 +44,22 @@ class EstateController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreEstateRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        $request->user()->estates()->create($data);
+
+        return redirect()->route('dashboard.estates.index');
     }
 
     /**
@@ -83,10 +100,12 @@ class EstateController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Estate $estate
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Estate $estate)
+    public function destroy(Estate $estate): RedirectResponse
     {
-        //
+        $estate->delete();
+
+        return back();
     }
 }

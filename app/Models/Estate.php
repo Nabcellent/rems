@@ -16,6 +16,11 @@ class Estate extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "name",
+        "location"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */
