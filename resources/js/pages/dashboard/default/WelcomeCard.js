@@ -4,6 +4,7 @@ import { Link, usePage } from "@inertiajs/inertia-react";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import profileImg from "../../../assets/images/profile-img.png";
 import CountUp from 'react-countup';
+import { Button } from '@mui/material';
 
 const WelcomeCard = () => {
     const { auth: { user }, my_estates_count, wallet_balance } = usePage().props;
@@ -48,10 +49,14 @@ const WelcomeCard = () => {
                                         <p className="text-muted mb-0">Wallet</p>
                                     </Col>
                                 </Row>
-                                <div className="mt-4">
-                                    <Link href="#" className="btn btn-primary btn-sm">
+                                <div className="mt-4 text-end">
+                                    <Button component={Link} href={'#'} size={'small'}
+                                            endIcon={<i className="mdi mdi-arrow-right ms-1"/>}>
+                                        View Profile
+                                    </Button>
+                                    {/*<Link href="#" className="btn btn-primary btn-sm">
                                         View Profile {" "}<i className="mdi mdi-arrow-right ms-1"/>
-                                    </Link>
+                                    </Link>*/}
                                 </div>
                             </div>
                         </Col>

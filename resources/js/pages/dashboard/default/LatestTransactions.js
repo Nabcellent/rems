@@ -13,7 +13,6 @@ const LatestTransactions = () => {
         <Row>
             <Col className="col-12">
                 <Card>
-                    {/* TODO: Which two are most important to show: Destination, Description, PaymentMethod */}
                     <DataTable title={'Latest Transactions'} perPage={5} searchable={false} columns={[
                         {
                             accessor: 'user',
