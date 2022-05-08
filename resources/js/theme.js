@@ -1,6 +1,12 @@
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+import { red } from '@mui/material/colors';
 
 export const theme = createTheme({
+    palette: {
+        primary: {
+            main: red[900]
+        }
+    },
     typography: {
         fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
     },
