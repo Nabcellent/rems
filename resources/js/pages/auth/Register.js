@@ -32,6 +32,7 @@ export default function Register() {
     return (
         <>
             <Head><title>Sign Up</title></Head>
+            <h4>Sign Up</h4>
 
             <ValidationErrors errors={errors}/>
 

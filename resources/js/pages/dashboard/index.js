@@ -11,7 +11,7 @@ const Breadcrumbs = lazy(() => import('../../components/common/Breadcrumb'));
 
 const Default = ({ errors, estates_count, revenue }) => {
     const reports = [
-        { title: "Estates", iconClass: "bx-copy-alt", description: <CountUp end={estates_count}/> },
+        { title: "Estates", iconClass: "bx-home-circle", description: <CountUp end={estates_count}/> },
         {
             title: "Revenue",
             iconClass: "bx-archive-in",
@@ -47,8 +47,8 @@ const Default = ({ errors, estates_count, revenue }) => {
                                                     <h4 className="mb-0">{report.description}</h4>
                                                 </div>
                                                 <div
-                                                    className="mini-stat-icon avatar-sm rounded-circle bg-primary align-self-center">
-                                                    <span className="avatar-title">
+                                                    className="mini-stat-icon avatar-sm rounded-circle bg-danger align-self-center">
+                                                    <span className="avatar-title bg-primary">
                                                         <i className={"bx " + report.iconClass + " font-size-24"}/>
                                                     </span>
                                                 </div>

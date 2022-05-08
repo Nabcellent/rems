@@ -7,6 +7,7 @@ import SimpleBar from "simplebar-react";
 // MetisMenu
 import MetisMenu from "metismenujs";
 import { Link } from "@inertiajs/inertia-react";
+import { Badge } from 'react-bootstrap';
 
 function usePrevious(value) {
     const ref = useRef();
@@ -132,7 +133,7 @@ const SidebarContent = ({ type, location }) => {
                 {
                     startIcon: <i className="bx bxs-dashboard"/>,
                     title: 'Dashboard',
-                    endIcon: <span className="badge rounded-pill bg-info m-0 ms-2">02</span>,
+                    endIcon: <Badge pill className={`small`}>02</Badge>,
                     subMenu: [
                         { link: route('dashboard.default'), title: 'Default' },
                         { link: route('dashboard.analytics'), title: 'Analytics' }

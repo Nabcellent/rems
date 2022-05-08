@@ -4,9 +4,10 @@ import ValidationErrors from '@/components/ValidationErrors';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 import { VpnKey } from '@mui/icons-material';
+import { TextField } from '@mui/material';
 
-export default function Login({status, canResetPassword}) {
-    const {data, setData, post, processing, errors, reset} = useForm({
+export default function Login({ status, canResetPassword }) {
+    const { data, setData, post, processing, errors, reset } = useForm({
         username: '',
         password: '',
         remember: '',
@@ -31,38 +32,23 @@ export default function Login({status, canResetPassword}) {
     return (
         <>
             <Head><title>Sign In</title></Head>
+            <h4>Sign In</h4>
 
             {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
 
             <ValidationErrors errors={errors}/>
 
             <form onSubmit={submit}>
-                <div>
-                    <label htmlFor="username" className={'block font-medium text-sm text-gray-700'}>Email / Phone
-                        number</label>
-
-                    <input
-                        type="text"
-                        name="username"
-                        value={data.username}
-                        className="shadow-sm rounded-md form-control"
-                        autoComplete="username"
-                        autoFocus={true}
-                        onChange={onHandleChange}
-                    />
+                <div className={'mt-3'}>
+                    <TextField size={"small"} label="Email / Phone number" placeholder="Email address or phone number..."
+                               name={'username'} value={data.username} autoFocus onChange={onHandleChange}
+                               autoComplete="username" fullWidth/>
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="password" className={'block font-medium text-sm text-gray-700'}>Password</label>
-
-                    <input
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="shadow-sm rounded-md form-control"
-                        autoComplete="current-password"
-                        onChange={onHandleChange}
-                    />
+                    <TextField size={"small"} label="Password" placeholder="Password" type={'password'}
+                               name={'password'} value={data.password} onChange={onHandleChange}
+                               autoComplete="current-password" fullWidth/>
                 </div>
 
                 <div className="d-flex align-items-center justify-content-between mt-4">

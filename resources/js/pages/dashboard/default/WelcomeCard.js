@@ -54,9 +54,6 @@ const WelcomeCard = () => {
                                             endIcon={<i className="mdi mdi-arrow-right ms-1"/>}>
                                         View Profile
                                     </Button>
-                                    {/*<Link href="#" className="btn btn-primary btn-sm">
-                                        View Profile {" "}<i className="mdi mdi-arrow-right ms-1"/>
-                                    </Link>*/}
                                 </div>
                             </div>
                         </Col>

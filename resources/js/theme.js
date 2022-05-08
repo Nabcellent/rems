@@ -1,10 +1,23 @@
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#990000'
+        }
+    },
     typography: {
         fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
     },
     components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '.375rem',
+                    boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)!important'
+                }
+            }
+        },
         MuiButton: {
             styleOverrides: {
                 root: {
