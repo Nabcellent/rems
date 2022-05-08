@@ -2,12 +2,12 @@
 .z-index-2 {z-index: 2 !important}
 .translate-y-50 {transform: translateY(50%) !important;}
 
-.bg-rems-danger {
+.bg-primary {
     background-color: #990000 !important;
 }
-.bg-rems-danger.bg-soft {
+.bg-primary.bg-soft {
     background-color: rgba(153, 0, 0, .25) !important
 }
-.text-rems-danger {
+.text-primary {
     color: #990000 !important;
 }

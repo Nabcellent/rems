@@ -48,7 +48,7 @@ const Default = ({ errors, estates_count, revenue }) => {
                                                 </div>
                                                 <div
                                                     className="mini-stat-icon avatar-sm rounded-circle bg-danger align-self-center">
-                                                    <span className="avatar-title bg-rems-danger">
+                                                    <span className="avatar-title bg-primary">
                                                         <i className={"bx " + report.iconClass + " font-size-24"}/>
                                                     </span>
                                                 </div>

@@ -14646,70 +14646,16 @@ textarea.form-control-lg {
     word-break: break-word !important
 }
 
-.text-primary {
-    --bs-text-opacity: 1;
-    color: rgba(85, 110, 230, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-secondary {
-    --bs-text-opacity: 1;
-    color: rgba(116, 120, 141, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-secondary-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-success {
-    --bs-text-opacity: 1;
-    color: rgba(52, 195, 143, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-success-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-info {
-    --bs-text-opacity: 1;
-    color: rgba(80, 165, 241, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-info-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-warning {
-    --bs-text-opacity: 1;
-    color: rgba(241, 180, 76, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-warning-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-danger {
-    --bs-text-opacity: 1;
-    color: rgba(244, 106, 106, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-danger-rgb), var(--bs-text-opacity)) !important
-}
-
 .text-pink {
     --bs-text-opacity: 1;
     color: rgba(232, 62, 140, var(--bs-text-opacity)) !important;
     color: rgba(var(--bs-pink-rgb), var(--bs-text-opacity)) !important
 }
 
-.text-light {
-    --bs-text-opacity: 1;
-    color: rgba(239, 242, 247, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-light-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-dark {
-    --bs-text-opacity: 1;
-    color: rgba(52, 58, 64, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-dark-rgb), var(--bs-text-opacity)) !important
-}
-
 .text-black {
     --bs-text-opacity: 1;
     color: rgba(0, 0, 0, var(--bs-text-opacity)) !important;
     color: rgba(var(--bs-black-rgb), var(--bs-text-opacity)) !important
-}
-
-.text-white {
-    --bs-text-opacity: 1;
-    color: rgba(255, 255, 255, var(--bs-text-opacity)) !important;
-    color: rgba(var(--bs-white-rgb), var(--bs-text-opacity)) !important
 }
 
 .text-body {
@@ -14752,42 +14698,6 @@ textarea.form-control-lg {
 
 .text-opacity-100 {
     --bs-text-opacity: 1
-}
-
-.bg-primary {
-    --bs-bg-opacity: 1;
-    background-color: rgba(85, 110, 230, var(--bs-bg-opacity)) !important;
-    background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity)) !important
-}
-
-.bg-secondary {
-    --bs-bg-opacity: 1;
-    background-color: rgba(116, 120, 141, var(--bs-bg-opacity)) !important;
-    background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important
-}
-
-.bg-success {
-    --bs-bg-opacity: 1;
-    background-color: rgba(52, 195, 143, var(--bs-bg-opacity)) !important;
-    background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important
-}
-
-.bg-info {
-    --bs-bg-opacity: 1;
-    background-color: rgba(80, 165, 241, var(--bs-bg-opacity)) !important;
-    background-color: rgba(var(--bs-info-rgb), var(--bs-bg-opacity)) !important
-}
-
-.bg-warning {
-    --bs-bg-opacity: 1;
-    background-color: rgba(241, 180, 76, var(--bs-bg-opacity)) !important;
-    background-color: rgba(var(--bs-warning-rgb), var(--bs-bg-opacity)) !important
-}
-
-.bg-danger {
-    --bs-bg-opacity: 1;
-    background-color: rgba(244, 106, 106, var(--bs-bg-opacity)) !important;
-    background-color: rgba(var(--bs-danger-rgb), var(--bs-bg-opacity)) !important
 }
 
 .bg-pink {

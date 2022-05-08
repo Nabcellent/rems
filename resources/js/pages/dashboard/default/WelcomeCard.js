@@ -12,11 +12,11 @@ const WelcomeCard = () => {
     return (
         <>
             <Card className="overflow-hidden">
-                <div className="bg-rems-danger bg-soft">
+                <div className="bg-primary bg-soft">
                     <Row>
                         <Col xs="7">
-                            <div className="text-rems-danger p-3">
-                                <h5 className="text-rems-danger">Welcome Back !</h5>
+                            <div className="text-primary p-3">
+                                <h5 className="text-primary">Welcome Back !</h5>
                                 <p>REMS Dashboard</p>
                             </div>
                         </Col>
