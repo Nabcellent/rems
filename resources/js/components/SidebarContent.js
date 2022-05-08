@@ -172,6 +172,12 @@ const SidebarContent = ({ type, location }) => {
                         { link: '/contacts', title: 'list' },
                         { link: '/notify', title: 'Notify' }
                     ]
+                },
+                {
+                    startIcon: <i className="bx bxs-coin-stack"/>, title: 'Payments', subMenu: [
+                        { link: '/payments', title: 'list' },
+                        { link: '/notify', title: 'Notify' }
+                    ]
                 }
             ]
         },

@@ -4,7 +4,8 @@ import AdvanceTable from './AdvanceTable';
 import AdvanceTableFooter from './AdvanceTableFooter';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import AdvanceTableSearchBox from './AdvanceTableSearchBox';
-import { Button, IconButton } from '@mui/material';
+import { Button } from '@mui/material';
+import { Add } from '@mui/icons-material';
 
 function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions }) {
     return (
@@ -36,7 +37,7 @@ function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions }) {
                         <div className={'d-flex align-items-center'}>
                             {
                                 onCreateRow &&
-                                <Button size="small" icon="plus" transform="shrink-3" className="me-2"
+                                <Button size="small" startIcon={<Add/>} transform="shrink-3" className="me-2"
                                         onClick={onCreateRow} variant={'contained'}>
                                     <span className="d-none d-sm-inline-block ms-1">New</span>
                                 </Button>
@@ -58,7 +59,8 @@ const DataTable = ({
     perPage = 10,
     tableClassName,
     bulkActions = true,
-    onCreateRow
+    onCreateRow,
+    searchable = true
 }) => {
     return (
         <Card className={'mb-3'}>
@@ -67,7 +69,9 @@ const DataTable = ({
                                      selection={bulkActions} selectionColumnWidth={30}>
                     <BulkAction table title={title} onCreateRow={onCreateRow} bulkActions={bulkActions}/>
                     <Row className="flex-end-center">
-                        <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
+                        {
+                            searchable && <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
+                        }
                     </Row>
                     <AdvanceTable table headerClassName="bg-200 text-900 text-nowrap align-middle"
                                   rowClassName="align-middle"

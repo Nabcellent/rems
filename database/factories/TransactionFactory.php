@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Description;
+use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,9 +20,11 @@ class TransactionFactory extends Factory
     public function definition(): array
     {
         return [
-            "user_id" => User::factory(),
-            "amount"  => $this->faker->numberBetween(100, 100000),
-            "description" => $this->faker->randomElement(Description::cases())
+            "user_id"        => User::factory(),
+            "destination_id" => User::factory(),
+            "amount"         => $this->faker->numberBetween(100, 100000),
+            "description"    => $this->faker->randomElement(Description::cases()),
+            "status"         => $this->faker->randomElement([Status::COMPLETED, Status::PENDING, Status::FAILED])
         ];
     }
 }

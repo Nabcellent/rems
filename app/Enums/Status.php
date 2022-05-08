@@ -6,7 +6,9 @@ enum Status: string
 {
     case ACTIVE = "ACTIVE";
     case INACTIVE = "INACTIVE";
+    case RESOLVED = "RESOLVED";
+
     case PENDING = "PENDING";
     case COMPLETED = "COMPLETED";
-    case RESOLVED = "RESOLVED";
+    case FAILED = "FAILED";
 }

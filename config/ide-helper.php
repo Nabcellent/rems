@@ -122,6 +122,7 @@ return [
     'include_helpers' => true,
 
     'helper_files' => [
+        base_path() . '/app/Helpers/helpers.php',
         base_path() . '/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
     ],
 

@@ -21644,6 +21644,18 @@ namespace  {
 namespace {
     
 
+use Illuminate\Support\Collection;
+
+if(!function_exists('stringifyArr')) {
+    function stringifyArr(array|Collection $array): string
+    {
+        $string = $array instanceof Collection ? $array->implode(',') : implode(', ', $array);
+
+        return str($string)->headline();
+    }
+}
+
+
 use Illuminate\Contracts\Support\DeferringDisplayableValue;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Arr;

@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Events\UserCreated;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -49,6 +51,56 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ["full_name", "user_roles", "user_roles_str"];
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => UserCreated::class,
+    ];
+
+    /**
+     * Get the user's full name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function fullName(): Attribute
+    {
+        return Attribute::get(function($value, $attributes) {
+            $firstName = $attributes["first_name"] ?? "";
+            $lastName = $attributes["last_name"] ?? "";
+            return str($firstName . $lastName)->headline();
+        });
+    }
+
+    /**
+     * Get the user's roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function userRoles(): Attribute
+    {
+        return Attribute::make(get: fn() => $this->getRoleNames());
+    }
+
+    /**
+     * Get the user's roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function userRolesStr(): Attribute
+    {
+        return Attribute::get(fn() => stringifyArr($this->getRoleNames()));
+    }
 
 
     /**

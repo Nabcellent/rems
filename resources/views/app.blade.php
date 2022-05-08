@@ -13,6 +13,7 @@
     <link href="{{ asset("css/dripicons.min.css") }}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="{{ asset("vendor/materialdesign/css/materialdesignicons.min.css") }}" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ asset("vendor/fontawesome/css/all.min.css") }}" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
 
     <!-- Scripts -->
     @routes
@@ -25,7 +26,7 @@
 @inertia
 
 @env('local')
-    <script src="http://localhost:8080/js/bundle.js"></script>
+{{--    <script src="http://localhost:8080/js/bundle.js"></script>--}}
 @endenv
 </body>
 </html>

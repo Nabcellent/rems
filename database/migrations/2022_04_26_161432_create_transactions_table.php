@@ -15,9 +15,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('transactions', function(Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('destination_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('type', 50)->default(TransactionType::PAYMENT->value);
             $table->integer("amount");
             $table->string("status")->default(Status::PENDING->value);
