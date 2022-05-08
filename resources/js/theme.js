@@ -10,6 +10,14 @@ export const theme = createTheme({
         fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
     },
     components: {
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    borderRadius: '.375rem',
+                    boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)!important'
+                }
+            }
+        },
         MuiButton: {
             styleOverrides: {
                 root: {
