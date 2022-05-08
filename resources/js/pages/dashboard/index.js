@@ -9,7 +9,7 @@ import LatestTransactions from '@/pages/dashboard/default/LatestTransactions';
 
 const Breadcrumbs = lazy(() => import('../../components/common/Breadcrumb'));
 
-const Default = ({ errors, estates_count, revenue, latest_transactions }) => {
+const Default = ({ errors, estates_count, revenue }) => {
     const reports = [
         { title: "Estates", iconClass: "bx-copy-alt", description: <CountUp end={estates_count}/> },
         {
@@ -31,15 +31,12 @@ const Default = ({ errors, estates_count, revenue, latest_transactions }) => {
                 <Breadcrumbs title="Dashboards" breadcrumbItem="Default"/>
 
                 <Row>
-                    <Col xl="4">
-                        <WelcomeCard/>
-                        {/*<MonthlyEarning />*/}
-                    </Col>
+                    <Col xl="4"><WelcomeCard/></Col>
                     <Col xl="8">
                         <Row>
                             {/* Reports Render */}
                             {reports.map((report, key) => (
-                                <Col md="4" key={"_col_" + key}>
+                                <Col md="4" key={`_col_${key}`}>
                                     <Card className="mini-stats-wid">
                                         <Card.Body>
                                             <div className="d-flex">
@@ -65,7 +62,7 @@ const Default = ({ errors, estates_count, revenue, latest_transactions }) => {
                 </Row>
                 <Row>
                     <Col lg="12">
-                        <LatestTransactions latestTransactions={latest_transactions}/>
+                        <LatestTransactions />
                     </Col>
                 </Row>
             </Container>

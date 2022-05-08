@@ -14,6 +14,7 @@ const AdvanceTable = ({
     headerClassName,
     rowClassName,
     tableProps,
+    getHeaderProps = defaultPropGetter,
     getColumnProps = defaultPropGetter,
     getRowProps = defaultPropGetter,
     getCellProps = defaultPropGetter,
@@ -25,8 +26,13 @@ const AdvanceTable = ({
                 <tr>
                     {headers.map((column, index) => (
                         <th
-                            key={index}
                             {...column.getHeaderProps(
+                                {
+                                    className: column.className,
+                                    style: column.style,
+                                },
+                                getColumnProps(column),
+                                getHeaderProps(column),
                                 column.getSortByToggleProps(column.headerProps)
                             )}
                         >
@@ -53,7 +59,7 @@ const AdvanceTable = ({
                     prepareRow(row);
                     return (
                         <tr key={i} className={rowClassName} {...row.getRowProps()}>
-                            {row.cells.map((cell, index) => {
+                            {row.cells.map(cell => {
                                 return (
                                     <td
                                         // Return an array of prop objects and react-table will merge them appropriately

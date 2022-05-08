@@ -51,7 +51,6 @@ namespace App\Models{
  * @property-read int|null $amenities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
  * @property-read int|null $images_count
- * @property-read \App\Models\User|null $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Policy[] $policies
  * @property-read int|null $policies_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Property[] $properties
@@ -60,6 +59,7 @@ namespace App\Models{
  * @property-read int|null $services_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
  * @property-read int|null $units_count
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\EstateFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Estate newQuery()
@@ -454,12 +454,14 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
+ * @property int $destination_id
  * @property string $type
  * @property int $amount
  * @property string $status
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $destination
  * @property-read \App\Models\Payment|null $payment
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\TransactionFactory factory(...$parameters)
@@ -469,6 +471,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDestinationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereType($value)

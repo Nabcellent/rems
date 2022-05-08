@@ -21,6 +21,11 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function destination(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "destination_id");
+    }
 
     public function payment(): HasOne
     {

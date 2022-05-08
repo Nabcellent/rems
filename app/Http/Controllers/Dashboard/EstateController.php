@@ -32,7 +32,7 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates', [
-            'estates' => Estate::select(["id", "user_id", "name", "location"])->with("user:id,last_name")
+            "estates" => Estate::select(["id", "user_id", "name", "location"])->with("user:id,last_name")
                 ->withCount(["properties", "units"])->latest()->get()
         ]);
     }

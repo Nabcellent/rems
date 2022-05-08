@@ -3,9 +3,10 @@ import { Link, usePage } from "@inertiajs/inertia-react";
 
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import profileImg from "../../../assets/images/profile-img.png";
+import CountUp from 'react-countup';
 
 const WelcomeCard = () => {
-    const { auth: { user } } = usePage().props;
+    const { auth: { user }, my_estates_count, wallet_balance } = usePage().props;
 
     return (
         <>
@@ -37,12 +38,14 @@ const WelcomeCard = () => {
                             <div className="pt-4">
                                 <Row>
                                     <Col xs="6">
-                                        <h5 className="font-size-15">125</h5>
-                                        <p className="text-muted mb-0">Projects</p>
+                                        <h5 className="font-size-15"><CountUp end={my_estates_count}/></h5>
+                                        <p className="text-muted mb-0">Estates</p>
                                     </Col>
                                     <Col xs="6">
-                                        <h5 className="font-size-15">$1245</h5>
-                                        <p className="text-muted mb-0">Revenue</p>
+                                        <h5 className="font-size-15">
+                                            <CountUp end={wallet_balance} prefix={'KES.'} separator={','}/>
+                                        </h5>
+                                        <p className="text-muted mb-0">Wallet</p>
                                     </Col>
                                 </Row>
                                 <div className="mt-4">

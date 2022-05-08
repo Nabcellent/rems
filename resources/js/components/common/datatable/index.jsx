@@ -59,7 +59,8 @@ const DataTable = ({
     perPage = 10,
     tableClassName,
     bulkActions = true,
-    onCreateRow
+    onCreateRow,
+    searchable = true
 }) => {
     return (
         <Card className={'mb-3'}>
@@ -68,7 +69,9 @@ const DataTable = ({
                                      selection={bulkActions} selectionColumnWidth={30}>
                     <BulkAction table title={title} onCreateRow={onCreateRow} bulkActions={bulkActions}/>
                     <Row className="flex-end-center">
-                        <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
+                        {
+                            searchable && <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
+                        }
                     </Row>
                     <AdvanceTable table headerClassName="bg-200 text-900 text-nowrap align-middle"
                                   rowClassName="align-middle"
