@@ -3,9 +3,10 @@ import ValidationErrors from '@/components/ValidationErrors';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 import { HowToReg } from '@mui/icons-material';
+import { TextField } from '@mui/material';
 
 export default function Register() {
-    const {data, setData, post, processing, errors, reset} = useForm({
+    const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
         email: '',
@@ -34,49 +35,37 @@ export default function Register() {
             <Head><title>Sign Up</title></Head>
             <h4>Sign Up</h4>
 
-            <ValidationErrors errors={errors}/>
+            <ValidationErrors errors={errors} />
 
             <form onSubmit={submit} className={'row'}>
                 <div className="col-12 col-lg-6 mt-3">
-                    <label htmlFor="first_name">First Name</label>
-
-                    <input type="text" name="first_name" value={data.first_name}
-                           className="shadow-sm rounded-md form-control"
-                           autoComplete="name" autoFocus onChange={onHandleChange} required/>
+                    <TextField size={"small"} label="First Name" placeholder="First Name..."
+                        name={'first_name'} value={data.first_name} autoFocus onChange={onHandleChange}
+                        autoComplete="name" fullWidth required />
                 </div>
 
                 <div className="col-12 col-lg-6 mt-3">
-                    <label htmlFor="last_name">Last Name</label>
-
-                    <input type="text" name="last_name" value={data.last_name}
-                           className="shadow-sm rounded-md form-control"
-                           autoComplete="name" onChange={onHandleChange} required/>
+                    <TextField size={"small"} label="Last Name" placeholder="Last Name..."
+                        name={'last_name'} value={data.last_name} autoFocus onChange={onHandleChange}
+                        autoComplete="name" fullWidth required />
                 </div>
 
                 <div className="col-12 mt-3">
-                    <label htmlFor="email">Email</label>
-
-                    <input type="email" name="email" value={data.email}
-                           className="shadow-sm rounded-md form-control" autoComplete="username"
-                           onChange={onHandleChange} required
-                    />
+                    <TextField size={"small"} label="Email" placeholder="Email..."
+                        name={'email'} value={data.email} autoFocus onChange={onHandleChange}
+                        autoComplete="off" fullWidth required />
                 </div>
 
                 <div className="col-12 col-lg-6 mt-3">
-                    <label htmlFor="password">Password</label>
-
-                    <input type="password" name="password" value={data.password}
-                           className="shadow-sm rounded-md form-control" autoComplete="new-password"
-                           onChange={onHandleChange} required
-                    />
+                    <TextField type="password" size={"small"} label="Password" placeholder="Password..."
+                        name={'password'} value={data.password} autoFocus onChange={onHandleChange}
+                        autoComplete="off" fullWidth required />
                 </div>
 
                 <div className="col-12 col-lg-6 mt-3">
-                    <label htmlFor="password_confirmation">Confirm Password</label>
-
-                    <input type="password" name="password_confirmation" value={data.password_confirmation}
-                           className="shadow-sm rounded-md form-control" onChange={onHandleChange} required
-                    />
+                    <TextField type="password" size={"small"} label="Password Confirmation" placeholder="Password confirmation..."
+                        name={'password_confirmation'} value={data.password_confirmation} autoFocus onChange={onHandleChange}
+                        autoComplete="off" fullWidth required />
                 </div>
 
                 <div className="d-flex align-items-center justify-content-between mt-3">
@@ -85,7 +74,7 @@ export default function Register() {
                     </Link>
 
                     <LoadingButton type={'submit'} size={'small'} variant={'contained'} className="ml-4"
-                                   loading={processing} endIcon={<HowToReg fontSize={'small'}/>}>
+                        loading={processing} endIcon={<HowToReg fontSize={'small'} />}>
                         Register
                     </LoadingButton>
                 </div>
