@@ -16,4 +16,5 @@ yarn-error.log
 y.hide
 
 public/js/*
+public/css/app.css
 database/migrations/2022_04_26_160204_create_leases_table.php

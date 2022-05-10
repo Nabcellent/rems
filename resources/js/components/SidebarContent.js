@@ -175,9 +175,14 @@ const SidebarContent = ({ type, location }) => {
                     ]
                 },
                 {
+                    startIcon: <i className="bx bx-transfer"/>,
+                    title: 'Transactions',
+                    link: route('dashboard.transactions.index')
+                },
+                {
                     startIcon: <i className="bx bxs-coin-stack"/>, title: 'Payments', subMenu: [
                         { link: '/payments', title: 'list' },
-                        { link: '/notify', title: 'Notify' }
+                        { link: '/notify', title: 'Plans' }
                     ]
                 }
             ]

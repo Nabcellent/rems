@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { Head } from '@inertiajs/inertia-react';
+import { Container } from 'react-bootstrap';
 
 const Footer = lazy(() => import('../components/Footer'));
 
@@ -108,14 +109,10 @@ const Dashboard = ({
 
             <div id="layout-wrapper">
                 <Header toggleMenuCallback={toggleMenuCallback}/>
-                <Sidebar
-                    theme={leftSideBarTheme}
-                    type={leftSideBarType}
-                    isMobile={isMobile}
-                />
+                <Sidebar theme={leftSideBarTheme} type={leftSideBarType} isMobile={isMobile}/>
                 <div className="main-content">
                     <div className="page-content">
-                        {children}
+                        <Container fluid>{children}</Container>
                     </div>
                 </div>
                 <Footer/>

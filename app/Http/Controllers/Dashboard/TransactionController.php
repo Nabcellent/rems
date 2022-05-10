@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class TransactionController extends Controller
 {
@@ -31,7 +34,7 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -42,18 +45,26 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Transaction $transaction
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Transaction $transaction)
+    public function show(Transaction $transaction): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/transactions/Show", [
+            "transaction" => $transaction->load([
+                'user:id,first_name,last_name,email,phone',
+                'user.roles',
+                'destination:id,first_name,last_name,email,phone',
+                'destination.roles',
+                "payment:id,transaction_id,amount,method,status"
+            ])
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function edit(Transaction $transaction)
@@ -64,8 +75,8 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Transaction  $transaction
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Transaction $transaction)
@@ -76,7 +87,7 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Transaction  $transaction
+     * @param \App\Models\Transaction $transaction
      * @return \Illuminate\Http\Response
      */
     public function destroy(Transaction $transaction)
