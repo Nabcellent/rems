@@ -77,56 +77,54 @@ const Index = ({ estates }) => {
 
     return (
         <Dashboard title={'Estates'}>
-            <Container fluid>
-                {/* Render Breadcrumbs */}
-                <Breadcrumbs title="Estates" breadcrumbItem="list"/>
+            {/* Render Breadcrumbs */}
+            <Breadcrumbs title="Estates" breadcrumbItem="list"/>
 
-                <Row>
-                    <Col className="col-12">
-                        <Card>
-                            <DataTable title={'Estates'} columns={[
-                                {
-                                    accessor: 'name',
-                                    Header: 'Name',
-                                },
-                                {
-                                    accessor: 'location',
-                                    Header: 'Location',
-                                },
-                                {
-                                    accessor: 'owner',
-                                    Header: 'Owner',
-                                    Cell: ({ row }) => row.original.user.last_name
-                                },
-                                {
-                                    accessor: 'properties_count',
-                                    Header: 'Properties',
-                                    Cell: ({ row }) => row.original.properties_count + row.original.units_count
-                                },
-                                {
-                                    accessor: 'actions',
-                                    disableSortBy: true,
-                                    className: 'text-end',
-                                    Cell: ({ row }) => {
-                                        return (
-                                            <>
-                                                <IconButton onClick={() => handleUpdate(row.original)}
-                                                            size={"small"} color={"primary"}>
-                                                    <Edit fontSize={'small'}/>
-                                                </IconButton>
-                                                <IconButton onClick={() => handleDelete(row.original)}
-                                                            size={"small"} color={"error"}>
-                                                    <Delete fontSize={'small'}/>
-                                                </IconButton>
-                                            </>
-                                        );
-                                    }
+            <Row>
+                <Col className="col-12">
+                    <Card>
+                        <DataTable title={'Estates'} columns={[
+                            {
+                                accessor: 'name',
+                                Header: 'Name',
+                            },
+                            {
+                                accessor: 'location',
+                                Header: 'Location',
+                            },
+                            {
+                                accessor: 'owner',
+                                Header: 'Owner',
+                                Cell: ({ row }) => row.original.user.last_name
+                            },
+                            {
+                                accessor: 'properties_count',
+                                Header: 'Properties',
+                                Cell: ({ row }) => row.original.properties_count + row.original.units_count
+                            },
+                            {
+                                accessor: 'actions',
+                                disableSortBy: true,
+                                className: 'text-end',
+                                Cell: ({ row }) => {
+                                    return (
+                                        <>
+                                            <IconButton onClick={() => handleUpdate(row.original)}
+                                                        size={"small"} color={"primary"}>
+                                                <Edit fontSize={'small'}/>
+                                            </IconButton>
+                                            <IconButton onClick={() => handleDelete(row.original)}
+                                                        size={"small"} color={"error"}>
+                                                <Delete fontSize={'small'}/>
+                                            </IconButton>
+                                        </>
+                                    );
                                 }
-                            ]} data={estates} onCreateRow={handleCreate}/>
-                        </Card>
-                    </Col>
-                </Row>
-            </Container>
+                            }
+                        ]} data={estates} onCreateRow={handleCreate}/>
+                    </Card>
+                </Col>
+            </Row>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">

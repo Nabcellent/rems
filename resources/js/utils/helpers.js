@@ -12,3 +12,8 @@ export const isToday = date => date.isSame(TODAY, "d");
 export const isYesterday = date => date.isSame(YESTERDAY, "d");
 export const isWithinAWeek = date => date.isAfter(A_WEEK_OLD);
 export const isTwoWeeksOrMore = date => !isWithinAWeek(date);
+
+export const currencyFormat = (number, currency = 'KES') => (new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency
+})).format(number)

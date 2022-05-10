@@ -9,7 +9,7 @@ import LatestTransactions from '@/pages/dashboard/default/LatestTransactions';
 
 const Breadcrumbs = lazy(() => import('../../components/common/Breadcrumb'));
 
-const Default = ({ errors, estates_count, revenue }) => {
+const Default = ({ errors, estates_count, revenue, service_providers_count }) => {
     const reports = [
         { title: "Estates", iconClass: "bx-home-circle", description: <CountUp end={estates_count}/> },
         {
@@ -18,9 +18,9 @@ const Default = ({ errors, estates_count, revenue }) => {
             description: <CountUp end={revenue} prefix={'KES.'} separator={','}/>,
         },
         {
-            title: "Average Price",
-            iconClass: "bx-purchase-tag-alt",
-            description: "$16.2",
+            title: "Service Providers",
+            iconClass: "bx-hard-hat",
+            description: <CountUp end={service_providers_count}/>,
         },
     ];
 

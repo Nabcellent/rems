@@ -5,6 +5,7 @@ import { Badge, Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import { Typography } from '@mui/material';
 import moment from 'moment';
 import { isToday, isYesterday } from '@/utils/helpers';
+import StatusBadge from '@/components/StatusBadge';
 
 const LatestTransactions = () => {
     const { latest_transactions } = usePage().props;
@@ -47,21 +48,7 @@ const LatestTransactions = () => {
                         {
                             accessor: 'status',
                             Header: 'Status',
-                            Cell: ({ row }) => {
-                                let { original: { status } } = row;
-                                let color;
-                                if (status === 'COMPLETED') {
-                                    color = 'success';
-                                } else if (status === 'PENDING') {
-                                    color = 'warning';
-                                } else if (status === 'FAILED') {
-                                    color = 'danger';
-                                }
-
-                                return (
-                                    <Badge pill bg={color} className={`font-size-12`}>{status}</Badge>
-                                );
-                            }
+                            Cell: ({ row }) => <StatusBadge status={row.original.status}/>
                         },
                         {
                             accessor: 'created_at',
