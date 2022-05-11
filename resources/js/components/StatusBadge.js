@@ -1,6 +1,6 @@
 import { Badge } from 'react-bootstrap';
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, bg = true }) => {
     let color;
     if (['COMPLETED', 'ACTIVE'].includes(status)) {
         color = 'success';
@@ -10,7 +10,10 @@ const StatusBadge = ({ status }) => {
         color = 'danger';
     }
 
-    return <Badge pill bg={color} className={`font-size-12`}>{status}</Badge>;
+    return <Badge pill bg={bg ? color : 'transparent'} text={bg ? 'white' : color}
+                  className={`font-weight-bold font-size-12`}>
+        {status}
+    </Badge>;
 };
 
 export default StatusBadge;

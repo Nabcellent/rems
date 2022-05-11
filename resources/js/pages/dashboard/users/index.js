@@ -2,7 +2,7 @@ import Dashboard from '@/layouts/Dashboard';
 import { Badge, Card, Col, Container, Modal, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { Button, Grid, IconButton, TextField } from '@mui/material';
+import { Autocomplete, Button, Grid, IconButton, TextField } from '@mui/material';
 import { Create, Delete, Edit } from '@mui/icons-material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -13,27 +13,36 @@ import { LoadingButton } from '@mui/lab';
 import ValidationErrors from '@/components/ValidationErrors';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
-import { parsePhoneNumber } from 'libphonenumber-js';
+import { isValidPhoneNumber, parsePhoneNumber } from 'libphonenumber-js';
 import PhoneBadge from '@/components/PhoneBadge';
 import StatusBadge from '@/components/StatusBadge';
+import { Role } from '@/utils/enums';
 
 const MySwal = withReactContent(Swal);
 
 const validationSchema = yup.object({
     first_name: yup.string().required(),
     last_name: yup.string().required(),
-    location: yup.string().required()
+    phone: yup.string().test({
+        name: 'is-valid-phone',
+        message: 'Invalid phone number',
+        test: value => isValidPhoneNumber(String(value), 'KE')
+    }).required('Phone number is required.'),
+    gender: yup.string(),
+    email: yup.string().email().required(),
+    role: yup.string().oneOf(Object.values(Role), 'Invalid role').required(),
 });
 
 const Index = ({ users }) => {
     console.log(users);
+
     const [showModal, setShowModal] = useState(false);
     const [formAction, setFormAction] = useState("create");
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
     const formik = useFormik({
-        initialValues: { first_name: '', last_name: '', },
+        initialValues: { first_name: '', last_name: '', phone: '', gender: '', email: '', role: '', },
         validationSchema: validationSchema,
         validateOnChange: true,
         onSubmit: values => {
@@ -111,7 +120,7 @@ const Index = ({ users }) => {
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                                Cell: ({ row }) => <StatusBadge status={row.original.status} bg={false}/>
                             },
                             {
                                 accessor: 'created_at',
@@ -143,30 +152,60 @@ const Index = ({ users }) => {
                 </Col>
             </Row>
 
-            <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal size={'lg'} show={showModal} onHide={() => setShowModal(false)}>
                 <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
                     <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShowModal(false)}/>
                 </div>
                 <Modal.Body className={'modal-body'}>
                     <div className="pb-3">
-                        <h4 className="mb-1">{(formAction === "create" ? "New" : "Update") + " Estate"}</h4>
+                        <h4 className="mb-1">{(formAction === "create" ? "New" : "Update") + " User"}</h4>
                     </div>
 
                     <ValidationErrors errors={errors}/>
 
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField size={"small"} label="Name" placeholder="Estate's name..." name={'name'}
-                                       value={formik.values.name} fullWidth onChange={formik.handleChange}
-                                       error={formik.touched.name && Boolean(formik.errors.name)}
-                                       helperText={formik.touched.name && formik.errors.name}/>
+                        <Grid item xs={6}>
+                            <TextField label="First Name" placeholder="First name..." name={'first_name'}
+                                       value={formik.values.first_name} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                                       helperText={formik.touched.first_name && formik.errors.first_name}/>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField label="Last Name" placeholder="Last name..." name={'last_name'}
+                                       value={formik.values.last_name} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                                       helperText={formik.touched.last_name && formik.errors.last_name}/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size={"small"} label="Location" placeholder="Estate's location..."
-                                       name={'location'}
-                                       value={formik.values.location} fullWidth onChange={formik.handleChange}
-                                       error={formik.touched.location && Boolean(formik.errors.location)}
-                                       helperText={formik.touched.location && formik.errors.location}/>
+                            <TextField label="Email" placeholder="Email..." name={'email'}
+                                       value={formik.values.email} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.email && Boolean(formik.errors.email)}
+                                       helperText={formik.touched.email && formik.errors.email}/>
+                        </Grid>
+                        <Grid item md={4}>
+                            <TextField label="Phone Number" placeholder="Phone number..." name={'phone'}
+                                       value={formik.values.phone} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.phone && Boolean(formik.errors.phone)}
+                                       helperText={formik.touched.phone && formik.errors.phone}/>
+                        </Grid>
+                        <Grid item md={4}>
+                            <TextField label="Gender" placeholder="Gender..." name={'gender'}
+                                       value={formik.values.gender} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.gender && Boolean(formik.errors.gender)}
+                                       helperText={formik.touched.gender && formik.errors.gender}/>
+                        </Grid>
+                        <Grid item md={4}>
+                            <Autocomplete name={'role'} options={Object.values(Role).map(r => r.replaceAll('_', ' '))}
+                                          freeSolo
+                                          onChange={(event, newValue) => {
+                                              formik.setFieldValue('role', newValue, true);
+                                          }} renderInput={(params) => (
+                                <TextField {...params} label="Role" value={formik.values.role} required
+                                           placeholder={'Role...'}
+                                           error={formik.touched.role && Boolean(formik.errors.role)}
+                                           helperText={formik.touched.role && formik.errors.role}/>
+                            )}
+                            />
                         </Grid>
                     </Grid>
                 </Modal.Body>

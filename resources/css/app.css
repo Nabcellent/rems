@@ -14655,11 +14655,6 @@ textarea.form-control-lg {
     background-color: rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity)) !important
 }
 
-.bg-transparent {
-    --bs-bg-opacity: 1;
-    background-color: transparent !important
-}
-
 .bg-opacity-10 {
     --bs-bg-opacity: .1
 }
@@ -19248,11 +19243,6 @@ label {
     color: #343a40;
     text-decoration: none;
     background-color: rgba(52, 58, 64, .4)
-}
-
-.rounded-pill {
-    padding-right: .6em;
-    padding-left: .6em
 }
 
 .badge.bg-dark {
