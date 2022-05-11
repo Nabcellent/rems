@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -27,6 +28,7 @@ class UserFactory extends Factory
             'phone'             => 7 . $this->faker->unique()->numerify('########'),
             'email'             => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
+            "status"            => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
             'password'          => Hash::make(12345678),
             'remember_token'    => Str::random(10),
         ];

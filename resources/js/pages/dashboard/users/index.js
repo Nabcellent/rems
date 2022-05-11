@@ -1,0 +1,186 @@
+import Dashboard from '@/layouts/Dashboard';
+import { Badge, Card, Col, Container, Modal, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import Breadcrumbs from '@/components/common/Breadcrumb';
+import DataTable from '@/components/common/datatable';
+import { Button, Grid, IconButton, TextField } from '@mui/material';
+import { Create, Delete, Edit } from '@mui/icons-material';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+import ValidationErrors from '@/components/ValidationErrors';
+import { Inertia } from '@inertiajs/inertia';
+import TableDate from '@/components/TableDate';
+import { parsePhoneNumber } from 'libphonenumber-js';
+import PhoneBadge from '@/components/PhoneBadge';
+import StatusBadge from '@/components/StatusBadge';
+
+const MySwal = withReactContent(Swal);
+
+const validationSchema = yup.object({
+    first_name: yup.string().required(),
+    last_name: yup.string().required(),
+    location: yup.string().required()
+});
+
+const Index = ({ users }) => {
+    console.log(users);
+    const [showModal, setShowModal] = useState(false);
+    const [formAction, setFormAction] = useState("create");
+    const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    const formik = useFormik({
+        initialValues: { first_name: '', last_name: '', },
+        validationSchema: validationSchema,
+        validateOnChange: true,
+        onSubmit: values => {
+            Inertia.post(route('dashboard.users.store'), values, {
+                onBefore: () => setIsLoading(true),
+                onSuccess: () => {
+                    setShowModal(false);
+                    formik.resetForm();
+                },
+                onError: errors => setErrors(errors),
+                onFinish: () => setIsLoading(false)
+            });
+        }
+    });
+
+    const handleCreate = () => {
+        setFormAction('create');
+        formik.resetForm();
+
+        setShowModal(true);
+    };
+
+    const handleUpdate = user => {
+        setFormAction('update');
+
+        formik.setValues(user, true);
+        setShowModal(true);
+    };
+
+    const handleDelete = user => {
+        if (user) {
+            MySwal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                showLoaderOnConfirm: true
+            }).then(async result => {
+                if (result.isConfirmed) Inertia.delete(route('dashboard.users.destroy', { user: user.id }));
+            });
+        }
+    };
+
+    return (
+        <Dashboard title={'Users'}>
+            {/* Render Breadcrumbs */}
+            <Breadcrumbs title="Users" breadcrumbItem="list"/>
+
+            <Row>
+                <Col className="col-12">
+                    <Card>
+                        <DataTable title={'Users'} columns={[
+                            {
+                                accessor: 'name',
+                                Header: 'Name',
+                                Cell: ({ row }) => (
+                                    <OverlayTrigger overlay={<Tooltip>{row.original.user_roles_str}</Tooltip>}>
+                                        <span>
+                                            {row.original.full_name} <br/>
+                                            <small>{row.original.email}</small>
+                                        </span>
+                                    </OverlayTrigger>
+                                )
+                            },
+                            {
+                                accessor: 'phone',
+                                Header: 'Phone',
+                                Cell: ({ row }) => row.original.phone
+                                    ? <PhoneBadge phone={row.original.phone}/>
+                                    : "N/A"
+                            },
+                            {
+                                accessor: 'status',
+                                Header: 'Status',
+                                Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                            },
+                            {
+                                accessor: 'created_at',
+                                Header: 'Date',
+                                className: 'text-end',
+                                Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                            },
+                            {
+                                accessor: 'actions',
+                                disableSortBy: true,
+                                className: 'text-end',
+                                Cell: ({ row }) => {
+                                    return (
+                                        <>
+                                            <IconButton onClick={() => handleUpdate(row.original)}
+                                                        size={"small"} color={"primary"}>
+                                                <Edit fontSize={'small'}/>
+                                            </IconButton>
+                                            <IconButton onClick={() => handleDelete(row.original)}
+                                                        size={"small"} color={"error"}>
+                                                <Delete fontSize={'small'}/>
+                                            </IconButton>
+                                        </>
+                                    );
+                                }
+                            }
+                        ]} data={users} onCreateRow={handleCreate}/>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
+                    <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShowModal(false)}/>
+                </div>
+                <Modal.Body className={'modal-body'}>
+                    <div className="pb-3">
+                        <h4 className="mb-1">{(formAction === "create" ? "New" : "Update") + " Estate"}</h4>
+                    </div>
+
+                    <ValidationErrors errors={errors}/>
+
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField size={"small"} label="Name" placeholder="Estate's name..." name={'name'}
+                                       value={formik.values.name} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.name && Boolean(formik.errors.name)}
+                                       helperText={formik.touched.name && formik.errors.name}/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField size={"small"} label="Location" placeholder="Estate's location..."
+                                       name={'location'}
+                                       value={formik.values.location} fullWidth onChange={formik.handleChange}
+                                       error={formik.touched.location && Boolean(formik.errors.location)}
+                                       helperText={formik.touched.location && formik.errors.location}/>
+                        </Grid>
+                    </Grid>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button size={'small'} className={'me-2'} onClick={() => setShowModal(false)}
+                            color={'inherit'}>Cancel</Button>
+                    <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
+                                   onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
+                        {formAction === "create" ? "Create" : "Update"}
+                    </LoadingButton>
+                </Modal.Footer>
+            </Modal>
+        </Dashboard>
+    );
+};
+
+export default Index;

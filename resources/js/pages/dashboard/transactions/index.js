@@ -10,6 +10,7 @@ import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';
 import IconMenuDropdown from '@/components/IconMenuDropdown';
 import { Inertia } from '@inertiajs/inertia';
+import TableDate from '@/components/TableDate';
 
 const Index = ({ transactions }) => {
     const handleUpdate = (transactionId, data) => {
@@ -69,25 +70,7 @@ const Index = ({ transactions }) => {
                                 accessor: 'created_at',
                                 Header: 'Date',
                                 className: 'text-end',
-                                Cell: ({ row }) => {
-                                    const { created_at } = row.original;
-
-                                    let date;
-                                    if (isToday(moment(created_at))) {
-                                        date = "Today";
-                                    } else if (isYesterday(moment(created_at))) {
-                                        date = "Yesterday";
-                                    } else {
-                                        date = moment(created_at).format("D.M.y");
-                                    }
-
-                                    return (
-                                        <>
-                                            <strong>{moment(created_at).format("hh:mm A")}</strong><br/>
-                                            <Typography variant={"caption"}>{date}</Typography>
-                                        </>
-                                    );
-                                }
+                                Cell: ({ row }) => <TableDate date={row.original.created_at}/>
                             },
                             {
                                 accessor: 'actions',

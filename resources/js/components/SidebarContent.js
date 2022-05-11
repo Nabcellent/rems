@@ -190,7 +190,13 @@ const SidebarContent = ({ type, location }) => {
         {
             title: 'System',
             menu: [
-                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings' }
+                {
+                    startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
+                        { link: route('dashboard.users.index'), title: 'list' },
+                        { link: '/grid', title: 'Grid' }
+                    ]
+                },
+                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings' },
             ]
         }
     ];
