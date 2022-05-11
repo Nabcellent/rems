@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
 use App\Http\Controllers\Dashboard\TransactionController;
+use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,7 +27,8 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard."
 
     Route::resources([
         "estates" => EstateController::class,
-        "transactions" => TransactionController::class
+        "transactions" => TransactionController::class,
+        "users" => UserController::class,
     ]);
 });
 

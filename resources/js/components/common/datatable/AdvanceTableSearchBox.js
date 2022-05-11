@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormControl, InputGroup } from 'react-bootstrap';
+import { FormControl } from 'react-bootstrap';
 import { useAsyncDebounce } from 'react-table';
+import 'regenerator-runtime/runtime.js';
 
 const AdvanceTableSearchBox = ({
     globalFilter = null,
