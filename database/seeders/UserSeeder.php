@@ -63,6 +63,6 @@ class UserSeeder extends Seeder
         /**
          * .....................    FACTORIES
          */
-        User::factory(5)->create()->each(fn(User $user) => $user->assignRole(Arr::random(Role::cases())->value));
+        User::factory(5)->create();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Estate;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Response;
