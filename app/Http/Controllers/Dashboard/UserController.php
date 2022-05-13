@@ -85,7 +85,7 @@ class UserController extends Controller
 
         if($request->hasFile("image")) {
             $file = $request->file("image");
-            $data["image"] = "usr_" . time() . $file->guessClientExtension();
+            $data["image"] = "usr_" . time() . ".{$file->guessClientExtension()}";
             $file->move("images/users", $data["image"]);
         }
 
@@ -98,11 +98,15 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function show(User $user)
     {
-        //
+        return inertia("dashboard/users/Show", [
+            "user" => $user->load([
+                "wallet:id,user_id,balance"
+            ])
+        ]);
     }
 
     /**
@@ -140,7 +144,7 @@ class UserController extends Controller
 
         if($request->hasFile("image")) {
             $file = $request->file("image");
-            $data["image"] = "usr_" . time() . $file->guessClientExtension();
+            $data["image"] = "usr_" . time() . ".{$file->guessClientExtension()}";
             $file->move("images/users", $data["image"]);
 
             if($user->image && file_exists("images/users/$user->image")) File::delete("images/users/$user->image");
