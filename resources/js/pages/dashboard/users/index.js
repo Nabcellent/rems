@@ -163,6 +163,11 @@ const Index = ({ users }) => {
                                     : "N/A"
                             },
                             {
+                                accessor: 'role',
+                                Header: 'Role',
+                                Cell: ({ row }) => <i>{row.original.user_roles_str}</i>
+                            },
+                            {
                                 accessor: 'status',
                                 Header: 'Status',
                                 Cell: ({ row }) => <StatusBadge status={row.original.status} bg={false}/>

@@ -89,7 +89,7 @@ class UserController extends Controller
             $file->move("images/users", $data["image"]);
         }
 
-        User::create($data)->assignRole()->wallet()->create();
+        User::create($data)->assignRole($data["role"])->wallet()->create();
 
         return back();
     }
