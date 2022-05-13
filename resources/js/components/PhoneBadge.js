@@ -1,7 +1,6 @@
 import { Badge } from 'react-bootstrap';
-import { parsePhoneNumber } from 'libphonenumber-js';
 import PropTypes from 'prop-types';
-import { getTelcoFromPhone } from '@/utils/helpers';
+import { getTelcoFromPhone, parsePhone } from '@/utils/helpers';
 
 const PhoneBadge = ({ phone }) => {
     let number = String(phone);
@@ -19,7 +18,7 @@ const PhoneBadge = ({ phone }) => {
 
     return (
         <Badge pill bg={color} className={`font-size-12`} style={{ backgroundColor: color }}>
-            {parsePhoneNumber(number, "KE").number}
+            {parsePhone(number)}
         </Badge>
     );
 };

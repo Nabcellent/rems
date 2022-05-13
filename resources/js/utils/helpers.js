@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { Typography } from '@mui/material';
+import { parsePhoneNumber } from 'libphonenumber-js';
 
 /** ------------------------------------    DATE HELPERS
  * */
@@ -43,8 +44,10 @@ export const getTelcoFromPhone = phone => {
 
 export const str = {
     headline: str => {
-        str = str.replaceAll('_', ' ').replaceAll('-', ' ')
+        str = str.replaceAll('_', ' ').replaceAll('-', ' ');
 
         return str.replaceAll(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.substring(1).toLowerCase());
     }
 };
+
+export const parsePhone = phone => phone && parsePhoneNumber(String(phone), 'KE').number;

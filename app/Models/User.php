@@ -99,7 +99,7 @@ class User extends Authenticatable
             ];
 
             $initials = "";
-            foreach($names as $name) $initials .= strtoupper($name[0]);
+            foreach($names as $name) $initials .= strtoupper($name[0] ?? "");
 
             return $initials;
         });

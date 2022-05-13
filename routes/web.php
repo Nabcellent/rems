@@ -26,9 +26,9 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard."
     Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");
 
     Route::resources([
-        "estates" => EstateController::class,
+        "estates"      => EstateController::class,
         "transactions" => TransactionController::class,
-        "users" => UserController::class,
+        "users"        => UserController::class,
     ]);
 });
 

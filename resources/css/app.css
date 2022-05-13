@@ -6906,16 +6906,6 @@ progress {
     }
 }
 
-.row > * {
-    -webkit-flex-shrink: 0;
-    flex-shrink: 0;
-    width: 100%;
-    max-width: 100%;
-    padding-right: calc(var(--bs-gutter-x) * 0.5);
-    padding-left: calc(var(--bs-gutter-x) * 0.5);
-    margin-top: var(--bs-gutter-y)
-}
-
 .row-cols-auto > * {
     width: auto
 }
@@ -11117,20 +11107,6 @@ textarea.form-control-lg {
 
 .navbar-dark .navbar-text a, .navbar-dark .navbar-text a:focus, .navbar-dark .navbar-text a:hover {
     color: #fff
-}
-
-.card {
-    position: relative;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    border: 0 solid #f6f6f6;
-    border-radius: .25rem
 }
 
 .card > hr {
@@ -19330,41 +19306,13 @@ a, button {
     font-family: 'Material Design Icons'
 }
 
-.card {
-    margin-bottom: 24px;
-    box-shadow: 0 .75rem 1.5rem rgba(18, 38, 63, .03)
-}
-
 .card-drop {
     color: #495057
-}
-
-.card-title {
-    font-size: 15px;
-    margin: 0 0 7px;
-    font-weight: 600
 }
 
 .card-title-desc {
     color: #74788d;
     margin-bottom: 24px
-}
-
-.dropdown-menu {
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, .175);
-    -webkit-animation-name: DropDownSlide;
-    animation-name: DropDownSlide;
-    -webkit-animation-duration: .3s;
-    animation-duration: .3s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-    margin: 0;
-    position: absolute;
-    z-index: 1000
-}
-
-.dropdown-menu.show {
-    top: 100% !important
 }
 
 .dropdown-menu-end[style] {

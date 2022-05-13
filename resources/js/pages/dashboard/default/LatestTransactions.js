@@ -2,7 +2,7 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import DataTable from '@/components/common/datatable';
 import { ReadMore } from '@mui/icons-material';
 import { Badge, Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
-import { Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import moment from 'moment';
 import { isToday, isYesterday } from '@/utils/helpers';
 import StatusBadge from '@/components/StatusBadge';
@@ -14,7 +14,7 @@ const LatestTransactions = () => {
     return (
         <Row>
             <Col className="col-12">
-                <Card>
+                <Paper>
                     <DataTable title={'Latest Transactions'} perPage={5} searchable={false} columns={[
                         {
                             accessor: 'user',
@@ -68,7 +68,7 @@ const LatestTransactions = () => {
                             )
                         }
                     ]} data={latest_transactions}/>
-                </Card>
+                </Paper>
             </Col>
         </Row>
     );
