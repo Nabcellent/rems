@@ -20,9 +20,9 @@ class DashboardController extends Controller
     public function default(): Response
     {
         return Inertia::render('dashboard', [
-            "new_estates_count"       => Estate::whereCreatedAt(Carbon::today())->count(),
-            "new_users_count"         => User::whereCreatedAt(Carbon::today())->count(),
-            "new_tickets_count"       => Ticket::whereCreatedAt(Carbon::today())->count(),
+            "new_estates_count"       => Estate::whereDate('created_at', Carbon::today())->count(),
+            "new_users_count"         => User::whereDate('created_at', Carbon::today())->count(),
+            "new_tickets_count"       => Ticket::whereDate('created_at', Carbon::today())->count(),
             "service_providers_count" => ServiceProvider::count(),
             "my_estates_count"        => Request::user()->estates()->count(),
             "wallet_balance"          => Request::user()->wallet->balance,

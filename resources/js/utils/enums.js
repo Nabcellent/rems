@@ -8,3 +8,12 @@ export const Gender = {
     MALE: 'male',
     FEMALE: 'female',
 };
+
+export const Status = {
+    PENDING: 'PENDING',
+    COMPLETED: 'COMPLETED',
+    FAILED: 'FAILED',
+
+    ACTIVE: 'ACTIVE',
+    INACTIVE: 'INACTIVE',
+};

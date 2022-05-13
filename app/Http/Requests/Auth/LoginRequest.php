@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use JetBrains\PhpStorm\ArrayShape;
+use Propaganistas\LaravelPhone\PhoneNumber;
 
 class LoginRequest extends FormRequest
 {
@@ -40,10 +41,11 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    #[ArrayShape(["username.required" => "string"])] public function messages(): array
+    #[ArrayShape(["username.required" => "string", "username.phone" => "string"])] public function messages(): array
     {
         return [
-            "username.required" => "Email or phone number is required."
+            "username.required" => "Email or phone number is required.",
+            "username.phone" => "Email or phone number is invalid."
         ];
     }
 
@@ -129,7 +131,7 @@ class LoginRequest extends FormRequest
         }
 
         return [
-            'phone'    => $username,
+            'phone'    => PhoneNumber::make($username, "KE"),
             'password' => $this->input('password')
         ];
     }
