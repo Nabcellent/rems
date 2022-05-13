@@ -167,7 +167,6 @@ const SidebarContent = ({ type, location }) => {
         {
             title: 'Apps',
             menu: [
-                { startIcon: <i className="bx bx-calendar"/>, title: 'Calendar', link: '/calendar' },
                 {
                     startIcon: <i className="bx bxs-user-detail"/>, title: 'Contacts', subMenu: [
                         { link: '/contacts', title: 'list' },
