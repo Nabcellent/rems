@@ -2,27 +2,12 @@
 
 namespace App\Policies;
 
-use App\Enums\Role;
-use App\Models\Estate;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
-class EstatePolicy
+class UserPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Perform pre-authorization checks.
-     *
-     * @param  \App\Models\User $user
-     * @param string            $ability
-     * @return void|bool
-     */
-    public function before(User $user, string $ability)
-    {
-        if ($user->hasRole(Role::ADMIN->value)) return true;
-    }
 
     /**
      * Determine whether the user can view any models.
@@ -39,10 +24,10 @@ class EstatePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Estate  $estate
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Estate $estate)
+    public function view(User $user, User $model)
     {
         //
     }
@@ -53,19 +38,19 @@ class EstatePolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user): Response|bool
+    public function create(User $user)
     {
-        return $user->hasRole(Role::PROPERTY_MANAGER->value);
+        //
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Estate  $estate
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Estate $estate)
+    public function update(User $user, User $model)
     {
         //
     }
@@ -74,10 +59,10 @@ class EstatePolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Estate  $estate
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Estate $estate)
+    public function delete(User $user, User $model)
     {
         //
     }
@@ -86,10 +71,10 @@ class EstatePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Estate  $estate
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Estate $estate)
+    public function restore(User $user, User $model)
     {
         //
     }
@@ -98,10 +83,10 @@ class EstatePolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Estate  $estate
+     * @param  \App\Models\User  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Estate $estate)
+    public function forceDelete(User $user, User $model)
     {
         //
     }

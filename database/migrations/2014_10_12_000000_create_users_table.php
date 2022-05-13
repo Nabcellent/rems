@@ -18,10 +18,10 @@ return new class extends Migration
             $table->id();
             $table->string('first_name', 20);
             $table->string('last_name', 20);
-            $table->integer('phone')->unique()->nullable();
+            $table->bigInteger('phone')->unique()->nullable();
             $table->string('gender', 6)->nullable();
             $table->string('image', 20)->nullable();
-            $table->string('email')->unique();
+            $table->string('email', 100)->unique();
             $table->string("status", 20)->default(Status::ACTIVE->value);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

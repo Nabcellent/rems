@@ -7,18 +7,18 @@ const PhoneBadge = ({ phone }) => {
     let number = String(phone);
 
     const telco = getTelcoFromPhone(number);
-    let color = 'primary';
+    let color = 'secondary';
 
     if (telco === 'safaricom') {
-        color = 'success';
+        color = '#59BC58';
     } else if (telco === 'airtel') {
-        color = 'danger';
+        color = '#EE4326';
     } else if (telco === 'telkom') {
-        color = 'warning';
+        color = '#30AACB';
     }
 
     return (
-        <Badge pill bg={color} className={`font-size-12`}>
+        <Badge pill bg={color} className={`font-size-12`} style={{ backgroundColor: color }}>
             {parsePhoneNumber(number, "KE").number}
         </Badge>
     );

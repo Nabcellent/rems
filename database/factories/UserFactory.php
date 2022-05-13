@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Propaganistas\LaravelPhone\PhoneNumber;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -23,12 +24,13 @@ class UserFactory extends Factory
     public function definition(): array
     {
         $gender = $this->faker->randomElement(["male", "female", null]);
+        $phone = PhoneNumber::make(7 . $this->faker->unique()->numerify('########'), 'KE');
 
         return [
             'first_name'        => $this->faker->firstName($gender),
             'last_name'         => $this->faker->lastName,
             'gender'            => $gender,
-            'phone'             => 7 . $this->faker->unique()->numerify('########'),
+            'phone'             => ltrim($phone, '+'),
             'email'             => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             "status"            => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),

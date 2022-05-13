@@ -28,14 +28,14 @@ class UserSeeder extends Seeder
                 "first_name" => "Lil",
                 "last_name"  => "Nabz",
                 "email"      => "nabcellent.dev@yopmail.com",
-                "phone"      => 110039317,
+                "phone"      => 254110039317,
                 "gender"     => "male",
             ],
             [
                 "first_name" => "Khalifa",
                 "last_name"  => "Fumo",
                 "email"      => "khalifa47@yopmail.com",
-                "phone"      => 711144488,
+                "phone"      => 254711144488,
                 "gender"     => "male",
             ]
         ];
