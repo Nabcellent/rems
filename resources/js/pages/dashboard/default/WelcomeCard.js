@@ -4,14 +4,14 @@ import { Link, usePage } from "@inertiajs/inertia-react";
 import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import profileImg from "../../../assets/images/profile-img.png";
 import CountUp from 'react-countup';
-import { Button } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 
 const WelcomeCard = () => {
     const { auth: { user }, my_estates_count, wallet_balance } = usePage().props;
 
     return (
         <>
-            <Card className="overflow-hidden">
+            <Paper sx={{ overflow: 'hidden', height: '100%' }}>
                 <div className="bg-primary bg-soft">
                     <Row>
                         <Col xs="7">
@@ -25,7 +25,7 @@ const WelcomeCard = () => {
                         </Col>
                     </Row>
                 </div>
-                <Card.Body className="pt-0">
+                <Card.Body className="py-0">
                     <Row>
                         <Col sm="4" className={'pe-0'}>
                             <div className="avatar-md profile-user-wid mb-4">
@@ -59,7 +59,7 @@ const WelcomeCard = () => {
                         </Col>
                     </Row>
                 </Card.Body>
-            </Card>
+            </Paper>
         </>
     );
 };

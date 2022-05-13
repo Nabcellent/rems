@@ -2,10 +2,11 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 import DataTable from '@/components/common/datatable';
 import { ReadMore } from '@mui/icons-material';
 import { Badge, Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
-import { Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import moment from 'moment';
 import { isToday, isYesterday } from '@/utils/helpers';
 import StatusBadge from '@/components/StatusBadge';
+import TableDate from '@/components/TableDate';
 
 const LatestTransactions = () => {
     const { latest_transactions } = usePage().props;
@@ -13,7 +14,7 @@ const LatestTransactions = () => {
     return (
         <Row>
             <Col className="col-12">
-                <Card>
+                <Paper>
                     <DataTable title={'Latest Transactions'} perPage={5} searchable={false} columns={[
                         {
                             accessor: 'user',
@@ -54,25 +55,7 @@ const LatestTransactions = () => {
                             accessor: 'created_at',
                             Header: 'Date',
                             className: 'text-end',
-                            Cell: ({ row }) => {
-                                const { created_at } = row.original;
-
-                                let date;
-                                if (isToday(moment(created_at))) {
-                                    date = "Today";
-                                } else if (isYesterday(moment(created_at))) {
-                                    date = "Yesterday";
-                                } else {
-                                    date = moment(created_at).format("D.M.y");
-                                }
-
-                                return (
-                                    <>
-                                        <strong>{moment(created_at).format("hh:mm A")}</strong><br/>
-                                        <Typography variant={"caption"}>{date}</Typography>
-                                    </>
-                                );
-                            }
+                            Cell: ({ row }) => <TableDate date={row.original.created_at}/>
                         },
                         {
                             accessor: 'actions',
@@ -85,7 +68,7 @@ const LatestTransactions = () => {
                             )
                         }
                     ]} data={latest_transactions}/>
-                </Card>
+                </Paper>
             </Col>
         </Row>
     );

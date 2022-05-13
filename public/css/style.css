@@ -10,4 +10,29 @@
 .text-primary {
     color: #990000 !important;
 }
+.min-vh-25 {
+    min-height: 25vh !important;
+}
+.mb-7 {
+    margin-bottom: 5rem!important;
+}
+.rounded-bottom-0 {
+    border-bottom-right-radius: 0!important;
+    border-bottom-left-radius: 0!important;
+}
+.bg-holder {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: 50%;
+    overflow: hidden;
+    will-change: transform, opacity, filter;
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    background-repeat: no-repeat;
+    z-index: 0;
+}
 

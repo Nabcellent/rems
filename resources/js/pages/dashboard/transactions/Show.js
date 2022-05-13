@@ -1,12 +1,12 @@
 import Dashboard from '@/layouts/Dashboard';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import { Card, Col, Dropdown, Row, Table } from 'react-bootstrap';
-import { parsePhoneNumber } from 'libphonenumber-js';
-import { currencyFormat } from '@/utils/helpers';
+import { currencyFormat, parsePhone } from '@/utils/helpers';
 import StatusBadge from '@/components/StatusBadge';
 import { CurrencyExchange } from '@mui/icons-material';
 import moment from 'moment';
 import { lazy } from 'react';
+import PhoneBadge from '@/components/PhoneBadge';
 
 const TransactionTable = lazy(() => import('@/pages/dashboard/transactions/PaymentTable'));
 const PaymentTable = lazy(() => import('@/pages/dashboard/transactions/TransactionTable'));
@@ -41,10 +41,8 @@ const Show = ({ errors, transaction }) => {
                                 <div className="row align-items-center justify-content-between">
                                     <div className={'col-xl-5'}>
                                         <h5 className="">{transaction.user.full_name}</h5>
-                                        <p className="text-muted mb-1">{transaction.user.email}</p>
-                                        <p className="text-muted mb-0">
-                                            {transaction.user.phone && parsePhoneNumber(transaction.user.phone, 'KE')}
-                                        </p>
+                                        <p className="text-muted mb-1 text-truncate">{transaction.user.email}</p>
+                                        <PhoneBadge phone={transaction.user.phone}/>
                                         <p className="text-muted mb-1">{transaction.user.user_roles_str}</p>
                                     </div>
 
@@ -54,10 +52,8 @@ const Show = ({ errors, transaction }) => {
 
                                     <div className={'col-xl-5 text-end'}>
                                         <h5 className="">{transaction.destination.full_name}</h5>
-                                        <p className="text-muted mb-1">{transaction.destination.email}</p>
-                                        <p className="text-muted mb-0">
-                                            {transaction.destination.phone && parsePhoneNumber(transaction.destination.phone, 'KE')}
-                                        </p>
+                                        <p className="text-muted mb-1 text-truncate">{transaction.destination.email}</p>
+                                        <PhoneBadge phone={transaction.destination.phone}/>
                                         <p className="text-muted mb-1">{transaction.destination.user_roles_str}</p>
                                     </div>
                                 </div>

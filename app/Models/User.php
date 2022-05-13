@@ -30,6 +30,9 @@ class User extends Authenticatable
         'first_name',
         'last_name',
         'email',
+        'phone',
+        'gender',
+        'image',
         'password',
     ];
 
@@ -57,7 +60,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $appends = ["full_name", "user_roles", "user_roles_str"];
+    protected $appends = ["full_name", "user_roles", "user_roles_str", "initials"];
 
     /**
      * The event map for the model.
@@ -79,6 +82,26 @@ class User extends Authenticatable
             $firstName = $attributes["first_name"] ?? "";
             $lastName = $attributes["last_name"] ?? "";
             return str($firstName . $lastName)->headline();
+        });
+    }
+
+    /**
+     * Get the user's full name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function initials(): Attribute
+    {
+        return Attribute::get(function($value, $attributes) {
+            $names = [
+                $attributes["first_name"] ?? "",
+                $attributes["last_name"] ?? ""
+            ];
+
+            $initials = "";
+            foreach($names as $name) $initials .= strtoupper($name[0] ?? "");
+
+            return $initials;
         });
     }
 

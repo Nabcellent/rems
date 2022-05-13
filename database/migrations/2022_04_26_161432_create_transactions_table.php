@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreignId('destination_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('type', 50)->default(TransactionType::PAYMENT->value);
             $table->integer("amount");
-            $table->string("status")->default(Status::PENDING->value);
+            $table->string("status", 20)->default(Status::PENDING->value);
             $table->string("description");
             $table->timestamps();
         });
