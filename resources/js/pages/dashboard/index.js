@@ -35,63 +35,61 @@ const Default = ({
 
     return (
         <Dashboard errors={errors} title={'Home'}>
-            <Container fluid>
-                {/* Render Breadcrumbs */}
-                <Breadcrumbs title="Dashboards" breadcrumbItem="Default"/>
+            {/* Render Breadcrumbs */}
+            <Breadcrumbs title="Dashboards" breadcrumbItem="Default"/>
 
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={4}><WelcomeCard/></Grid>
-                            <Grid item xs={8}>
-                                <Row className={'align-items-stretch h-100'}>
-                                    {/* Reports Render */}
-                                    {reports.map((report, key) => (
-                                        <Col md="4" key={`_col_${key}`} className={'mb-3'}>
-                                            <Paper sx={{ p: 3 }} className={'mini-stats-wid'}>
-                                                <div className="d-flex">
-                                                    <div className="flex-grow-1">
-                                                        <p className="text-muted fw-medium">{report.title}</p>
-                                                        <h4 className="mb-0">{report.description}</h4>
-                                                    </div>
-                                                    <div
-                                                        className="mini-stat-icon avatar-sm rounded-circle bg-danger align-self-center">
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <Grid container spacing={2}>
+                        <Grid item lg={4}><WelcomeCard/></Grid>
+                        <Grid item lg={8}>
+                            <Row className={'align-items-stretch h-100'}>
+                                {/* Reports Render */}
+                                {reports.map((report, key) => (
+                                    <Col md="4" key={`_col_${key}`} className={'mb-3'}>
+                                        <Paper sx={{ p: 3 }} className={'mini-stats-wid'}>
+                                            <div className="d-flex">
+                                                <div className="flex-grow-1">
+                                                    <p className="text-muted fw-medium">{report.title}</p>
+                                                    <h4 className="mb-0">{report.description}</h4>
+                                                </div>
+                                                <div
+                                                    className="mini-stat-icon avatar-sm rounded-circle bg-danger align-self-center">
                                                     <span className="avatar-title bg-primary">
                                                         <i className={"bx " + report.iconClass + " font-size-24"}/>
                                                     </span>
-                                                    </div>
                                                 </div>
-                                            </Paper>
-                                        </Col>
-                                    ))}
-                                    {reportsTwo.map((report, key) => (
-                                        <Col md="6" key={`_col_${key}`}>
-                                            <Paper sx={{ p: 3 }} className={'mini-stats-wid'}>
-                                                <div className="d-flex">
-                                                    <div className="flex-grow-1">
-                                                        <p className="text-muted fw-medium">{report.title}</p>
-                                                        <h4 className="mb-0">{report.description}</h4>
-                                                    </div>
-                                                    <div
-                                                        className="mini-stat-icon avatar-sm rounded-circle bg-danger align-self-center">
+                                            </div>
+                                        </Paper>
+                                    </Col>
+                                ))}
+                                {reportsTwo.map((report, key) => (
+                                    <Col md="6" key={`_col_${key}`} className={'mb-3 mb-lg-0'}>
+                                        <Paper sx={{ p: 3 }} className={'mini-stats-wid'}>
+                                            <div className="d-flex">
+                                                <div className="flex-grow-1">
+                                                    <p className="text-muted fw-medium">{report.title}</p>
+                                                    <h4 className="mb-0">{report.description}</h4>
+                                                </div>
+                                                <div
+                                                    className="mini-stat-icon avatar-sm rounded-circle bg-danger align-self-center">
                                                     <span className="avatar-title bg-primary">
                                                         <i className={"bx " + report.iconClass + " font-size-24"}/>
                                                     </span>
-                                                    </div>
                                                 </div>
-                                            </Paper>
-                                        </Col>
-                                    ))}
-                                </Row>
-                            </Grid>
+                                            </div>
+                                        </Paper>
+                                    </Col>
+                                ))}
+                            </Row>
                         </Grid>
                     </Grid>
-
-                    <Grid item xs={12}>
-                        <LatestTransactions/>
-                    </Grid>
                 </Grid>
-            </Container>
+
+                <Grid item xs={12}>
+                    <LatestTransactions/>
+                </Grid>
+            </Grid>
         </Dashboard>
     );
 };
