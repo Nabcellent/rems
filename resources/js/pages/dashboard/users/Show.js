@@ -35,14 +35,16 @@ const Show = ({ errors, user }) => {
                             </h4>
                             <h5 className="fs-0 fw-normal">{user.email}</h5>
                             <p className="text-500">{user.user_roles_str}</p>
-                            <Button variant={'outlined'} className="px-3 btn btn-falcon-primary btn-sm">Following</Button>
-                            <Button variant={'outlined'} className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
+                            <Button variant={'outlined'}
+                                    className="px-3 btn btn-falcon-primary btn-sm">Following</Button>
+                            <Button variant={'outlined'}
+                                    className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
                             <div className="border-dashed-bottom my-4 d-lg-none"></div>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
                             <a href="/user/profile#!">
                                 <div className="d-flex align-items-center mb-2">
-                                    <Avatar sx={{width:30, height:30}} className="me-2"/>
+                                    <Avatar sx={{ width: 30, height: 30 }} className="me-2"/>
                                     <div className="flex-1"><h6 className="mb-0">See followers (330)</h6></div>
                                 </div>
                             </a>
