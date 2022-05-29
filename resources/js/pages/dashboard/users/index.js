@@ -15,7 +15,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import PhoneBadge from '@/components/PhoneBadge';
 import StatusBadge from '@/components/StatusBadge';
 import { Role } from '@/utils/enums';
-import ModalForm from '@/pages/dashboard/users/ModalForm';
+import ModalForm from '@/pages/dashboard/users/components/ModalForm';
 
 // Import React FilePond with plugins & styles
 import { registerPlugin } from 'react-filepond';

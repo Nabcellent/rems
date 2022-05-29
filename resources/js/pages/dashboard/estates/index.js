@@ -3,7 +3,7 @@ import { Card, Col, Container, Modal, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { Button, Grid, IconButton, TextField } from '@mui/material';
-import { Create, Delete, Edit } from '@mui/icons-material';
+import { Create, Delete, Edit, ReadMore } from '@mui/icons-material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import * as yup from 'yup';
@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import ValidationErrors from '@/components/ValidationErrors';
 import { Inertia } from '@inertiajs/inertia';
+import { Link } from '@inertiajs/inertia-react';
 
 const MySwal = withReactContent(Swal);
 
@@ -89,8 +90,8 @@ const Index = ({ estates }) => {
                                 Header: 'Name',
                             },
                             {
-                                accessor: 'location',
-                                Header: 'Location',
+                                accessor: 'address',
+                                Header: 'Address',
                             },
                             {
                                 accessor: 'owner',
@@ -113,6 +114,9 @@ const Index = ({ estates }) => {
                                                         size={"small"} color={"primary"}>
                                                 <Edit fontSize={'small'}/>
                                             </IconButton>
+                                            <Link href={route('dashboard.estates.show', { estate: row.original.id })}>
+                                                <ReadMore fontSize={'small'}/>
+                                            </Link>
                                             <IconButton onClick={() => handleDelete(row.original)}
                                                         size={"small"} color={"error"}>
                                                 <Delete fontSize={'small'}/>

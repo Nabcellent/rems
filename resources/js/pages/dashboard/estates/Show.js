@@ -5,14 +5,15 @@ import { Female, Male, PhoneIphone, ToggleOff, ToggleOn } from '@mui/icons-mater
 import { Gender, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
+import { getInitials } from '@/utils/helpers';
 
-const Show = ({ errors, user }) => {
+const Show = ({ errors, estate }) => {
     const theme = useTheme();
-    console.log(user);
+    console.log(estate);
 
     return (
         <Dashboard errors={errors} title={'Transaction'}>
-            <Breadcrumbs title="Users" breadcrumbItem={user.email}/>
+            <Breadcrumbs title="Users" breadcrumbItem={estate.name}/>
 
             <Paper className={'mb-3'}>
                 <div className="position-relative min-vh-25 mb-7 card-header">
@@ -26,19 +27,19 @@ const Show = ({ errors, user }) => {
                         width: '10rem',
                         height: '10rem',
                         backgroundColor: theme.palette.primary.main
-                    }} src={`/images/users/${user.image}`}>
-                        {user.initials}
+                    }} src={`/images/estates/${estate.image}`}>
+                        {getInitials(estate.name)}
                     </Avatar>
                 </div>
                 <div className="card-body">
                     <div className="row">
                         <div className="col-lg-8">
                             <h4 className="mb-1">
-                                {user.full_name}
+                                {estate.name}
                                 <i className={'bx bxs-check-circle'}/>
                             </h4>
-                            <h6 className="fs-0 fw-normal">{user.email}</h6>
-                            <p className="text-500">{user.user_roles_str}</p>
+                            <h6 className="fs-0 fw-normal">{estate.user.email}</h6>
+                            <p className="text-500">{estate.user.user_roles_str}</p>
                             <Button variant={'outlined'}
                                     className="px-3 btn btn-falcon-primary btn-sm">Following</Button>
                             <Button variant={'outlined'}
@@ -49,27 +50,27 @@ const Show = ({ errors, user }) => {
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     {
-                                        user.status === Status.ACTIVE
+                                        estate.status === Status.ACTIVE
                                             ? <ToggleOn fontSize={'small'}/>
                                             : <ToggleOff fontSize={'small'}/>
                                     }
                                 </Avatar>
-                                <div className="flex-1"><StatusBadge status={user.status}/></div>
+                                <div className="flex-1"><StatusBadge status={estate.status}/></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {user.gender === Gender.MALE
+                                    {estate.gender === Gender.MALE
                                         ? <Male fontSize={'small'}/>
                                         : <Female fontSize={'small'}/>}
                                 </Avatar>
-                                <div className="flex-1"><h6 className="mb-0">{user.gender.toUpperCase()}</h6></div>
+                                <div className="flex-1"><h6 className="mb-0">{estate.address}</h6></div>
                             </div>
                             <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     <PhoneIphone fontSize={'small'}/>
                                 </Avatar>
-                                <div className="flex-1"><PhoneBadge phone={user.phone}/></div>
+                                <div className="flex-1"><PhoneBadge phone={estate.user.phone}/></div>
                             </div>
                         </div>
                     </div>

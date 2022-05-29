@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { Typography } from '@mui/material';
 import { parsePhoneNumber } from 'libphonenumber-js';
 
 /** ------------------------------------    DATE HELPERS
@@ -51,3 +50,9 @@ export const str = {
 };
 
 export const parsePhone = phone => phone && parsePhoneNumber(String(phone), 'KE').number;
+
+export const getInitials = str => {
+    let initials = str.match(/\b(\w)/g);
+
+    return initials.join('').toUpperCase();
+}

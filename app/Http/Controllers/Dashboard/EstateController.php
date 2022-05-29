@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class EstateController extends Controller
 {
@@ -32,7 +33,7 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates', [
-            "estates" => Estate::select(["id", "user_id", "name", "location"])->with("user:id,last_name")
+            "estates" => Estate::select(["id", "user_id", "name", "address"])->with("user:id,last_name")
                 ->withCount(["properties", "units"])->latest()->get()
         ]);
     }
@@ -66,11 +67,16 @@ class EstateController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Estate $estate
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Estate $estate)
+    public function show(Estate $estate): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/estates/Show", [
+            "estate" => $estate->load([
+                "user:id,first_name,last_name,email,phone",
+                "user.roles:id,name"
+            ])
+        ]);
     }
 
     /**
