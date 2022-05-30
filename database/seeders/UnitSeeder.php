@@ -18,9 +18,9 @@ class UnitSeeder extends Seeder
         /**
          * .....................    FACTORIES
          */
-        Unit::factory(5)->hasLease()->create();
-        Unit::factory()->hasRooms(3)->create();
+        Unit::factory(3)->hasLease()->create();
+        Unit::factory()->hasRooms(2)->create();
 
-        Room::factory(3)->forUnit()->create(); // Same as the above
+        Room::factory(2)->forUnit()->create(); // Same as the above
     }
 }

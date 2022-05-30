@@ -1,4 +1,8 @@
 import Toastify from 'toastify-js';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+
+const Sweet = withReactContent(Swal);
 
 window._ = require('lodash');
 
@@ -25,6 +29,21 @@ window.toast = data => {
         position: data.position ?? 'right',
         className: type,
     }).showToast();
+};
+
+window.sweet = async data => {
+    const timer = (data.duration ?? 3) * 1000,
+        position = data.position ?? 'bottom-end',
+        icon = data.type ?? 'success',
+        text = data.text ?? 'REMS';
+
+    await Sweet.fire({
+        toast: true,
+        position, icon,
+        title: data.message,
+        text, timer,
+        showConfirmButton: false
+    });
 };
 
 /**

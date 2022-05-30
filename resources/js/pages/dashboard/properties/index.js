@@ -8,26 +8,18 @@ import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
 
-const Index = ({ estates }) => {
-    console.log(estates);
+const Index = ({ properties }) => {
+    console.log(properties);
 
     return (
-        <Dashboard title={'Estates'}>
+        <Dashboard title={'Properties'}>
             {/* Render Breadcrumbs */}
-            <Breadcrumbs title="Estates" breadcrumbItem="list"/>
+            <Breadcrumbs title="Properties" breadcrumbItem="list"/>
 
             <Row>
                 <Col className="col-12">
                     <Card>
-                        <DataTable title={'Estates'} columns={[
-                            {
-                                accessor: 'name',
-                                Header: 'Name',
-                            },
-                            {
-                                accessor: 'address',
-                                Header: 'Address',
-                            },
+                        <DataTable title={'Properties'} columns={[
                             {
                                 accessor: 'owner',
                                 Header: 'Owner',
@@ -41,9 +33,18 @@ const Index = ({ estates }) => {
                                 )
                             },
                             {
-                                accessor: 'properties_count',
-                                Header: 'Properties',
-                                Cell: ({ row }) => row.original.properties_count + row.original.units_count
+                                accessor: 'type',
+                                Header: 'Type',
+                            },
+                            {
+                                accessor: 'address',
+                                Header: 'Address',
+                                Cell: ({ row }) => row.original.estate.address
+                            },
+                            {
+                                accessor: 'units_count',
+                                Header: 'Units',
+                                Cell: ({ row }) => row.original.units_count
                             },
                             {
                                 accessor: 'actions',
@@ -52,15 +53,16 @@ const Index = ({ estates }) => {
                                 Cell: ({ row }) => {
                                     return (
                                         <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.estates.create'))}
-                                                        size={"small"} color={"primary"}>
+                                            <IconButton onClick={() => Inertia.get(route('dashboard.properties.create'))} size={"small"}
+                                                        color={"primary"}>
                                                 <Edit fontSize={'small'}/>
                                             </IconButton>
-                                            <Link href={route('dashboard.estates.show', { estate: row.original.id })}>
+                                            <Link
+                                                href={route('dashboard.properties.show', { property: row.original.id })}>
                                                 <ReadMore fontSize={'small'}/>
                                             </Link>
                                             <IconButton
-                                                onClick={() => handleDelete(route('dashboard.estates.destroy', { property: row.original.id }), 'estate')}
+                                                onClick={() => handleDelete(route('dashboard.properties.destroy', { property: row.original.id }), 'property')}
                                                 size={"small"} color={"error"}>
                                                 <Delete fontSize={'small'}/>
                                             </IconButton>
@@ -68,7 +70,7 @@ const Index = ({ estates }) => {
                                     );
                                 }
                             }
-                        ]} data={estates} onCreateRow={() => Inertia.get(route('dashboard.estates.create'))}/>
+                        ]} data={properties} onCreateRow={() => Inertia.get(route('dashboard.properties.create'))}/>
                     </Card>
                 </Col>
             </Row>

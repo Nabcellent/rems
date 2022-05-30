@@ -6,15 +6,18 @@ import { Card, Col, Form, Row } from 'react-bootstrap';
 import AdvanceTableSearchBox from './AdvanceTableSearchBox';
 import { Button } from '@mui/material';
 import { Add } from '@mui/icons-material';
+import pluralize from 'pluralize';
 
 function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions }) {
+    const selectedRowsCount = Object.keys(selectedRowIds).length;
+
     return (
         <Row className="flex-between-center mb-3">
             <Col xs={4} sm="auto" className="d-flex align-items-center pe-0">
                 <h5 className="fs-0 mb-0 text-nowrap py-2 py-xl-0">
                     {
-                        Object.keys(selectedRowIds).length > 0
-                            ? `You have selected ${Object.keys(selectedRowIds).length} rows`
+                        selectedRowsCount
+                            ? `You have selected ${selectedRowsCount} ${pluralize(title, selectedRowsCount)}`
                             : title
                     }
                 </h5>

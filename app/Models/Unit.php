@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,29 @@ class Unit extends Model
     use HasFactory;
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ["unitable_model", "estate_name"];
+
+    public function unitableModel(): Attribute
+    {
+        return Attribute::get(fn() => match ($this->unitable_type) {
+            Estate::class => "estate",
+            Property::class => "property"
+        });
+    }
+
+    public function estateName(): Attribute
+    {
+        return Attribute::get(fn() => match ($this->unitable_type) {
+            Estate::class => $this->unitable->name,
+            Property::class => $this->unitable->estate->name
+        });
+    }
+
+    /**
      * .....................    _____________________RELATIONSHIPS
      */
     public function unitable(): MorphTo
@@ -25,7 +49,9 @@ class Unit extends Model
         return $this->morphTo();
     }
 
-    public function owner(): BelongsTo
+    /** Owner
+     * */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

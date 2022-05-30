@@ -11135,16 +11135,6 @@ textarea.form-control-lg {
     border-top: 0
 }
 
-.card-body {
-    -webkit-flex: 1 1 auto;
-    flex: 1 1 auto;
-    padding: 1.25rem
-}
-
-.card-title {
-    margin-bottom: .5rem
-}
-
 .card-subtitle {
     margin-top: -.25rem
 }
@@ -11159,27 +11149,6 @@ textarea.form-control-lg {
 
 .card-link + .card-link {
     margin-left: 1.25rem
-}
-
-.card-header {
-    padding: .625rem 1.25rem;
-    margin-bottom: 0;
-    background-color: rgba(0, 0, 0, .03);
-    border-bottom: 0 solid #f6f6f6
-}
-
-.card-header:first-child {
-    border-radius: .25rem .25rem 0 0
-}
-
-.card-footer {
-    padding: .625rem 1.25rem;
-    background-color: rgba(0, 0, 0, .03);
-    border-top: 0 solid #f6f6f6
-}
-
-.card-footer:last-child {
-    border-radius: 0 0 .25rem .25rem
 }
 
 .card-header-tabs {

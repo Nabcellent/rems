@@ -6,6 +6,7 @@ use App\Enums\Description;
 use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -17,7 +18,13 @@ class TransactionFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition(): array
+    #[ArrayShape([
+        "user_id"        => "mixed",
+        "destination_id" => "mixed",
+        "amount"         => "int",
+        "description"    => "mixed",
+        "status"         => "mixed"
+    ])] public function definition(): array
     {
         return [
             "user_id"        => User::factory(),

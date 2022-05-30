@@ -1,6 +1,10 @@
 import moment from 'moment';
-import { Typography } from '@mui/material';
 import { parsePhoneNumber } from 'libphonenumber-js';
+import { Inertia } from '@inertiajs/inertia';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
+const Sweet = withReactContent(Swal);
 
 /** ------------------------------------    DATE HELPERS
  * */
@@ -51,3 +55,24 @@ export const str = {
 };
 
 export const parsePhone = phone => phone && parsePhoneNumber(String(phone), 'KE').number;
+
+export const getInitials = str => {
+    let initials = str.match(/\b(\w)/g);
+
+    return initials.join('').toUpperCase();
+};
+
+export const handleDelete = (route, title) => {
+    if (route) {
+        Sweet.fire({
+            title: 'Are you sure?',
+            text: `You won't be able to revert this!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: `Yes, delete ${title ?? 'it'}!`,
+            showLoaderOnConfirm: true
+        }).then(result => result.isConfirmed && Inertia.delete(route));
+    }
+};

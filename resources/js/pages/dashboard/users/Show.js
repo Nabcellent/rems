@@ -11,7 +11,7 @@ const Show = ({ errors, user }) => {
     console.log(user);
 
     return (
-        <Dashboard errors={errors} title={'Transaction'}>
+        <Dashboard errors={errors} title={'Users'}>
             <Breadcrumbs title="Users" breadcrumbItem={user.email}/>
 
             <Paper className={'mb-3'}>
@@ -48,9 +48,11 @@ const Show = ({ errors, user }) => {
                         <div className="ps-2 ps-lg-3 col">
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {user.status === Status.ACTIVE
-                                        ? <ToggleOn fontSize={'small'}/>
-                                        : <ToggleOff fontSize={'small'}/>}
+                                    {
+                                        user.status === Status.ACTIVE
+                                            ? <ToggleOn fontSize={'small'}/>
+                                            : <ToggleOff fontSize={'small'}/>
+                                    }
                                 </Avatar>
                                 <div className="flex-1"><StatusBadge status={user.status}/></div>
                             </div>
@@ -60,7 +62,9 @@ const Show = ({ errors, user }) => {
                                         ? <Male fontSize={'small'}/>
                                         : <Female fontSize={'small'}/>}
                                 </Avatar>
-                                <div className="flex-1"><h6 className="mb-0">{user.gender.toUpperCase()}</h6></div>
+                                <div className="flex-1">
+                                    <h6 className="mb-0">{user.gender ? user.gender.toUpperCase() : 'N/A'}</h6>
+                                </div>
                             </div>
                             <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
