@@ -98,6 +98,6 @@ class PropertyController extends Controller
     {
         $property->delete();
 
-        return back()->with(["toast" => ["message" => "Property Deleted!"]]);
+        return back()->with(["toast" => ["message" => "Property Deleted!", "type" => "info"]]);
     }
 }

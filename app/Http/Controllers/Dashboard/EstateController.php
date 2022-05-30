@@ -33,8 +33,8 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates', [
-            "estates" => Estate::select(["id", "user_id", "name", "address"])->with("user:id,last_name")
-                ->withCount(["properties", "units"])->latest()->get()
+            "estates" => Estate::select(["id", "user_id", "name", "address"])
+                ->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
         ]);
     }
 
@@ -115,6 +115,6 @@ class EstateController extends Controller
     {
         $estate->delete();
 
-        return back();
+        return back()->with(["toast" => ["message" => "Estate Deleted!", "type" => "info"]]);
     }
 }

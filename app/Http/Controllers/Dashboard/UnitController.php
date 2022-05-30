@@ -101,6 +101,6 @@ class UnitController extends Controller
     {
         $unit->delete();
 
-        return back()->with(["toast" => ["message" => "Property Deleted!"]]);
+        return back()->with(["toast" => ["message" => "Unit Deleted!", "type" => "info"]]);
     }
 }
