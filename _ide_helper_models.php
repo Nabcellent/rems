@@ -44,7 +44,10 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property string $name
- * @property string $location
+ * @property string $address
+ * @property float $latitude
+ * @property float $longitude
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Amenity[] $amenities
@@ -64,10 +67,13 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Estate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Estate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Estate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLatitude($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLongitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereUserId($value)
  */
@@ -303,6 +309,7 @@ namespace App\Models{
  * @property int $estate_id
  * @property int $user_id
  * @property string $type
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Amenity[] $amenities
@@ -310,11 +317,11 @@ namespace App\Models{
  * @property-read \App\Models\Estate $estate
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
  * @property-read int|null $images_count
- * @property-read \App\Models\User|null $manager
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Policy[] $policies
  * @property-read int|null $policies_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
  * @property-read int|null $units_count
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\PropertyFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
@@ -322,6 +329,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereEstateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereUserId($value)

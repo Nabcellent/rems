@@ -152,12 +152,18 @@ const SidebarContent = ({ type, location }) => {
                 },
                 {
                     startIcon: <i className="bx bxs-home"/>, title: 'Units', subMenu: [
-                        { link: '/units', title: 'list' },
+                        { link: route('dashboard.units.index'), title: 'list' },
                         { link: '/units', title: 'create' }
                     ]
                 },
                 {
-                    startIcon: <i className="bx bxs-home-circle"/>, title: 'Estates', subMenu: [
+                    startIcon: <i className="bx bxs-home-circle"/>, title: 'Properties', subMenu: [
+                        { link: route('dashboard.properties.index'), title: 'list' },
+                        { link: '/estates', title: 'create' }
+                    ]
+                },
+                {
+                    startIcon: <i className="bx bxs-building-house"/>, title: 'Estates', subMenu: [
                         { link: route('dashboard.estates.index'), title: 'list' },
                         { link: '/estates', title: 'create' }
                     ]

@@ -73,9 +73,12 @@ class EstateController extends Controller
     {
         return inertia("dashboard/estates/Show", [
             "estate" => $estate->load([
+                "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
+                "properties:id,estate_id,user_id,type,created_at",
+                "properties.user:id,first_name,last_name,email,phone",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name"
-            ])
+            ])->loadCount(["properties", "units"])
         ]);
     }
 

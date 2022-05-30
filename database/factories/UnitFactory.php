@@ -19,13 +19,7 @@ class UnitFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    #[ArrayShape([
-        "user_id"       => "mixed",
-        "unitable_id"   => "mixed",
-        "unitable_type" => "mixed",
-        "house_number"  => "string",
-        "purpose"       => "mixed"
-    ])] public function definition(): array
+    public function definition(): array
     {
         $property = $this->faker->randomElement([Property::factory(), Estate::factory()]);
 
@@ -34,7 +28,8 @@ class UnitFactory extends Factory
             "unitable_id"   => $property->create()->id,
             "unitable_type" => $property->modelName(),
             "house_number"  => $this->faker->buildingNumber(),
-            "purpose"       => $this->faker->randomElement(Purpose::cases())
+            "purpose"       => $this->faker->randomElement(Purpose::cases()),
+            "created_at"        => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 }

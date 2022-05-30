@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
+use App\Http\Controllers\Dashboard\PropertyController;
 use App\Http\Controllers\Dashboard\TransactionController;
+use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -26,9 +28,11 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard."
     Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");
 
     Route::resources([
-        "estates"      => EstateController::class,
-        "transactions" => TransactionController::class,
         "users"        => UserController::class,
+        "estates"      => EstateController::class,
+        "properties"   => PropertyController::class,
+        "units"        => UnitController::class,
+        "transactions" => TransactionController::class,
     ]);
 });
 

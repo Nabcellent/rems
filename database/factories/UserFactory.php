@@ -27,16 +27,16 @@ class UserFactory extends Factory
         $phone = PhoneNumber::make(7 . $this->faker->unique()->numerify('########'), 'KE');
 
         return [
-            'first_name'        => $this->faker->firstName($gender),
-            'last_name'         => $this->faker->lastName,
-            'gender'            => $gender,
-            'phone'             => ltrim($phone, '+'),
-            'email'             => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            "first_name"        => $this->faker->firstName($gender),
+            "last_name"         => $this->faker->lastName,
+            "gender"            => $gender,
+            "phone"             => ltrim($phone, '+'),
+            "email"             => $this->faker->unique()->safeEmail(),
+            "email_verified_at" => now(),
             "status"            => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
-            'password'          => Hash::make(12345678),
-            'remember_token'    => Str::random(10),
-            "created_at"        => $this->faker->dateTimeBetween('-10 years')
+            "password"          => Hash::make(12345678),
+            "remember_token"    => Str::random(10),
+            "created_at"        => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 
