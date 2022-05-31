@@ -10,7 +10,7 @@ const Show = ({ errors, lease }) => {
     console.log(lease);
 
     return (
-        <Dashboard errors={errors} title={'Leases'}>
+        <Dashboard errors={errors} title={`Leases #${lease.id}`}>
             <Breadcrumbs title="Leases" breadcrumbItem={`#${lease.id}`}/>
 
             <Paper className={'mb-3'}>

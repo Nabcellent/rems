@@ -6,9 +6,7 @@ import { IconButton } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
-import { currencyFormat, handleDelete } from '@/utils/helpers';
-import moment from 'moment';
-import StatusBadge from '@/components/StatusBadge';
+import { handleDelete } from '@/utils/helpers';
 
 const Index = ({ services }) => {
     console.log(services);
@@ -51,8 +49,7 @@ const Index = ({ services }) => {
                                                     size={"small"} color={"primary"}>
                                             <Edit fontSize={'small'}/>
                                         </IconButton>
-                                        <Link
-                                            href={route('dashboard.services.show', { service: service.id })}>
+                                        <Link href={route('dashboard.services.show', { service: service.id })}>
                                             <ReadMore fontSize={'small'}/>
                                         </Link>
                                         <IconButton

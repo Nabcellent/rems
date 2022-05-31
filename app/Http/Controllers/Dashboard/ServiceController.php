@@ -49,11 +49,15 @@ class ServiceController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Service $service
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Service $service)
+    public function show(Service $service): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/services/Show", [
+            "service" => $service->load([
+                "providers",
+            ])
+        ]);
     }
 
     /**

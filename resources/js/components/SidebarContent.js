@@ -197,9 +197,10 @@ const SidebarContent = ({ type, location }) => {
             menu: [
                 {
                     startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
+                        { link: route('dashboard.services.index'), title: 'List Services' },
+                        { link: route('dashboard.service-providers.index'), title: 'List Service Providers' },
                         { link: route('dashboard.services.create'), title: 'Create Service' },
-                        { link: route('dashboard.services.index'), title: 'List all services' },
-                        { link: route('dashboard.users.service-providers'), title: 'Service Providers' }
+                        { link: route('dashboard.service-providers.create'), title: 'Create Service Provider' }
                     ]
                 },
                 {
