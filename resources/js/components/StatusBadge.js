@@ -3,7 +3,7 @@ import { Status } from '@/utils/enums';
 
 const StatusBadge = ({ status, bg = true }) => {
     let color;
-    if ([Status.COMPLETED, Status.ACTIVE].includes(status)) {
+    if ([Status.COMPLETED, Status.ACTIVE, Status.RESOLVED].includes(status)) {
         color = 'success';
     } else if (status === Status.PENDING) {
         color = 'warning';

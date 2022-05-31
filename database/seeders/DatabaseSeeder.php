@@ -19,11 +19,12 @@ class DatabaseSeeder extends Seeder
 //            UserSeeder::class,
 //            EstateSeeder::class,
 //            PropertySeeder::class,
-            UnitSeeder::class,
-            ServiceSeeder::class,
-            ServiceProviderSeeder::class,
-            TransactionSeeder::class,
-            PaymentSeeder::class,
+//            UnitSeeder::class,
+//            ServiceSeeder::class,
+//            ServiceProviderSeeder::class,
+//            TransactionSeeder::class,
+//            PaymentSeeder::class,
+            TicketSeeder::class,
         ]);
     }
 }
