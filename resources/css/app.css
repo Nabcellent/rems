@@ -15273,7 +15273,7 @@ body[data-layout=horizontal] .footer {
 }
 
 .mm-active, .mm-active .active, .mm-active .active i, .mm-active > a, .mm-active > a i, .mm-active > i {
-    color: #556ee6 !important
+    color: #990000 !important
 }
 
 @media (max-width: 992px) {

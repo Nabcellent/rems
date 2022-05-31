@@ -6,7 +6,7 @@ import SimpleBar from "simplebar-react";
 
 // MetisMenu
 import MetisMenu from "metismenujs";
-import { Link } from "@inertiajs/inertia-react";
+import { Link, usePage } from "@inertiajs/inertia-react";
 import { Badge } from 'react-bootstrap';
 
 function usePrevious(value) {
@@ -18,13 +18,17 @@ function usePrevious(value) {
 }
 
 const Section = ({ title, menu }) => {
+    const { url } = usePage();
+
+    const isActive = link => link?.includes(url);
+
     return (
         <>
             <li className="menu-title">{title}</li>
 
             {
                 menu.map((item, i) => (
-                    <li key={`menu-${i}`}>
+                    <li key={`menu-${i}`} className={item.subMenu?.find(m => isActive(m.link)) || isActive(item.link) ? 'mm-active' : ''}>
                         <Link href={item.link} className={item.subMenu && 'has-arrow'}>
                             {item.startIcon}<span>{item.title}</span>{item.endIcon}
                         </Link>
@@ -33,7 +37,10 @@ const Section = ({ title, menu }) => {
                             <ul className="sub-menu" aria-expanded="false">
                                 {
                                     item.subMenu.map((subMenu, i) => (
-                                        <li key={`sub-menu-${i}`}><Link href={subMenu.link}>{subMenu.title}</Link></li>
+                                        <li key={`sub-menu-${i}`}>
+                                            <Link href={subMenu.link}
+                                                  className={isActive(subMenu.link) ? 'mm-active' : ''}>{subMenu.title}</Link>
+                                        </li>
                                     ))
                                 }
                             </ul>
