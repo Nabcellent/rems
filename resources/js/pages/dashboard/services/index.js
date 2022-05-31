@@ -32,6 +32,7 @@ const Index = ({ services }) => {
                         {
                             accessor: 'description',
                             Header: 'Description',
+                            Cell: ({ row }) => row.original.description || 'N / A'
                         },
                         {
                             accessor: 'providers_count',
