@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 const Footer = () => {
     return (
         <>
-            <footer className="footer">
+            <footer className="footer shadow-lg position-fixed bottom-0">
                 <div className="container-fluid">
                     <Row>
                         <Col sm={6}>{new Date().getFullYear()} © Rems.</Col>

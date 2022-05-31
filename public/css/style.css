@@ -50,3 +50,13 @@
     border-bottom: 1px dashed #d8e2ef!important;
 }
 
+a {
+    color: #990000;
+    text-decoration: none
+}
+
+a:hover {
+    color: #990000;
+    text-decoration: underline
+}
+

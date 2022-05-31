@@ -1812,16 +1812,6 @@ sup {
     top: -.5em
 }
 
-a {
-    color: #556ee6;
-    text-decoration: none
-}
-
-a:hover {
-    color: #4458b8;
-    text-decoration: underline
-}
-
 a:not([href]):not([class]), a:not([href]):not([class]):hover {
     color: inherit;
     text-decoration: none
@@ -15029,12 +15019,11 @@ body[data-layout=horizontal] .page-content {
 
 .footer {
     bottom: 0;
-    padding: 20px 12px;
+    padding: 10px 12px;
     position: absolute;
     right: 0;
-    color: #74788d;
+    color: #9596a8;
     left: 250px;
-    height: 60px;
     background-color: #f2f2f5
 }
 

@@ -57,7 +57,7 @@ class TicketController extends Controller
             "ticket" => $ticket->load([
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name"
-            ])->loadCount(["properties", "units"])
+            ])
         ]);
     }
 

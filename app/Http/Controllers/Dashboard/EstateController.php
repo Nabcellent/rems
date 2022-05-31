@@ -71,7 +71,7 @@ class EstateController extends Controller
      */
     public function show(Estate $estate): Response|ResponseFactory
     {
-        return inertia("dashboard/estates/Show", [
+        return inertia("dashboard/tickets/Show", [
             "estate" => $estate->load([
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",

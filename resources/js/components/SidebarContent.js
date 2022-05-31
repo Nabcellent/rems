@@ -37,7 +37,7 @@ const Section = ({ title, menu }) => {
                     <li key={`menu-${i}`}
                         className={item.subMenu?.find(m => isActive(m.link)) || isActive(item.link) ? 'mm-active' : ''}>
                         <Link href={item.link} className={item.subMenu && 'has-arrow'}>
-                            {item.startIcon}<span>{item.title}</span>{item.endIcon}
+                            {item.startIcon}<span>{item.title}</span>
                         </Link>
                         {
                             item.subMenu &&
@@ -81,7 +81,6 @@ const SidebarContent = ({ type }) => {
                 {
                     startIcon: <i className="bx bxs-dashboard"/>,
                     title: 'Dashboard',
-                    endIcon: <Badge pill className={`small`}>02</Badge>,
                     subMenu: [
                         { link: route('dashboard.default'), title: 'Default' },
                         { link: route('dashboard.analytics'), title: 'Analytics' }
