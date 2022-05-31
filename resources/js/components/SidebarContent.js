@@ -196,6 +196,13 @@ const SidebarContent = ({ type, location }) => {
             title: 'System',
             menu: [
                 {
+                    startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
+                        { link: route('dashboard.services.create'), title: 'Create Service' },
+                        { link: route('dashboard.services.index'), title: 'List all services' },
+                        { link: route('dashboard.users.service-providers'), title: 'Service Providers' }
+                    ]
+                },
+                {
                     startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
                         { link: route('dashboard.users.index'), title: 'list' },
                         { link: '/grid', title: 'Grid' }

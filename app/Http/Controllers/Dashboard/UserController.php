@@ -165,4 +165,20 @@ class UserController extends Controller
 
         return back();
     }
+
+    public function getServiceProviders(): Response|ResponseFactory
+    {
+        return inertia('dashboard/users', [
+            "providers" => User::select([
+                "id",
+                "first_name",
+                "last_name",
+                "phone",
+                "email",
+                "image",
+                "status",
+                "created_at"
+            ])->whereHas("roles", fn($qry) => dd($qry))->latest()->get()
+        ]);
+    }
 }
