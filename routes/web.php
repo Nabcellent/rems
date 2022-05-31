@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
+use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\PropertyController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UnitController;
@@ -32,6 +33,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard."
         "estates"      => EstateController::class,
         "properties"   => PropertyController::class,
         "units"        => UnitController::class,
+        "leases"       => LeaseController::class,
         "transactions" => TransactionController::class,
     ]);
 });

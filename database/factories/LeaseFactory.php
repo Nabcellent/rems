@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,10 +19,13 @@ class LeaseFactory extends Factory
     public function definition(): array
     {
         return [
-            "user_id" => User::factory(),
-            "rent_amount" => $this->faker->numberBetween(10000, 100000),
-            "start_date" => $this->faker->dateTimeBetween("+5 days", "+1 month"),
-            "end_date" => $this->faker->dateTimeBetween("+2 months", "+1 year")
+            "user_id"     => User::factory(),
+            "rent_amount" => $this->faker->numberBetween(20000, 100000),
+            "deposit"     => $this->faker->numberBetween(0, 50000),
+            "start_date"  => $this->faker->dateTimeBetween("+5 days", "+1 month"),
+            "end_date"    => $this->faker->dateTimeBetween("+2 months", "+1 year"),
+            "status"      => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
+            "created_at"  => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 }

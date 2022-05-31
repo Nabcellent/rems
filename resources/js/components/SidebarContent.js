@@ -146,7 +146,7 @@ const SidebarContent = ({ type, location }) => {
             menu: [
                 {
                     startIcon: <i className="bx bxs-detail"/>, title: 'Leases', subMenu: [
-                        { link: '/leases', title: 'list' },
+                        { link: route('dashboard.leases.index'), title: 'list' },
                         { link: '/leases', title: 'create' }
                     ]
                 },

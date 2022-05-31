@@ -19,7 +19,7 @@ class PropertyController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/properties', [
-            "properties" => Property::select(["id", "estate_id", "user_id", "type"])->with([
+            "properties" => Property::select(["id", "estate_id", "user_id", "name", "type"])->with([
                 "user:id,first_name,last_name,email",
                 "estate:id,name,address"
             ])->withCount(["units"])->latest()->get()

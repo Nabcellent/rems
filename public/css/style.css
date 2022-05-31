@@ -35,4 +35,7 @@
     background-repeat: no-repeat;
     z-index: 0;
 }
+.border-dashed-bottom {
+    border-bottom: 1px dashed #d8e2ef!important;
+}
 

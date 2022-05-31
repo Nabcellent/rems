@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -23,21 +22,23 @@ class Unit extends Model
      *
      * @var array
      */
-    protected $appends = ["unitable_model", "estate_name"];
+    protected $appends = ["unitable_name", "estate"];
 
-    public function unitableModel(): Attribute
+    public function unitableName(): Attribute
     {
         return Attribute::get(fn() => match ($this->unitable_type) {
             Estate::class => "estate",
-            Property::class => "property"
+            Property::class => "property",
+            default => null
         });
     }
 
-    public function estateName(): Attribute
+    public function estate(): Attribute
     {
         return Attribute::get(fn() => match ($this->unitable_type) {
-            Estate::class => $this->unitable->name,
-            Property::class => $this->unitable->estate->name
+            Estate::class => $this->unitable,
+            Property::class => $this->unitable->estate,
+            default => null
         });
     }
 
@@ -56,9 +57,9 @@ class Unit extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function lease(): HasOne
+    public function leases(): HasMany
     {
-        return $this->hasOne(Lease::class);
+        return $this->hasMany(Lease::class);
     }
 
     public function images(): MorphMany

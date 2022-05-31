@@ -21,7 +21,9 @@ class Lease extends Model
         return $this->belongsTo(Unit::class);
     }
 
-    public function tenant(): BelongsTo
+    /** Tenant
+     * */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

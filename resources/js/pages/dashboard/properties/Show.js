@@ -48,7 +48,7 @@ const Show = ({ errors, property }) => {
                     <div className="row">
                         <div className="col-lg-8">
                             <h4 className="mb-1">
-                                {property.name}<i className={'bx bxs-check-circle'}/>
+                                {property.name}@{property.estate.name}<i className={'bx bxs-check-circle'}/>
                             </h4>
                             <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
