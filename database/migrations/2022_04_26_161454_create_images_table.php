@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->morphs("payable"); // ESTATE ID or PROPERTY ID or UNIT ID
+            $table->morphs("imageable"); // ESTATE ID or PROPERTY ID or UNIT ID or ROOM ID
+            $table->string("title", 20);
             $table->string("image", 20);
             $table->timestamps();
         });
