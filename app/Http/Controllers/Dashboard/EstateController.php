@@ -77,7 +77,8 @@ class EstateController extends Controller
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
                 "user:id,first_name,last_name,email,phone",
-                "user.roles:id,name"
+                "user.roles:id,name",
+                "images:id,image",
             ])->loadCount(["properties", "units"])
         ]);
     }

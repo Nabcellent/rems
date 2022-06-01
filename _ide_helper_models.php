@@ -106,8 +106,9 @@ namespace App\Models{
  * App\Models\Image
  *
  * @property int $id
- * @property string $payable_type
- * @property int $payable_id
+ * @property string $imageable_type
+ * @property int $imageable_id
+ * @property string|null $title
  * @property string $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -119,8 +120,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Image wherePayableId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Image wherePayableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereImageableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereImageableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Image whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Image whereUpdatedAt($value)
  */
 	class IdeHelperImage {}
@@ -140,8 +142,8 @@ namespace App\Models{
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $tenant
  * @property-read \App\Models\Unit $unit
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\LeaseFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Lease newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Lease newQuery()
@@ -234,8 +236,8 @@ namespace App\Models{
  * @property string $payable_type
  * @property int $payable_id
  * @property int $amount
- * @property string $method
- * @property string $status
+ * @property \App\Enums\PaymentMethod $method
+ * @property \App\Enums\Status $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $payable
@@ -308,6 +310,7 @@ namespace App\Models{
  * @property int $id
  * @property int $estate_id
  * @property int $user_id
+ * @property string|null $name
  * @property string $type
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -329,6 +332,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereEstateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereUpdatedAt($value)
@@ -346,6 +350,8 @@ namespace App\Models{
  * @property string $type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
+ * @property-read int|null $images_count
  * @property-read \App\Models\Unit $unit
  * @method static \Database\Factories\RoomFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Room newModelQuery()
@@ -437,6 +443,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
+ * @property string $title
  * @property string $description
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -450,6 +457,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Ticket whereUserId($value)
  */
@@ -463,7 +471,7 @@ namespace App\Models{
  * @property int $id
  * @property int $user_id
  * @property int $destination_id
- * @property string $type
+ * @property \App\Enums\TransactionType $type
  * @property int $amount
  * @property \App\Enums\Status $status
  * @property string $description
@@ -507,13 +515,14 @@ namespace App\Models{
  * @property-read int|null $amenities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
  * @property-read int|null $images_count
- * @property-read \App\Models\Lease|null $lease
- * @property-read \App\Models\User|null $owner
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lease[] $leases
+ * @property-read int|null $leases_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Policy[] $policies
  * @property-read int|null $policies_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Room[] $rooms
  * @property-read int|null $rooms_count
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $unitable
+ * @property-read \App\Models\User $user
  * @method static \Database\Factories\UnitFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Unit newQuery()
