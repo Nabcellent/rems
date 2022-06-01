@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\TicketController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Dashboard\WalletController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,6 +32,10 @@ Route::get('/', [HomeController::class, 'home'])->name("home");
 Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard.")->group(function() {
     Route::get('/', [DashboardController::class, 'default'])->name("default");
     Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");
+
+    Route::prefix('/wallet')->name('wallet')->group(function() {
+        Route::get('/', [WalletController::class, 'index']);
+    });
 
     Route::resources([
         "users"             => UserController::class,

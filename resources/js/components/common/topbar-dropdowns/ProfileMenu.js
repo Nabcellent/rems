@@ -19,7 +19,7 @@ const ProfileMenu = () => {
                     <i className="bx bx-user font-size-16 align-middle ms-1"/>
                     Profile
                 </Dropdown.Item>
-                <Dropdown.Item tag="a" href="/crypto-wallet">
+                <Dropdown.Item as={Link} href={route('dashboard.wallet')}>
                     <i className="bx bx-wallet font-size-16 align-middle me-1"/>
                     My Wallet
                 </Dropdown.Item>
