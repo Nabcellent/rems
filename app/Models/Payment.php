@@ -14,6 +14,10 @@ class Payment extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "status"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */

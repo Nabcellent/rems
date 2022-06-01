@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
 use App\Http\Controllers\Dashboard\LeaseController;
+use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PropertyController;
 use App\Http\Controllers\Dashboard\ServiceController;
 use App\Http\Controllers\Dashboard\ServiceProviderController;
@@ -41,6 +42,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard."
         "service-providers" => ServiceProviderController::class,
         "tickets"           => TicketController::class,
         "transactions"      => TransactionController::class,
+        "payments"          => PaymentController::class,
     ]);
 });
 

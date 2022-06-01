@@ -1,8 +1,8 @@
 import Dashboard from '@/layouts/Dashboard';
-import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { ListItemIcon } from '@mui/material';
+import { ListItemIcon, Tooltip } from '@mui/material';
 import { Cancel, Pending, ReadMore, TaskAlt, Update } from '@mui/icons-material';
 import StatusBadge from '@/components/StatusBadge';
 import { Link } from '@inertiajs/inertia-react';
@@ -10,54 +10,46 @@ import IconMenuDropdown from '@/components/IconMenuDropdown';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
 
-const Index = ({ transactions }) => {
-    const handleUpdate = (transactionId, data) => {
-        return Inertia.put(route('dashboard.transactions.update', { transaction: transactionId }), data);
+const Index = ({ payments }) => {
+    console.log(payments);
+
+    const handleUpdate = (paymentId, data) => {
+        return Inertia.put(route('dashboard.payments.update', { payment: paymentId }), data);
     };
 
     return (
-        <Dashboard title={'Transactions'}>
-            <Breadcrumbs title="Transactions" breadcrumbItem="list"/>
+        <Dashboard title={'Payments'}>
+            <Breadcrumbs title="Payments" breadcrumbItem="list"/>
 
             <Row>
                 <Col className="col-12">
                     <Card>
-                        <DataTable title={'Transactions'} columns={[
+                        <DataTable title={'Payments'} columns={[
                             {
                                 accessor: 'user',
-                                Header: 'Billing name',
+                                Header: 'User',
                                 Cell: ({ row }) => (
-                                    <OverlayTrigger overlay={<Tooltip>{row.original.user.email}</Tooltip>}>
+                                    <Tooltip title={row.original.transaction.user.user_roles_str}>
                                         <span>
-                                            {row.original.user.last_name} <br/>
-                                            <small>{row.original.user.user_roles_str}</small>
+                                            {row.original.transaction.user.full_name} <br/>
+                                            <Link href={route('dashboard.users.show', { user: row.original.transaction.user.id })}>
+                                                 <strong><small>{row.original.transaction.user.email}</small></strong>
+                                            </Link>
                                         </span>
-                                    </OverlayTrigger>
+                                    </Tooltip>
                                 )
                             },
                             {
-                                accessor: 'destination',
-                                Header: 'Destination',
-                                Cell: ({ row }) => (
-                                    <OverlayTrigger overlay={<Tooltip>{row.original.destination.email}</Tooltip>}>
-                                        <span>
-                                            {row.original.destination.last_name} <br/>
-                                            <small>{row.original.destination.user_roles_str}</small>
-                                        </span>
-                                    </OverlayTrigger>
-                                )
-                            },
-                            {
-                                accessor: 'description',
-                                Header: 'Description',
+                                accessor: 'method',
+                                Header: 'Method',
                             },
                             {
                                 accessor: 'amount',
                                 Header: 'Amount',
-                                Cell: ({ row }) => (new Intl.NumberFormat('en-GB', {
+                                Cell: ({ row }) => new Intl.NumberFormat('en-GB', {
                                     style: 'currency',
                                     currency: 'KES'
-                                })).format(row.original.amount)
+                                }).format(row.original.amount)
                             },
                             {
                                 accessor: 'status',
@@ -96,13 +88,13 @@ const Index = ({ transactions }) => {
                                             },
                                         ]}/>
                                         <Link
-                                            href={route('dashboard.transactions.show', { transaction: row.original.id })}>
+                                            href={route('dashboard.transactions.show', { transaction: row.original.transaction_id })}>
                                             <ReadMore fontSize={'small'}/>
                                         </Link>
                                     </>
                                 )
                             }
-                        ]} data={transactions}/>
+                        ]} data={payments}/>
                     </Card>
                 </Col>
             </Row>

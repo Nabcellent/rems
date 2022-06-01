@@ -8,8 +8,8 @@ import moment from 'moment';
 import { lazy } from 'react';
 import PhoneBadge from '@/components/PhoneBadge';
 
-const TransactionTable = lazy(() => import('@/pages/dashboard/transactions/PaymentTable'));
-const PaymentTable = lazy(() => import('@/pages/dashboard/transactions/TransactionTable'));
+const TransactionTable = lazy(() => import('@/pages/dashboard/transactions/TransactionTable'));
+const PaymentTable = lazy(() => import('@/pages/dashboard/transactions/PaymentTable'));
 
 const Show = ({ errors, transaction }) => {
     console.log(transaction);

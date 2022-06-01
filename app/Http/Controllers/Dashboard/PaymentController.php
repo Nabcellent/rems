@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\Status;
 use App\Http\Controllers\Controller;
-use App\Models\Estate;
-use App\Models\Transaction;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
-class TransactionController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Create the controller instance.
@@ -21,7 +17,7 @@ class TransactionController extends Controller
      */
     public function __construct()
     {
-        $this->authorizeResource(Transaction::class, 'transaction');
+        $this->authorizeResource(Payment::class, 'payment');
     }
 
     /**
@@ -31,20 +27,19 @@ class TransactionController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/transactions', [
-            "transactions" => Transaction::select([
+        return inertia('dashboard/payments', [
+            "payments" => Payment::select([
                 "id",
-                "user_id",
-                "destination_id",
+                "transaction_id",
+                "payable_id",
+                "payable_type",
                 "amount",
-                "description",
+                "method",
                 "status",
                 "created_at"
             ])->with([
-                "user:id,last_name,email,phone",
-                "user.roles",
-                "destination.roles",
-                "destination:id,last_name,email,phone"
+                "transaction:id,user_id,type,description",
+                "transaction.user:id,first_name,last_name,email",
             ])->latest()->get()
         ]);
     }
@@ -73,29 +68,21 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Transaction $transaction
+     * @param \App\Models\Payment $payment
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Transaction $transaction): Response|ResponseFactory
+    public function show(Payment $payment): Response|ResponseFactory
     {
-        return inertia("dashboard/transactions/Show", [
-            "transaction" => $transaction->load([
-                'user:id,first_name,last_name,email,phone',
-                'user.roles',
-                'destination:id,first_name,last_name,email,phone',
-                'destination.roles',
-                "payment:id,transaction_id,amount,method,status"
-            ])
-        ]);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Transaction $transaction
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Transaction $transaction)
+    public function edit(Payment $payment)
     {
         //
     }
@@ -104,27 +91,27 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Transaction  $transaction
+     * @param \App\Models\Payment      $payment
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Transaction $transaction): RedirectResponse
+    public function update(Request $request, Payment $payment)
     {
         $data = $request->validate([
             "status" => "string"
         ]);
 
-        $transaction->update($data);
+        $payment->update($data);
 
-        return back()->with(["toast" => ["message" => "Transaction Updated!"]]);
+        return back()->with(["toast" => ["message" => "Payment Updated!"]]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Transaction $transaction
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function destroy(Payment $payment)
     {
         //
     }
