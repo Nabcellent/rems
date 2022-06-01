@@ -29,18 +29,28 @@ const Wallet = ({ wallet, auth }) => {
                 if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
                 if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid Safaricom Number!');
 
-                await new Mpesa().init({
-                    amount,
-                    phone,
-                    reference: 'REMS Wallet',
-                    description: Description.WALLET_DEPOSIT,
-                    onSuccess: () => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), { amount }),
-                });
+                try {
+                    await new Mpesa().init({
+                        amount, phone,
+                        reference: 'REMS Wallet',
+                        description: Description.WALLET_DEPOSIT,
+                        destination_id: auth.user.id,
+                        user_id: auth.user.id,
+                        onSuccess: stkStatus => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), {
+                            amount,
+                            stk_status: stkStatus
+                        }),
+                    });
+                } catch (err) {
+                    const message = err.response.data.message;
+
+                    return Sweet.showValidationMessage(message);
+                }
 
                 return { amount, phone };
             },
             allowOutsideClick: () => !Sweet.isLoading()
-        })
+        });
     };
 
     return (

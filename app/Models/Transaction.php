@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Status;
+use App\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,10 +17,16 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        "user_id",
+        "destination_id",
+        "type",
+        "amount",
+        "description",
         "status"
     ];
 
     protected $casts = [
+        "type"   => TransactionType::class,
         "status" => Status::class
     ];
 

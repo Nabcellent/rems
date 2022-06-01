@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\MpesaController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
 use App\Http\Controllers\Dashboard\LeaseController;
@@ -29,27 +30,29 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name("home");
 
-Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard.")->group(function() {
-    Route::get('/', [DashboardController::class, 'default'])->name("default");
-    Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");
+Route::middleware(['auth', 'verified'])->group(function() {
+    Route::prefix('/dashboard')->name("dashboard.")->group(function() {
+        Route::get('/', [DashboardController::class, 'default'])->name("default");
+        Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");
 
-    Route::prefix('/wallet')->name('wallet')->group(function() {
-        Route::get('/', [WalletController::class, 'index']);
-        Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
+        Route::prefix('/wallet')->name('wallet')->group(function() {
+            Route::get('/', [WalletController::class, 'index']);
+            Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
+        });
+
+        Route::resources([
+            "users"             => UserController::class,
+            "estates"           => EstateController::class,
+            "properties"        => PropertyController::class,
+            "units"             => UnitController::class,
+            "leases"            => LeaseController::class,
+            "services"          => ServiceController::class,
+            "service-providers" => ServiceProviderController::class,
+            "tickets"           => TicketController::class,
+            "transactions"      => TransactionController::class,
+            "payments"          => PaymentController::class,
+        ]);
     });
-
-    Route::resources([
-        "users"             => UserController::class,
-        "estates"           => EstateController::class,
-        "properties"        => PropertyController::class,
-        "units"             => UnitController::class,
-        "leases"            => LeaseController::class,
-        "services"          => ServiceController::class,
-        "service-providers" => ServiceProviderController::class,
-        "tickets"           => TicketController::class,
-        "transactions"      => TransactionController::class,
-        "payments"          => PaymentController::class,
-    ]);
 });
 
 require __DIR__ . '/auth.php';

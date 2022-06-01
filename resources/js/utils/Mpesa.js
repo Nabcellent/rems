@@ -4,13 +4,13 @@ export default class Mpesa {
     onSuccess = () => {
     };
 
-    init = async ({ phone, amount, reference, description, onSuccess }) => {
+    init = async ({ phone, amount, reference, description, onSuccess, ...data }) => {
         const { data: stkRequest } = await axios.post(`${this.baseUrl}/stk/initiate`, {
             phone,
             amount: 1,
-            reference,
-            description,
-        });
+            reference, description,
+            ...data,
+        }, { headers: { 'Accept': 'application/json' } });
 
         if (stkRequest) {
             console.log(stkRequest);
@@ -66,8 +66,10 @@ export default class Mpesa {
         });
     };
 
-    async confirmResponse(resp) {
-        const { ResultCode, errorCode } = resp;
+    async confirmResponse(stkStatus) {
+        console.log(stkStatus);
+
+        const { ResultCode, errorCode } = stkStatus;
 
         let type, message, showConfirmButton = false;
 
@@ -80,7 +82,7 @@ export default class Mpesa {
             type = 'success';
             message = 'Payment Successful!';
 
-            this.onSuccess();
+            this.onSuccess(stkStatus);
         } else {
             type = 'warning';
             message = 'Something went wrong!';

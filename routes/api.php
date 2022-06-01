@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\API\MpesaController;
-use DrH\Mpesa\Http\Controllers\StkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::prefix('/mpesa')->group(function() {
-    Route::post('/stk/initiate', [StkController::class, 'initiatePush']);
+    Route::post('/stk/initiate', [MpesaController::class, 'initiatePush']);
     Route::post('/stk/query-status', [MpesaController::class, 'stkStatus']);
 });

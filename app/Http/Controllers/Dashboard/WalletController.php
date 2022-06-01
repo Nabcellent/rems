@@ -23,6 +23,8 @@ class WalletController extends Controller
         $wallet->balance += $request->input('amount');
         $wallet->save();
 
+
+
         return back()->with(["toast" => ["message" => "Wallet Loaded!"]]);
     }
 }
