@@ -1,50 +1,46 @@
 import Dashboard from '@/layouts/Dashboard';
 import Breadcrumbs from '@/components/common/Breadcrumb';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import CountUp from 'react-countup';
 import { Link } from '@inertiajs/inertia-react';
 import { Button } from '@mui/material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import { Inertia } from '@inertiajs/inertia';
 import { AccountBalanceWallet } from '@mui/icons-material';
-import { Mpesa } from '@/utils/Mpesa';
+import Mpesa from '@/utils/Mpesa';
 import { getTelcoFromPhone } from '@/utils/helpers';
 import { Description, Telco } from '@/utils/enums';
-
-const Sweet = withReactContent(Swal);
 
 const Wallet = ({ wallet, auth }) => {
     console.log(wallet, auth);
 
-    const handleDeposit = () => {
-        Sweet.fire({
+    const handleDeposit = async () => {
+        await Sweet.fire({
             html:
                 '<small>Amount (min: 100)</small>' +
                 '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
                 '<small>Phone number (optional)</small>' +
                 `<input id="phone" type="tel" class="form-control" value="${auth.user.phone}" placeholder="Enter phone to request.">`,
             showLoaderOnConfirm: true,
-            preConfirm: () => {
+            backdrop: `rgba(150, 0, 0, 0.4)`,
+            preConfirm: async () => {
                 const amount = document.getElementById('amount').value,
                     phone = document.getElementById('phone').value;
 
                 if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
                 if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid Safaricom Number!');
 
+                await new Mpesa().init({
+                    amount,
+                    phone,
+                    reference: 'REMS Wallet',
+                    description: Description.WALLET_DEPOSIT,
+                    onSuccess: () => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), { amount }),
+                });
+
                 return { amount, phone };
             },
             allowOutsideClick: () => !Sweet.isLoading()
-        }).then(async result => {
-            if (result.isConfirmed) {
-                await Mpesa.init({
-                    ...result.value,
-                    reference: 'Wallet',
-                    description: Description.WALLET_DEPOSIT,
-                    onSuccess: () => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), { amount: result.value }),
-                });
-            }
-        });
+        })
     };
 
     return (
