@@ -74,30 +74,26 @@ const DataTable = ({
     viewAll = null
 }) => {
     return (
-        <Card className={'mb-3'}>
-            <Card.Body>
-                <AdvanceTableWrapper columns={columns} data={data} sortable pagination perPage={perPage}
-                                     selection={bulkActions} selectionColumnWidth={30}>
-                    <BulkAction table title={title} onCreateRow={onCreateRow} bulkActions={bulkActions}
-                                viewAll={viewAll}/>
-                    <Row className="flex-end-center">
-                        {
-                            searchable && <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
-                        }
-                    </Row>
-                    <AdvanceTable table headerClassName="bg-200 text-900 text-nowrap align-middle"
-                                  rowClassName="align-middle"
-                                  tableProps={{
-                                      striped: true,
-                                      className: `fs--1 mb-0 overflow-hidden ${tableClassName}`
-                                  }}
-                    />
-                    <div className="mt-3">
-                        <AdvanceTableFooter rowCount={data.length} table rowInfo navButtons rowsPerPageSelection/>
-                    </div>
-                </AdvanceTableWrapper>
-            </Card.Body>
-        </Card>
+        <AdvanceTableWrapper columns={columns} data={data} sortable pagination perPage={perPage}
+                             selection={bulkActions} selectionColumnWidth={30}>
+            <BulkAction table title={title} onCreateRow={onCreateRow} bulkActions={bulkActions}
+                        viewAll={viewAll}/>
+            <Row className="flex-end-center">
+                {
+                    searchable && <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
+                }
+            </Row>
+            <AdvanceTable table headerClassName="bg-200 text-900 text-nowrap align-middle"
+                          rowClassName="align-middle"
+                          tableProps={{
+                              striped: true,
+                              className: `fs--1 mb-0 overflow-hidden ${tableClassName}`
+                          }}
+            />
+            <div className="mt-3">
+                <AdvanceTableFooter rowCount={data.length} table rowInfo navButtons rowsPerPageSelection/>
+            </div>
+        </AdvanceTableWrapper>
     );
 };
 

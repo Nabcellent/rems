@@ -33,6 +33,6 @@ class StkPaymentFailed
         $payment->status = Status::FAILED;
         $payment->save();
 
-        $payment->payable->update(["status" => Status::FAILED]);
+        $payment->transaction->update(["status" => Status::FAILED]);
     }
 }

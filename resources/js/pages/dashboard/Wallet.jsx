@@ -3,14 +3,17 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import { Card, Col, Row } from 'react-bootstrap';
 import CountUp from 'react-countup';
 import { Link } from '@inertiajs/inertia-react';
-import { Button } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import { AccountBalanceWallet } from '@mui/icons-material';
 import Mpesa from '@/utils/Mpesa';
 import { getTelcoFromPhone } from '@/utils/helpers';
 import { Description, Telco } from '@/utils/enums';
+import TableDate from '@/components/TableDate';
+import DataTable from '@/components/common/datatable';
+import StatusBadge from '@/components/StatusBadge';
 
-const Wallet = ({ wallet, auth }) => {
+const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
     console.log(wallet, auth);
 
     const handleDeposit = async () => {
@@ -59,7 +62,7 @@ const Wallet = ({ wallet, auth }) => {
 
             <Row>
                 <Col xl={4}>
-                    <Card>
+                    <Paper className={'mb-3 h-100 d-flex justify-content-between flex-column'}>
                         <Card.Body>
                             <div className="d-flex">
                                 <div className="flex-shrink-0 me-4">
@@ -100,10 +103,8 @@ const Wallet = ({ wallet, auth }) => {
                                 </Col>
                                 <Col sm={6}>
                                     <div className="text-sm-end mt-4 mt-sm-0">
-                                        <p className="text-muted mb-2">Since last month</p>
-                                        <h5>+ $ 248.35 <span
-                                            className="badge bg-success ms-1 align-bottom">+ 1.3 %</span></h5>
-
+                                        <p className="text-muted mb-2">Last top up</p>
+                                        <TableDate date={last_top_up}/>
                                     </div>
                                 </Col>
                             </Row>
@@ -142,9 +143,35 @@ const Wallet = ({ wallet, auth }) => {
                                 </Row>
                             </div>
                         </Card.Body>
-                    </Card>
+                    </Paper>
                 </Col>
-                <Col xl={8}></Col>
+                <Col xl={8}>
+                    <Paper className={'mb-3 h-100'}>
+                        <Card.Body>
+                            <DataTable data={transactions} title={'Wallet Transactions'} perPage={5} columns={[
+                                {
+                                    accessor: 'amount',
+                                    Header: 'Amount',
+                                    Cell: ({ row }) => (new Intl.NumberFormat('en-GB', {
+                                        style: 'currency',
+                                        currency: 'KES'
+                                    })).format(row.original.amount)
+                                },
+                                {
+                                    accessor: 'status',
+                                    Header: 'Status',
+                                    Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                                },
+                                {
+                                    accessor: 'created_at',
+                                    Header: 'Date',
+                                    className: 'text-end',
+                                    Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                                },
+                            ]}/>
+                        </Card.Body>
+                    </Paper>
+                </Col>
             </Row>
         </Dashboard>
     );
