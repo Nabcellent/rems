@@ -35,6 +35,7 @@ Route::prefix('/dashboard')->middleware(['auth', 'verified'])->name("dashboard."
 
     Route::prefix('/wallet')->name('wallet')->group(function() {
         Route::get('/', [WalletController::class, 'index']);
+        Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
     });
 
     Route::resources([

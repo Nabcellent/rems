@@ -18,3 +18,15 @@ export const Status = {
     INACTIVE: 'INACTIVE',
     RESOLVED: 'RESOLVED',
 };
+
+export const Telco = {
+    SAFARICOM: 'SAFARICOM',
+    AIRTEL: 'AIRTEL',
+    TELKOM: 'TELKOM',
+    EQUITEL: 'EQUITEL',
+    FAIBA: 'FAIBA',
+}
+
+export const Description = {
+    WALLET_DEPOSIT: 'Wallet Deposit'
+}

@@ -1,6 +1,7 @@
 import { Badge } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { getTelcoFromPhone, parsePhone } from '@/utils/helpers';
+import { Telco } from '@/utils/enums';
 
 const PhoneBadge = ({ phone }) => {
     let number = String(phone);
@@ -8,11 +9,11 @@ const PhoneBadge = ({ phone }) => {
     const telco = getTelcoFromPhone(number);
     let color = 'secondary';
 
-    if (telco === 'safaricom') {
+    if (telco === Telco.SAFARICOM) {
         color = '#59BC58';
-    } else if (telco === 'airtel') {
+    } else if (telco === Telco.AIRTEL) {
         color = '#EE4326';
-    } else if (telco === 'telkom') {
+    } else if (telco === Telco.TELKOM) {
         color = '#30AACB';
     }
 

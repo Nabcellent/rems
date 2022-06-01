@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use DrH\Mpesa\Http\Controllers\StkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('/mpesa')->group(function() {
+    Route::post('/stk/initiate', [StkController::class, 'initiatePush']);
 });
