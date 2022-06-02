@@ -22,6 +22,7 @@ class PropertyFactory extends Factory
         return [
             "estate_id"  => Estate::factory(),
             "user_id"    => User::factory(),
+            "name"       => $this->faker->randomElement([strtoupper($this->faker->randomLetter()), null]),
             "type"       => $this->faker->randomElement(PropertyType::cases()),
             "created_at" => $this->faker->dateTimeBetween('-1 years')
         ];

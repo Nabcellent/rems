@@ -40,7 +40,8 @@ class HandleInertiaRequests extends Middleware
                     'id',
                     'first_name',
                     'last_name',
-                    'email'
+                    'email',
+                    "phone"
                 ]) : null,
             ],
             'ziggy' => function() {

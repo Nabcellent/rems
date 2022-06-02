@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Purpose;
+use App\Enums\Status;
 use App\Models\Estate;
 use App\Models\Property;
 use App\Models\User;
@@ -29,7 +30,8 @@ class UnitFactory extends Factory
             "unitable_type" => $property->modelName(),
             "house_number"  => $this->faker->buildingNumber(),
             "purpose"       => $this->faker->randomElement(Purpose::cases()),
-            "created_at"        => $this->faker->dateTimeBetween('-1 years')
+            "created_at"        => $this->faker->dateTimeBetween('-1 years'),
+            "status"    => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
         ];
     }
 }

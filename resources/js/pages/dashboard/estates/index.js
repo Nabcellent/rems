@@ -19,56 +19,60 @@ const Index = ({ estates }) => {
             <Row>
                 <Col className="col-12">
                     <Card>
-                        <DataTable title={'Estates'} columns={[
-                            {
-                                accessor: 'name',
-                                Header: 'Name',
-                            },
-                            {
-                                accessor: 'address',
-                                Header: 'Address',
-                            },
-                            {
-                                accessor: 'owner',
-                                Header: 'Owner',
-                                Cell: ({ row }) => (
-                                    <span>
+                        <Card.Body>
+                            <DataTable title={'Estates'} columns={[
+                                {
+                                    accessor: 'name',
+                                    Header: 'Name',
+                                },
+                                {
+                                    accessor: 'address',
+                                    Header: 'Address',
+                                },
+                                {
+                                    accessor: 'owner',
+                                    Header: 'Owner',
+                                    Cell: ({ row }) => (
+                                        <span>
                                         {row.original.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
                                             <small>{row.original.user.email}</small>
                                         </Link>
                                     </span>
-                                )
-                            },
-                            {
-                                accessor: 'properties_count',
-                                Header: 'Properties',
-                                Cell: ({ row }) => row.original.properties_count + row.original.units_count
-                            },
-                            {
-                                accessor: 'actions',
-                                disableSortBy: true,
-                                className: 'text-end',
-                                Cell: ({ row }) => {
-                                    return (
-                                        <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.estates.create'))}
-                                                        size={"small"} color={"primary"}>
-                                                <Edit fontSize={'small'}/>
-                                            </IconButton>
-                                            <Link href={route('dashboard.estates.show', { estate: row.original.id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                            <IconButton
-                                                onClick={() => handleDelete(route('dashboard.estates.destroy', { property: row.original.id }), 'estate')}
-                                                size={"small"} color={"error"}>
-                                                <Delete fontSize={'small'}/>
-                                            </IconButton>
-                                        </>
-                                    );
+                                    )
+                                },
+                                {
+                                    accessor: 'properties_count',
+                                    Header: 'Properties',
+                                    Cell: ({ row }) => row.original.properties_count + row.original.units_count
+                                },
+                                {
+                                    accessor: 'actions',
+                                    disableSortBy: true,
+                                    className: 'text-end',
+                                    Cell: ({ row }) => {
+                                        return (
+                                            <>
+                                                <IconButton
+                                                    onClick={() => Inertia.get(route('dashboard.estates.create'))}
+                                                    size={"small"} color={"primary"}>
+                                                    <Edit fontSize={'small'}/>
+                                                </IconButton>
+                                                <Link
+                                                    href={route('dashboard.estates.show', { estate: row.original.id })}>
+                                                    <ReadMore fontSize={'small'}/>
+                                                </Link>
+                                                <IconButton
+                                                    onClick={() => handleDelete(route('dashboard.estates.destroy', { property: row.original.id }), 'estate')}
+                                                    size={"small"} color={"error"}>
+                                                    <Delete fontSize={'small'}/>
+                                                </IconButton>
+                                            </>
+                                        );
+                                    }
                                 }
-                            }
-                        ]} data={estates} onCreateRow={() => Inertia.get(route('dashboard.estates.create'))}/>
+                            ]} data={estates} onCreateRow={() => Inertia.get(route('dashboard.estates.create'))}/>
+                        </Card.Body>
                     </Card>
                 </Col>
             </Row>

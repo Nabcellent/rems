@@ -33,8 +33,9 @@ const Index = ({ units }) => {
                                 )
                             },
                             {
-                                accessor: 'estate_name',
+                                accessor: 'estate',
                                 Header: 'Estate',
+                                Cell: ({ row }) => row.original.estate.name
                             },
                             {
                                 accessor: 'house_number',
@@ -49,7 +50,7 @@ const Index = ({ units }) => {
                                 disableSortBy: true,
                                 className: 'text-end',
                                 Cell: ({ row }) => {
-                                    const unit = row.original
+                                    const unit = row.original;
 
                                     return (
                                         <>

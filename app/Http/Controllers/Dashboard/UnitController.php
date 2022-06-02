@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Unit;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -61,11 +62,20 @@ class UnitController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Unit $unit
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Unit $unit)
+    public function show(Unit $unit): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/units/Show", [
+            "unit" => $unit->load([
+                "unitable",
+                "user:id,first_name,last_name,email,phone",
+                "user.roles:id,name",
+                "leases" => fn(HasMany $qry) => $qry->orderByDesc('status'),
+                "leases.user:id,first_name,last_name,email,phone",
+                "images:id,imageable_id,imageable_type,image,title,created_at",
+            ])
+        ]);
     }
 
     /**

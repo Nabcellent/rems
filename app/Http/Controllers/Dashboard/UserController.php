@@ -163,6 +163,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return back();
+        return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
     }
 }

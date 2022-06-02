@@ -2,7 +2,9 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
-    AlternateEmail, Apartment,
+    AddAPhoto,
+    AlternateEmail,
+    Apartment,
     Badge,
     Home,
     LocationOn,
@@ -11,7 +13,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Status } from '@/utils/enums';
+import { Imageable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
@@ -19,9 +21,13 @@ import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
+import Photos from '@/components/Photos';
+import AddImageModal from '@/components/AddImageModal';
+import { useState } from 'react';
 
 const Show = ({ errors, estate }) => {
     const theme = useTheme();
+    const [showModal, setShowModal] = useState(false);
     console.log(estate);
     const assetCount = estate.properties_count + estate.units_count;
 
@@ -110,10 +116,10 @@ const Show = ({ errors, estate }) => {
                 </div>
             </Paper>
 
-            <Row className={'mb-3 g-3'}>
-                <Col lg={8}>
-                    {
-                        Boolean(estate.properties.length) && (
+            <Row className={'mb-3 g-3 justify-content-center'}>
+                {
+                    Boolean(estate.properties.length) && (
+                        <Col lg={6}>
                             <Paper className={'mb-3'}>
                                 <Card.Header><h5 className={'mb-0'}>Properties</h5></Card.Header>
                                 <Card.Body>
@@ -124,11 +130,14 @@ const Show = ({ errors, estate }) => {
                                                     <Apartment color={'primary'}/>
                                                 </Avatar>
                                                 <div className="w-100">
-                                                    <Link href={route('dashboard.properties.show', { property: property.id })} className="mb-0">
+                                                    <Link
+                                                        href={route('dashboard.properties.show', { property: property.id })}
+                                                        className="mb-0">
                                                         <strong>{property.type}</strong>
                                                     </Link>
                                                     <div className={'d-flex justify-content-between'}>
-                                                        <Link href={route('dashboard.users.show', { user: property.user.id })}>
+                                                        <Link
+                                                            href={route('dashboard.users.show', { user: property.user.id })}>
                                                             <small className="mb-1">
                                                                 For <strong>{property.user.email}</strong>
                                                             </small>
@@ -143,10 +152,12 @@ const Show = ({ errors, estate }) => {
                                     }
                                 </Card.Body>
                             </Paper>
-                        )
-                    }
-                    {
-                        Boolean(estate.units.length) && (
+                        </Col>
+                    )
+                }
+                {
+                    Boolean(estate.units.length) && (
+                        <Col lg={6}>
                             <Paper className={'mb-3'}>
                                 <Card.Header><h5 className={'mb-0'}>Units</h5></Card.Header>
                                 <Card.Body>
@@ -173,16 +184,27 @@ const Show = ({ errors, estate }) => {
                                     }
                                 </Card.Body>
                             </Paper>
-                        )
-                    }
+                        </Col>
+                    )
+                }
+            </Row>
 
-                </Col>
-                <Col lg={4}>
+            <Row>
+                <Col>
                     <Paper className={'mb-3'}>
-
+                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                            <h5 className={'mb-0'}>Photos</h5>
+                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
+                        </Card.Header>
+                        <Card.Body>
+                            <Photos images={estate.images} directory={'estates'}/>
+                        </Card.Body>
                     </Paper>
                 </Col>
             </Row>
+
+            <AddImageModal imageable={Imageable.ESTATE} imageableId={estate.id} showModal={showModal}
+                           setShowModal={setShowModal}/>
         </Dashboard>
     );
 };

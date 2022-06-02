@@ -6,7 +6,7 @@ import SimpleBar from "simplebar-react";
 
 // MetisMenu
 import MetisMenu from "metismenujs";
-import { Link } from "@inertiajs/inertia-react";
+import { Link, usePage } from "@inertiajs/inertia-react";
 import { Badge } from 'react-bootstrap';
 
 function usePrevious(value) {
@@ -18,22 +18,36 @@ function usePrevious(value) {
 }
 
 const Section = ({ title, menu }) => {
+    const { url } = usePage();
+
+    const isActive = link => {
+        try {
+            return new URL(link).pathname === url;
+        } catch (err) {
+            return false;
+        }
+    };
+
     return (
         <>
             <li className="menu-title">{title}</li>
 
             {
                 menu.map((item, i) => (
-                    <li key={`menu-${i}`}>
+                    <li key={`menu-${i}`}
+                        className={item.subMenu?.find(m => isActive(m.link)) || isActive(item.link) ? 'mm-active' : ''}>
                         <Link href={item.link} className={item.subMenu && 'has-arrow'}>
-                            {item.startIcon}<span>{item.title}</span>{item.endIcon}
+                            {item.startIcon}<span>{item.title}</span>
                         </Link>
                         {
                             item.subMenu &&
                             <ul className="sub-menu" aria-expanded="false">
                                 {
                                     item.subMenu.map((subMenu, i) => (
-                                        <li key={`sub-menu-${i}`}><Link href={subMenu.link}>{subMenu.title}</Link></li>
+                                        <li key={`sub-menu-${i}`}>
+                                            <Link href={subMenu.link}
+                                                  className={isActive(subMenu.link) ? 'mm-active' : ''}>{subMenu.title}</Link>
+                                        </li>
                                     ))
                                 }
                             </ul>
@@ -46,78 +60,12 @@ const Section = ({ title, menu }) => {
 };
 
 //i18n
-const SidebarContent = ({ type, location }) => {
+const SidebarContent = ({ type }) => {
     const refDiv = useRef();
     const prevType = usePrevious(type);
 
-    const scrollElement = item => {
-        setTimeout(() => {
-            if (refDiv.current !== null) {
-                if (item) {
-                    const currentPosition = item.offsetTop;
-                    if (currentPosition > window.innerHeight) {
-                        if (refDiv.current) refDiv.current.getScrollElement().scrollTop = currentPosition - 300;
-                    }
-                }
-            }
-        }, 300);
-    };
-
-    const activateParentDropdown = item => {
-        item.classList.add("active");
-        const parent = item.parentElement;
-
-        const parent2El = parent.childNodes[1];
-
-        if (parent2El && parent2El.id !== "side-menu") parent2El.classList.add("mm-show");
-
-        if (parent) {
-            parent.classList.add("mm-active");
-            const parent2 = parent.parentElement;
-
-            if (parent2) {
-                parent2.classList.add("mm-show"); // ul tag
-
-                const parent3 = parent2.parentElement; // li tag
-
-                if (parent3) {
-                    parent3.classList.add("mm-active"); // li
-                    parent3.childNodes[0].classList.add("mm-active"); //a
-
-                    const parent4 = parent3.parentElement; // ul
-
-                    if (parent4) {
-                        parent4.classList.add("mm-show"); // ul
-                        const parent5 = parent4.parentElement;
-                        if (parent5) {
-                            parent5.classList.add("mm-show"); // li
-                            parent5.childNodes[0].classList.add("mm-active"); // a tag
-                        }
-                    }
-                }
-            }
-            scrollElement(item);
-            return false;
-        }
-        scrollElement(item);
-        return false;
-    };
-
     const initMenu = () => {
         new MetisMenu("#side-menu");
-
-        let matchingMenuItem = null;
-        const ul = document.getElementById("side-menu");
-        const items = ul.getElementsByTagName("a");
-
-        for (let i = 0; i < items.length; ++i) {
-            if (location?.pathname === items[i].pathname) {
-                matchingMenuItem = items[i];
-                break;
-            }
-        }
-
-        if (matchingMenuItem) activateParentDropdown(matchingMenuItem);
     };
 
     useEffect(() => {
@@ -133,7 +81,6 @@ const SidebarContent = ({ type, location }) => {
                 {
                     startIcon: <i className="bx bxs-dashboard"/>,
                     title: 'Dashboard',
-                    endIcon: <Badge pill className={`small`}>02</Badge>,
                     subMenu: [
                         { link: route('dashboard.default'), title: 'Default' },
                         { link: route('dashboard.analytics'), title: 'Analytics' }
@@ -146,7 +93,7 @@ const SidebarContent = ({ type, location }) => {
             menu: [
                 {
                     startIcon: <i className="bx bxs-detail"/>, title: 'Leases', subMenu: [
-                        { link: '/leases', title: 'list' },
+                        { link: route('dashboard.leases.index'), title: 'list' },
                         { link: '/leases', title: 'create' }
                     ]
                 },
@@ -186,7 +133,7 @@ const SidebarContent = ({ type, location }) => {
                 },
                 {
                     startIcon: <i className="bx bxs-coin-stack"/>, title: 'Payments', subMenu: [
-                        { link: '/payments', title: 'list' },
+                        { link: route('dashboard.payments.index'), title: 'list' },
                         { link: '/notify', title: 'Plans' }
                     ]
                 }
@@ -195,6 +142,15 @@ const SidebarContent = ({ type, location }) => {
         {
             title: 'System',
             menu: [
+                { startIcon: <i className="bx bxs-hand"/>, title: 'Tickets', link: route('dashboard.tickets.index') },
+                {
+                    startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
+                        { link: route('dashboard.services.index'), title: 'List Services' },
+                        { link: route('dashboard.service-providers.index'), title: 'List Service Providers' },
+                        { link: route('dashboard.services.create'), title: 'Create Service' },
+                        { link: route('dashboard.service-providers.create'), title: 'Create Service Provider' }
+                    ]
+                },
                 {
                     startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
                         { link: route('dashboard.users.index'), title: 'list' },

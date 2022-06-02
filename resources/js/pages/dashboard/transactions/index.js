@@ -2,11 +2,9 @@ import Dashboard from '@/layouts/Dashboard';
 import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { ListItemIcon, Typography } from '@mui/material';
+import { ListItemIcon } from '@mui/material';
 import { Cancel, Pending, ReadMore, TaskAlt, Update } from '@mui/icons-material';
 import StatusBadge from '@/components/StatusBadge';
-import { isToday, isYesterday } from '@/utils/helpers';
-import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';
 import IconMenuDropdown from '@/components/IconMenuDropdown';
 import { Inertia } from '@inertiajs/inertia';
@@ -24,7 +22,7 @@ const Index = ({ transactions }) => {
             <Row>
                 <Col className="col-12">
                     <Card>
-                        <DataTable title={'Latest Transactions'} columns={[
+                        <DataTable title={'Transactions'} columns={[
                             {
                                 accessor: 'user',
                                 Header: 'Billing name',

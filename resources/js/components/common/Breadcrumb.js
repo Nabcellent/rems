@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Breadcrumb, Col, Row } from "react-bootstrap";
 import { Link } from '@inertiajs/inertia-react';
 
-const Breadcrumbs = ({title, breadcrumbItem}) => {
+const Breadcrumbs = ({ title, breadcrumbItem }) => {
     return (
         <React.Fragment>
             <Row>
@@ -24,7 +24,7 @@ const Breadcrumbs = ({title, breadcrumbItem}) => {
 };
 
 Breadcrumbs.propTypes = {
-    breadcrumbItem: PropTypes.string,
+    breadcrumbItem: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     title: PropTypes.string
 };
 

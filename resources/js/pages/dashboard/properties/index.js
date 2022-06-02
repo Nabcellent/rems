@@ -21,6 +21,11 @@ const Index = ({ properties }) => {
                     <Card>
                         <DataTable title={'Properties'} columns={[
                             {
+                                accessor: 'name',
+                                Header: 'Name',
+                                Cell: ({ row }) => row.original.name || ' - '
+                            },
+                            {
                                 accessor: 'owner',
                                 Header: 'Owner',
                                 Cell: ({ row }) => (
@@ -53,8 +58,10 @@ const Index = ({ properties }) => {
                                 Cell: ({ row }) => {
                                     return (
                                         <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.properties.create'))} size={"small"}
-                                                        color={"primary"}>
+                                            <IconButton
+                                                onClick={() => Inertia.get(route('dashboard.properties.create'))}
+                                                size={"small"}
+                                                color={"primary"}>
                                                 <Edit fontSize={'small'}/>
                                             </IconButton>
                                             <Link

@@ -3,6 +3,7 @@ import { parsePhoneNumber } from 'libphonenumber-js';
 import { Inertia } from '@inertiajs/inertia';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { Telco } from '@/utils/enums';
 
 const Sweet = withReactContent(Swal);
 
@@ -32,15 +33,15 @@ export const getTelcoFromPhone = phone => {
         faibaRegEx = /^(?:254|\+254|0)?(747\d{6})$/;
 
     if (phone.match(safRegEx)) {
-        return 'safaricom';
+        return Telco.SAFARICOM;
     } else if (phone.match(airtelRegEx)) {
-        return 'airtel';
+        return Telco.AIRTEL;
     } else if (phone.match(telkomRegEx)) {
-        return 'telkom';
+        return Telco.TELKOM;
     } else if (phone.match(equitelRegEx)) {
-        return 'equitel';
+        return Telco.EQUITEL;
     } else if (phone.match(faibaRegEx)) {
-        return 'faiba';
+        return Telco.FAIBA;
     } else {
         return null;
     }

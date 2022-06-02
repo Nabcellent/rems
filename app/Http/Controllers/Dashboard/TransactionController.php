@@ -115,7 +115,7 @@ class TransactionController extends Controller
 
         $transaction->update($data);
 
-        return back();
+        return back()->with(["toast" => ["message" => "Transaction Updated!"]]);
     }
 
     /**

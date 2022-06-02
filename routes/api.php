@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\MpesaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('/mpesa')->group(function() {
+    Route::post('/stk/initiate', [MpesaController::class, 'initiatePush']);
+    Route::post('/stk/query-status', [MpesaController::class, 'stkStatus']);
 });

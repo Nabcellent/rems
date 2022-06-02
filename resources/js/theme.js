@@ -30,6 +30,13 @@ export const theme = createTheme({
                     borderRadius: '2.5rem'
                 }
             }
+        },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    position: 'relative'
+                }
+            }
         }
     }
 });
