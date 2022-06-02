@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\API\MpesaController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
+use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PropertyController;
@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "tickets"           => TicketController::class,
             "transactions"      => TransactionController::class,
             "payments"          => PaymentController::class,
+            "images"            => ImageController::class,
         ]);
     });
 });

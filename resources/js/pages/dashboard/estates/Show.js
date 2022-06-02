@@ -17,10 +17,12 @@ import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
 import CountUp from 'react-countup';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Modal, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Photos from '@/components/Photos';
+import ValidationErrors from '@/components/ValidationErrors';
+import AddImageModal from '@/AddImageModal';
 
 const Show = ({ errors, estate }) => {
     const theme = useTheme();
@@ -199,7 +201,7 @@ const Show = ({ errors, estate }) => {
                 </Col>
             </Row>
 
-
+            <AddImageModal imageable={'estate'} imageableId={estate.id}/>
         </Dashboard>
     );
 };

@@ -4,8 +4,6 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { Avatar, IconButton, useTheme } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -31,8 +29,6 @@ import { handleDelete } from '@/utils/helpers';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
-
-const MySwal = withReactContent(Swal);
 
 const validationSchema = yup.object({
     first_name: yup.string().required('First name is required.'),

@@ -1,0 +1,103 @@
+import { Modal } from 'react-bootstrap';
+import ValidationErrors from '@/components/ValidationErrors';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { Button, Grid, TextField } from '@mui/material';
+import { FilePond } from 'react-filepond';
+import { LoadingButton } from '@mui/lab';
+import { Create } from '@mui/icons-material';
+import { useFormik } from 'formik';
+import { Inertia, Method } from '@inertiajs/inertia';
+import * as yup from 'yup';
+
+const validationSchema = yup.object({
+    imageable: yup.string.isRequired(),
+    imageable_id: yup.string.isRequired(),
+    title:yup.string.isRequired()
+});
+
+const AddImageModal = ({ imageable, imageableId, image }) => {
+    const [show, setShow] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    const formik = useFormik({
+        initialValues: {
+            imageable: imageable,
+            imageable_id: imageableId,
+            image: '',
+            title: ''
+        },
+        validationSchema: validationSchema,
+        validateOnChange: true,
+        onSubmit: values => {
+            let url = route(`dashboard.images.store`);
+
+            if (image) {
+                url = route(`dashboard.images.update`, { image: image.id });
+                values._method = Method.PUT;
+            }
+
+            Inertia.post(url, values, {
+                    forceFormData: true,
+                    onBefore: () => setIsLoading(true),
+                    onSuccess: () => {
+                        setShow(false);
+                        formik.resetForm();
+                    },
+                    onError: errors => setErrors(errors),
+                    onFinish: () => setIsLoading(false)
+                }
+            );
+        }
+    });
+
+    return (
+        <Modal show={show} onHide={() => setShow(false)}>
+            <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
+                <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShow(false)}/>
+            </div>
+            <Modal.Body className={'modal-body'}>
+                <div className="pb-3">
+                    <h4 className="mb-1">{(image ? "Update" : "New") + " Image"}</h4>
+                </div>
+                <ValidationErrors errors={errors}/>
+
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <TextField label="Title" placeholder="Image title..." name={'title'}
+                                   value={formik.values.title} fullWidth onChange={formik.handleChange}
+                                   error={formik.touched.title && Boolean(formik.errors.title)}
+                                   helperText={formik.touched.title && formik.errors.title}/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FilePond maxFiles={3} name="image" maxFileSize={'1MB'} className={'mb-0'}
+                                  labelMaxFileSizeExceeded={'Image is too large.'}
+                                  labelFileTypeNotAllowed={'Invalid image type. allowed(jpg, png, jpeg)'}
+                                  labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'
+                                  acceptedFileTypes={['image/jpg', 'image/png', 'image/jpeg']} dropOnPage
+                                  imageResizeTargetWidth={300} imageResizeTargetHeight={300}
+                                  onupdatefiles={image => formik.setFieldValue('image', image[0]?.file, true)}
+                                  onremovefile={() => formik.setFieldValue('image', null, true)}/>
+                    </Grid>
+                </Grid>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button size={'small'} className={'me-2'} onClick={() => setShow(false)}
+                        color={'inherit'}>Cancel</Button>
+                <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
+                               onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
+                    {image ? "Create" : "Update"}
+                </LoadingButton>
+            </Modal.Footer>
+        </Modal>
+    );
+};
+
+AddImageModal.propTypes = {
+    imageable: PropTypes.string.isRequired,
+    imageableId: PropTypes.number.isRequired,
+    image: PropTypes.object
+};
+
+export default AddImageModal;
