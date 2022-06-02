@@ -19,7 +19,8 @@ const Photos = ({ images, style, directory }) => {
     return (
         <LightBoxGallery images={images.map(i => `/images/${directory}/${i.image}`)}>
             {setImgIndex => (
-                <ImageList sx={{ height: 450 }} variant={style} cols={4} {...imgListProps}>
+                <ImageList sx={{ height: 450 }} variant={style}
+                           cols={images.length < 4 ? images.length : 4} {...imgListProps}>
                     {images.map((item, i) => (
                         <ImageListItem key={`${style}-${i}`} onClick={() => setImgIndex(i)} {...{
                             ...imgListItemProps, ...{ rows: sample([1, 2]), cols: sample([1, 2]) }

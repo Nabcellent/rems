@@ -60,3 +60,26 @@ a:hover {
     text-decoration: underline
 }
 
+.hover-actions {
+    display: none;
+    position: absolute;
+}
+
+.hover-actions-trigger {
+    position: relative;
+}
+
+.hover-actions-trigger:focus .hover-actions, .hover-actions-trigger:hover .hover-actions {
+    z-index: 1;
+    display: flex;
+}
+
+.translate-middle-y {
+    transform: translateY(-50%)!important;
+}
+
+.file-thumbnail {
+    height: 2.25rem;
+    width: 2.25rem;
+}
+

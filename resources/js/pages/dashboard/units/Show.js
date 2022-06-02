@@ -2,9 +2,9 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Alert, Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
-    AddAPhoto,
+    AddAPhoto, AddBusiness,
     AlternateEmail,
-    Badge,
+    Badge, DeleteSweep, Edit,
     LocationOn, PersonOutlined,
     PhoneIphone,
     SupervisorAccount,
@@ -150,8 +150,38 @@ const Show = ({ errors, unit }) => {
                     </Paper>
                 </Col>
                 <Col lg={4}>
-                    <Paper className={'mb-3'}>
-
+                    <Paper>
+                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                            <h5>Rooms</h5>
+                            <Button startIcon={<AddBusiness/>} onClick={() => setShowModal(true)}>Add</Button>
+                        </Card.Header>
+                        <Card.Body>
+                            <div className="d-flex align-items-center mb-3 hover-actions-trigger">
+                                <div className="file-thumbnail">
+                                    <img className="h-100 w-100 fit-cover rounded-2 border"
+                                         src="/static/media/5.09ac6a83.jpg" alt=""/>
+                                </div>
+                                <div className="ms-3 flex-shrink-1 flex-grow-1">
+                                    <h6 className="mb-1">
+                                        <a className="stretched-link text-900 fw-semi-bold"
+                                           href="/#!">apple-smart-watch.png</a>
+                                    </h6>
+                                    <div className="fs--1">
+                                        <span className="fw-semi-bold">Antony</span>
+                                        <span className="fw-medium text-600 ms-2">Just Now</span>
+                                    </div>
+                                    <div className="hover-actions end-0 top-50 translate-middle-y">
+                                        <a role="button" tabIndex="0" href="/static/media/5.09ac6a83.jpg" download=""
+                                           className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                            <Edit fontSize={'small'}/>
+                                        </a>
+                                        <button type="button" className="border-300 text-600 btn btn-light btn-sm">
+                                            <DeleteSweep fontSize={'small'}/>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Card.Body>
                     </Paper>
                 </Col>
             </Row>
