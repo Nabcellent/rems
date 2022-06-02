@@ -13,6 +13,11 @@ class Image extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "title",
+        "image"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */

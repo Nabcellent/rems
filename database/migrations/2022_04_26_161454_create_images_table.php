@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->morphs("imageable"); // ESTATE ID or PROPERTY ID or UNIT ID or ROOM ID
             $table->string("title", 20)->nullable();
-            $table->string("image", 20);
+            $table->string("image", 30);
             $table->timestamps();
         });
     }

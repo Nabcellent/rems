@@ -13,7 +13,7 @@ class StoreImageRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,7 +26,7 @@ class StoreImageRequest extends FormRequest
         return [
             "imageable"    => "required|string|in:estate,property,unit,room",
             "imageable_id" => "required|integer",
-            "title"        => "string|max:20",
+            "title"        => "nullable|string|max:20",
             "image"        => "required|image|max:1024",
         ];
     }

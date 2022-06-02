@@ -197,7 +197,7 @@ const Show = ({ errors, estate }) => {
                             <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
                         </Card.Header>
                         <Card.Body>
-                            <Photos images={estate.images}/>
+                            <Photos images={estate.images} directory={'estates'}/>
                         </Card.Body>
                     </Paper>
                 </Col>

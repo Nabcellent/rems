@@ -1,17 +1,15 @@
 import { Modal } from 'react-bootstrap';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, Grid, TextField } from '@mui/material';
-import { FilePond } from 'react-filepond';
+// Import React FilePond with plugins & styles
+import { FilePond, registerPlugin } from 'react-filepond';
 import { LoadingButton } from '@mui/lab';
 import { Create } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import * as yup from 'yup';
-
-// Import React FilePond with plugins & styles
-import { registerPlugin } from 'react-filepond';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
@@ -55,7 +53,7 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
                     forceFormData: true,
                     onBefore: () => setIsLoading(true),
                     onSuccess: () => {
-                        setShow(false);
+                        setShowModal(false);
                         formik.resetForm();
                     },
                     onError: errors => setErrors(errors),
@@ -84,7 +82,7 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
                                    helperText={formik.touched.title && formik.errors.title}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <FilePond maxFiles={3} name="image" maxFileSize={'1MB'} className={'mb-0'}
+                        <FilePond maxFiles={3} name="image" maxFileSize={'1MB'} className={'mb-0'} required
                                   labelMaxFileSizeExceeded={'Image is too large.'}
                                   labelFileTypeNotAllowed={'Invalid image type. allowed(jpg, png, jpeg)'}
                                   labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'

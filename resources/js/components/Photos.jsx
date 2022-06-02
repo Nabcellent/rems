@@ -25,7 +25,7 @@ const Quilted = ({ images }) => {
     );
 };
 
-const WovenMasonry = ({ images, style }) => {
+const WovenMasonry = ({ images, directory, style }) => {
     if (!['woven', 'masonry'].includes(style)) return;
 
     return (
@@ -34,9 +34,7 @@ const WovenMasonry = ({ images, style }) => {
                 <ImageList sx={{ height: 450 }} variant={style} cols={4} gap={8}>
                     {images.map((item, i) => (
                         <ImageListItem key={`${style}-${i}`} onClick={() => setImgIndex(i)}>
-                            <img src={`${item.image}?w=248&fit=crop&auto=format`}
-                                 srcSet={`${item.image}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                                 alt={item.title} loading="lazy"/>
+                            <img src={`/images/${directory}/${item.image}`} alt={item.title} loading="lazy"/>
                         </ImageListItem>
                     ))}
                 </ImageList>
@@ -45,14 +43,14 @@ const WovenMasonry = ({ images, style }) => {
     );
 };
 
-const Photos = ({ images, style }) => {
+const Photos = ({ images, style, directory }) => {
     style = style ?? 'woven';
 
     switch (style) {
         case 'quilted':
             return <Quilted images={itemData}/>;
         default:
-            return <WovenMasonry images={itemData} style={style}/>;
+            return <WovenMasonry images={images} style={style} directory={directory}/>;
     }
 };
 
@@ -142,8 +140,9 @@ const itemData = [
 ];
 
 Photos.propTypes = {
+    directory: PropTypes.string.isRequired,
     images: PropTypes.arrayOf(PropTypes.shape({
-        src: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
         title: PropTypes.string,
     })),
     style: PropTypes.string
