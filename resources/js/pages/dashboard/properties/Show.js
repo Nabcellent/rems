@@ -2,7 +2,8 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
-    AlternateEmail, Apartment,
+    AddAPhoto,
+    AlternateEmail,
     Badge,
     Home,
     LocationOn,
@@ -11,7 +12,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Status } from '@/utils/enums';
+import { Imageable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
@@ -19,10 +20,14 @@ import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
+import Photos from '@/components/Photos';
+import AddImageModal from '@/components/AddImageModal';
+import { useState } from 'react';
 
 const Show = ({ errors, property }) => {
-    const theme = useTheme();
     console.log(property);
+    const theme = useTheme();
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <Dashboard errors={errors} title={'Properties'}>
@@ -146,6 +151,23 @@ const Show = ({ errors, property }) => {
                     </Paper>
                 </Col>
             </Row>
+
+            <Row>
+                <Col>
+                    <Paper className={'mb-3'}>
+                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                            <h5 className={'mb-0'}>Photos</h5>
+                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
+                        </Card.Header>
+                        <Card.Body>
+                            <Photos images={property.images} directory={'properties'} style={'masonry'}/>
+                        </Card.Body>
+                    </Paper>
+                </Col>
+            </Row>
+
+            <AddImageModal imageable={Imageable.PROPERTY} imageableId={property.id} showModal={showModal}
+                           setShowModal={setShowModal}/>
         </Dashboard>
     );
 };

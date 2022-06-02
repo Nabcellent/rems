@@ -30,3 +30,10 @@ export const Telco = {
 export const Description = {
     WALLET_DEPOSIT: 'Wallet Deposit'
 }
+
+export const Imageable = {
+    ESTATE: 'estate',
+    PROPERTY: 'property',
+    UNIT: 'unit',
+    ROOM: 'room',
+}

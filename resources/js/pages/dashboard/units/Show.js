@@ -2,6 +2,7 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Alert, Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
+    AddAPhoto,
     AlternateEmail,
     Badge,
     LocationOn, PersonOutlined,
@@ -10,7 +11,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Status } from '@/utils/enums';
+import { Imageable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import CountUp from 'react-countup';
@@ -18,10 +19,14 @@ import { Card, Col, Row } from 'react-bootstrap';
 import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
+import Photos from '@/components/Photos';
+import AddImageModal from '@/components/AddImageModal';
+import { useState } from 'react';
 
 const Show = ({ errors, unit }) => {
     const theme = useTheme();
     console.log(unit);
+    const [showModal, setShowModal] = useState(false);
 
     const pastTenantsCount = unit.leases.reduce((total, lease) => lease.status === Status.INACTIVE ? total + 1 : total + 0, 0);
 
@@ -150,6 +155,23 @@ const Show = ({ errors, unit }) => {
                     </Paper>
                 </Col>
             </Row>
+
+            <Row>
+                <Col>
+                    <Paper className={'mb-3'}>
+                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                            <h5 className={'mb-0'}>Photos</h5>
+                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
+                        </Card.Header>
+                        <Card.Body>
+                            <Photos images={unit.images} directory={'units'} style={'quilted'}/>
+                        </Card.Body>
+                    </Paper>
+                </Col>
+            </Row>
+
+            <AddImageModal imageable={Imageable.UNIT} imageableId={unit.id} showModal={showModal}
+                           setShowModal={setShowModal}/>
         </Dashboard>
     );
 };

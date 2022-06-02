@@ -13,7 +13,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Status } from '@/utils/enums';
+import { Imageable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
@@ -22,12 +22,12 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Photos from '@/components/Photos';
-import AddImageModal from '@/AddImageModal';
+import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
 
 const Show = ({ errors, estate }) => {
     const theme = useTheme();
-    const [showModal, setShowModal] = useState(false)
+    const [showModal, setShowModal] = useState(false);
     console.log(estate);
     const assetCount = estate.properties_count + estate.units_count;
 
@@ -203,7 +203,8 @@ const Show = ({ errors, estate }) => {
                 </Col>
             </Row>
 
-            <AddImageModal imageable={'estate'} imageableId={estate.id} showModal={showModal} setShowModal={setShowModal}/>
+            <AddImageModal imageable={Imageable.ESTATE} imageableId={estate.id} showModal={showModal}
+                           setShowModal={setShowModal}/>
         </Dashboard>
     );
 };

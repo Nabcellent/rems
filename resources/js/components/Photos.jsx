@@ -1,39 +1,29 @@
 import PropTypes from 'prop-types';
 import { ImageList, ImageListItem } from '@mui/material';
 import LightBoxGallery from '@/components/LightBoxGallery';
+import sample from 'lodash/sample';
 
-const Quilted = ({ images }) => {
-    const srcset = (image, size, rows = 1, cols = 1) => {
-        return {
-            src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-            srcSet: `${image}?w=${size * cols}&h=${
-                size * rows
-            }&fit=crop&auto=format&dpr=2 2x`,
-        };
-    };
+const Photos = ({ images, style, directory }) => {
+    style = style ?? 'woven';
 
+    if (!['woven', 'masonry', 'quilted'].includes(style)) return;
 
-    return (
-        <ImageList sx={{ height: 450 }} variant="quilted" cols={4} rowHeight={121}>
-            {images.map((item) => (
-                <ImageListItem key={item.image} cols={item.cols || 1} rows={item.rows || 1}>
-                    <img {...srcset(item.image, 121, item.rows, item.cols)}
-                         alt={item.title} loading="lazy"/>
-                </ImageListItem>
-            ))}
-        </ImageList>
-    );
-};
-
-const WovenMasonry = ({ images, directory, style }) => {
-    if (!['woven', 'masonry'].includes(style)) return;
+    let imgListProps = {}, imgListItemProps = {};
+    if (style === 'quilted') {
+        imgListProps = { rowHeight: 121 };
+        imgListItemProps = { rows: sample([1, 2]), cols: sample([1, 2]) };
+    } else {
+        imgListProps = { gap: 8 };
+    }
 
     return (
-        <LightBoxGallery images={images.map(i => i.image)}>
+        <LightBoxGallery images={images.map(i => `/images/${directory}/${i.image}`)}>
             {setImgIndex => (
-                <ImageList sx={{ height: 450 }} variant={style} cols={4} gap={8}>
+                <ImageList sx={{ height: 450 }} variant={style} cols={4} {...imgListProps}>
                     {images.map((item, i) => (
-                        <ImageListItem key={`${style}-${i}`} onClick={() => setImgIndex(i)}>
+                        <ImageListItem key={`${style}-${i}`} onClick={() => setImgIndex(i)} {...{
+                            ...imgListItemProps, ...{ rows: sample([1, 2]), cols: sample([1, 2]) }
+                        }}>
                             <img src={`/images/${directory}/${item.image}`} alt={item.title} loading="lazy"/>
                         </ImageListItem>
                     ))}
@@ -41,17 +31,6 @@ const WovenMasonry = ({ images, directory, style }) => {
             )}
         </LightBoxGallery>
     );
-};
-
-const Photos = ({ images, style, directory }) => {
-    style = style ?? 'woven';
-
-    switch (style) {
-        case 'quilted':
-            return <Quilted images={itemData}/>;
-        default:
-            return <WovenMasonry images={images} style={style} directory={directory}/>;
-    }
 };
 
 const itemData = [

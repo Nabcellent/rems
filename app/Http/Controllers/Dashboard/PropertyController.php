@@ -60,7 +60,8 @@ class PropertyController extends Controller
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "estate:id,name,address",
                 "user:id,first_name,last_name,email,phone",
-                "user.roles:id,name"
+                "user.roles:id,name",
+                "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["units"])
         ]);
     }

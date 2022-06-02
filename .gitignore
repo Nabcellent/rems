@@ -17,7 +17,9 @@ y.hide
 
 public/js/*
 public/css/app.css
-public/images/estates/*
 public/images/users/*
+public/images/estates/*
+!public/images/users/profile-default.jpg
 public/images/properties/*
+public/images/units/*
 database/migrations/2022_04_26_160204_create_leases_table.php
