@@ -7,7 +7,6 @@ import { FilePond } from 'react-filepond';
 import { LoadingButton } from '@mui/lab';
 import { Create } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import * as yup from 'yup';
 
 const ModalForm = ({ showModal, setShowModal, action, isLoading, formik, errors }) => {
     return (

@@ -14,7 +14,7 @@ const LatestTransactions = () => {
     return (
         <Row>
             <Col className="col-12">
-                <Paper>
+                <Paper className={'p-3'}>
                     <DataTable title={'Latest Transactions'} perPage={5} searchable={false} columns={[
                         {
                             accessor: 'user',

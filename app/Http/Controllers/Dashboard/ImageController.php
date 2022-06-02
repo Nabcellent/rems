@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreImageRequest;
 use App\Models\Image;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,10 @@ class ImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreImageRequest $request)
     {
-        //
+        $data = $request->validated();
+        dd($data);
     }
 
     /**

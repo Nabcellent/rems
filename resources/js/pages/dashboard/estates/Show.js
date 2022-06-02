@@ -3,7 +3,8 @@ import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
     AddAPhoto,
-    AlternateEmail, Apartment,
+    AlternateEmail,
+    Apartment,
     Badge,
     Home,
     LocationOn,
@@ -17,15 +18,16 @@ import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
 import CountUp from 'react-countup';
-import { Card, Col, Modal, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Photos from '@/components/Photos';
-import ValidationErrors from '@/components/ValidationErrors';
 import AddImageModal from '@/AddImageModal';
+import { useState } from 'react';
 
 const Show = ({ errors, estate }) => {
     const theme = useTheme();
+    const [showModal, setShowModal] = useState(false)
     console.log(estate);
     const assetCount = estate.properties_count + estate.units_count;
 
@@ -192,7 +194,7 @@ const Show = ({ errors, estate }) => {
                     <Paper className={'mb-3'}>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
                             <h5 className={'mb-0'}>Photos</h5>
-                            <Button startIcon={<AddAPhoto/>}>Add</Button>
+                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
                         </Card.Header>
                         <Card.Body>
                             <Photos images={estate.images}/>
@@ -201,7 +203,7 @@ const Show = ({ errors, estate }) => {
                 </Col>
             </Row>
 
-            <AddImageModal imageable={'estate'} imageableId={estate.id}/>
+            <AddImageModal imageable={'estate'} imageableId={estate.id} showModal={showModal} setShowModal={setShowModal}/>
         </Dashboard>
     );
 };

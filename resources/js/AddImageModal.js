@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Grid, TextField } from '@mui/material';
 import { FilePond } from 'react-filepond';
 import { LoadingButton } from '@mui/lab';
@@ -10,14 +10,27 @@ import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import * as yup from 'yup';
 
+// Import React FilePond with plugins & styles
+import { registerPlugin } from 'react-filepond';
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+import FilePondPluginFileRename from 'filepond-plugin-file-rename';
+import 'filepond/dist/filepond.min.css';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+// Register filepond plugins
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
+
+
 const validationSchema = yup.object({
-    imageable: yup.string.isRequired(),
-    imageable_id: yup.string.isRequired(),
-    title:yup.string.isRequired()
+    imageable: yup.string().required(),
+    imageable_id: yup.string().required(),
+    title: yup.string()
 });
 
-const AddImageModal = ({ imageable, imageableId, image }) => {
-    const [show, setShow] = useState(false);
+const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -53,9 +66,9 @@ const AddImageModal = ({ imageable, imageableId, image }) => {
     });
 
     return (
-        <Modal show={show} onHide={() => setShow(false)}>
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
             <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
-                <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShow(false)}/>
+                <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShowModal(false)}/>
             </div>
             <Modal.Body className={'modal-body'}>
                 <div className="pb-3">
@@ -64,7 +77,7 @@ const AddImageModal = ({ imageable, imageableId, image }) => {
                 <ValidationErrors errors={errors}/>
 
                 <Grid container spacing={2}>
-                    <Grid item>
+                    <Grid item xs={12}>
                         <TextField label="Title" placeholder="Image title..." name={'title'}
                                    value={formik.values.title} fullWidth onChange={formik.handleChange}
                                    error={formik.touched.title && Boolean(formik.errors.title)}
@@ -83,11 +96,11 @@ const AddImageModal = ({ imageable, imageableId, image }) => {
                 </Grid>
             </Modal.Body>
             <Modal.Footer>
-                <Button size={'small'} className={'me-2'} onClick={() => setShow(false)}
+                <Button size={'small'} className={'me-2'} onClick={() => setShowModal(false)}
                         color={'inherit'}>Cancel</Button>
                 <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
                                onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
-                    {image ? "Create" : "Update"}
+                    {image ? "Update" : "Create"}
                 </LoadingButton>
             </Modal.Footer>
         </Modal>
@@ -97,7 +110,8 @@ const AddImageModal = ({ imageable, imageableId, image }) => {
 AddImageModal.propTypes = {
     imageable: PropTypes.string.isRequired,
     imageableId: PropTypes.number.isRequired,
-    image: PropTypes.object
+    image: PropTypes.object,
+    showModal: PropTypes.bool
 };
 
 export default AddImageModal;
