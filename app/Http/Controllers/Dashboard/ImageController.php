@@ -52,22 +52,32 @@ class ImageController extends Controller
      */
     public function store(StoreImageRequest $request): RedirectResponse
     {
-        $data = $request->validated();
-
-        $imageable = match ($data["imageable"]) {
+        $imageable = match ($request->input(["imageable"])) {
             "estate" => new Estate,
             "property" => new Property,
             "unit" => new Unit,
             "room" => new Room
         };
 
-        $imageable = $imageable->findOrFail($data["imageable_id"]);
+        $imageable = $imageable->findOrFail($request->input("imageable_id"));
 
-        $file = $request->file("image");
-        $data["image"] = "{$data["imageable"]}_" . time() . ".{$file->guessClientExtension()}";
-        $file->move("images/" . str()->plural($data["imageable"]), $data["image"]);
+        $images = [];
+        foreach($request->file("images") as $index => $file) {
+            $imageName = "{$request->input('imageable')}_{$index}_" . time() . ".{$file->guessClientExtension()}";
 
-        $imageable->images()->create($data);
+            $images[] = [
+                "imageable_id"   => $request->input("imageable_id"),
+                "imageable_type" => $imageable->getMorphClass(),
+                "title"          => $request->input("title"),
+                "image"          => $imageName,
+                "created_at"     => now(),
+                "updated_at"     => now(),
+            ];
+
+            $file->move("images/" . str()->plural($request->input("imageable")), $imageName);
+        }
+
+        $imageable->images()->insert($images);
 
         return back()->with(["toast" => ["message" => "Image Created!"]]);
     }

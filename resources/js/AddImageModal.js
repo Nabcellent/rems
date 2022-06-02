@@ -3,13 +3,15 @@ import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Button, Grid, TextField } from '@mui/material';
-// Import React FilePond with plugins & styles
-import { FilePond, registerPlugin } from 'react-filepond';
 import { LoadingButton } from '@mui/lab';
 import { Create } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import * as yup from 'yup';
+
+// Import React FilePond with plugins & styles
+import { FilePond, registerPlugin } from 'react-filepond';
+
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
@@ -36,7 +38,7 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
         initialValues: {
             imageable: imageable,
             imageable_id: imageableId,
-            image: '',
+            images: '',
             title: ''
         },
         validationSchema: validationSchema,
@@ -82,14 +84,14 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
                                    helperText={formik.touched.title && formik.errors.title}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <FilePond maxFiles={3} name="image" maxFileSize={'1MB'} className={'mb-0'} required
-                                  labelMaxFileSizeExceeded={'Image is too large.'}
+                        <FilePond maxFiles={3} name="images" maxFileSize={'1MB'} className={'mb-0'} required
+                                  labelMaxFileSizeExceeded={'Image is too large.'} allowMultiple
                                   labelFileTypeNotAllowed={'Invalid image type. allowed(jpg, png, jpeg)'}
                                   labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'
                                   acceptedFileTypes={['image/jpg', 'image/png', 'image/jpeg']} dropOnPage
                                   imageResizeTargetWidth={300} imageResizeTargetHeight={300}
-                                  onupdatefiles={image => formik.setFieldValue('image', image[0]?.file, true)}
-                                  onremovefile={() => formik.setFieldValue('image', null, true)}/>
+                                  onupdatefiles={image => formik.setFieldValue('images', image.map(i => i?.file), true)}
+                                  onremovefile={() => formik.setFieldValue('images', null, true)}/>
                     </Grid>
                 </Grid>
             </Modal.Body>
