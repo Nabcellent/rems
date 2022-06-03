@@ -19,7 +19,8 @@ class Room extends Model
         "type",
         "length",
         "width",
-        "image"
+        "image",
+        "description",
     ];
 
     /**

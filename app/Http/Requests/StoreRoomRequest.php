@@ -26,11 +26,12 @@ class StoreRoomRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "unit_id" => "required|exists:units,id",
-            "type"    => ["required", new Enum(RoomType::class)],
-            "length"  => "required_with:width|nullable|numeric",
-            "width"   => "required_with:length|nullable|numeric",
-            "image"   => "nullable|image|max:1024",
+            "unit_id"     => "required|exists:units,id",
+            "type"        => ["required", new Enum(RoomType::class)],
+            "length"      => "required_with:width|nullable|numeric",
+            "width"       => "required_with:length|nullable|numeric",
+            "image"       => "nullable|image|max:1024",
+            "description" => "nullable|string|max:225",
         ];
     }
 }

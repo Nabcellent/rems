@@ -74,7 +74,7 @@ class UnitController extends Controller
                 "user.roles:id,name",
                 "leases" => fn(HasMany $qry) => $qry->orderByDesc('status'),
                 "leases.user:id,first_name,last_name,email,phone",
-                "rooms:id,unit_id,type,image,length,width",
+                "rooms:id,unit_id,type,image,length,width,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])
         ]);

@@ -22,16 +22,27 @@ import moment from 'moment';
 import Photos from '@/components/Photos';
 import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
-import { handleDelete } from '@/utils/helpers';
+import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 
 const Show = ({ errors, unit }) => {
     const theme = useTheme();
     console.log(unit);
+    const [room, setRoom] = useState(undefined);
     const [showImageModal, setShowImageModal] = useState(false);
     const [showRoomModal, setShowRoomModal] = useState(false);
 
     const pastTenantsCount = unit.leases.reduce((total, lease) => lease.status === Status.INACTIVE ? total + 1 : total + 0, 0);
+
+    const handleCreateRoom = () => {
+        setRoom(undefined);
+        setShowRoomModal(true);
+    };
+
+    const handleUpdateRoom = (room) => {
+        setRoom(room);
+        setShowRoomModal(true);
+    };
 
     return (
         <Dashboard errors={errors} title={'Properties'}>
@@ -118,45 +129,61 @@ const Show = ({ errors, unit }) => {
 
             <Row className={'mb-3 g-3'}>
                 <Col lg={8}>
-                    <Paper className={'mb-3'}>
-                        <Card.Header><h5 className={'mb-0'}>Tenant History</h5></Card.Header>
-                        <Card.Body>
-                            {
-                                !unit.leases.length
-                                    ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
-                                    : unit.leases.map((lease, i) => (
-                                        <div key={`lease-${lease.id}`} className="d-flex">
-                                            <Link href="/user/profile#!">
-                                                <PersonOutlined/>
-                                            </Link>
-                                            <div className="flex-1 position-relative ps-3">
-                                                <h6 className="fs-0 mb-0">
-                                                    <Link href="/user/profile#!">{lease.user.full_name}</Link>
-                                                    {
-                                                        lease.status === Status.ACTIVE &&
-                                                        <span><i className={'fas fa-check-circle'}></i></span>
-                                                    }
-                                                </h6>
-                                                <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
-                                                <p className="text-muted mb-0">
-                                                    {moment(lease.start_date).format("LL")}
-                                                    &nbsp;-&nbsp;
-                                                    {moment(lease.end_date).format("LL")}
-                                                </p>
-                                                {i < unit.leases.length - 1 &&
-                                                    <div className="border-dashed-bottom my-3"/>}
-                                            </div>
-                                        </div>
-                                    ))
-                            }
-                        </Card.Body>
-                    </Paper>
+                    <Row>
+                        <Col sm={12}>
+                            <Paper className={'mb-3'}>
+                                <Card.Header><h5 className={'mb-0'}>Tenant History</h5></Card.Header>
+                                <Card.Body>
+                                    {
+                                        !unit.leases.length
+                                            ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
+                                            : unit.leases.map((lease, i) => (
+                                                <div key={`lease-${lease.id}`} className="d-flex">
+                                                    <Link href="/user/profile#!">
+                                                        <PersonOutlined/>
+                                                    </Link>
+                                                    <div className="flex-1 position-relative ps-3">
+                                                        <h6 className="fs-0 mb-0">
+                                                            <Link href="/user/profile#!">{lease.user.full_name}</Link>
+                                                            {
+                                                                lease.status === Status.ACTIVE &&
+                                                                <span><i className={'fas fa-check-circle'}></i></span>
+                                                            }
+                                                        </h6>
+                                                        <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
+                                                        <p className="text-muted mb-0">
+                                                            {moment(lease.start_date).format("LL")}
+                                                            &nbsp;-&nbsp;
+                                                            {moment(lease.end_date).format("LL")}
+                                                        </p>
+                                                        {i < unit.leases.length - 1 &&
+                                                            <div className="border-dashed-bottom my-3"/>}
+                                                    </div>
+                                                </div>
+                                            ))
+                                    }
+                                </Card.Body>
+                            </Paper>
+                        </Col>
+                        <Col sm={12}>
+                            <Paper className={'mb-3'}>
+                                <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                                    <h5 className={'mb-0'}>Photos</h5>
+                                    <Button startIcon={<AddAPhoto/>}
+                                            onClick={() => setShowImageModal(true)}>Add</Button>
+                                </Card.Header>
+                                <Card.Body>
+                                    <Photos images={unit.images} directory={'units'} style={'quilted'}/>
+                                </Card.Body>
+                            </Paper>
+                        </Col>
+                    </Row>
                 </Col>
                 <Col lg={4}>
                     <Paper>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
                             <h5 className={'mb-0'}>Rooms</h5>
-                            <Button startIcon={<AddBusiness/>} onClick={() => setShowRoomModal(true)}>Add</Button>
+                            <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
                         </Card.Header>
                         <Card.Body>
                             {
@@ -166,31 +193,36 @@ const Show = ({ errors, unit }) => {
                                         <div key={`room-${room.id}`}
                                              className="d-flex align-items-center mb-3 hover-actions-trigger">
                                             <div className="file-thumbnail">
-                                                <img className="h-100 w-100 fit-cover rounded-2 border"
-                                                     src={`/images/rooms/${room.image}`} alt={'image'}/>
+                                                <Avatar sx={{ bgcolor: theme.palette.primary.main }} alt={'image'}
+                                                        src={`/images/rooms/${room.image}`} variant="rounded">
+                                                    {getInitials(room.type)}
+                                                </Avatar>
                                             </div>
                                             <div className="ms-3 flex-shrink-1 flex-grow-1">
                                                 <h6 className="mb-1">
-                                                    <a className="stretched-link text-900 fw-semi-bold"
-                                                       href="/#!">{room.type}</a>
+                                                    <Link className="stretched-link text-900 fw-semi-bold"
+                                                          href={route('dashboard.rooms.show', { room: room.id })}>
+                                                        {room.type}
+                                                    </Link>
                                                 </h6>
+                                                <small>{room.description}</small>
                                                 {
                                                     room.width && (
-                                                        <div className="fs--1">
+                                                        <strong className="fs--1">
                                                             <small className="fw-semi-bold">
                                                                 {room.length}m * {room.width}m
                                                             </small>
-                                                        </div>
+                                                        </strong>
                                                     )
                                                 }
                                                 <div className="hover-actions end-0 top-50 translate-middle-y">
-                                                    <Link href={route('dashboard.rooms.edit', { room: room.id })}
-                                                          className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                    <button onClick={() => handleUpdateRoom(room)}
+                                                            className="border-300 me-1 text-600 btn btn-light btn-sm">
                                                         <Edit fontSize={'small'}/>
-                                                    </Link>
+                                                    </button>
                                                     <button
                                                         onClick={() => handleDelete(route('dashboard.rooms.destroy', { room: room.id }), 'room')}
-                                                        className="border-300 text-600 btn btn-light btn-sm">
+                                                        className="border-300 text-600 btn btn-danger btn-sm">
                                                         <DeleteSweep fontSize={'small'}/>
                                                     </button>
                                                 </div>
@@ -203,21 +235,7 @@ const Show = ({ errors, unit }) => {
                 </Col>
             </Row>
 
-            <Row>
-                <Col>
-                    <Paper className={'mb-3'}>
-                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5 className={'mb-0'}>Photos</h5>
-                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowImageModal(true)}>Add</Button>
-                        </Card.Header>
-                        <Card.Body>
-                            <Photos images={unit.images} directory={'units'} style={'quilted'}/>
-                        </Card.Body>
-                    </Paper>
-                </Col>
-            </Row>
-
-            <RoomModal showModal={showRoomModal} setShowModal={setShowRoomModal} unitId={unit.id}/>
+            <RoomModal showModal={showRoomModal} setShowModal={setShowRoomModal} unitId={unit.id} room={room}/>
 
             <AddImageModal imageable={Imageable.UNIT} imageableId={unit.id} showModal={showImageModal}
                            setShowModal={setShowImageModal}/>

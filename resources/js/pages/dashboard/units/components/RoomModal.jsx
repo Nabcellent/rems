@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Create } from '@mui/icons-material';
@@ -27,6 +27,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, F
 const validationSchema = yup.object({
     length: yup.number(),
     width: yup.number(),
+    description: yup.string(),
     unit_id: yup.number().required(),
     type: yup.string().oneOf(Object.values(RoomType), 'Invalid type').required('Type is required.')
 });
@@ -36,7 +37,7 @@ const RoomModal = ({ unitId, room, showModal, setShowModal }) => {
     const [errors, setErrors] = useState({});
 
     const formik = useFormik({
-        initialValues: { unit_id: unitId, length: '', width: '', type: '', image: '', },
+        initialValues: { unit_id: unitId, length: '', width: '', type: '', image: '', description: '', },
         validationSchema,
         validateOnChange: true,
         onSubmit: values => {
@@ -61,6 +62,17 @@ const RoomModal = ({ unitId, room, showModal, setShowModal }) => {
         }
     });
 
+    useEffect(() => {
+        formik.setValues({
+            unit_id: unitId,
+            length: room?.length ?? '',
+            width: room?.width ?? '',
+            type: room?.type ?? '',
+            image: room?.image ?? '',
+            description: room?.description ?? '',
+        }, true);
+    }, [room]);
+
     return (
         <Modal show={showModal} onHide={() => setShowModal(false)}>
             <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
@@ -75,11 +87,10 @@ const RoomModal = ({ unitId, room, showModal, setShowModal }) => {
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <Autocomplete name={'type'} freeSolo options={Object.values(RoomType)}
-                                      onChange={(event, value) => {
-                                          formik.setFieldValue('type', value, true);
-                                      }} renderInput={(params) => (
-                            <TextField {...params} label="Type" value={formik.values.type} required
-                                       placeholder={'Type...'}
+                                      value={formik.values.type} onChange={(event, value) => {
+                            formik.setFieldValue('type', value, true);
+                        }} renderInput={(params) => (
+                            <TextField {...params} label="Type" required placeholder={'Type...'}
                                        error={formik.touched.type && Boolean(formik.errors.type)}
                                        helperText={formik.touched.type && formik.errors.type}/>
                         )}/>
@@ -95,6 +106,13 @@ const RoomModal = ({ unitId, room, showModal, setShowModal }) => {
                                    value={formik.values.width} fullWidth onChange={formik.handleChange}
                                    error={formik.touched.width && Boolean(formik.errors.width)}
                                    helperText={formik.touched.width && formik.errors.width}/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField label="Description" multiline rows={3} placeholder="Description..."
+                                   name={'description'}
+                                   value={formik.values.description} fullWidth onChange={formik.handleChange}
+                                   error={formik.touched.description && Boolean(formik.errors.description)}
+                                   helperText={formik.touched.description && formik.errors.description}/>
                     </Grid>
                     <Grid item xs={12}>
                         <FilePond name="image" maxFileSize={'1MB'} className={'mb-0'}
