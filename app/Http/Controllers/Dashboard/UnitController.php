@@ -27,6 +27,7 @@ class UnitController extends Controller
                 "user_id",
                 "house_number",
                 "purpose",
+                "type",
                 "description",
                 "status",
                 "created_at"

@@ -21,6 +21,7 @@ return new class extends Migration
                 ->comment('Property Manager');
             $table->string('name', 100)->nullable();
             $table->string('type', 50);
+            $table->string("image", 30)->nullable();
             $table->string('status', 20)->default(Status::ACTIVE->value);
             $table->timestamps();
         });

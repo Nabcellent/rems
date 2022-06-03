@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Status;
+use App\Enums\UnitType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,7 +23,9 @@ return new class extends Migration
             $table->morphs('unitable'); // Property ID or Estate ID
             $table->string('house_number');
             $table->string("purpose")->comment("For Rent or For Sale");
+            $table->string("type")->default(UnitType::UNFURNISHED->name)->comment("Furnished or Unfurnished");
             $table->text("description")->nullable();
+            $table->string("image", 30)->nullable();
             $table->string("status")->default(Status::INACTIVE->value);
             $table->timestamps();
         });

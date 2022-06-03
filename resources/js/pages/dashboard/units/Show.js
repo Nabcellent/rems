@@ -22,11 +22,13 @@ import moment from 'moment';
 import Photos from '@/components/Photos';
 import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
+import { handleDelete } from '@/utils/helpers';
 
 const Show = ({ errors, unit }) => {
     const theme = useTheme();
     console.log(unit);
-    const [showModal, setShowModal] = useState(false);
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [showRoomModal, setShowRoomModal] = useState(false);
 
     const pastTenantsCount = unit.leases.reduce((total, lease) => lease.status === Status.INACTIVE ? total + 1 : total + 0, 0);
 
@@ -152,35 +154,44 @@ const Show = ({ errors, unit }) => {
                 <Col lg={4}>
                     <Paper>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5>Rooms</h5>
-                            <Button startIcon={<AddBusiness/>} onClick={() => setShowModal(true)}>Add</Button>
+                            <h5 className={'mb-0'}>Rooms</h5>
+                            <Button startIcon={<AddBusiness/>} onClick={() => setShowRoomModal(true)}>Add</Button>
                         </Card.Header>
                         <Card.Body>
-                            <div className="d-flex align-items-center mb-3 hover-actions-trigger">
-                                <div className="file-thumbnail">
-                                    <img className="h-100 w-100 fit-cover rounded-2 border"
-                                         src="/static/media/5.09ac6a83.jpg" alt=""/>
-                                </div>
-                                <div className="ms-3 flex-shrink-1 flex-grow-1">
-                                    <h6 className="mb-1">
-                                        <a className="stretched-link text-900 fw-semi-bold"
-                                           href="/#!">apple-smart-watch.png</a>
-                                    </h6>
-                                    <div className="fs--1">
-                                        <span className="fw-semi-bold">Antony</span>
-                                        <span className="fw-medium text-600 ms-2">Just Now</span>
-                                    </div>
-                                    <div className="hover-actions end-0 top-50 translate-middle-y">
-                                        <a role="button" tabIndex="0" href="/static/media/5.09ac6a83.jpg" download=""
-                                           className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                            <Edit fontSize={'small'}/>
-                                        </a>
-                                        <button type="button" className="border-300 text-600 btn btn-light btn-sm">
-                                            <DeleteSweep fontSize={'small'}/>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            {
+                                !unit.rooms.length
+                                    ? <Alert severity="info">This Unit Hasn't any room yet.</Alert>
+                                    : unit.rooms.map(room => (
+                                        <div key={`room-${room.id}`}
+                                             className="d-flex align-items-center mb-3 hover-actions-trigger">
+                                            <div className="file-thumbnail">
+                                                <img className="h-100 w-100 fit-cover rounded-2 border"
+                                                     src={`/images/rooms/${room.image}`} alt={'image'}/>
+                                            </div>
+                                            <div className="ms-3 flex-shrink-1 flex-grow-1">
+                                                <h6 className="mb-1">
+                                                    <a className="stretched-link text-900 fw-semi-bold"
+                                                       href="/#!">apple-smart-watch.png</a>
+                                                </h6>
+                                                <div className="fs--1">
+                                                    <span className="fw-semi-bold">Antony</span>
+                                                    <span className="fw-medium text-600 ms-2">Just Now</span>
+                                                </div>
+                                                <div className="hover-actions end-0 top-50 translate-middle-y">
+                                                    <Link href={route('dashboard.rooms.edit', { room: room.id })}
+                                                          className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                        <Edit fontSize={'small'}/>
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => handleDelete(route('dashboard.rooms.destroy', { room: room.id }), 'room')}
+                                                        className="border-300 text-600 btn btn-light btn-sm">
+                                                        <DeleteSweep fontSize={'small'}/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                            }
                         </Card.Body>
                     </Paper>
                 </Col>
@@ -191,7 +202,7 @@ const Show = ({ errors, unit }) => {
                     <Paper className={'mb-3'}>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
                             <h5 className={'mb-0'}>Photos</h5>
-                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
+                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowImageModal(true)}>Add</Button>
                         </Card.Header>
                         <Card.Body>
                             <Photos images={unit.images} directory={'units'} style={'quilted'}/>
@@ -200,8 +211,8 @@ const Show = ({ errors, unit }) => {
                 </Col>
             </Row>
 
-            <AddImageModal imageable={Imageable.UNIT} imageableId={unit.id} showModal={showModal}
-                           setShowModal={setShowModal}/>
+            <AddImageModal imageable={Imageable.UNIT} imageableId={unit.id} showModal={showImageModal}
+                           setShowModal={setShowImageModal}/>
         </Dashboard>
     );
 };
