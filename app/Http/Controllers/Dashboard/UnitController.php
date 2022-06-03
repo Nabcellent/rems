@@ -34,7 +34,7 @@ class UnitController extends Controller
             ])->with([
                 "user:id,first_name,last_name,email",
                 "unitable"
-            ])->latest()->get()
+            ])->withCount("rooms")->latest()->get()
         ]);
     }
 

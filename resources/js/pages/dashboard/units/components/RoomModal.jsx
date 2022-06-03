@@ -117,6 +117,7 @@ const RoomModal = ({ unitId, room, showModal, setShowModal }) => {
                     <Grid item xs={12}>
                         <FilePond name="image" maxFileSize={'1MB'} className={'mb-0'}
                                   labelMaxFileSizeExceeded={'Image is too large.'}
+                                  files={room?.image && `/images/rooms/${room?.image}`}
                                   labelFileTypeNotAllowed={'Invalid image type. allowed(jpg, png, jpeg)'}
                                   labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'
                                   acceptedFileTypes={['image/jpg', 'image/png', 'image/jpeg']} dropOnPage

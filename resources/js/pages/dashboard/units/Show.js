@@ -189,44 +189,46 @@ const Show = ({ errors, unit }) => {
                             {
                                 !unit.rooms.length
                                     ? <Alert severity="info">This Unit Hasn't any room yet.</Alert>
-                                    : unit.rooms.map(room => (
-                                        <div key={`room-${room.id}`}
-                                             className="d-flex align-items-center mb-3 hover-actions-trigger">
-                                            <div className="file-thumbnail">
-                                                <Avatar sx={{ bgcolor: theme.palette.primary.main }} alt={'image'}
-                                                        src={`/images/rooms/${room.image}`} variant="rounded">
-                                                    {getInitials(room.type)}
-                                                </Avatar>
-                                            </div>
-                                            <div className="ms-3 flex-shrink-1 flex-grow-1">
-                                                <h6 className="mb-1">
-                                                    <Link className="stretched-link text-900 fw-semi-bold"
-                                                          href={route('dashboard.rooms.show', { room: room.id })}>
-                                                        {room.type}
-                                                    </Link>
-                                                </h6>
-                                                <small>{room.description}</small>
-                                                {
-                                                    room.width && (
-                                                        <strong className="fs--1">
-                                                            <small className="fw-semi-bold">
-                                                                {room.length}m * {room.width}m
-                                                            </small>
-                                                        </strong>
-                                                    )
-                                                }
-                                                <div className="hover-actions end-0 top-50 translate-middle-y">
-                                                    <button onClick={() => handleUpdateRoom(room)}
-                                                            className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                                        <Edit fontSize={'small'}/>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDelete(route('dashboard.rooms.destroy', { room: room.id }), 'room')}
-                                                        className="border-300 text-600 btn btn-danger btn-sm">
-                                                        <DeleteSweep fontSize={'small'}/>
-                                                    </button>
+                                    : unit.rooms.map((room, i) => (
+                                        <div key={`room-${room.id}`}>
+                                            <div className="d-flex align-items-center hover-actions-trigger">
+                                                <div className="file-thumbnail">
+                                                    <Avatar sx={{ bgcolor: theme.palette.primary.main }} alt={'image'}
+                                                            src={`/images/rooms/${room.image}`} variant="rounded">
+                                                        {getInitials(room.type)}
+                                                    </Avatar>
+                                                </div>
+                                                <div className="ms-3 flex-shrink-1 flex-grow-1">
+                                                    <h6 className="mb-0">
+                                                        <Link className="stretched-link text-900 fw-semi-bold"
+                                                              href={route('dashboard.rooms.show', { room: room.id })}>
+                                                            {room.type}
+                                                        </Link>
+                                                    </h6>
+                                                    <small>{room.description}</small><br/>
+                                                    {
+                                                        room.width && (
+                                                            <strong className="fs--1">
+                                                                <small className="fw-semi-bold">
+                                                                    {room.length}m * {room.width}m
+                                                                </small>
+                                                            </strong>
+                                                        )
+                                                    }
+                                                    <div className="hover-actions end-0 top-50 translate-middle-y">
+                                                        <button onClick={() => handleUpdateRoom(room)}
+                                                                className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                            <Edit fontSize={'small'}/>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(route('dashboard.rooms.destroy', { room: room.id }), 'room')}
+                                                            className="border-300 text-600 btn btn-danger btn-sm">
+                                                            <DeleteSweep fontSize={'small'}/>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            {i < unit.rooms.length - 1 && <div className={'border-dashed-bottom my-3'}/>}
                                         </div>
                                     ))
                             }

@@ -51,6 +51,10 @@ const Index = ({ units }) => {
                                     Header: 'Type',
                                 },
                                 {
+                                    accessor: 'rooms_count',
+                                    Header: 'Rooms',
+                                },
+                                {
                                     accessor: 'actions',
                                     disableSortBy: true,
                                     className: 'text-end',

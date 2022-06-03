@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoomRequest;
+use App\Http\Requests\UpdateRoomRequest;
 use App\Models\Room;
 use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class RoomController extends Controller
 {
@@ -45,7 +47,7 @@ class RoomController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreRoomRequest $request): RedirectResponse
@@ -66,7 +68,7 @@ class RoomController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Room  $room
+     * @param \App\Models\Room $room
      * @return \Illuminate\Http\Response
      */
     public function show(Room $room)
@@ -77,7 +79,7 @@ class RoomController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Room  $room
+     * @param \App\Models\Room $room
      * @return \Illuminate\Http\Response
      */
     public function edit(Room $room)
@@ -88,19 +90,33 @@ class RoomController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Room  $room
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\UpdateRoomRequest $request
+     * @param \App\Models\Room                     $room
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Room $room)
+    public function update(UpdateRoomRequest $request, Room $room): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+//        dd($data);
+
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "rm_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/rooms", $data["image"]);
+
+            if($room->image && file_exists("images/rooms/$room->image")) File::delete("images/rooms/$room->image");
+        }
+
+        $room->update($data);
+
+        return back()->with(["toast" => ["message" => "Room Updated!"]]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Room  $room
+     * @param \App\Models\Room $room
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Room $room): RedirectResponse

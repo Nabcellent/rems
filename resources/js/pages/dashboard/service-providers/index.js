@@ -2,7 +2,7 @@ import Dashboard from '@/layouts/Dashboard';
 import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { Avatar, IconButton, useTheme } from '@mui/material';
+import { Avatar, IconButton, Paper, useTheme } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -106,7 +106,7 @@ const Index = ({ providers }) => {
 
             <Row>
                 <Col className="col-12">
-                    <Card>
+                    <Paper className={'p-3'}>
                         <DataTable title={'Service Providers'} columns={[
                             {
                                 accessor: 'name',
@@ -176,7 +176,7 @@ const Index = ({ providers }) => {
                                 }
                             }
                         ]} data={providers} onCreateRow={handleCreate}/>
-                    </Card>
+                    </Paper>
                 </Col>
             </Row>
 

@@ -34,33 +34,35 @@ const Show = ({ errors, service }) => {
                 </Card.Body>
             </Paper>
 
-            <DataTable title={'Service Providers'} data={service.providers} perPage={5}
-                       viewAll={route('dashboard.service-providers.index')} columns={[
-                {
-                    accessor: 'email',
-                    Header: 'Email',
-                },
-                {
-                    accessor: 'phone',
-                    Header: 'Phone',
-                },
-                {
-                    accessor: 'actions',
-                    disableSortBy: true,
-                    className: 'text-end',
-                    Cell: ({ row }) => {
-                        const serviceProvider = row.original;
+            <Paper className={'p-3'}>
+                <DataTable title={'Service Providers'} data={service.providers} perPage={5}
+                           viewAll={route('dashboard.service-providers.index')} columns={[
+                    {
+                        accessor: 'email',
+                        Header: 'Email',
+                    },
+                    {
+                        accessor: 'phone',
+                        Header: 'Phone',
+                    },
+                    {
+                        accessor: 'actions',
+                        disableSortBy: true,
+                        className: 'text-end',
+                        Cell: ({ row }) => {
+                            const serviceProvider = row.original;
 
-                        return (
-                            <>
-                                <Link href={route('dashboard.services.show', { service: serviceProvider.id })}>
-                                    <ReadMore fontSize={'small'}/>
-                                </Link>
-                            </>
-                        );
-                    }
-                },
-            ]}/>
+                            return (
+                                <>
+                                    <Link href={route('dashboard.services.show', { service: serviceProvider.id })}>
+                                        <ReadMore fontSize={'small'}/>
+                                    </Link>
+                                </>
+                            );
+                        }
+                    },
+                ]}/>
+            </Paper>
         </Dashboard>
     );
 };
