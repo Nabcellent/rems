@@ -352,6 +352,8 @@ namespace App\Models{
  * @property int $id
  * @property int $unit_id
  * @property string $type
+ * @property float|null $length
+ * @property float|null $width
  * @property string|null $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -365,9 +367,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereLength($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereUnitId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereWidth($value)
  */
 	class IdeHelperRoom {}
 }

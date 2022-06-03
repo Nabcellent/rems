@@ -14,6 +14,14 @@ class Room extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "unit_id",
+        "type",
+        "length",
+        "width",
+        "image"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */

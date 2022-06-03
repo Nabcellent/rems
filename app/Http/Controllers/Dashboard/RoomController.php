@@ -3,12 +3,25 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRoomRequest;
 use App\Models\Room;
+use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Room::class, 'room');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -33,11 +46,21 @@ class RoomController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRoomRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "rm_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/rooms", $data["image"]);
+        }
+
+        Room::create($data);
+
+        return back()->with(["toast" => ["message" => str($data['type'])->title() . " Created!"]]);
     }
 
     /**

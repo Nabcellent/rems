@@ -23,6 +23,7 @@ import Photos from '@/components/Photos';
 import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
 import { handleDelete } from '@/utils/helpers';
+import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 
 const Show = ({ errors, unit }) => {
     const theme = useTheme();
@@ -171,12 +172,17 @@ const Show = ({ errors, unit }) => {
                                             <div className="ms-3 flex-shrink-1 flex-grow-1">
                                                 <h6 className="mb-1">
                                                     <a className="stretched-link text-900 fw-semi-bold"
-                                                       href="/#!">apple-smart-watch.png</a>
+                                                       href="/#!">{room.type}</a>
                                                 </h6>
-                                                <div className="fs--1">
-                                                    <span className="fw-semi-bold">Antony</span>
-                                                    <span className="fw-medium text-600 ms-2">Just Now</span>
-                                                </div>
+                                                {
+                                                    room.width && (
+                                                        <div className="fs--1">
+                                                            <small className="fw-semi-bold">
+                                                                {room.length}m * {room.width}m
+                                                            </small>
+                                                        </div>
+                                                    )
+                                                }
                                                 <div className="hover-actions end-0 top-50 translate-middle-y">
                                                     <Link href={route('dashboard.rooms.edit', { room: room.id })}
                                                           className="border-300 me-1 text-600 btn btn-light btn-sm">
@@ -210,6 +216,8 @@ const Show = ({ errors, unit }) => {
                     </Paper>
                 </Col>
             </Row>
+
+            <RoomModal showModal={showRoomModal} setShowModal={setShowRoomModal} unitId={unit.id}/>
 
             <AddImageModal imageable={Imageable.UNIT} imageableId={unit.id} showModal={showImageModal}
                            setShowModal={setShowImageModal}/>
