@@ -116,7 +116,12 @@ const Show = ({ errors, estate, services }) => {
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     <AlternateEmail fontSize={'small'}/>
                                 </Avatar>
-                                <div className="flex-1"><h6 className="mb-0">{estate.user.email}</h6></div>
+                                <div className="flex-1">
+                                    <Link href={route('dashboard.users.show', { user: estate.user.id })}
+                                          className="mb-0">
+                                        {estate.user.email}
+                                    </Link>
+                                </div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
