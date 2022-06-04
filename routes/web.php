@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
+use App\Http\Controllers\Dashboard\EstateServiceController;
 use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PropertyController;
+use App\Http\Controllers\Dashboard\RoomController;
 use App\Http\Controllers\Dashboard\ServiceController;
 use App\Http\Controllers\Dashboard\ServiceProviderController;
 use App\Http\Controllers\Dashboard\TicketController;
@@ -52,6 +54,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "transactions"      => TransactionController::class,
             "payments"          => PaymentController::class,
             "images"            => ImageController::class,
+            "rooms"             => RoomController::class,
+            "estate-services"    => EstateServiceController::class,
         ]);
     });
 });

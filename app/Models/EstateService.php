@@ -11,4 +11,10 @@ use Illuminate\Database\Eloquent\Model;
 class EstateService extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "estate_id",
+        "service_id",
+        "description",
+    ];
 }

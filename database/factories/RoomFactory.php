@@ -20,6 +20,7 @@ class RoomFactory extends Factory
     {
         return [
             "unit_id" => Unit::factory(),
+            "description" => $this->faker->text(),
             "type" => $this->faker->randomElement(RoomType::cases()),
         ];
     }

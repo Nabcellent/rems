@@ -12,23 +12,14 @@ const Footer = lazy(() => import('../components/Footer'));
 const Dashboard = ({
     title,
     children,
+    isPreloader,
     leftSideBarTheme,
     leftSideBarType,
-    isPreloader,
-    changeSidebarTheme,
-    leftSideBarThemeImage, changeSidebarThemeImage,
-    layoutWidth, changeLayoutWidth,
-    changeSidebarType,
-    topbarTheme, changeTopbarTheme,
     toggleRightSidebar
 }) => {
     const { toast: toastData } = usePage().props;
 
     const [isMobile, setIsMobile] = useState(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
-
-    const capitalizeFirstLetter = string => string.charAt(1).toUpperCase() + string.slice(2);
 
     useEffect(() => {
         if (toastData) sweet(toastData);
@@ -50,26 +41,7 @@ const Dashboard = ({
 
         // Scroll Top to 0
         window.scrollTo(0, 0);
-
-        if (leftSideBarTheme) {
-            changeSidebarTheme(leftSideBarTheme);
-        }
-
-        if (leftSideBarThemeImage) {
-            changeSidebarThemeImage(leftSideBarThemeImage);
-        }
-
-        if (layoutWidth) {
-            changeLayoutWidth(layoutWidth);
-        }
-
-        if (leftSideBarType) {
-            changeSidebarType(leftSideBarType);
-        }
-        if (topbarTheme) {
-            changeTopbarTheme(topbarTheme);
-        }
-    });
+    }, [toastData]);
 
     const toggleMenuCallback = () => {
         let body = document.body;
@@ -113,9 +85,7 @@ const Dashboard = ({
                 <Header toggleMenuCallback={toggleMenuCallback}/>
                 <Sidebar theme={leftSideBarTheme} type={leftSideBarType} isMobile={isMobile}/>
                 <div className="main-content">
-                    <div className="page-content">
-                        <Container fluid>{children}</Container>
-                    </div>
+                    <div className="page-content"><Container fluid>{children}</Container></div>
                 </div>
                 <Footer/>
             </div>
@@ -125,21 +95,11 @@ const Dashboard = ({
 
 Dashboard.propTypes = {
     title: PropTypes.string,
-    changeLayoutWidth: PropTypes.func,
-    changeSidebarTheme: PropTypes.func,
-    changeSidebarThemeImage: PropTypes.func,
-    changeSidebarType: PropTypes.func,
-    changeTopbarTheme: PropTypes.func,
     children: PropTypes.any,
     isPreloader: PropTypes.bool,
-    layoutWidth: PropTypes.any,
     leftSideBarTheme: PropTypes.any,
     leftSideBarThemeImage: PropTypes.any,
     leftSideBarType: PropTypes.any,
-    location: PropTypes.object,
-    showRightSidebar: PropTypes.any,
-    toggleRightSidebar: PropTypes.any,
-    topbarTheme: PropTypes.any
 };
 
 export default Dashboard;

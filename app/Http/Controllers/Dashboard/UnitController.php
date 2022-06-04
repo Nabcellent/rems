@@ -27,13 +27,14 @@ class UnitController extends Controller
                 "user_id",
                 "house_number",
                 "purpose",
+                "type",
                 "description",
                 "status",
                 "created_at"
             ])->with([
                 "user:id,first_name,last_name,email",
                 "unitable"
-            ])->latest()->get()
+            ])->withCount("rooms")->latest()->get()
         ]);
     }
 
@@ -73,6 +74,7 @@ class UnitController extends Controller
                 "user.roles:id,name",
                 "leases" => fn(HasMany $qry) => $qry->orderByDesc('status'),
                 "leases.user:id,first_name,last_name,email,phone",
+                "rooms:id,unit_id,type,image,length,width,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])
         ]);
