@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Card } from 'react-bootstrap';
-import { Grid, TextField } from '@mui/material';
+import { FormControlLabel, Grid, Switch, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { Create } from '@mui/icons-material';
@@ -53,12 +53,11 @@ const General = ({ settings }) => {
                            error={formik.touched.site_phone && Boolean(formik.errors.site_phone)}
                            helperText={formik.touched.site_phone && formik.errors.site_phone}/>
             </Grid>
-            <Grid item xs={12}>
-                <TextField name={'site_under_maintenance'} fullWidth value={formik.values.site_under_maintenance}
-                           onChange={formik.handleChange} label="Under maintenance"
-                           error={formik.touched.site_under_maintenance && Boolean(formik.errors.site_under_maintenance)}
-                           helperText={formik.touched.site_under_maintenance && formik.errors.site_under_maintenance}/>
-            </Grid>
+            {/*<Grid item xs={12}>
+                <FormControlLabel control={<Switch checked={formik.values.site_under_maintenance}/>}
+                                  name={'site_under_maintenance'} label="Under Maintenance" labelPlacement={'top'}
+                                  onChange={formik.handleChange}/>
+            </Grid>*/}
             <Grid item xs={12} textAlign={'right'}>
                 <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
                                onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
