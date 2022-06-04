@@ -93,10 +93,12 @@ class EstateServiceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\EstateService $estateService
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(EstateService $estateService)
+    public function destroy(EstateService $estateService): RedirectResponse
     {
-        //
+        $estateService->delete();
+
+        return back()->with(["toast" => ["message" => "Service Deleted!", "type" => "info"]]);
     }
 }

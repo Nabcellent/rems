@@ -178,7 +178,7 @@ const Show = ({ errors, estate, services }) => {
                         {
                             Boolean(estate.units.length) && (
                                 <Col lg={12}>
-                                    <Paper className={'mb-3'}>
+                                    <Paper>
                                         <Card.Header><h5 className={'mb-0'}>Units</h5></Card.Header>
                                         <Card.Body>
                                             {
@@ -210,7 +210,7 @@ const Show = ({ errors, estate, services }) => {
                     </Row>
                 </Col>
                 <Col sm={5}>
-                    <Paper className={'ask-analytics'}>
+                    <Paper className={'ask-analytics h-100'}>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
                             <h5 className={'m-0'}>Services</h5>
                             <Button startIcon={<HomeRepairService/>} onClick={() => handleCreateService()}>Add</Button>
@@ -240,7 +240,7 @@ const Show = ({ errors, estate, services }) => {
                                                     <Edit fontSize={'small'}/>
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDelete(route('dashboard.estate_services.destroy', { estate_service: service.id }), 'Service')}
+                                                    onClick={() => handleDelete(route('dashboard.estate-services.destroy', { estate_service: service.pivot.id }), 'Service')}
                                                     className="border-300 text-600 btn btn-danger btn-sm">
                                                     <DeleteSweep fontSize={'small'}/>
                                                 </button>
@@ -261,7 +261,15 @@ const Show = ({ errors, estate, services }) => {
                             <Button startIcon={<AddAPhoto/>} onClick={() => setShowImageModal(true)}>Add</Button>
                         </Card.Header>
                         <Card.Body>
-                            <Photos images={estate.images} directory={'estates'}/>
+                            {
+                                !estate.images.length
+                                    ? <Alert severity="info">
+                                        <a className={'text-primary'} onClick={() => setShowImageModal(true)}>
+                                            Add
+                                        </a> some nice images🙂
+                                    </Alert>
+                                    : <Photos images={estate.images} directory={'estates'}/>
+                            }
                         </Card.Body>
                     </Paper>
                 </Col>
