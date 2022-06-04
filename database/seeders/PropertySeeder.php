@@ -17,7 +17,7 @@ class PropertySeeder extends Seeder
         /**
          * .....................    FACTORIES
          */
-        Property::factory(5)->create();
-        Property::factory(5)->hasUnits(4)->create();
+        Property::factory(3)->create();
+        Property::factory(2)->hasUnits(4)->create();
     }
 }

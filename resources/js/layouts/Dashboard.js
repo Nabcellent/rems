@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 // Layout Related Components
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import { Head } from '@inertiajs/inertia-react';
+import { Head, usePage } from '@inertiajs/inertia-react';
+import { Container } from 'react-bootstrap';
 
 const Footer = lazy(() => import('../components/Footer'));
 
@@ -21,15 +22,17 @@ const Dashboard = ({
     topbarTheme, changeTopbarTheme,
     toggleRightSidebar
 }) => {
+    const { toast: toastData } = usePage().props;
+
     const [isMobile, setIsMobile] = useState(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
     const [width, setWidth] = useState(0);
     const [height, setHeight] = useState(0);
 
-    const capitalizeFirstLetter = string => {
-        return string.charAt(1).toUpperCase() + string.slice(2);
-    };
+    const capitalizeFirstLetter = string => string.charAt(1).toUpperCase() + string.slice(2);
 
     useEffect(() => {
+        if (toastData) sweet(toastData);
+
         document.body.addEventListener("click", hideRightBar, true);
 
         if (isPreloader === true) {
@@ -108,14 +111,10 @@ const Dashboard = ({
 
             <div id="layout-wrapper">
                 <Header toggleMenuCallback={toggleMenuCallback}/>
-                <Sidebar
-                    theme={leftSideBarTheme}
-                    type={leftSideBarType}
-                    isMobile={isMobile}
-                />
+                <Sidebar theme={leftSideBarTheme} type={leftSideBarType} isMobile={isMobile}/>
                 <div className="main-content">
                     <div className="page-content">
-                        {children}
+                        <Container fluid>{children}</Container>
                     </div>
                 </div>
                 <Footer/>

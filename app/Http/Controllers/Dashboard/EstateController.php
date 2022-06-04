@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Inertia\ResponseFactory;
 
 class EstateController extends Controller
 {
@@ -32,8 +33,8 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates', [
-            "estates" => Estate::select(["id", "user_id", "name", "location"])->with("user:id,last_name")
-                ->withCount(["properties", "units"])->latest()->get()
+            "estates" => Estate::select(["id", "user_id", "name", "address"])
+                ->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
         ]);
     }
 
@@ -66,11 +67,20 @@ class EstateController extends Controller
      * Display the specified resource.
      *
      * @param \App\Models\Estate $estate
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(Estate $estate)
+    public function show(Estate $estate): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/estates/Show", [
+            "estate" => $estate->load([
+                "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
+                "properties:id,estate_id,user_id,type,created_at",
+                "properties.user:id,first_name,last_name,email,phone",
+                "user:id,first_name,last_name,email,phone",
+                "user.roles:id,name",
+                "images:id,imageable_id,imageable_type,image,title,created_at",
+            ])->loadCount(["properties", "units"])
+        ]);
     }
 
     /**
@@ -106,6 +116,6 @@ class EstateController extends Controller
     {
         $estate->delete();
 
-        return back();
+        return back()->with(["toast" => ["message" => "Estate Deleted!", "type" => "info"]]);
     }
 }

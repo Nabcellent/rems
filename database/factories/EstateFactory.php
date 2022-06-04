@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\Status;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use JetBrains\PhpStorm\ArrayShape;
@@ -16,16 +17,16 @@ class EstateFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    #[ArrayShape([
-        "user_id"  => "mixed",
-        "name"     => "string",
-        "location" => "string"
-    ])] public function definition(): array
+    public function definition(): array
     {
         return [
-            "user_id"  => User::factory(),
-            "name"     => $this->faker->streetName(),
-            "location" => $this->faker->streetAddress(),
+            "user_id"   => User::factory(),
+            "name"      => $this->faker->streetName(),
+            "address"   => $this->faker->streetAddress(),
+            "latitude"  => $this->faker->latitude(-0.864785, -1.695412),
+            "longitude" => $this->faker->longitude(36.384459, 37.466612),
+            "status"    => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
+            "created_at"        => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 }

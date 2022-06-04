@@ -20,9 +20,11 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            "estate_id" => Estate::factory(),
-            "user_id"   => User::factory(),
-            "type"      => $this->faker->randomElement(PropertyType::cases())
+            "estate_id"  => Estate::factory(),
+            "user_id"    => User::factory(),
+            "name"       => $this->faker->randomElement([strtoupper($this->faker->randomLetter()), null]),
+            "type"       => $this->faker->randomElement(PropertyType::cases()),
+            "created_at" => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 }

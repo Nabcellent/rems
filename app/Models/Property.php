@@ -22,7 +22,9 @@ class Property extends Model
         return $this->belongsTo(Estate::class);
     }
 
-    public function manager(): BelongsTo
+    /** Property Manager
+     * */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

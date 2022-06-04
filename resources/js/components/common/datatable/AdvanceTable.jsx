@@ -2,6 +2,7 @@ import { memo } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { Table } from 'react-bootstrap';
+import { KeyboardArrowDown, KeyboardArrowUp, Sort } from '@mui/icons-material';
 
 // Create a default prop getter
 const defaultPropGetter = () => ({});
@@ -25,30 +26,21 @@ const AdvanceTable = ({
                 <thead className={headerClassName}>
                 <tr>
                     {headers.map((column, index) => (
-                        <th
+                        <th key={index}
                             {...column.getHeaderProps(
+                                column.getSortByToggleProps(column.headerProps),
                                 {
                                     className: column.className,
                                     style: column.style,
                                 },
-                                getColumnProps(column),
-                                getHeaderProps(column),
-                                column.getSortByToggleProps(column.headerProps)
-                            )}
-                        >
+                            )}>
                             {column.render('Header')}
-                            {column.canSort ? (
+                            {column.canSort && (
                                 column.isSorted ? (
-                                    column.isSortedDesc ? (
-                                        <span className="sort desc"/>
-                                    ) : (
-                                        <span className="sort asc"/>
-                                    )
-                                ) : (
-                                    <span className="sort"/>
-                                )
-                            ) : (
-                                ''
+                                    column.isSortedDesc
+                                        ? <KeyboardArrowDown style={{ marginLeft: '1rem' }} fontSize={'small'}/>
+                                        : <KeyboardArrowUp style={{ marginLeft: '1rem' }} fontSize={'small'}/>
+                                ) : <Sort style={{ marginLeft: '1rem' }} fontSize={'small'}/>
                             )}
                         </th>
                     ))}

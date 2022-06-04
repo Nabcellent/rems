@@ -28,20 +28,20 @@ class RegisteredUserController extends Controller
     /**
      * Handle an incoming registration request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \App\Http\Requests\RegisterRequest $request
      * @return \Illuminate\Http\RedirectResponse
      *
-     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(RegisterRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
         $data += [
-            'password' => Hash::make($request->input('password')),
+            "password" => Hash::make($request->input('password')),
         ];
 
         $user = User::create($data);
+        $user->wallet()->create();
 
         Auth::login($user);
 

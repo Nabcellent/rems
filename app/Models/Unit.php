@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
@@ -18,6 +18,31 @@ class Unit extends Model
     use HasFactory;
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ["unitable_name", "estate"];
+
+    public function unitableName(): Attribute
+    {
+        return Attribute::get(fn() => match ($this->unitable_type) {
+            Estate::class => "estate",
+            Property::class => "property",
+            default => null
+        });
+    }
+
+    public function estate(): Attribute
+    {
+        return Attribute::get(fn() => match ($this->unitable_type) {
+            Estate::class => $this->unitable,
+            Property::class => $this->unitable->estate,
+            default => null
+        });
+    }
+
+    /**
      * .....................    _____________________RELATIONSHIPS
      */
     public function unitable(): MorphTo
@@ -25,14 +50,16 @@ class Unit extends Model
         return $this->morphTo();
     }
 
-    public function owner(): BelongsTo
+    /** Owner
+     * */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function lease(): HasOne
+    public function leases(): HasMany
     {
-        return $this->hasOne(Lease::class);
+        return $this->hasMany(Lease::class);
     }
 
     public function images(): MorphMany

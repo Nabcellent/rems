@@ -1,0 +1,6 @@
+### Laravel template
+/vendor/
+node_modules/
+
+.env
+
