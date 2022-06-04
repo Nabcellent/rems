@@ -7,38 +7,34 @@ import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
-import StatusBadge from '@/components/StatusBadge';
 
-const Index = ({ tickets }) => {
-    console.log(tickets);
+const Index = ({ notices }) => {
+    console.log(notices);
 
     return (
-        <Dashboard title={'Tickets'}>
+        <Dashboard title={'Notices'}>
             {/* Render Breadcrumbs */}
-            <Breadcrumbs title="Tickets" breadcrumbItem="list"/>
+            <Breadcrumbs title="Notices" breadcrumbItem="list"/>
 
             <Row>
                 <Col className="col-12">
                     <Paper className={'p-3'}>
-                        <DataTable title={'Tickets'} columns={[
+                        <DataTable title={'Notices'} columns={[
                             {
                                 accessor: 'user',
                                 Header: 'User',
                                 Cell: ({ row }) => (
                                     <span>
-                                        {row.original.user.full_name} <br/>
-                                        <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
-                                            <small>{row.original.user.email}</small>
-                                        </Link>
-                                    </span>
+                                    {row.original.user.full_name} <br/>
+                                    <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
+                                        <small>{row.original.user.email}</small>
+                                    </Link>
+                                </span>
                                 )
                             },
                             {
-                                accessor: 'title',
-                                Header: 'Title',
-                                Cell: ({ row }) => (
-                                    <div className={'text-truncate'} style={{ maxWidth: '10rem' }}>{row.original.title}</div>
-                                )
+                                accessor: 'type',
+                                Header: 'Type',
                             },
                             {
                                 accessor: 'description',
@@ -57,11 +53,6 @@ const Index = ({ tickets }) => {
                                 )
                             },
                             {
-                                accessor: 'status',
-                                Header: 'Status',
-                                Cell: ({ row }) => <StatusBadge status={row.original.status}/>
-                            },
-                            {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
@@ -70,15 +61,15 @@ const Index = ({ tickets }) => {
 
                                     return (
                                         <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.tickets.create'))}
+                                            <IconButton onClick={() => Inertia.get(route('dashboard.notices.create'))}
                                                         size={"small"} color={"primary"}>
                                                 <Edit fontSize={'small'}/>
                                             </IconButton>
-                                            <Link href={route('dashboard.tickets.show', { ticket: ticket.id })}>
+                                            <Link href={route('dashboard.notices.show', { ticket: ticket.id })}>
                                                 <ReadMore fontSize={'small'}/>
                                             </Link>
                                             <IconButton
-                                                onClick={() => handleDelete(route('dashboard.tickets.destroy', { ticket: ticket.id }), 'ticket')}
+                                                onClick={() => handleDelete(route('dashboard.notices.destroy', { ticket: ticket.id }), 'ticket')}
                                                 size={"small"} color={"error"}>
                                                 <Delete fontSize={'small'}/>
                                             </IconButton>
@@ -86,7 +77,7 @@ const Index = ({ tickets }) => {
                                     );
                                 }
                             }
-                        ]} data={tickets} onCreateRow={() => Inertia.get(route('dashboard.tickets.create'))}/>
+                        ]} data={notices} onCreateRow={() => Inertia.get(route('dashboard.notices.create'))}/>
                     </Paper>
                 </Col>
             </Row>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\NoticeType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Notice extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "user_id",
+        "type",
+        "description",
+        "start_date",
+        "end_date",
+    ];
+
+    protected $casts = [
+        "type" => NoticeType::class
+    ];
 
     /**
      * .....................    _____________________RELATIONSHIPS

@@ -136,6 +136,12 @@ const SidebarContent = ({ type }) => {
                         { link: route('dashboard.payments.index'), title: 'list' },
                         { link: '/notify', title: 'Plans' }
                     ]
+                },
+                {
+                    startIcon: <i className="bx bxs-notification"/>, title: 'Notices', subMenu: [
+                        { link: route('dashboard.notices.index'), title: 'list' },
+                        { link: route('dashboard.notices.create'), title: 'create' }
+                    ]
                 }
             ]
         },
