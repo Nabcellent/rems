@@ -26,8 +26,8 @@ import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 
 const Show = ({ errors, unit }) => {
-    const theme = useTheme();
     console.log(unit);
+    const theme = useTheme();
     const [room, setRoom] = useState(undefined);
     const [showImageModal, setShowImageModal] = useState(false);
     const [showRoomModal, setShowRoomModal] = useState(false);
@@ -39,7 +39,7 @@ const Show = ({ errors, unit }) => {
         setShowRoomModal(true);
     };
 
-    const handleUpdateRoom = (room) => {
+    const handleUpdateRoom = room => {
         setRoom(room);
         setShowRoomModal(true);
     };

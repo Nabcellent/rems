@@ -13,7 +13,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import PhoneBadge from '@/components/PhoneBadge';
 import StatusBadge from '@/components/StatusBadge';
 import { Role } from '@/utils/enums';
-import ModalForm from '@/pages/dashboard/users/components/ModalForm';
+import UserModal from '@/pages/dashboard/users/components/UserModal';
 
 // Import React FilePond with plugins & styles
 import { registerPlugin } from 'react-filepond';
@@ -31,15 +31,6 @@ import { handleDelete } from '@/utils/helpers';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
 
 const validationSchema = yup.object({
-    first_name: yup.string().required('First name is required.'),
-    last_name: yup.string().required('Last name is required.'),
-    phone: yup.string().test({
-        name: 'is-valid-phone',
-        message: 'Invalid phone number',
-        test: value => isValidPhoneNumber(String(value), 'KE')
-    }).required('Phone number is required.'),
-    gender: yup.string().oneOf(['male', 'female']),
-    email: yup.string().email().required('Email is required.'),
     role: yup.string().oneOf(Object.values(Role), 'Invalid role').required('Role is required.'),
 });
 
@@ -52,13 +43,6 @@ const Index = ({ providers }) => {
 
     const formik = useFormik({
         initialValues: {
-            first_name: '',
-            last_name: '',
-            phone: '',
-            gender: '',
-            email: '',
-            role: '',
-            image: '',
             user_id: ''
         },
         validationSchema: validationSchema,
@@ -180,7 +164,7 @@ const Index = ({ providers }) => {
                 </Col>
             </Row>
 
-            <ModalForm showModal={showModal} errors={errors} setShowModal={setShowModal} action={formAction}
+            <UserModal showModal={showModal} errors={errors} setShowModal={setShowModal} action={formAction}
                        formik={formik} isLoading={isLoading}/>
         </Dashboard>
     );

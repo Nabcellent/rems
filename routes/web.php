@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
+use App\Http\Controllers\Dashboard\EstateServiceController;
 use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\PaymentController;
@@ -54,6 +55,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "payments"          => PaymentController::class,
             "images"            => ImageController::class,
             "rooms"             => RoomController::class,
+            "estate-services"    => EstateServiceController::class,
         ]);
     });
 });

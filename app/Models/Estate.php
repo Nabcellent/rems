@@ -59,6 +59,6 @@ class Estate extends Model
      */
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, 'estate_services');
+        return $this->belongsToMany(Service::class, 'estate_services')->withPivot('id', 'description');
     }
 }
