@@ -157,7 +157,7 @@ const SidebarContent = ({ type }) => {
                         { link: '/grid', title: 'Grid' }
                     ]
                 },
-                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings' },
+                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: route('dashboard.settings') },
             ]
         }
     ];

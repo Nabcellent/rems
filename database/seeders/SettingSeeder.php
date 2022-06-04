@@ -16,15 +16,15 @@ class SettingSeeder extends Seeder
      */
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Setting::truncate();
-        Schema::enableForeignKeyConstraints();
+//        Schema::disableForeignKeyConstraints();
+//        Setting::truncate();
+//        Schema::enableForeignKeyConstraints();
 
-        Setting::insert([
+        /*Setting::insert([
             [
                 "key"   => SettingKey::DEFAULT_USER_PASSWORD,
                 "value" => "12345678"
             ]
-        ]);
+        ]);*/
     }
 }
