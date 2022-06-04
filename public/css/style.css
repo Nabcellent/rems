@@ -29,6 +29,10 @@
     margin-bottom: 5rem !important;
 }
 
+.mb-8 {
+    margin-bottom: 7.5rem !important;
+}
+
 .rounded-bottom-0 {
     border-bottom-right-radius: 0 !important;
     border-bottom-left-radius: 0 !important;

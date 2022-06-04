@@ -5,11 +5,13 @@ use App\Http\Controllers\Dashboard\EstateController;
 use App\Http\Controllers\Dashboard\EstateServiceController;
 use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
+use App\Http\Controllers\Dashboard\NoticeController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\PropertyController;
 use App\Http\Controllers\Dashboard\RoomController;
 use App\Http\Controllers\Dashboard\ServiceController;
 use App\Http\Controllers\Dashboard\ServiceProviderController;
+use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\TicketController;
 use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UnitController;
@@ -42,6 +44,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
             Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
         });
 
+        Route::prefix('/settings')->name('settings')->group(function() {
+            Route::get('/', [SettingController::class, 'index']);
+            Route::put('/', [SettingController::class, 'update'])->name('.update');
+        });
+
         Route::resources([
             "users"             => UserController::class,
             "estates"           => EstateController::class,
@@ -55,7 +62,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "payments"          => PaymentController::class,
             "images"            => ImageController::class,
             "rooms"             => RoomController::class,
-            "estate-services"    => EstateServiceController::class,
+            "estate-services"   => EstateServiceController::class,
+            "notices"           => NoticeController::class,
         ]);
     });
 });

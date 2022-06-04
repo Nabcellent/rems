@@ -354,6 +354,7 @@ namespace App\Models{
  * @property string $type
  * @property float|null $length
  * @property float|null $width
+ * @property string|null $description
  * @property string|null $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -365,6 +366,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Room newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Room query()
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereLength($value)
@@ -431,18 +433,23 @@ namespace App\Models{
  * App\Models\Setting
  *
  * @property int $id
- * @property \App\Enums\SettingKey $key
- * @property string $value
+ * @property string $group
+ * @property string $name
+ * @property int $locked
+ * @property mixed $payload
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Enums\SettingKey $key
  * @method static \Illuminate\Database\Eloquent\Builder|Setting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Setting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Setting query()
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereGroup($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereLocked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting wherePayload($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereValue($value)
  */
 	class IdeHelperSetting {}
 }

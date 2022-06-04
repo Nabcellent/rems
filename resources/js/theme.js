@@ -10,6 +10,13 @@ export const theme = createTheme({
         fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
     },
     components: {
+        MuiAvatar: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#990000',
+                }
+            }
+        },
         MuiTextField: {
             defaultProps: {
                 size: 'small'
@@ -34,7 +41,9 @@ export const theme = createTheme({
         MuiPaper: {
             styleOverrides: {
                 root: {
-                    position: 'relative'
+                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column'
                 }
             }
         }

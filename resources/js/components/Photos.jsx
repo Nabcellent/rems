@@ -13,7 +13,7 @@ const Photos = ({ images, style, directory }) => {
         imgListProps = { rowHeight: 121 };
         imgListItemProps = { rows: sample([1, 2]), cols: sample([1, 2]) };
     } else {
-        imgListProps = { gap: 8 };
+        imgListProps = { gap: 8, cols: 4 };
     }
 
     return (
