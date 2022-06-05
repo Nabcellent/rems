@@ -57,7 +57,7 @@ const Index = ({ notices }) => {
                                 disableSortBy: true,
                                 className: 'text-end',
                                 Cell: ({ row }) => {
-                                    const ticket = row.original;
+                                    const notice = row.original;
 
                                     return (
                                         <>
@@ -65,11 +65,11 @@ const Index = ({ notices }) => {
                                                         size={"small"} color={"primary"}>
                                                 <Edit fontSize={'small'}/>
                                             </IconButton>
-                                            <Link href={route('dashboard.notices.show', { ticket: ticket.id })}>
+                                            <Link href={route('dashboard.notices.show', { notice: notice.id })}>
                                                 <ReadMore fontSize={'small'}/>
                                             </Link>
                                             <IconButton
-                                                onClick={() => handleDelete(route('dashboard.notices.destroy', { ticket: ticket.id }), 'ticket')}
+                                                onClick={() => handleDelete(route('dashboard.notices.destroy', { notice: notice.id }), 'Notice')}
                                                 size={"small"} color={"error"}>
                                                 <Delete fontSize={'small'}/>
                                             </IconButton>
