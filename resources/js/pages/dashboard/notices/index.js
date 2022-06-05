@@ -7,6 +7,9 @@ import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
+import TableDate from '@/components/TableDate';
+import { NoticeType } from '@/utils/enums';
+import moment from 'moment';
 
 const Index = ({ notices }) => {
     console.log(notices);
@@ -51,6 +54,27 @@ const Index = ({ notices }) => {
                                         }}>{row.original.description || 'N / A'}</Typography>
                                     </Tooltip>
                                 )
+                            },
+                            {
+                                accessor: 'created_at',
+                                Header: 'Date',
+                                Cell: ({ row }) => {
+                                    let date, notice = row.original;
+
+                                    if (notice.type === NoticeType.VACATION) {
+                                        date = <strong>{moment(notice.end_at).format("D.M.y")}</strong>;
+                                    } else {
+                                        date = (
+                                            <>
+                                                <strong>{moment(notice.start_at).format("D.M.y")}</strong>
+                                                &nbsp; to &nbsp;
+                                                <strong>{moment(notice.end_at).format("D.M.y")}</strong>
+                                            </>
+                                        );
+                                    }
+
+                                    return date;
+                                }
                             },
                             {
                                 accessor: 'actions',

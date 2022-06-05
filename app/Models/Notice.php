@@ -18,8 +18,8 @@ class Notice extends Model
         "user_id",
         "type",
         "description",
-        "start_date",
-        "end_date",
+        "start_at",
+        "end_at",
     ];
 
     protected $casts = [

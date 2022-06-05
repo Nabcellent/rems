@@ -22,11 +22,11 @@ class NoticeFactory extends Factory
             "user_id"     => User::factory(),
             "type"        => $this->faker->randomElement(NoticeType::cases()),
             "description" => $this->faker->text,
-            "start_date"  => fn(array $attributes) => match ($attributes["type"]) {
+            "start_at"  => fn(array $attributes) => match ($attributes["type"]) {
                 NoticeType::VACATION => null,
                 default => $this->faker->dateTimeBetween('now', '+1 week'),
             },
-            "end_date"    => fn(array $attributes) => $this->faker->dateTimeBetween($attributes["start_date"], '+3 months'),
+            "end_at"    => fn(array $attributes) => $this->faker->dateTimeBetween($attributes["start_date"], '+3 months'),
             "created_at"  => $this->faker->dateTimeBetween('-1 year')
         ];
     }

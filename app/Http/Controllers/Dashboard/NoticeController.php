@@ -29,7 +29,7 @@ class NoticeController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/notices', [
-            "notices" => Notice::select(["id", "user_id", "type", "description"])
+            "notices" => Notice::select(["id", "user_id", "type", "description", "start_at", "end_at"])
                 ->with("user:id,first_name,last_name,email")->latest()->get()
         ]);
     }
