@@ -45,6 +45,7 @@ namespace App\Models{
  * @property int $user_id
  * @property string $name
  * @property string $address
+ * @property string|null $image
  * @property float $latitude
  * @property float $longitude
  * @property string $status
@@ -70,6 +71,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLatitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLongitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereName($value)
@@ -312,6 +314,7 @@ namespace App\Models{
  * @property int $user_id
  * @property string|null $name
  * @property string $type
+ * @property string|null $image
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -332,6 +335,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereEstateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereType($value)
@@ -348,6 +352,10 @@ namespace App\Models{
  * @property int $id
  * @property int $unit_id
  * @property string $type
+ * @property float|null $length
+ * @property float|null $width
+ * @property string|null $description
+ * @property string|null $image
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
@@ -358,10 +366,14 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Room newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Room query()
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereLength($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereUnitId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Room whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Room whereWidth($value)
  */
 	class IdeHelperRoom {}
 }
@@ -421,18 +433,23 @@ namespace App\Models{
  * App\Models\Setting
  *
  * @property int $id
- * @property \App\Enums\SettingKey $key
- * @property string $value
+ * @property string $group
+ * @property string $name
+ * @property int $locked
+ * @property mixed $payload
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \App\Enums\SettingKey $key
  * @method static \Illuminate\Database\Eloquent\Builder|Setting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Setting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Setting query()
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereGroup($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereLocked($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Setting wherePayload($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Setting whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Setting whereValue($value)
  */
 	class IdeHelperSetting {}
 }
@@ -507,7 +524,9 @@ namespace App\Models{
  * @property int $unitable_id
  * @property string $house_number
  * @property string $purpose For Rent or For Sale
+ * @property string $type Furnished or Unfurnished
  * @property string|null $description
+ * @property string|null $image
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -531,8 +550,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereHouseNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePurpose($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUnitableId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUnitableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUpdatedAt($value)

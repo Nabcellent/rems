@@ -2,7 +2,7 @@ import Dashboard from '@/layouts/Dashboard';
 import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { Avatar, IconButton, useTheme } from '@mui/material';
+import { Avatar, IconButton, Paper, useTheme } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -15,7 +15,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import PhoneBadge from '@/components/PhoneBadge';
 import StatusBadge from '@/components/StatusBadge';
 import { Role } from '@/utils/enums';
-import ModalForm from '@/pages/dashboard/users/components/ModalForm';
+import UserModal from '@/pages/dashboard/users/components/UserModal';
 
 // Import React FilePond with plugins & styles
 import { registerPlugin } from 'react-filepond';
@@ -126,7 +126,7 @@ const Index = ({ users }) => {
 
             <Row>
                 <Col className="col-12">
-                    <Card>
+                    <Paper className={'p-3'}>
                         <DataTable title={'Users'} columns={[
                             {
                                 accessor: 'name',
@@ -199,11 +199,11 @@ const Index = ({ users }) => {
                                 }
                             }
                         ]} data={users} onCreateRow={handleCreate}/>
-                    </Card>
+                    </Paper>
                 </Col>
             </Row>
 
-            <ModalForm showModal={showModal} errors={errors} setShowModal={setShowModal} action={formAction}
+            <UserModal showModal={showModal} errors={errors} setShowModal={setShowModal} action={formAction}
                        formik={formik} isLoading={isLoading}/>
         </Dashboard>
     );

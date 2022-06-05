@@ -136,6 +136,12 @@ const SidebarContent = ({ type }) => {
                         { link: route('dashboard.payments.index'), title: 'list' },
                         { link: '/notify', title: 'Plans' }
                     ]
+                },
+                {
+                    startIcon: <i className="bx bxs-notification"/>, title: 'Notices', subMenu: [
+                        { link: route('dashboard.notices.index'), title: 'list' },
+                        { link: route('dashboard.notices.create'), title: 'create' }
+                    ]
                 }
             ]
         },
@@ -157,7 +163,7 @@ const SidebarContent = ({ type }) => {
                         { link: '/grid', title: 'Grid' }
                     ]
                 },
-                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: '/settings' },
+                { startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: route('dashboard.settings') },
             ]
         }
     ];

@@ -4,6 +4,13 @@ export const Role = {
     PROPERTY_MANAGER: 'property_manager'
 };
 
+export const RoomType = {
+    BEDROOM: 'BEDROOM',
+    KITCHEN: 'KITCHEN',
+    TOILET: 'TOILET',
+    BATHROOM: 'BATHROOM'
+};
+
 export const Gender = {
     MALE: 'male',
     FEMALE: 'female',
@@ -25,15 +32,15 @@ export const Telco = {
     TELKOM: 'TELKOM',
     EQUITEL: 'EQUITEL',
     FAIBA: 'FAIBA',
-}
+};
 
 export const Description = {
     WALLET_DEPOSIT: 'Wallet Deposit'
-}
+};
 
 export const Imageable = {
     ESTATE: 'estate',
     PROPERTY: 'property',
     UNIT: 'unit',
     ROOM: 'room',
-}
+};

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEstateRequest;
 use App\Models\Estate;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -72,14 +73,16 @@ class EstateController extends Controller
     public function show(Estate $estate): Response|ResponseFactory
     {
         return inertia("dashboard/estates/Show", [
-            "estate" => $estate->load([
+            "estate"   => $estate->load([
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
+                "services:id,name,icon,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
-            ])->loadCount(["properties", "units"])
+            ])->loadCount(["properties", "units"]),
+            "services" => Service::select(["id", "name"])->get()
         ]);
     }
 

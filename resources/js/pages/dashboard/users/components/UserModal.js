@@ -8,7 +8,7 @@ import { LoadingButton } from '@mui/lab';
 import { Create } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
-const ModalForm = ({ showModal, setShowModal, action, isLoading, formik, errors }) => {
+const UserModal = ({ showModal, setShowModal, action, isLoading, formik, errors }) => {
     return (
         <Modal size={'lg'} show={showModal} onHide={() => setShowModal(false)}>
             <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
@@ -25,13 +25,12 @@ const ModalForm = ({ showModal, setShowModal, action, isLoading, formik, errors 
                     {
                         action === "store" && (
                             <Grid item lg={4}>
-                                <Autocomplete name={'role'} freeSolo
+                                <Autocomplete name={'role'} freeSolo value={formik.values.role}
                                               options={Object.values(Role).map(r => ({ label: str.headline(r), value: r }))}
-                                              onChange={(event, { value }) => {
-                                                  formik.setFieldValue('role', value, true);
+                                              onChange={(event, value) => {
+                                                  formik.setFieldValue('role', value?.value, true);
                                               }} renderInput={(params) => (
-                                    <TextField {...params} label="Role" value={formik.values.role} required
-                                               placeholder={'Role...'}
+                                    <TextField {...params} label="Role" required placeholder={'Role...'}
                                                error={formik.touched.role && Boolean(formik.errors.role)}
                                                helperText={formik.touched.role && formik.errors.role}/>
                                 )}/>
@@ -99,7 +98,7 @@ const ModalForm = ({ showModal, setShowModal, action, isLoading, formik, errors 
     );
 };
 
-ModalForm.propTypes = {
+UserModal.propTypes = {
     showModal: PropTypes.bool.isRequired,
     setShowModal: PropTypes.func.isRequired,
     action: PropTypes.string.isRequired,
@@ -108,4 +107,4 @@ ModalForm.propTypes = {
     errors:PropTypes.object
 };
 
-export default ModalForm;
+export default UserModal;
