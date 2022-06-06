@@ -7,12 +7,25 @@ import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
-import TableDate from '@/components/TableDate';
 import { NoticeType } from '@/utils/enums';
 import moment from 'moment';
+import NoticeModal from '@/pages/dashboard/notices/components/NoticeModal';
+import { useState } from 'react';
 
 const Index = ({ notices }) => {
     console.log(notices);
+    const [notice, setNotice] = useState(undefined);
+    const [showNoticeModal, setShowNoticeModal] = useState(false);
+
+    const handleCreate = () => {
+        setNotice(undefined)
+        setShowNoticeModal(true)
+    }
+
+    const handleUpdate = notice => {
+        setNotice(notice)
+        setShowNoticeModal(true)
+    }
 
     return (
         <Dashboard title={'Notices'}>
@@ -85,7 +98,7 @@ const Index = ({ notices }) => {
 
                                     return (
                                         <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.notices.create'))}
+                                            <IconButton onClick={() => handleUpdate(notice)}
                                                         size={"small"} color={"primary"}>
                                                 <Edit fontSize={'small'}/>
                                             </IconButton>
@@ -101,10 +114,12 @@ const Index = ({ notices }) => {
                                     );
                                 }
                             }
-                        ]} data={notices} onCreateRow={() => Inertia.get(route('dashboard.notices.create'))}/>
+                        ]} data={notices} onCreateRow={() => handleCreate()}/>
                     </Paper>
                 </Col>
             </Row>
+
+            <NoticeModal showModal={showNoticeModal} setShowModal={setShowNoticeModal} notice={notice} />
         </Dashboard>
     );
 };

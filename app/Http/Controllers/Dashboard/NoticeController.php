@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreNoticeRequest;
+use App\Http\Requests\UpdateNoticeRequest;
 use App\Models\Notice;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,11 +50,14 @@ class NoticeController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreNoticeRequest $request): RedirectResponse
     {
-        //
+        dd($request->validated());
+        Notice::create($request->validated());
+
+        return back()->with("toast", ["message" => "Notice Created!"]);
     }
 
     /**
@@ -89,7 +94,7 @@ class NoticeController extends Controller
      * @param \App\Models\Notice       $notice
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Notice $notice)
+    public function update(UpdateNoticeRequest $request, Notice $notice)
     {
         //
     }

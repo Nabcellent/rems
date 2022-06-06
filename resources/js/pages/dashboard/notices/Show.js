@@ -48,7 +48,7 @@ const Show = ({ errors, notice }) => {
                         width: '10rem',
                         height: '10rem',
                     }}>
-                        REMS
+                        Notice.
                     </Avatar>
                 </div>
             </Paper>
@@ -57,10 +57,7 @@ const Show = ({ errors, notice }) => {
                 <CardBgCorner/>
                 <Card.Body>
                     <Row>
-                        <Col xs={12} className={'d-flex justify-content-between align-items-start'}>
-                            <h4>Notice.</h4>
-                        </Col>
-                        <Col lg={4}>
+                        <Col lg={4} className={'mb-4 mb-lg-0'}>
                             <h5>Notice By:</h5>
                             <div className={'border-dashed-bottom my-2'}></div>
                             <p className="mb-0 fs--1">
@@ -76,7 +73,7 @@ const Show = ({ errors, notice }) => {
                                 <strong>Phone: </strong><a href={`tel:${notice.user.phone}`}>+{notice.user.phone}</a>
                             </p>
                         </Col>
-                        <Col lg={4}>
+                        <Col lg={4} className={'mb-4 mb-lg-0'}>
                             <h5>Description:</h5>
                             <div className={'border-dashed-bottom my-2'}></div>
                             <p className="mb-1 fs--1">{notice.description}</p>
