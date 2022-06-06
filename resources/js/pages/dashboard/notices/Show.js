@@ -5,7 +5,6 @@ import { Card, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';
 import { NoticeType } from '@/utils/enums';
-import { IMAGES } from '@/constants/images';
 import CardBgCorner from '@/components/CardBgCorner';
 
 const Show = ({ errors, notice }) => {
@@ -39,7 +38,7 @@ const Show = ({ errors, notice }) => {
             <Paper className={'mb-3 d-flex flex-column'}>
                 <div className="position-relative min-vh-25 mb-8 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
-                         style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
+                         style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}/>
                     <Avatar sx={{
                         position: 'absolute',
                         bottom: 0,

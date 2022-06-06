@@ -41,7 +41,8 @@ export const Description = {
 export const NoticeType = {
     VACATION: 'VACATION',
     TRAVEL: 'TRAVEL',
-    AWAY: 'AWAY'
+    AWAY: 'AWAY',
+    MAINTENANCE: 'MAINTENANCE',
 };
 
 export const Imageable = {
