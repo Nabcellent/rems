@@ -46,9 +46,9 @@ const Show = ({ errors, ticket }) => {
                             </p>
                         </Col>
                         <Col xs={12} className={'text-end'}>
-                            <p className="mb-1 fs--1">
-                                <strong>Created On: </strong>{moment(ticket.created_at).format("MMMM Do YYYY")}
-                            </p>
+                            <i className="mb-1 fs--1">
+                                Created On: <strong>{moment(ticket.created_at).format("MMMM Do YYYY")}</strong>
+                            </i>
                         </Col>
                     </Row>
                 </Card.Body>

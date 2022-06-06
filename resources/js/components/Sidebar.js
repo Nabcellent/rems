@@ -30,7 +30,7 @@ const Sidebar = ({type}) => {
                     </Link>
                 </div>
 
-                <div className={'row justify-content-center'}>
+                <div id={'sidebar-greeting'} className={'row justify-content-center'}>
                     <div className="col-auto">
                         {/* TODO: Make the greeting dynamic */}
                         <h6>Good Morning {user.last_name}</h6>
