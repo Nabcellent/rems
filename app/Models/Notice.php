@@ -23,7 +23,9 @@ class Notice extends Model
     ];
 
     protected $casts = [
-        "type" => NoticeType::class
+        "type"     => NoticeType::class,
+        "start_at" => "datetime",
+        "end_at"   => "datetime",
     ];
 
     /**

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\NoticeType;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateNoticeRequest extends FormRequest
 {
@@ -11,9 +13,9 @@ class UpdateNoticeRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +23,13 @@ class UpdateNoticeRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            "type"        => ["required", "string", new Enum(NoticeType::class)],
+            "description" => "required|string",
+            "start_at"    => "nullable|date",
+            "end_at"      => "required|date|after:start_at",
         ];
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreNoticeRequest;
 use App\Http\Requests\UpdateNoticeRequest;
 use App\Models\Notice;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -54,8 +55,7 @@ class NoticeController extends Controller
      */
     public function store(StoreNoticeRequest $request): RedirectResponse
     {
-        dd($request->validated());
-        Notice::create($request->validated());
+        user()->notices()->create($request->validated());
 
         return back()->with("toast", ["message" => "Notice Created!"]);
     }
@@ -92,11 +92,13 @@ class NoticeController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Notice       $notice
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateNoticeRequest $request, Notice $notice)
+    public function update(UpdateNoticeRequest $request, Notice $notice): RedirectResponse
     {
-        //
+        $notice->update($request->validated());
+
+        return back()->with("toast", ["message" => "Notice Updated!"]);
     }
 
     /**
