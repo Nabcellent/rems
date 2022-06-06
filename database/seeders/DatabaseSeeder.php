@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 //            TransactionSeeder::class,
 //            PaymentSeeder::class,
 //            TicketSeeder::class,
-            NoticeSeeder::class,
+//            NoticeSeeder::class,
         ]);
     }
 }

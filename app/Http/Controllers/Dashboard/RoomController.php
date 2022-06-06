@@ -98,8 +98,6 @@ class RoomController extends Controller
     {
         $data = $request->validated();
 
-//        dd($data);
-
         if($request->hasFile("image")) {
             $file = $request->file("image");
             $data["image"] = "rm_" . time() . ".{$file->guessClientExtension()}";

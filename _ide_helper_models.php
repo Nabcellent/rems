@@ -89,12 +89,14 @@ namespace App\Models{
  * @property int $id
  * @property int $estate_id
  * @property int $service_id
+ * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService query()
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EstateService whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService whereEstateId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EstateService whereServiceId($value)
@@ -207,21 +209,22 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
- * @property string $type
+ * @property \App\Enums\NoticeType $type
  * @property string $description
- * @property string|null $start_date
- * @property string|null $end_date
+ * @property \Illuminate\Support\Carbon|null $start_at
+ * @property \Illuminate\Support\Carbon|null $end_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\NoticeFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notice newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Notice query()
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notice whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notice whereEndAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notice whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notice whereStartAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereUserId($value)
@@ -286,20 +289,21 @@ namespace App\Models{
  * App\Models\Policy
  *
  * @property int $id
- * @property string $property_type
- * @property int $property_id
+ * @property string $policeable_type
+ * @property int $policeable_id
  * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $property
+ * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $policeable
+ * @method static \Database\Factories\PolicyFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Policy newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Policy newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Policy query()
  * @method static \Illuminate\Database\Eloquent\Builder|Policy whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Policy whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Policy whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Policy wherePropertyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Policy wherePropertyType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Policy wherePoliceableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Policy wherePoliceableType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Policy whereUpdatedAt($value)
  */
 	class IdeHelperPolicy {}

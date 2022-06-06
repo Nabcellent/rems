@@ -180,7 +180,7 @@ const Show = ({ errors, unit }) => {
                     </Row>
                 </Col>
                 <Col lg={4}>
-                    <Paper>
+                    <Paper className={'mb-3'}>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
                             <h5 className={'mb-0'}>Rooms</h5>
                             <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
@@ -233,6 +233,13 @@ const Show = ({ errors, unit }) => {
                                     ))
                             }
                         </Card.Body>
+                    </Paper>
+
+                    <Paper className={'mb-3'}>
+                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                            <h5 className={'mb-0'}>Policies</h5>
+                            <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
+                        </Card.Header>
                     </Paper>
                 </Col>
             </Row>

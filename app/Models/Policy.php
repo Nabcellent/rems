@@ -16,7 +16,7 @@ class Policy extends Model
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function property(): BelongsTo
+    public function policeable(): BelongsTo
     {
         return $this->morphTo();
     }

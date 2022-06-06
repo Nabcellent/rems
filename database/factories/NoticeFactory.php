@@ -26,7 +26,7 @@ class NoticeFactory extends Factory
                 NoticeType::VACATION => null,
                 default => $this->faker->dateTimeBetween('now', '+1 week'),
             },
-            "end_at"    => fn(array $attributes) => $this->faker->dateTimeBetween($attributes["start_date"], '+3 months'),
+            "end_at"    => fn(array $attributes) => $this->faker->dateTimeBetween($attributes["start_at"], '+3 months'),
             "created_at"  => $this->faker->dateTimeBetween('-1 year')
         ];
     }

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("type", 50);
             $table->text("description");
-            $table->timestamp("start_date")->nullable();
-            $table->timestamp("end_date")->nullable();
+            $table->timestamp("start_at")->nullable();
+            $table->timestamp("end_at")->nullable();
             $table->timestamps();
         });
     }

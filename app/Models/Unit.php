@@ -74,7 +74,7 @@ class Unit extends Model
 
     public function policies(): MorphMany
     {
-        return $this->morphMany(Policy::class, 'property');
+        return $this->morphMany(Policy::class, 'policeable');
     }
 
     public function amenities(): MorphMany
