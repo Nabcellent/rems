@@ -11,9 +11,9 @@ class UpdatePolicyRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +21,12 @@ class UpdatePolicyRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            "policeable"    => "required|string|in:estate,property,unit",
+            "policeable_id" => "required|integer",
+            "description"   => "required|string"
         ];
     }
 }

@@ -37,7 +37,7 @@ class PolicyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StorePolicyRequest $request): RedirectResponse
@@ -57,7 +57,7 @@ class PolicyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Policy  $policy
+     * @param \App\Models\Policy $policy
      * @return \Illuminate\Http\Response
      */
     public function show(Policy $policy)
@@ -68,7 +68,7 @@ class PolicyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Policy  $policy
+     * @param \App\Models\Policy $policy
      * @return \Illuminate\Http\Response
      */
     public function edit(Policy $policy)
@@ -79,8 +79,8 @@ class PolicyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Policy  $policy
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Policy       $policy
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(UpdatePolicyRequest $request, Policy $policy): RedirectResponse
@@ -93,11 +93,13 @@ class PolicyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Policy  $policy
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Policy $policy
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Policy $policy)
+    public function destroy(Policy $policy): RedirectResponse
     {
-        //
+        $policy->delete();
+
+        return back()->with("toast", ["message" => "Policy Deleted!"]);
     }
 }

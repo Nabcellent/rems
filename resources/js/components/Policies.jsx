@@ -51,7 +51,7 @@ const Policies = ({ policies, policeable, policeableId }) => {
 
     const handleUpdate = policy => {
         setPolicy(policy);
-        formik.setValues(policy, true);
+        formik.setFieldValue('description', policy.description, true);
         setShowModal(true);
     };
 
