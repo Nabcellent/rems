@@ -27,10 +27,13 @@ const NoticeModal = ({ notice, showModal, setShowModal }) => {
                              is: value => value !== NoticeType.VACATION,
                              then: schema => schema.required('From date is required.')
                          }),
-            end_at: yup.date('Invalid date.').min(yup.ref('start_at') ?? moment()
-                .toDate(), `Must be ${String(yup.ref('type')) === NoticeType.VACATION ? 'today or after today.' : 'after from date.'}`)
-                       .max(moment().add('1', 'y').toDate(), 'Must be within the year.')
-                       .required(String(yup.ref('type')) === NoticeType.VACATION ? 'Vacate Date is required.' : 'To date is required.')
+            end_at: yup.date('Invalid date.').when('type', {
+                is: NoticeType.VACATION,
+                then: schema => schema.min(moment(), 'Must be today or after today.')
+                                      .required('Vacate date is required.'),
+                otherwise: schema => schema.min(yup.ref('start_at') ?? moment(), 'after from date.')
+                                           .required('End date is required.'),
+            }).max(moment().add('1', 'y').toDate(), 'Must be within the year.')
         }),
         validateOnChange: true,
         onSubmit: values => {
