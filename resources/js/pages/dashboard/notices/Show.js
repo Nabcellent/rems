@@ -36,7 +36,7 @@ const Show = ({ errors, notice }) => {
         <Dashboard errors={errors} title={'Notice'}>
             <Breadcrumbs title="Notice" breadcrumbItem={`#${notice.id}`}/>
 
-            <Paper className={'mb-3'}>
+            <Paper className={'mb-3 d-flex flex-column'}>
                 <div className="position-relative min-vh-25 mb-8 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>

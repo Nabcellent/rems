@@ -42,8 +42,6 @@ export const theme = createTheme({
             styleOverrides: {
                 root: {
                     position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'column'
                 }
             }
         }

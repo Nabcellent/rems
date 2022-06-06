@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("estate_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId("service_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string("description")->nullable();
             $table->timestamps();
         });
     }
