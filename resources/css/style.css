@@ -1,18 +1,24 @@
-@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css");
 
 :root {
-    --rems-100: #f9fafd
+    --rems-100: #f9fafd;
 }
 
-.z-index-1 {z-index: 1 !important}
-.z-index-2 {z-index: 2 !important}
-.translate-y-50 {transform: translateY(50%) !important;}
+.z-index-1 {
+    z-index: 1 !important;
+}
+.z-index-2 {
+    z-index: 2 !important;
+}
+.translate-y-50 {
+    transform: translateY(50%) !important;
+}
 
 .bg-primary {
     background-color: #990000 !important;
 }
 .bg-primary.bg-soft {
-    background-color: rgba(153, 0, 0, .25) !important
+    background-color: rgba(153, 0, 0, 0.25) !important;
 }
 .text-primary {
     color: #990000 !important;
@@ -59,12 +65,12 @@
 
 a {
     color: #990000;
-    text-decoration: none
+    text-decoration: none;
 }
 
 a:hover {
     color: #990000;
-    text-decoration: underline
+    text-decoration: underline;
 }
 .hover-actions {
     display: none;
@@ -73,7 +79,8 @@ a:hover {
 .hover-actions-trigger {
     position: relative;
 }
-.hover-actions-trigger:focus .hover-actions, .hover-actions-trigger:hover .hover-actions {
+.hover-actions-trigger:focus .hover-actions,
+.hover-actions-trigger:hover .hover-actions {
     z-index: 1;
     display: flex;
 }
@@ -84,6 +91,7 @@ a:hover {
     height: 2.25rem;
     width: 2.25rem;
 }
-.ask-analytics .ask-analytics-item:focus, .ask-analytics .ask-analytics-item:hover {
+.ask-analytics .ask-analytics-item:focus,
+.ask-analytics .ask-analytics-item:hover {
     background: var(--rems-100);
 }
