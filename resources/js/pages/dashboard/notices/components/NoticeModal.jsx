@@ -18,11 +18,19 @@ const NoticeModal = ({ notice, showModal, setShowModal }) => {
 
     const formik = useFormik({
         initialValues: { type: '', description: '', start_at: null, end_at: null, },
-        validationSchema: yup.object({
+        validationSchema: yup.object().shape({
             type: yup.string().oneOf(Object.values(NoticeType), 'Invalid type.').required('Type is required.'),
             description: yup.string(),
-            start_at: yup.date().min(Date(), 'Invalid date.'),
-            end_at: yup.date().min(Date(), 'Invalid date.')
+            start_at: yup.date('Invalid date.').min(moment().toDate(), 'Must be today or after today.')
+                         .max(moment().add('1', 'y').toDate(), 'Must be within the year.')
+                         .when('type', {
+                             is: value => value !== NoticeType.VACATION,
+                             then: schema => schema.required('From date is required.')
+                         }),
+            end_at: yup.date('Invalid date.').min(yup.ref('start_at') ?? moment()
+                .toDate(), `Must be ${String(yup.ref('type')) === NoticeType.VACATION ? 'today or after today.' : 'after from date.'}`)
+                       .max(moment().add('1', 'y').toDate(), 'Must be within the year.')
+                       .required(String(yup.ref('type')) === NoticeType.VACATION ? 'Vacate Date is required.' : 'To date is required.')
         }),
         validateOnChange: true,
         onSubmit: values => {
@@ -46,12 +54,14 @@ const NoticeModal = ({ notice, showModal, setShowModal }) => {
         }
     });
 
+    const isVacation = formik.values.type === NoticeType.VACATION;
+
     useEffect(() => {
         formik.setValues({
             type: notice?.type ?? '',
             description: notice?.description ?? '',
-            start_at: notice?.start_at,
-            end_at: notice?.end_at
+            start_at: notice?.start_at ?? '',
+            end_at: notice?.end_at ?? ''
         }, true);
     }, [notice]);
 
@@ -78,24 +88,31 @@ const NoticeModal = ({ notice, showModal, setShowModal }) => {
                                            helperText={formik.touched.type && formik.errors.type}/>
                             )}/>
                         </Grid>
-                        <Grid item xs={6}>
-                            <DatePicker label="From" value={formik.values.start_at} minDate={moment()}
-                                        onChange={(newValue) => formik.setFieldValue('start_at', newValue, true)}
-                                        renderInput={params => (
-                                            <TextField {...params}
-                                                       error={formik.touched.start_at && Boolean(formik.errors.start_at)}
-                                                       helperText={formik.touched.start_at && formik.errors.start_at}
-                                                       placeholder={'From'}/>
-                                        )}/>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <DatePicker label="To" value={formik.values.end_at} minDate={moment()}
+                        {
+                            !isVacation && (
+                                <Grid item xs={6}>
+                                    <DatePicker label="Start Date" value={formik.values.start_at} minDate={moment()}
+                                                maxDate={moment().add(1, 'year')}
+                                                onChange={(newValue) => formik.setFieldValue('start_at', newValue, true)}
+                                                renderInput={params => (
+                                                    <TextField {...params} fullWidth
+                                                               error={formik.touched.start_at && Boolean(formik.errors.start_at)}
+                                                               helperText={formik.touched.start_at && formik.errors.start_at}
+                                                               placeholder={'Start Date'}/>
+                                                )}/>
+                                </Grid>
+                            )
+                        }
+                        <Grid item xs={isVacation ? 12 : 6}>
+                            <DatePicker label={isVacation ? 'Vacate Date' : 'End date'} value={formik.values.end_at}
+                                        minDate={isVacation ? moment() : formik.values.start_at ?? moment()}
+                                        maxDate={moment().add(1, 'year')}
                                         onChange={(newValue) => formik.setFieldValue('end_at', newValue, true)}
                                         renderInput={params => (
-                                            <TextField {...params}
+                                            <TextField {...params} fullWidth
                                                        error={formik.touched.end_at && Boolean(formik.errors.end_at)}
                                                        helperText={formik.touched.end_at && formik.errors.end_at}
-                                                       placeholder={'To'}/>
+                                                       placeholder={isVacation ? 'Vacate Date' : 'End date'}/>
                                         )}/>
                         </Grid>
                         <Grid item xs={12}>
