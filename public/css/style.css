@@ -54,6 +54,13 @@
     z-index: 0;
 }
 
+.bg-card {
+    background-size: contain;
+    background-position: 100%;
+    border-top-right-radius: .375rem;
+    border-bottom-right-radius: .375rem;
+}
+
 .border-dashed-bottom {
     border-bottom: 1px dashed #d8e2ef !important;
 }
