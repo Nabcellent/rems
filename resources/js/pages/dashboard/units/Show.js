@@ -24,6 +24,7 @@ import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
 import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
+import Policies from '@/components/Policies';
 
 const Show = ({ errors, unit }) => {
     console.log(unit);
@@ -188,7 +189,7 @@ const Show = ({ errors, unit }) => {
                         <Card.Body>
                             {
                                 !unit.rooms.length
-                                    ? <Alert severity="info">This Unit Hasn't any room yet.</Alert>
+                                    ? <Alert severity="info">This unit hasn't any room yet.</Alert>
                                     : unit.rooms.map((room, i) => (
                                         <div key={`room-${room.id}`}>
                                             <div className="d-flex align-items-center hover-actions-trigger">
@@ -236,10 +237,7 @@ const Show = ({ errors, unit }) => {
                     </Paper>
 
                     <Paper className={'mb-3'}>
-                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5 className={'mb-0'}>Policies</h5>
-                            <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
-                        </Card.Header>
+                        <Policies policeable={'unit'} policies={unit.policies} policeableId={unit.id}/>
                     </Paper>
                 </Col>
             </Row>

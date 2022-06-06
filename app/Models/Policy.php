@@ -13,6 +13,10 @@ class Policy extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "description"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */
