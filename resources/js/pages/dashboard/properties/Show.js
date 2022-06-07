@@ -12,7 +12,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Imageable, Status } from '@/utils/enums';
+import { Morphable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
@@ -20,9 +20,11 @@ import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Photos from '@/components/Photos';
+import Photos from '@/components/Images';
 import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
+import Policies from '@/components/Policies';
+import Images from '@/components/Images';
 
 const Show = ({ errors, property }) => {
     console.log(property);
@@ -144,29 +146,19 @@ const Show = ({ errors, property }) => {
                             </Paper>
                         )
                     }
+
+                    <Paper className={'mb-3'}>
+                        <Images imageableId={property.id} images={property.images} imageable={Morphable.PROPERTY}/>
+                    </Paper>
                 </Col>
                 <Col lg={4}>
                     <Paper className={'mb-3'}>
-
+                        <Policies policeable={'property'} policies={property.policies} policeableId={property.id}/>
                     </Paper>
                 </Col>
             </Row>
 
-            <Row>
-                <Col>
-                    <Paper className={'mb-3'}>
-                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5 className={'mb-0'}>Photos</h5>
-                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
-                        </Card.Header>
-                        <Card.Body>
-                            <Photos images={property.images} directory={'properties'} style={'masonry'}/>
-                        </Card.Body>
-                    </Paper>
-                </Col>
-            </Row>
-
-            <AddImageModal imageable={Imageable.PROPERTY} imageableId={property.id} showModal={showModal}
+            <AddImageModal imageable={Morphable.PROPERTY} imageableId={property.id} showModal={showModal}
                            setShowModal={setShowModal}/>
         </Dashboard>
     );

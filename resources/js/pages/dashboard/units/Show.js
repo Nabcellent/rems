@@ -11,7 +11,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Imageable, Status } from '@/utils/enums';
+import { Morphable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import CountUp from 'react-countup';
@@ -19,7 +19,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Photos from '@/components/Photos';
+import Images from '@/components/Images';
 import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
 import { getInitials, handleDelete } from '@/utils/helpers';
@@ -130,55 +130,42 @@ const Show = ({ errors, unit }) => {
 
             <Row className={'mb-3 g-3'}>
                 <Col lg={8}>
-                    <Row>
-                        <Col sm={12}>
-                            <Paper className={'mb-3'}>
-                                <Card.Header><h5 className={'mb-0'}>Tenant History</h5></Card.Header>
-                                <Card.Body>
-                                    {
-                                        !unit.leases.length
-                                            ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
-                                            : unit.leases.map((lease, i) => (
-                                                <div key={`lease-${lease.id}`} className="d-flex">
-                                                    <Link href="/user/profile#!">
-                                                        <PersonOutlined/>
-                                                    </Link>
-                                                    <div className="flex-1 position-relative ps-3">
-                                                        <h6 className="fs-0 mb-0">
-                                                            <Link href="/user/profile#!">{lease.user.full_name}</Link>
-                                                            {
-                                                                lease.status === Status.ACTIVE &&
-                                                                <span><i className={'fas fa-check-circle'}></i></span>
-                                                            }
-                                                        </h6>
-                                                        <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
-                                                        <p className="text-muted mb-0">
-                                                            {moment(lease.start_date).format("LL")}
-                                                            &nbsp;-&nbsp;
-                                                            {moment(lease.end_date).format("LL")}
-                                                        </p>
-                                                        {i < unit.leases.length - 1 &&
-                                                            <div className="border-dashed-bottom my-3"/>}
-                                                    </div>
-                                                </div>
-                                            ))
-                                    }
-                                </Card.Body>
-                            </Paper>
-                        </Col>
-                        <Col sm={12}>
-                            <Paper className={'mb-3'}>
-                                <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                                    <h5 className={'mb-0'}>Photos</h5>
-                                    <Button startIcon={<AddAPhoto/>}
-                                            onClick={() => setShowImageModal(true)}>Add</Button>
-                                </Card.Header>
-                                <Card.Body>
-                                    <Photos images={unit.images} directory={'units'} style={'quilted'}/>
-                                </Card.Body>
-                            </Paper>
-                        </Col>
-                    </Row>
+                    <Paper className={'mb-3'}>
+                        <Card.Header><h5 className={'mb-0'}>Tenant History</h5></Card.Header>
+                        <Card.Body>
+                            {
+                                !unit.leases.length
+                                    ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
+                                    : unit.leases.map((lease, i) => (
+                                        <div key={`lease-${lease.id}`} className="d-flex">
+                                            <Link href="/user/profile#!">
+                                                <PersonOutlined/>
+                                            </Link>
+                                            <div className="flex-1 position-relative ps-3">
+                                                <h6 className="fs-0 mb-0">
+                                                    <Link href="/user/profile#!">{lease.user.full_name}</Link>
+                                                    {
+                                                        lease.status === Status.ACTIVE &&
+                                                        <span><i className={'fas fa-check-circle'}></i></span>
+                                                    }
+                                                </h6>
+                                                <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
+                                                <p className="text-muted mb-0">
+                                                    {moment(lease.start_date).format("LL")}
+                                                    &nbsp;-&nbsp;
+                                                    {moment(lease.end_date).format("LL")}
+                                                </p>
+                                                {i < unit.leases.length - 1 &&
+                                                    <div className="border-dashed-bottom my-3"/>}
+                                            </div>
+                                        </div>
+                                    ))
+                            }
+                        </Card.Body>
+                    </Paper>
+                    <Paper className={'mb-3'}>
+                        <Images imageableId={unit.id} images={unit.images} imageable={Morphable.UNIT}/>
+                    </Paper>
                 </Col>
                 <Col lg={4}>
                     <Paper className={'mb-3'}>
@@ -244,7 +231,7 @@ const Show = ({ errors, unit }) => {
 
             <RoomModal showModal={showRoomModal} setShowModal={setShowRoomModal} unitId={unit.id} room={room}/>
 
-            <AddImageModal imageable={Imageable.UNIT} imageableId={unit.id} showModal={showImageModal}
+            <AddImageModal imageable={Morphable.UNIT} imageableId={unit.id} showModal={showImageModal}
                            setShowModal={setShowImageModal}/>
         </Dashboard>
     );

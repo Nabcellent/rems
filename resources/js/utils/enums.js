@@ -45,7 +45,7 @@ export const NoticeType = {
     MAINTENANCE: 'MAINTENANCE',
 };
 
-export const Imageable = {
+export const Morphable = {
     ESTATE: 'estate',
     PROPERTY: 'property',
     UNIT: 'unit',

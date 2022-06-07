@@ -95,3 +95,9 @@ a:hover {
 .ask-analytics .ask-analytics-item:hover {
     background: var(--rems-100);
 }
+
+.sticky-sidebar {
+    position: sticky;
+    z-index: 1015;
+    top: 4.3125rem;
+}

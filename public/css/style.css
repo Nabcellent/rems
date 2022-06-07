@@ -110,3 +110,10 @@ a:hover {
     background: var(--rems-100);
 }
 
+.sticky-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1015;
+    top: 4.3125rem;
+}
+
