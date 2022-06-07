@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 
 // custom componentes
 import SectionBox from '@/components/home/SectionBox';
+import HomeFooter from '@/components/home/HomeFooter';
 
 // images
 import bannerImg from '../assets/images/home/banner_img.svg';
@@ -83,6 +84,7 @@ const Home = () => {
 
             </Container>
             {/* Footer */}
+            <HomeFooter />
         </>
     );
 }
