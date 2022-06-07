@@ -28,6 +28,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
+import Policies from '@/components/Policies';
 
 const Show = ({ errors, estate, services }) => {
     console.log(estate);
@@ -212,10 +213,29 @@ const Show = ({ errors, estate, services }) => {
                                 </Col>
                             )
                         }
+                        <Col sm={12}>
+                            <Paper className={'mb-3'}>
+                                <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                                    <h5 className={'mb-0'}>Photos</h5>
+                                    <Button startIcon={<AddAPhoto/>} onClick={() => setShowImageModal(true)}>Add</Button>
+                                </Card.Header>
+                                <Card.Body>
+                                    {
+                                        !estate.images.length
+                                            ? <Alert severity="info">
+                                                <a className={'text-primary'} onClick={() => setShowImageModal(true)}>
+                                                    Add
+                                                </a> some nice images🙂
+                                            </Alert>
+                                            : <Photos images={estate.images} directory={'estates'}/>
+                                    }
+                                </Card.Body>
+                            </Paper>
+                        </Col>
                     </Row>
                 </Col>
                 <Col sm={5}>
-                    <Paper className={'ask-analytics h-100'}>
+                    <Paper className={'ask-analytics mb-3'}>
                         <Card.Header className={'d-flex justify-content-between align-items-center'}>
                             <h5 className={'m-0'}>Services</h5>
                             <Button startIcon={<HomeRepairService/>} onClick={() => handleCreateService()}>Add</Button>
@@ -255,27 +275,9 @@ const Show = ({ errors, estate, services }) => {
                             }
                         </Card.Body>
                     </Paper>
-                </Col>
-            </Row>
 
-            <Row>
-                <Col>
                     <Paper className={'mb-3'}>
-                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5 className={'mb-0'}>Photos</h5>
-                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowImageModal(true)}>Add</Button>
-                        </Card.Header>
-                        <Card.Body>
-                            {
-                                !estate.images.length
-                                    ? <Alert severity="info">
-                                        <a className={'text-primary'} onClick={() => setShowImageModal(true)}>
-                                            Add
-                                        </a> some nice images🙂
-                                    </Alert>
-                                    : <Photos images={estate.images} directory={'estates'}/>
-                            }
-                        </Card.Body>
+                        <Policies policeable={'estate'} policies={estate.policies} policeableId={estate.id}/>
                     </Paper>
                 </Col>
             </Row>
