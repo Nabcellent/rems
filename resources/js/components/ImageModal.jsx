@@ -82,9 +82,7 @@ const ImageModal = ({ imageable, imageableId, image, showModal, setShowModal }) 
                 <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShowModal(false)}/>
             </div>
             <Modal.Body className={'modal-body'}>
-                <div className="pb-3">
-                    <h4 className="mb-1">{(image ? "Update" : "New") + " Image"}</h4>
-                </div>
+                <div className="pb-3"><h4 className="mb-1">{(image ? "Update" : "New") + " Image(s)"}</h4></div>
                 <ValidationErrors errors={errors}/>
 
                 <Grid container spacing={2}>

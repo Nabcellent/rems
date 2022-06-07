@@ -117,10 +117,10 @@ class ImageController extends Controller
     {
         $data = $request->validated();
 
-        if($request->hasFile("image")) {
+        if($request->hasFile("images")) {
             $dir = str()->plural($data["imageable"]);
 
-            $file = $request->file("image");
+            $file = $request->file("images")[0];
             $data["image"] = "{$data['imageable']}_" . time() . ".{$file->guessClientExtension()}";
             $file->move("images/$dir", $data["image"]);
 
