@@ -3,15 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use JetBrains\PhpStorm\ArrayShape;
 
-class StoreImageRequest extends FormRequest
+class ImageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +22,12 @@ class StoreImageRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(): array
+    #[ArrayShape([
+        "imageable"    => "string",
+        "imageable_id" => "string",
+        "title"        => "string",
+        "images.*"     => "string"
+    ])] public function rules(): array
     {
         return [
             "imageable"    => "required|string|in:estate,property,unit,room",

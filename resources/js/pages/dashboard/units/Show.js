@@ -2,10 +2,13 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Alert, Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
-    AddAPhoto, AddBusiness,
+    AddBusiness,
     AlternateEmail,
-    Badge, DeleteSweep, Edit,
-    LocationOn, PersonOutlined,
+    Badge,
+    DeleteSweep,
+    Edit,
+    LocationOn,
+    PersonOutlined,
     PhoneIphone,
     SupervisorAccount,
     ToggleOff,
@@ -20,7 +23,6 @@ import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/Images';
-import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
 import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';

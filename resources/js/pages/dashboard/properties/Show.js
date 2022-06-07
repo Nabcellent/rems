@@ -1,29 +1,15 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
-import {
-    AlternateEmail,
-    Badge,
-    Home,
-    LocationOn,
-    OtherHouses,
-    PhoneIphone,
-    ToggleOff,
-    ToggleOn
-} from '@mui/icons-material';
+import { AlternateEmail, Badge, LocationOn, OtherHouses, PhoneIphone, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials } from '@/utils/helpers';
 import CountUp from 'react-countup';
-import { Card, Col, Row } from 'react-bootstrap';
-import { Link } from '@inertiajs/inertia-react';
-import moment from 'moment';
+import { Col, Row } from 'react-bootstrap';
 import Images from '@/components/Images';
-import AddImageModal from '@/components/AddImageModal';
-import { useState } from 'react';
 import Policies from '@/components/Policies';
-import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Units from '@/pages/dashboard/properties/components/Units';
 
 const Show = ({ errors, property }) => {

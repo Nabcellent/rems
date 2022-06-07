@@ -5,7 +5,7 @@ import sample from 'lodash/sample';
 import { Card } from 'react-bootstrap';
 import { AddAPhoto, DeleteSweep, Edit } from '@mui/icons-material';
 import { useState } from 'react';
-import AddImageModal from '@/components/AddImageModal';
+import ImageModal from '@/components/ImageModal';
 import pluralize from 'pluralize';
 import { handleDelete } from '@/utils/helpers';
 
@@ -27,6 +27,11 @@ const Images = ({ images, style, imageable, imageableId }) => {
         imgListProps = { gap: 8, cols: 4 };
     }
 
+    const handleCreate = () => {
+        setImage(undefined);
+        setShowModal(true);
+    }
+
     const handleUpdate = image => {
         setImage(image);
         setShowModal(true);
@@ -36,7 +41,7 @@ const Images = ({ images, style, imageable, imageableId }) => {
         <>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Photos</h5>
-                <Button startIcon={<AddAPhoto/>} onClick={() => setShowModal(true)}>Add</Button>
+                <Button startIcon={<AddAPhoto/>} onClick={() => handleCreate()}>Add</Button>
             </Card.Header>
             <Card.Body>
                 {
@@ -78,8 +83,8 @@ const Images = ({ images, style, imageable, imageableId }) => {
                 }
             </Card.Body>
 
-            <AddImageModal imageable={imageable} imageableId={imageableId} showModal={showModal}
-                           setShowModal={setShowModal}/>
+            <ImageModal imageable={imageable} imageableId={imageableId} showModal={showModal} image={image}
+                        setShowModal={setShowModal}/>
         </>
     );
 };
