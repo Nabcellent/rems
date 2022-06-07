@@ -3,12 +3,14 @@ import { Alert, Button, ImageList, ImageListItem } from '@mui/material';
 import LightBoxGallery from '@/components/LightBoxGallery';
 import sample from 'lodash/sample';
 import { Card } from 'react-bootstrap';
-import { AddAPhoto } from '@mui/icons-material';
+import { AddAPhoto, DeleteSweep, Edit } from '@mui/icons-material';
 import { useState } from 'react';
 import AddImageModal from '@/components/AddImageModal';
 import pluralize from 'pluralize';
+import { handleDelete } from '@/utils/helpers';
 
 const Images = ({ images, style, imageable, imageableId }) => {
+    const [image, setImage] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
 
     style = style ?? 'woven';
@@ -24,6 +26,11 @@ const Images = ({ images, style, imageable, imageableId }) => {
     } else {
         imgListProps = { gap: 8, cols: 4 };
     }
+
+    const handleUpdate = image => {
+        setImage(image);
+        setShowModal(true);
+    };
 
     return (
         <>
@@ -45,12 +52,23 @@ const Images = ({ images, style, imageable, imageableId }) => {
                                 {setImgIndex => (
                                     <ImageList sx={{ height: 450 }} variant={style}
                                                cols={images.length < 4 ? images.length : 4} {...imgListProps}>
-                                        {images.map((item, i) => (
-                                            <ImageListItem key={`${style}-${i}`} onClick={() => setImgIndex(i)} {...{
+                                        {images.map((image, i) => (
+                                            <ImageListItem key={`${style}-${i}`} {...{
                                                 ...imgListItemProps, ...{ rows: sample([1, 2]), cols: sample([1, 2]) }
-                                            }}>
-                                                <img src={`/images/${directory}/${item.image}`} alt={item.title}
+                                            }} className={'hover-actions-trigger'}>
+                                                <img onClick={() => setImgIndex(i)} src={`/images/${directory}/${image.image}`} alt={image.title}
                                                      loading="lazy"/>
+                                                <div className="hover-actions end-0 top-0 mt-2 me-2">
+                                                    <button onClick={() => handleUpdate(image)}
+                                                            className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                        <Edit fontSize={'small'}/>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(route('dashboard.images.destroy', { image: image.id }), 'Image')}
+                                                        className="border-300 text-600 btn btn-danger btn-sm">
+                                                        <DeleteSweep fontSize={'small'}/>
+                                                    </button>
+                                                </div>
                                             </ImageListItem>
                                         ))}
                                     </ImageList>
@@ -60,7 +78,8 @@ const Images = ({ images, style, imageable, imageableId }) => {
                 }
             </Card.Body>
 
-            <AddImageModal imageable={imageable} imageableId={imageableId} showModal={showModal} setShowModal={setShowModal}/>
+            <AddImageModal imageable={imageable} imageableId={imageableId} showModal={showModal}
+                           setShowModal={setShowModal}/>
         </>
     );
 };

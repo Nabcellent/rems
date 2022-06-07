@@ -84,9 +84,6 @@ a:hover {
     z-index: 1;
     display: flex;
 }
-.translate-middle-y {
-    transform: translateY(-50%) !important;
-}
 .file-thumbnail {
     height: 2.25rem;
     width: 2.25rem;

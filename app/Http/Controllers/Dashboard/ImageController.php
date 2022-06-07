@@ -120,10 +120,12 @@ class ImageController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Image $image
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Image $image)
+    public function destroy(Image $image): RedirectResponse
     {
-        //
+        $image->delete();
+
+        return back()->with(["toast" => ["message" => "Image Deleted!", "type" => "info"]]);
     }
 }
