@@ -1,5 +1,5 @@
 import { Alert, Button, Grid, TextField } from '@mui/material';
-import { AddBusiness, Create, DeleteSweep, Edit } from '@mui/icons-material';
+import { AddBusiness, Create, DeleteSweep, Edit, LocalPolice, LocalPoliceTwoTone } from '@mui/icons-material';
 import { Card, Modal } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
@@ -19,7 +19,7 @@ const Policies = ({ policies, policeable, policeableId }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const formik = useFormik({
-        initialValues: { description: '', policeable_id: policeableId, policeable: policeable, },
+        initialValues: { description: '', policeable_id: policeableId, policeable, },
         validationSchema: yup.object({ description: yup.string().required(), }),
         validateOnChange: true,
         onSubmit: values => {
@@ -59,7 +59,7 @@ const Policies = ({ policies, policeable, policeableId }) => {
         <>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Policies</h5>
-                <Button startIcon={<AddBusiness/>} onClick={() => handleCreate()}>Add</Button>
+                <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
             </Card.Header>
             <Card.Body>
                 {

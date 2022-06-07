@@ -60,8 +60,7 @@ const Images = ({ images, style, imageable, imageableId }) => {
                 }
             </Card.Body>
 
-            <AddImageModal imageable={imageable} imageableId={imageableId} showModal={showModal}
-                           setShowModal={setShowModal}/>
+            <AddImageModal imageable={imageable} imageableId={imageableId} showModal={showModal} setShowModal={setShowModal}/>
         </>
     );
 };

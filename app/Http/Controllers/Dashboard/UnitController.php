@@ -3,15 +3,28 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUnitRequest;
+use App\Http\Requests\UpdateUnitRequest;
+use App\Models\Estate;
+use App\Models\Property;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
 class UnitController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Unit::class, 'unit');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -52,11 +65,28 @@ class UnitController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreUnitRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        $unitable = match ($request->input(["unitable"])) {
+            "estate" => new Estate,
+            "property" => new Property,
+        };
+
+        $unitable = $unitable->findOrFail($request->input("unitable_id"));
+
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "unit_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/units", $data["image"]);
+        }
+
+        $unitable->units()->create([...$data, "user_id" => user()->id]);
+
+        return back()->with("toast", ["message" => "Unit Created!"]);
     }
 
     /**
@@ -99,7 +129,7 @@ class UnitController extends Controller
      * @param \App\Models\Unit         $unit
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Unit $unit)
+    public function update(UpdateUnitRequest $request, Unit $unit)
     {
         //
     }

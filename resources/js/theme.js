@@ -10,6 +10,11 @@ export const theme = createTheme({
         fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
     },
     components: {
+        MuiRadio: {
+            defaultProps: {
+                size: 'small'
+            }
+        },
         MuiAvatar: {
             styleOverrides: {
                 root: {

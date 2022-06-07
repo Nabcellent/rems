@@ -2,7 +2,6 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
-    AddAPhoto,
     AlternateEmail,
     Badge,
     Home,
@@ -20,16 +19,16 @@ import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Photos from '@/components/Images';
+import Images from '@/components/Images';
 import AddImageModal from '@/components/AddImageModal';
 import { useState } from 'react';
 import Policies from '@/components/Policies';
-import Images from '@/components/Images';
+import RoomModal from '@/pages/dashboard/units/components/RoomModal';
+import Units from '@/pages/dashboard/properties/components/Units';
 
 const Show = ({ errors, property }) => {
     console.log(property);
     const theme = useTheme();
-    const [showModal, setShowModal] = useState(false);
 
     return (
         <Dashboard errors={errors} title={'Properties'}>
@@ -116,50 +115,21 @@ const Show = ({ errors, property }) => {
 
             <Row className={'mb-3 g-3'}>
                 <Col lg={8}>
-                    {
-                        Boolean(property.units.length) && (
-                            <Paper className={'mb-3'}>
-                                <Card.Header><h5 className={'mb-0'}>Units</h5></Card.Header>
-                                <Card.Body>
-                                    {
-                                        property.units.map(unit => (
-                                            <Link key={`unit-${unit.id}`} className="d-flex align-items-center p-1"
-                                                  href={route('dashboard.units.show', { unit: unit.id })}>
-                                                <Avatar sx={{ width: 30, height: 30 }} className="me-3">
-                                                    <Home color={'primary'}/>
-                                                </Avatar>
-                                                <div className="w-100">
-                                                    <p className="mb-0">
-                                                        House Number: <strong>{unit.house_number}</strong>
-                                                    </p>
-                                                    <div className={'d-flex justify-content-between'}>
-                                                        <small className="mb-1">For <strong>{unit.purpose}</strong></small>
-                                                        <span className="text-muted">
-                                                            {moment(unit.created_at).format("MMMM D, LT")}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        ))
-                                    }
-                                </Card.Body>
-                            </Paper>
-                        )
-                    }
-
+                    <Paper className={'mb-3'}>
+                        <Units unitable={Morphable.PROPERTY} units={property.units} unitableId={property.id}/>
+                    </Paper>
                     <Paper className={'mb-3'}>
                         <Images imageableId={property.id} images={property.images} imageable={Morphable.PROPERTY}/>
                     </Paper>
                 </Col>
                 <Col lg={4}>
-                    <Paper className={'mb-3'}>
-                        <Policies policeable={'property'} policies={property.policies} policeableId={property.id}/>
-                    </Paper>
+                    <div className="sticky-sidebar">
+                        <Paper className={'mb-3'}>
+                            <Policies policeable={'property'} policies={property.policies} policeableId={property.id}/>
+                        </Paper>
+                    </div>
                 </Col>
             </Row>
-
-            <AddImageModal imageable={Morphable.PROPERTY} imageableId={property.id} showModal={showModal}
-                           setShowModal={setShowModal}/>
         </Dashboard>
     );
 };

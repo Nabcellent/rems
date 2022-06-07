@@ -11,6 +11,16 @@ export const RoomType = {
     BATHROOM: 'BATHROOM'
 };
 
+export const Purpose = {
+    SALE: 'SALE',
+    RENT: 'RENT',
+}
+
+export const UnitType = {
+    FURNISHED: 'FURNISHED',
+    UNFURNISHED: 'UNFURNISHED',
+}
+
 export const Gender = {
     MALE: 'male',
     FEMALE: 'female',
