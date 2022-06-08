@@ -33,6 +33,9 @@ class PayPalController extends Controller
         return response()->json($transaction);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function update(Request $request, Transaction $transaction)
     {
         $data = $request->validate([
@@ -42,13 +45,16 @@ class PayPalController extends Controller
         $payLoad = $data["payload"];
 
         if($payLoad['status'] === Status::COMPLETED->value) {
+            $amount = $payLoad["purchase_units"][0]["amount"]["value"];
+            $currency = $payLoad["purchase_units"][0]["amount"]["currency_code"];
+
             $data = [
                 "order_id"    => $payLoad["id"],
                 "payer_id"    => $payLoad["payer"]["payer_id"],
                 "payer_email" => $payLoad["payer"]["email_address"],
                 "status"      => Status::COMPLETED,
-                "amount"      => $payLoad["purchase_units"][0]["amount"]["value"],
-                "currency"    => $payLoad["purchase_units"][0]["amount"]["currency_code"],
+                "amount"      => convertCurrency($amount, $currency, "KES"),
+                "currency"    => "KES",
                 "created_at"  => $payLoad["create_time"],
                 "updated_at"  => $payLoad["update_time"]
             ];
