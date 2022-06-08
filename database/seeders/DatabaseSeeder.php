@@ -22,10 +22,10 @@ class DatabaseSeeder extends Seeder
 //            UnitSeeder::class,
 //            ServiceSeeder::class,
 //            ServiceProviderSeeder::class,
-//            TransactionSeeder::class,
-//            PaymentSeeder::class,
-//            TicketSeeder::class,
-//            NoticeSeeder::class,
+            TransactionSeeder::class,
+            PaymentSeeder::class,
+            TicketSeeder::class,
+            NoticeSeeder::class,
         ]);
     }
 }

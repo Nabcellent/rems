@@ -2,11 +2,12 @@ import { Card, Modal } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import {
     Alert,
-    Autocomplete,
     Avatar,
     Button,
     FormControl,
-    FormControlLabel, FormHelperText, FormLabel,
+    FormControlLabel,
+    FormHelperText,
+    FormLabel,
     Grid,
     Radio,
     RadioGroup,
@@ -21,7 +22,7 @@ import * as yup from 'yup';
 import { Inertia, Method } from '@inertiajs/inertia';
 import ValidationErrors from '@/components/ValidationErrors';
 import { LoadingButton } from '@mui/lab';
-import { Purpose, RoomType, UnitType } from '@/utils/enums';
+import { Purpose, UnitType } from '@/utils/enums';
 
 // Import React FilePond with plugins & styles
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -138,9 +139,9 @@ const Units = ({ unitableId, units, unitable }) => {
                                 <FormLabel className={'m-0'} id="unit-type">Type</FormLabel>
                                 <RadioGroup row aria-labelledby="unit-type" name="type" value={formik.values.type}
                                             onChange={formik.handleChange}>
-                                    <FormControlLabel className={'mb-0'} value="FURNISHED" control={<Radio/>}
+                                    <FormControlLabel className={'mb-0'} value={UnitType.FURNISHED} control={<Radio/>}
                                                       label="Furnished"/>
-                                    <FormControlLabel className={'mb-0'} value="UNFURNISHED" control={<Radio/>}
+                                    <FormControlLabel className={'mb-0'} value={UnitType.UNFURNISHED} control={<Radio/>}
                                                       label="Unfurnished"/>
                                 </RadioGroup>
                                 <FormHelperText className={'mt-0'}>
@@ -154,8 +155,10 @@ const Units = ({ unitableId, units, unitable }) => {
                                 <RadioGroup row aria-labelledby="unit-purpose" name="purpose"
                                             value={formik.values.purpose}
                                             onChange={formik.handleChange}>
-                                    <FormControlLabel className={'mb-0'} value="RENT" control={<Radio/>} label="Rent"/>
-                                    <FormControlLabel className={'mb-0'} value="SALE" control={<Radio/>} label="Sale"/>
+                                    <FormControlLabel className={'mb-0'} value={Purpose.RENT} control={<Radio/>}
+                                                      label="Rent"/>
+                                    <FormControlLabel className={'mb-0'} value={Purpose.SALE} control={<Radio/>}
+                                                      label="Sale"/>
                                 </RadioGroup>
                                 <FormHelperText className={'mt-0'}>
                                     {formik.touched.purpose && formik.errors.purpose}

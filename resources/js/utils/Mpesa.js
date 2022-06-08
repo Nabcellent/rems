@@ -1,7 +1,47 @@
+import { getTelcoFromPhone } from '@/utils/helpers';
+import { Description, Telco } from '@/utils/enums';
+
 export default class Mpesa {
     baseUrl = '/api/mpesa';
     request_id = null;
     onSuccess = () => {
+    };
+
+    static fire = async (details, onCompleted) => {
+        await Sweet.fire({
+            html:
+                '<small>Amount (min: 100)</small>' +
+                '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
+                '<small>Phone number (optional)</small>' +
+                `<input id="phone" type="tel" class="form-control" value="${details.user.phone}" placeholder="Enter phone to request.">`,
+            showLoaderOnConfirm: true,
+            backdrop: `rgba(150, 0, 0, 0.4)`,
+            preConfirm: async () => {
+                const amount = document.getElementById('amount').value,
+                    phone = document.getElementById('phone').value;
+
+                if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
+                if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid Safaricom Number!');
+
+                try {
+                    await new Mpesa().init({
+                        amount, phone,
+                        reference: 'REMS Wallet',
+                        description: details.description,
+                        user_id: details.user.id,
+                        destination_id: details.destinationId,
+                        onSuccess: () => onCompleted({ amount }),
+                    });
+                } catch (err) {
+                    const message = err.response.data.message;
+
+                    return Sweet.showValidationMessage(message);
+                }
+
+                return { amount, phone };
+            },
+            allowOutsideClick: () => !Sweet.isLoading()
+        });
     };
 
     init = async ({ phone, amount, reference, description, onSuccess, ...data }) => {
@@ -82,7 +122,7 @@ export default class Mpesa {
             type = 'success';
             message = 'Payment Successful!';
 
-            this.onSuccess(stkStatus);
+            this.onSuccess();
         } else {
             type = 'warning';
             message = 'Something went wrong!';

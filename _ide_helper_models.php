@@ -273,13 +273,13 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
  * @property-read int|null $payments_count
- * @method static \Database\Factories\PaypalCallbackFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|PaypalCallback newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PaypalCallback newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PaypalCallback query()
- * @method static \Illuminate\Database\Eloquent\Builder|PaypalCallback whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaypalCallback whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PaypalCallback whereUpdatedAt($value)
+ * @method static \Database\Factories\PaypalTransactionFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereUpdatedAt($value)
  */
 	class IdeHelperPaypalCallback {}
 }

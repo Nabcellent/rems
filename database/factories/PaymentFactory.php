@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Enums\PaymentMethod;
 use App\Enums\Status;
 use App\Models\MpesaStkCallback;
-use App\Models\PaypalCallback;
+use App\Models\PaypalTransaction;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -24,7 +24,7 @@ class PaymentFactory extends Factory
     {
         $payable = $this->faker->randomElement([
             Wallet::factory(),
-            PaypalCallback::factory(),
+            PaypalTransaction::factory(),
             //            MpesaStkCallback::factory()
         ]);
 
@@ -34,7 +34,7 @@ class PaymentFactory extends Factory
             "payable_type"   => $payable->modelName(),
             "amount"         => $this->faker->numberBetween(1000, 100000),
             "method"         => fn(array $attributes) => match ($attributes["payable_type"]) {
-                PaypalCallback::class => PaymentMethod::PAYPAL,
+                PaypalTransaction::class => PaymentMethod::PAYPAL,
                 Wallet::class => PaymentMethod::WALLET,
                 MpesaStkCallback::class => PaymentMethod::MPESA,
                 default => PaymentMethod::CASH
