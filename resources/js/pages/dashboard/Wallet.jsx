@@ -146,7 +146,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                      amount,
                  }) => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), {
                      amount
-                 })}/>
+                 }, {preserveState:true})}/>
         </Dashboard>
     );
 };

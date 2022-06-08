@@ -1,6 +1,22 @@
-import React from "react";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import React, { useEffect } from "react";
+import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { Status } from '@/utils/enums';
+import { CircularProgress } from '@mui/material';
+
+const ButtonWrapper = ({ createOrder, onApprove, onCancel, onError }) => {
+    const [{ isPending }] = usePayPalScriptReducer();
+
+    return (
+        <>
+            {isPending && <CircularProgress color={'primary'}/>}
+            <PayPalButtons style={{ color: 'silver', shape: 'pill', label: 'pay' }}
+                           createOrder={(data, actions) => createOrder(data, actions)}
+                           onApprove={(data, actions) => onApprove(data, actions)}
+                           onCancel={data => onCancel(data)}
+                           onError={data => onError(data)}/>
+        </>
+    );
+};
 
 export default class PayPal {
     baseUrl = '/api/paypal';
@@ -34,8 +50,6 @@ export default class PayPal {
             amount,
             ...formData
         });
-
-        console.log(transactionId);
 
         const createOrder = (data, actions) => {
             return actions.order.create({
@@ -84,11 +98,9 @@ export default class PayPal {
                     "client-id": "AYXp1jXvuBqmHZNm4PigmNrtubq1f0oGGmdIbatPCiF6f_yIStH17cNkb8aXk39596dF6Ut_Bxrm-Zj5",
                     currency: "USD",
                 }}>
-                    <PayPalButtons style={{ color: 'silver', shape: 'pill', label: 'pay' }}
-                                   createOrder={(data, actions) => createOrder(data, actions)}
+                    <ButtonWrapper createOrder={(data, actions) => createOrder(data, actions)}
                                    onApprove={(data, actions) => onApprove(data, actions)}
-                                   onCancel={data => onCancel(data)}
-                                   onError={data => onError(data)}/>
+                                   onCancel={data => onCancel(data)} onError={data => onError(data)}/>
                 </PayPalScriptProvider>
             ),
             showConfirmButton: false,
