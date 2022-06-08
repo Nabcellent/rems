@@ -83,6 +83,8 @@ export default class PayPal {
             await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
                 payload: { status: Status.CANCELLED, amount, ...data }
             });
+
+            await sweet({ type: 'info', message: 'Payment Cancelled!' });
         };
 
         const onError = async (data) => {
@@ -90,6 +92,8 @@ export default class PayPal {
             await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
                 payload: { status: Status.FAILED, amount, ...data }
             });
+
+            await sweet({ type: 'warning', message: 'Something went wrong!' });
         };
 
         await Sweet.fire({
