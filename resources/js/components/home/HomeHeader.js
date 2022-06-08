@@ -6,13 +6,14 @@ import Box from '@mui/material/Box';
 
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
+import Logo from '@/components/Logo';
 
 const HomeHeader = () => {
     return (
         <AppBar position="fixed">
             <Container maxWidth={'xl'}>
                 <Toolbar disableGutters sx={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}>
-                    <Box component={'img'} src={'logo'} alt={'logo'} /> {/*logo here*/}
+                    <Logo/>
 
                     <Box>
                         <Button variant={'contained'} bgcolor={'blue'} endIcon={<FollowTheSignsIcon />}>Sign In</Button>

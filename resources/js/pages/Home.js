@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/inertia-react';
 
-// mui 
+// mui
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
@@ -21,8 +21,11 @@ import searchImg from '../assets/images/home/house_search.svg';
 import serviceImg from '../assets/images/home/house_service.svg';
 import tenantImg from '../assets/images/home/house_tenant.svg';
 import HomeHeader from '@/components/home/HomeHeader';
+import { Inertia } from '@inertiajs/inertia';
 
-const Home = () => {
+const Home = ({registerUrls}) => {
+    console.log(registerUrls);
+
     return (
         <>
             <Head><title>Welcome</title></Head>
@@ -55,22 +58,26 @@ const Home = () => {
                     image={ownerImg}
                     title={'Become an Owner'}
                     desc={'Register your properties here and manage them easily at your comfort. You can also manage any issues related as well as the occupants if any.'}
+                    onBtnClick={() => Inertia.get(registerUrls.owner)}
                 />
                 <SectionBox
                     image={managerImg}
                     title={'Become a Property Manager'}
                     desc={'Register here if you want to manage property and estates. This involves ensuring the property is well-maintained and habitable by managing issues raised.'}
+                    onBtnClick={() => Inertia.get(registerUrls.manager)}
                 />
                 <SectionBox
                     tint={true}
                     image={tenantImg}
                     title={'Become a Tenant'}
                     desc={'Apply here to become a tenant. On registration, an applicant waits for an approval from the owner. Managed ment of rental payments is also done on the system.'}
+                    onBtnClick={() => Inertia.get(registerUrls.tenant)}
                 />
                 <SectionBox
                     image={serviceImg}
                     title={'Become a Service Provider'}
                     desc={'Service providers such as electrians, plumbers, carpenters, painters, laundry services and house managers can register from here and offer their services to residents.'}
+                    onBtnClick={() => Inertia.get(registerUrls.provider)}
                 />
                 <SectionBox
                     tint={true}

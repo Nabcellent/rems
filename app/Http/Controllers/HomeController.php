@@ -18,8 +18,11 @@ class HomeController extends Controller
             'canRegister'    => Route::has('register'),
             'laravelVersion' => Application::VERSION,
             'phpVersion'     => PHP_VERSION,
-            "register"       => [
-                "owner" => URL::signedRoute("home", ["role" => Role::OWNER])
+            "registerUrls"   => [
+                "owner"            => URL::signedRoute("register", ["role" => Role::OWNER->value]),
+                "manager" => URL::signedRoute("register", ["role" => Role::PROPERTY_MANAGER->value]),
+                "tenant"           => URL::signedRoute("register", ["role" => Role::TENANT->value]),
+                "provider" => URL::signedRoute("register", ["role" => Role::SERVICE_PROVIDER->value]),
             ]
         ]);
     }
