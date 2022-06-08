@@ -41,8 +41,6 @@ class PayPalController extends Controller
 
         $payLoad = $data["payload"];
 
-        dd($data);
-
         if($payLoad['status'] === Status::COMPLETED->value) {
             $data = [
                 "order_id"    => $payLoad["id"],
