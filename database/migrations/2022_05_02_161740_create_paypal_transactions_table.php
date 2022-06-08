@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string("order_id")->unique();
             $table->string("payer_id")->nullable();
             $table->string("payer_email")->nullable();
-            $table->integer("amount")->nullable();
+            $table->double("amount", 10)->nullable();
             $table->string("currency", 5)->nullable();
             $table->string("status", 20)->default(Status::PENDING->value);
             $table->timestamps();
