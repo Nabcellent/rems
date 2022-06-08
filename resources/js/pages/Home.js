@@ -11,6 +11,7 @@ import Divider from '@mui/material/Divider';
 
 // custom componentes
 import SectionBox from '@/components/home/SectionBox';
+import HomeFooter from '@/components/home/HomeFooter';
 
 // images
 import bannerImg from '../assets/images/home/banner_img.svg';
@@ -19,17 +20,15 @@ import ownerImg from '../assets/images/home/house_owner.svg';
 import searchImg from '../assets/images/home/house_search.svg';
 import serviceImg from '../assets/images/home/house_service.svg';
 import tenantImg from '../assets/images/home/house_tenant.svg';
+import HomeHeader from '@/components/home/HomeHeader';
 
 const Home = () => {
     return (
         <>
             <Head><title>Welcome</title></Head>
+
             {/* Header */}
-            <Box>
-                <AppBar position="static">
-                    <Toolbar />
-                </AppBar>
-            </Box>
+            <HomeHeader />
 
             <Container>
                 {/* Banner */}
@@ -83,6 +82,7 @@ const Home = () => {
 
             </Container>
             {/* Footer */}
+            <HomeFooter />
         </>
     );
 }
