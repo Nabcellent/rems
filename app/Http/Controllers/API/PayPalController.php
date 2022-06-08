@@ -52,10 +52,11 @@ class PayPalController extends Controller
                 "created_at"  => $payLoad["create_time"],
                 "updated_at"  => $payLoad["update_time"]
             ];
-
-
+        } else if(!isset($payLoad["orderID"])) {
+            return $transaction->update(["status" => $payLoad["status"]]);
         } else {
             $data = [
+                "amount"   => $payLoad["amount"],
                 "order_id" => $payLoad["orderID"],
                 "status"   => $payLoad["status"],
             ];

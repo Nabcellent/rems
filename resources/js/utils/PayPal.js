@@ -54,8 +54,6 @@ export default class PayPal {
 
         const onApprove = (data, actions) => {
             return actions.order.capture().then(async details => {
-                console.log(data);
-                console.log(actions);
                 console.log(details);
 
                 const { status } = await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
@@ -67,14 +65,16 @@ export default class PayPal {
         };
 
         const onCancel = async (data) => {
+            console.log(data);
             await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
-                payload: { status: Status.CANCELLED, ...data }
+                payload: { status: Status.CANCELLED, amount, ...data }
             });
         };
 
         const onError = async (data) => {
+            console.log(data);
             await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
-                payload: { status: Status.FAILED, ...data }
+                payload: { status: Status.FAILED, amount, ...data }
             });
         };
 
