@@ -11,6 +11,16 @@ export const RoomType = {
     BATHROOM: 'BATHROOM'
 };
 
+export const Purpose = {
+    SALE: 'SALE',
+    RENT: 'RENT',
+};
+
+export const UnitType = {
+    FURNISHED: 'FURNISHED',
+    UNFURNISHED: 'UNFURNISHED',
+};
+
 export const Gender = {
     MALE: 'male',
     FEMALE: 'female',
@@ -20,6 +30,7 @@ export const Status = {
     PENDING: 'PENDING',
     COMPLETED: 'COMPLETED',
     FAILED: 'FAILED',
+    CANCELLED: 'CANCELLED',
 
     ACTIVE: 'ACTIVE',
     INACTIVE: 'INACTIVE',
@@ -45,9 +56,15 @@ export const NoticeType = {
     MAINTENANCE: 'MAINTENANCE',
 };
 
-export const Imageable = {
+export const Morphable = {
     ESTATE: 'estate',
     PROPERTY: 'property',
     UNIT: 'unit',
     ROOM: 'room',
+};
+
+export const PaymentMethod = {
+    MPESA: 'MPESA',
+    WALLET: 'WALLET',
+    PAYPAL: 'PAYPAL'
 };

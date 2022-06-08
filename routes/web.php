@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\NoticeController;
 use App\Http\Controllers\Dashboard\PaymentController;
+use App\Http\Controllers\Dashboard\PolicyController;
 use App\Http\Controllers\Dashboard\PropertyController;
 use App\Http\Controllers\Dashboard\RoomController;
 use App\Http\Controllers\Dashboard\ServiceController;
@@ -64,6 +65,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "rooms"             => RoomController::class,
             "estate-services"   => EstateServiceController::class,
             "notices"           => NoticeController::class,
+            "policies"          => PolicyController::class,
         ]);
     });
 });

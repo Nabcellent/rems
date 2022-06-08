@@ -80,6 +80,7 @@ class EstateController extends Controller
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
                 "services:id,name,icon,description",
+                "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["properties", "units"]),
             "services" => Service::select(["id", "name"])->get()

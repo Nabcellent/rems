@@ -17,6 +17,18 @@ class Unit extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "user_id",
+        "unitable_id",
+        "unitable_type",
+        "house_number",
+        "purpose",
+        "type",
+        "description",
+        "image",
+        "status",
+    ];
+
     /**
      * The accessors to append to the model's array form.
      *
@@ -74,7 +86,7 @@ class Unit extends Model
 
     public function policies(): MorphMany
     {
-        return $this->morphMany(Policy::class, 'property');
+        return $this->morphMany(Policy::class, 'policeable');
     }
 
     public function amenities(): MorphMany

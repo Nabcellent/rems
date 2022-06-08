@@ -89,7 +89,7 @@ class UserController extends Controller
 
         User::create($data)->assignRole($data["role"])->wallet()->create();
 
-        return back();
+        return back()->with("toast", ["message" => "User Created!"]);
     }
 
     /**

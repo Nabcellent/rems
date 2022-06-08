@@ -4,56 +4,21 @@ import { Card, Col, Row } from 'react-bootstrap';
 import CountUp from 'react-countup';
 import { Link } from '@inertiajs/inertia-react';
 import { Button, Paper } from '@mui/material';
-import { Inertia } from '@inertiajs/inertia';
 import { AccountBalanceWallet } from '@mui/icons-material';
-import Mpesa from '@/utils/Mpesa';
-import { getTelcoFromPhone } from '@/utils/helpers';
-import { Description, Telco } from '@/utils/enums';
 import TableDate from '@/components/TableDate';
 import DataTable from '@/components/common/datatable';
 import StatusBadge from '@/components/StatusBadge';
+import { useState } from 'react';
+import Pay from '@/components/Pay';
+import { Inertia } from '@inertiajs/inertia';
+import { Description } from '@/utils/enums';
 
 const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
     console.log(wallet, auth);
+    const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
 
     const handleDeposit = async () => {
-        await Sweet.fire({
-            html:
-                '<small>Amount (min: 100)</small>' +
-                '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
-                '<small>Phone number (optional)</small>' +
-                `<input id="phone" type="tel" class="form-control" value="${auth.user.phone}" placeholder="Enter phone to request.">`,
-            showLoaderOnConfirm: true,
-            backdrop: `rgba(150, 0, 0, 0.4)`,
-            preConfirm: async () => {
-                const amount = document.getElementById('amount').value,
-                    phone = document.getElementById('phone').value;
-
-                if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
-                if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid Safaricom Number!');
-
-                try {
-                    await new Mpesa().init({
-                        amount, phone,
-                        reference: 'REMS Wallet',
-                        description: Description.WALLET_DEPOSIT,
-                        destination_id: auth.user.id,
-                        user_id: auth.user.id,
-                        onSuccess: stkStatus => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), {
-                            amount,
-                            stk_status: stkStatus
-                        }),
-                    });
-                } catch (err) {
-                    const message = err.response.data.message;
-
-                    return Sweet.showValidationMessage(message);
-                }
-
-                return { amount, phone };
-            },
-            allowOutsideClick: () => !Sweet.isLoading()
-        });
+        setShowPaymentMethodModal(true);
     };
 
     return (
@@ -173,6 +138,15 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                     </Paper>
                 </Col>
             </Row>
+
+            <Pay details={{ user: auth.user, destinationId: auth.user.id, description: Description.WALLET_DEPOSIT }}
+                 destinationId={auth.user.id} showModal={showPaymentMethodModal}
+                 setShowModal={setShowPaymentMethodModal}
+                 onCompleted={({
+                     amount,
+                 }) => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), {
+                     amount
+                 }, {preserveState:true})}/>
         </Dashboard>
     );
 };

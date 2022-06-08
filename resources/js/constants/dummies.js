@@ -1,40 +1,4 @@
-import PropTypes from 'prop-types';
-import { ImageList, ImageListItem } from '@mui/material';
-import LightBoxGallery from '@/components/LightBoxGallery';
-import sample from 'lodash/sample';
-
-const Photos = ({ images, style, directory }) => {
-    style = style ?? 'woven';
-
-    if (!['woven', 'masonry', 'quilted'].includes(style)) return;
-
-    let imgListProps = {}, imgListItemProps = {};
-    if (style === 'quilted') {
-        imgListProps = { rowHeight: 121 };
-        imgListItemProps = { rows: sample([1, 2]), cols: sample([1, 2]) };
-    } else {
-        imgListProps = { gap: 8, cols: 4 };
-    }
-
-    return (
-        <LightBoxGallery images={images.map(i => `/images/${directory}/${i.image}`)}>
-            {setImgIndex => (
-                <ImageList sx={{ height: 450 }} variant={style}
-                           cols={images.length < 4 ? images.length : 4} {...imgListProps}>
-                    {images.map((item, i) => (
-                        <ImageListItem key={`${style}-${i}`} onClick={() => setImgIndex(i)} {...{
-                            ...imgListItemProps, ...{ rows: sample([1, 2]), cols: sample([1, 2]) }
-                        }}>
-                            <img src={`/images/${directory}/${item.image}`} alt={item.title} loading="lazy"/>
-                        </ImageListItem>
-                    ))}
-                </ImageList>
-            )}
-        </LightBoxGallery>
-    );
-};
-
-const itemData = [
+export const imageData = [
     {
         image: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
         title: 'Breakfast',
@@ -118,14 +82,3 @@ const itemData = [
         cols: 2,
     },
 ];
-
-Photos.propTypes = {
-    directory: PropTypes.string.isRequired,
-    images: PropTypes.arrayOf(PropTypes.shape({
-        image: PropTypes.string.isRequired,
-        title: PropTypes.string,
-    })),
-    style: PropTypes.string
-};
-
-export default Photos;

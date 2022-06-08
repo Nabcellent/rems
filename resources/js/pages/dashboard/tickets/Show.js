@@ -5,6 +5,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';
 import StatusBadge from '@/components/StatusBadge';
+import CardBgCorner from '@/components/CardBgCorner';
 
 const Show = ({ errors, ticket }) => {
     console.log(ticket);
@@ -13,7 +14,8 @@ const Show = ({ errors, ticket }) => {
         <Dashboard errors={errors} title={'Ticket'}>
             <Breadcrumbs title="Ticket" breadcrumbItem={`#${ticket.id}`}/>
 
-            <Paper className={'mb-3'}>
+            <Paper className={'mb-3 d-flex flex-column'}>
+                <CardBgCorner corner={2}/>
                 <Card.Body>
                     <Row>
                         <Col xs={12} className={'d-flex justify-content-between align-items-start'}>

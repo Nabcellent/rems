@@ -7,6 +7,8 @@ const StatusBadge = ({ status, bg = true }) => {
         color = 'success';
     } else if (status === Status.PENDING) {
         color = 'warning';
+    } else if (status === Status.CANCELLED) {
+        color = 'info';
     } else if ([Status.FAILED, Status.INACTIVE].includes(status)) {
         color = 'danger';
     }

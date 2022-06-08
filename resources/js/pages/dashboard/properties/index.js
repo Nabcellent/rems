@@ -2,7 +2,7 @@ import Dashboard from '@/layouts/Dashboard';
 import { Card, Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { IconButton } from '@mui/material';
+import { IconButton, Paper } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
@@ -18,7 +18,7 @@ const Index = ({ properties }) => {
 
             <Row>
                 <Col className="col-12">
-                    <Card>
+                    <Paper className={'p-3'}>
                         <DataTable title={'Properties'} columns={[
                             {
                                 accessor: 'name',
@@ -78,7 +78,7 @@ const Index = ({ properties }) => {
                                 }
                             }
                         ]} data={properties} onCreateRow={() => Inertia.get(route('dashboard.properties.create'))}/>
-                    </Card>
+                    </Paper>
                 </Col>
             </Row>
         </Dashboard>

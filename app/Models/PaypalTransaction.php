@@ -9,9 +9,18 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 /**
  * @mixin IdeHelperPaypalCallback
  */
-class PaypalCallback extends Model
+class PaypalTransaction extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "order_id",
+        "payer_id",
+        "payer_email",
+        "status",
+        "amount",
+        "currency",
+    ];
 
     /**
      * .....................    _____________________RELATIONSHIPS

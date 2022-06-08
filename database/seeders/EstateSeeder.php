@@ -18,6 +18,6 @@ class EstateSeeder extends Seeder
          * .....................    FACTORIES
          */
         Estate::factory(3)->hasProperties(3)->create();
-        Estate::factory(2)->hasUnits(2)->create();
+        Estate::factory(2)->hasUnits(2)->hasPolicies(2)->create();
     }
 }

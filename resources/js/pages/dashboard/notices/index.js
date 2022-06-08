@@ -4,7 +4,6 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { IconButton, Paper, Tooltip, Typography } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
-import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
 import { NoticeType } from '@/utils/enums';

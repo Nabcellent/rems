@@ -18,7 +18,7 @@ class WalletController extends Controller
         return inertia('dashboard/Wallet', [
             'wallet'       => user()->wallet->load('user:id,first_name,last_name,email,phone'),
             'transactions' => user()->transactions()->select(["id", "user_id", "amount", "status", "created_at"])
-                ->whereDescription(Description::WALLET_DEPOSIT)->get(),
+                ->whereDescription(Description::WALLET_DEPOSIT)->latest()->get(),
             "last_top_up"  => Transaction::whereDescription(Description::WALLET_DEPOSIT)->latest()->first()->created_at
         ]);
     }

@@ -13,10 +13,14 @@ class Policy extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "description"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */
-    public function property(): BelongsTo
+    public function policeable(): BelongsTo
     {
         return $this->morphTo();
     }

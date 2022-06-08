@@ -2,10 +2,11 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Alert, Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import {
-    AddAPhoto,
     AlternateEmail,
     Apartment,
-    Badge, DeleteSweep, Edit,
+    Badge,
+    DeleteSweep,
+    Edit,
     Home,
     HomeRepairService,
     LocationOn,
@@ -14,7 +15,7 @@ import {
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
-import { Imageable, Status } from '@/utils/enums';
+import { Morphable, Status } from '@/utils/enums';
 import StatusBadge from '@/components/StatusBadge';
 import PhoneBadge from '@/components/PhoneBadge';
 import { getInitials, handleDelete } from '@/utils/helpers';
@@ -22,19 +23,19 @@ import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Photos from '@/components/Photos';
-import AddImageModal from '@/components/AddImageModal';
+import Images from '@/components/Images';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
+import Policies from '@/components/Policies';
+import Units from '@/pages/dashboard/properties/components/Units';
 
 const Show = ({ errors, estate, services }) => {
     console.log(estate);
     const theme = useTheme();
     const [service, setService] = useState(undefined);
     const [showServiceModal, setShowServiceModal] = useState(false);
-    const [showImageModal, setShowImageModal] = useState(false);
 
     const assetCount = estate.properties_count + estate.units_count;
 
@@ -130,8 +131,6 @@ const Show = ({ errors, estate, services }) => {
                                 <div className="flex-1"><PhoneBadge phone={estate.user.phone}/></div>
                             </div>
                             <Button variant={'outlined'}
-                                    className="px-3 btn btn-falcon-primary btn-sm">Following</Button>
-                            <Button variant={'outlined'}
                                     className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
                         </div>
                     </div>
@@ -140,153 +139,108 @@ const Show = ({ errors, estate, services }) => {
 
             <Row className={'mb-3 g-3 justify-content-center'}>
                 <Col sm={7}>
-                    <Row>
-                        {
-                            Boolean(estate.properties.length) && (
-                                <Col lg={12}>
-                                    <Paper className={'mb-3'}>
-                                        <Card.Header><h5 className={'mb-0'}>Properties</h5></Card.Header>
-                                        <Card.Body>
-                                            {
-                                                estate.properties.map(property => (
-                                                    <div key={`property-${property.id}`}
-                                                         className="d-flex align-items-center p-1">
-                                                        <Avatar sx={{ width: 30, height: 30 }} className="me-3">
-                                                            <Apartment color={'primary'}/>
-                                                        </Avatar>
-                                                        <div className="w-100">
+                    {
+                        Boolean(estate.properties.length) && (
+                            <Paper className={'mb-3'}>
+                                <Card.Header><h5 className={'mb-0'}>Properties</h5></Card.Header>
+                                <Card.Body>
+                                    {
+                                        !estate.properties.length
+                                            ? <Alert severity="info">This unit hasn't any room yet.</Alert>
+                                            : estate.properties.map(property => (
+                                                <div key={`property-${property.id}`}
+                                                     className="d-flex align-items-center px-1 py-2">
+                                                    <Avatar sx={{ width: 30, height: 30 }} className="me-3">
+                                                        <Apartment color={'primary'}/>
+                                                    </Avatar>
+                                                    <div className="w-100">
+                                                        <Link className="mb-0"
+                                                              href={route('dashboard.properties.show', { property: property.id })}>
+                                                            <strong>{property.type}</strong>
+                                                        </Link>
+                                                        <div className={'d-flex justify-content-between'}>
                                                             <Link
-                                                                href={route('dashboard.properties.show', { property: property.id })}
-                                                                className="mb-0">
-                                                                <strong>{property.type}</strong>
+                                                                href={route('dashboard.users.show', { user: property.user.id })}>
+                                                                <small className="mb-1">
+                                                                    For <strong>{property.user.email}</strong>
+                                                                </small>
                                                             </Link>
-                                                            <div className={'d-flex justify-content-between'}>
-                                                                <Link
-                                                                    href={route('dashboard.users.show', { user: property.user.id })}>
-                                                                    <small className="mb-1">
-                                                                        For <strong>{property.user.email}</strong>
-                                                                    </small>
-                                                                </Link>
-                                                                <span className="text-muted">
-                                                            {moment(property.created_at).format("MMMM D, LT")}
-                                                        </span>
-                                                            </div>
+                                                            <small className="text-muted">
+                                                                <i>{moment(property.created_at).format("MMMM D, LT")}</i>
+                                                            </small>
                                                         </div>
                                                     </div>
-                                                ))
-                                            }
-                                        </Card.Body>
-                                    </Paper>
-                                </Col>
-                            )
-                        }
-                        {
-                            Boolean(estate.units.length) && (
-                                <Col lg={12}>
-                                    <Paper>
-                                        <Card.Header><h5 className={'mb-0'}>Units</h5></Card.Header>
-                                        <Card.Body>
-                                            {
-                                                estate.units.map(unit => (
-                                                    <Link key={`unit-${unit.id}`} className="d-flex align-items-center p-1"
-                                                          href={route('dashboard.units.show', { unit: unit.id })}>
-                                                        <Avatar sx={{ width: 30, height: 30 }} className="me-3">
-                                                            <Home color={'primary'}/>
-                                                        </Avatar>
-                                                        <div className="w-100">
-                                                            <p className="mb-0">
-                                                                House Number: <strong>{unit.house_number}</strong>
-                                                            </p>
-                                                            <div className={'d-flex justify-content-between'}>
-                                                                <small className="mb-1">For <strong>{unit.purpose}</strong></small>
-                                                                <span className="text-muted">
-                                                            {moment(unit.created_at).format("MMMM D, LT")}
-                                                        </span>
-                                                            </div>
-                                                        </div>
-                                                    </Link>
-                                                ))
-                                            }
-                                        </Card.Body>
-                                    </Paper>
-                                </Col>
-                            )
-                        }
-                    </Row>
+                                                </div>
+                                            ))
+                                    }
+                                </Card.Body>
+                            </Paper>
+                        )
+                    }
+                    {
+                        Boolean(estate.units.length) && (
+                            <Paper className={'mb-3'}>
+                                <Units unitable={Morphable.ESTATE} units={estate.units} unitableId={estate.id}/>
+                            </Paper>
+                        )
+                    }
+                    <Paper className={'mb-3'}>
+                        <Images imageableId={estate.id} images={estate.images} imageable={Morphable.ESTATE}/>
+                    </Paper>
                 </Col>
                 <Col sm={5}>
-                    <Paper className={'ask-analytics h-100'}>
-                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5 className={'m-0'}>Services</h5>
-                            <Button startIcon={<HomeRepairService/>} onClick={() => handleCreateService()}>Add</Button>
-                        </Card.Header>
-                        <Card.Body>
-                            {
-                                !estate.services.length
-                                    ? <Alert severity="info">This Estate Hasn't any service(s) yet.</Alert>
-                                    : estate.services.map(service => (
-                                        <div key={`service-${service.id}`}
-                                             className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
-                                            <div className="d-flex align-items-center mb-3">
-                                                {service.icon ??
-                                                    <FontAwesomeIcon icon={faScrewdriverWrench} className={'text-primary'}
-                                                                     role={'img'}/>}
-                                                <Link className="stretched-link text-decoration-none"
-                                                      href="/dashboard/analytics#!">
-                                                    <h5 className="fs--1 text-600 mb-0 ps-3">{service.name}</h5>
-                                                </Link>
+                    <div className="sticky-sidebar">
+                        <Paper className={'ask-analytics mb-3'}>
+                            <Card.Header className={'d-flex justify-content-between align-items-center'}>
+                                <h5 className={'m-0'}>Services</h5>
+                                <Button startIcon={<HomeRepairService/>}
+                                        onClick={() => handleCreateService()}>Add</Button>
+                            </Card.Header>
+                            <Card.Body>
+                                {
+                                    !estate.services.length
+                                        ? <Alert severity="info">This Estate Hasn't any service(s) yet.</Alert>
+                                        : estate.services.map(service => (
+                                            <div key={`service-${service.id}`}
+                                                 className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
+                                                <div className="d-flex align-items-center mb-3">
+                                                    {service.icon ??
+                                                        <FontAwesomeIcon icon={faScrewdriverWrench}
+                                                                         className={'text-primary'}
+                                                                         role={'img'}/>}
+                                                    <Link className="stretched-link text-decoration-none" href="#">
+                                                        <h5 className="fs--1 text-600 mb-0 ps-3">{service.name}</h5>
+                                                    </Link>
+                                                </div>
+                                                <h6 className="fs--1 text-800">
+                                                    {service.pivot.description ?? service.description}
+                                                </h6>
+                                                <div className="hover-actions end-0 top-50 translate-middle-y me-2">
+                                                    <button onClick={() => handleUpdateService(service)}
+                                                            className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                        <Edit fontSize={'small'}/>
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDelete(route('dashboard.estate-services.destroy', { estate_service: service.pivot.id }), 'Service')}
+                                                        className="border-300 text-600 btn btn-danger btn-sm">
+                                                        <DeleteSweep fontSize={'small'}/>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <h6 className="fs--1 text-800">
-                                                {service.pivot.description ?? service.description}
-                                            </h6>
-                                            <div className="hover-actions end-0 top-50 translate-middle-y me-2">
-                                                <button onClick={() => handleUpdateService(service)}
-                                                        className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                                    <Edit fontSize={'small'}/>
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(route('dashboard.estate-services.destroy', { estate_service: service.pivot.id }), 'Service')}
-                                                    className="border-300 text-600 btn btn-danger btn-sm">
-                                                    <DeleteSweep fontSize={'small'}/>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    ))
-                            }
-                        </Card.Body>
-                    </Paper>
-                </Col>
-            </Row>
+                                        ))
+                                }
+                            </Card.Body>
+                        </Paper>
 
-            <Row>
-                <Col>
-                    <Paper className={'mb-3'}>
-                        <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                            <h5 className={'mb-0'}>Photos</h5>
-                            <Button startIcon={<AddAPhoto/>} onClick={() => setShowImageModal(true)}>Add</Button>
-                        </Card.Header>
-                        <Card.Body>
-                            {
-                                !estate.images.length
-                                    ? <Alert severity="info">
-                                        <a className={'text-primary'} onClick={() => setShowImageModal(true)}>
-                                            Add
-                                        </a> some nice images🙂
-                                    </Alert>
-                                    : <Photos images={estate.images} directory={'estates'}/>
-                            }
-                        </Card.Body>
-                    </Paper>
+                        <Paper className={'mb-3'}>
+                            <Policies policeable={'estate'} policies={estate.policies} policeableId={estate.id}/>
+                        </Paper>
+                    </div>
                 </Col>
             </Row>
 
             <ServiceModal showModal={showServiceModal} setShowModal={setShowServiceModal} estateId={estate.id}
                           service={service} services={services}/>
-
-            <AddImageModal imageable={Imageable.ESTATE} imageableId={estate.id} showModal={showImageModal}
-                           setShowModal={setShowImageModal}/>
-
-
         </Dashboard>
     );
 };

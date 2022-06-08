@@ -8,6 +8,7 @@ import { Create } from '@mui/icons-material';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import * as yup from 'yup';
+import { RoomType } from '@/utils/enums';
 
 // Import React FilePond with plugins & styles
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -19,7 +20,6 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginFileRename from 'filepond-plugin-file-rename';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import { RoomType } from '@/utils/enums';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
@@ -29,7 +29,7 @@ const validationSchema = yup.object({
     width: yup.number(),
     description: yup.string(),
     unit_id: yup.number().required(),
-    type: yup.string().oneOf(Object.values(RoomType), 'Invalid type').required('Type is required.')
+    type: yup.string().oneOf(Object.values(RoomType), 'Invalid type.').required('Type is required.')
 });
 
 const RoomModal = ({ unitId, room, showModal, setShowModal }) => {

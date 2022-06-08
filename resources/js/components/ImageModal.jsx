@@ -1,7 +1,7 @@
 import { Modal } from 'react-bootstrap';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Grid, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Create } from '@mui/icons-material';
@@ -19,6 +19,7 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginFileRename from 'filepond-plugin-file-rename';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import pluralize from 'pluralize';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
@@ -30,7 +31,7 @@ const validationSchema = yup.object({
     title: yup.string()
 });
 
-const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal }) => {
+const ImageModal = ({ imageable, imageableId, image, showModal, setShowModal }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -38,10 +39,10 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
         initialValues: {
             imageable: imageable,
             imageable_id: imageableId,
-            images: '',
+            images: [],
             title: ''
         },
-        validationSchema: validationSchema,
+        validationSchema,
         validateOnChange: true,
         onSubmit: values => {
             let url = route(`dashboard.images.store`);
@@ -65,15 +66,23 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
         }
     });
 
+    useEffect(() => {
+        formik.setValues({
+            imageable: imageable,
+            imageable_id: imageableId,
+            images: [],
+            image: image?.image ? `/images/${pluralize(imageable)}/${image.image}` : '',
+            title: image?.title ?? ''
+        }, true);
+    }, [image]);
+
     return (
         <Modal show={showModal} onHide={() => setShowModal(false)}>
             <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">
                 <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShowModal(false)}/>
             </div>
             <Modal.Body className={'modal-body'}>
-                <div className="pb-3">
-                    <h4 className="mb-1">{(image ? "Update" : "New") + " Image"}</h4>
-                </div>
+                <div className="pb-3"><h4 className="mb-1">{(image ? "Update" : "New") + " Image(s)"}</h4></div>
                 <ValidationErrors errors={errors}/>
 
                 <Grid container spacing={2}>
@@ -84,7 +93,8 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
                                    helperText={formik.touched.title && formik.errors.title}/>
                     </Grid>
                     <Grid item xs={12}>
-                        <FilePond maxFiles={3} name="images" maxFileSize={'1MB'} className={'mb-0'} required
+                        <FilePond maxFiles={formik.values.image ? 1 : 3} files={formik.values.image} name="images"
+                                  maxFileSize={'1MB'} className={'mb-0'} required
                                   labelMaxFileSizeExceeded={'Image is too large.'} allowMultiple
                                   labelFileTypeNotAllowed={'Invalid image type. allowed(jpg, png, jpeg)'}
                                   labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'
@@ -107,11 +117,11 @@ const AddImageModal = ({ imageable, imageableId, image, showModal, setShowModal 
     );
 };
 
-AddImageModal.propTypes = {
+ImageModal.propTypes = {
     imageable: PropTypes.string.isRequired,
     imageableId: PropTypes.number.isRequired,
     image: PropTypes.object,
     showModal: PropTypes.bool
 };
 
-export default AddImageModal;
+export default ImageModal;
