@@ -4,10 +4,10 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 
-const SectionBox = ({ tint, image, title, desc, onBtnClick }) => {
+const SectionBox = ({ id, tint, image, title, desc, onBtnClick }) => {
     return (
-        <Grid container my={'2rem'} p={5} spacing={2} justifyContent="center" alignItems="center" borderRadius={'4px'}
-              bgcolor={tint ? '#f1f1f1' : 'white'}>
+        <Grid id={id} container my={'2rem'} p={5} spacing={2} justifyContent="center" alignItems="center"
+              borderRadius={'4px'} bgcolor={tint ? '#f1f1f1' : 'white'}>
             {!tint && <Grid item xs={12} md={6} textAlign="center">
                 <Box component={'img'} width={'100%'} src={image}/>
             </Grid>}
