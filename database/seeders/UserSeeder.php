@@ -30,6 +30,7 @@ class UserSeeder extends Seeder
                 "email"      => "nabcellent.dev@yopmail.com",
                 "phone"      => 254110039317,
                 "gender"     => "male",
+                "role" => Role::SUPER_ADMIN
             ],
             [
                 "first_name" => "Khalifa",
@@ -37,27 +38,38 @@ class UserSeeder extends Seeder
                 "email"      => "khalifa47@yopmail.com",
                 "phone"      => 254711144488,
                 "gender"     => "male",
-            ]
+                "role" => Role::SUPER_ADMIN
+            ],
+            [
+                "first_name" => "Property",
+                "last_name"  => "Manager",
+                "email"      => "manager.rems@yopmail.com",
+                "role" => Role::PROPERTY_MANAGER
+            ],
+            [
+                "first_name" => "Rems",
+                "last_name"  => "Owner",
+                "email"      => "owner.rems@yopmail.com",
+                "role" => Role::OWNER
+            ],
+            [
+                "first_name" => "Rems",
+                "last_name"  => "Tenant",
+                "email"      => "tenant.rems@yopmail.com",
+                "role" => Role::TENANT
+            ],
         ];
 
-        $users = array_map(fn($user) => [
-            ...$user,
-            "password"          => Hash::make(12345678),
-            "email_verified_at" => now(),
-            "created_at"        => now(),
-            "updated_at"        => now()
-        ], $users);
-
         array_map(function($user) {
-            $user = User::create([
+            $role = Arr::pull($user, "role");
+
+            User::create([
                 ...$user,
                 "password"          => Hash::make(12345678),
                 "email_verified_at" => now(),
                 "created_at"        => now(),
                 "updated_at"        => now()
-            ]);
-            $user->assignRole(Role::SUPER_ADMIN->value);
-            $user->wallet()->create();
+            ])->assignRole($role->value)->wallet()->create();
         }, $users);
 
         /**

@@ -57,7 +57,7 @@ const Default = ({
                                     <Col md={report.col} key={`_col_${key}`}
                                          className={`mb-3 ${report.col === '6' && 'mb-lg-0'}`}>
                                         <Paper sx={{ p: 3 }} className={'mini-stats-wid h-100 d-flex align-items-center'}>
-                                            <div className="d-flex">
+                                            <div className="d-flex w-100">
                                                 <div className="flex-grow-1">
                                                     <p className="text-muted fw-medium">{report.title}</p>
                                                     <h4 className="mb-0">{report.description}</h4>

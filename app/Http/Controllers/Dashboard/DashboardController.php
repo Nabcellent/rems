@@ -25,7 +25,7 @@ class DashboardController extends Controller
             "new_tickets_count"       => Ticket::whereDate('created_at', Carbon::today())->count(),
             "service_providers_count" => ServiceProvider::count(),
             "my_estates_count"        => Request::user()->estates()->count(),
-            "wallet_balance"          => Request::user()->wallet->balance,
+            "wallet_balance"          => Request::user()->wallet?->balance ?? 0,
             "revenue"                 => Payment::whereStatus(Status::COMPLETED)->sum("amount"),
             "latest_transactions"     => Transaction::latest()->take(10)->with([
                 "user:id,email,last_name",
