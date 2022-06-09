@@ -74,8 +74,8 @@ export const sidebarLinks = can => {
                 {
                     authorized: can.access.notices,
                     startIcon: <i className="bx bxs-notification"/>, title: 'Notices', subMenu: [
-                        { link: route('dashboard.notices.index'), title: 'list' },
-                        { link: route('dashboard.notices.create'), title: 'create' }
+                        { authorized: true, link: route('dashboard.notices.index'), title: 'list' },
+                        { authorized: true, link: route('dashboard.notices.create'), title: 'create' }
                     ]
                 }
             ]
@@ -87,10 +87,10 @@ export const sidebarLinks = can => {
                 {
                     authorized: can.access.services,
                     startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
-                        { link: route('dashboard.services.index'), title: 'List Services' },
-                        { link: route('dashboard.service-providers.index'), title: 'List Service Providers' },
-                        { link: route('dashboard.services.create'), title: 'Create Service' },
-                        { link: route('dashboard.service-providers.create'), title: 'Create Service Provider' }
+                        { authorized: true, link: route('dashboard.services.index'), title: 'List Services' },
+                        { authorized: true, link: route('dashboard.service-providers.index'), title: 'List Service Providers' },
+                        { authorized: can.create.service, link: route('dashboard.services.create'), title: 'Create Service' },
+                        { authorized: can.create.service_provider, link: route('dashboard.service-providers.create'), title: 'Create Service Provider' }
                     ]
                 },
                 {
@@ -99,6 +99,10 @@ export const sidebarLinks = can => {
                         { link: route('dashboard.users.index'), title: 'list' },
                         { link: '/grid', title: 'Grid' }
                     ]
+                },
+                {
+                    authorized: true,
+                    startIcon: <i className="bx bx-user-circle"/>, title: 'Profile', link: route('dashboard.profile')
                 },
                 {
                     authorized: can.access.settings,

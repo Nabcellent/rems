@@ -2,19 +2,20 @@
 
 namespace App\Policies;
 
-use App\Models\Notice;
+use App\Enums\Role;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class NoticePolicy
+class ServicePolicy
 {
     use HandlesAuthorization;
 
     /**
      * Determine whether the user can view any models.
      *
-     * @param \App\Models\User $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user): Response|bool
@@ -25,11 +26,11 @@ class NoticePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User   $user
-     * @param \App\Models\Notice $notice
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Service  $service
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Notice $notice)
+    public function view(User $user, Service $service)
     {
         //
     }
@@ -37,22 +38,22 @@ class NoticePolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param \App\Models\User $user
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user): Response|bool
     {
-        //
+        return $user->hasRole([Role::PROPERTY_MANAGER->value]);
     }
 
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User   $user
-     * @param \App\Models\Notice $notice
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Service  $service
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Notice $notice)
+    public function update(User $user, Service $service)
     {
         //
     }
@@ -60,11 +61,11 @@ class NoticePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param \App\Models\User   $user
-     * @param \App\Models\Notice $notice
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Service  $service
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Notice $notice)
+    public function delete(User $user, Service $service)
     {
         //
     }
@@ -72,11 +73,11 @@ class NoticePolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param \App\Models\User   $user
-     * @param \App\Models\Notice $notice
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Service  $service
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Notice $notice)
+    public function restore(User $user, Service $service)
     {
         //
     }
@@ -84,11 +85,11 @@ class NoticePolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param \App\Models\User   $user
-     * @param \App\Models\Notice $notice
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Service  $service
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Notice $notice)
+    public function forceDelete(User $user, Service $service)
     {
         //
     }
