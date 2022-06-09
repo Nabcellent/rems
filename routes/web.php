@@ -45,6 +45,11 @@ Route::middleware(['auth', 'verified'])->group(function() {
             Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
         });
 
+        Route::prefix('/profile')->name('profile')->group(function() {
+            Route::get('/', [SettingController::class, 'index']);
+            Route::put('/', [SettingController::class, 'update'])->name('.update');
+        });
+
         Route::prefix('/settings')->name('settings')->group(function() {
             Route::get('/', [SettingController::class, 'index']);
             Route::put('/', [SettingController::class, 'update'])->name('.update');

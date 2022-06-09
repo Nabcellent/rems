@@ -16493,7 +16493,41 @@
      
 }
 
-        namespace Barryvdh\Debugbar\Facades { 
+        namespace AmrShawky\LaravelCurrency\Facade { 
+            /**
+     * 
+     *
+     */ 
+        class Currency {
+                    /**
+         * 
+         *
+         * @param \GuzzleHttp\Client|null $client
+         * @return \AmrShawky\CurrencyConversion 
+         * @static 
+         */ 
+        public static function convert($client = null)
+        {
+                        /** @var \AmrShawky\CurrencyFactory $instance */
+                        return $instance->convert($client);
+        }
+                    /**
+         * 
+         *
+         * @return \AmrShawky\CurrencyRatesProxy 
+         * @static 
+         */ 
+        public static function rates()
+        {
+                        /** @var \AmrShawky\CurrencyFactory $instance */
+                        return $instance->rates();
+        }
+         
+    }
+     
+}
+
+    namespace Barryvdh\Debugbar\Facades { 
             /**
      * 
      *
@@ -17989,81 +18023,6 @@
         {
                         return \Illuminate\Testing\TestResponse::inertiaPage();
         }
-         
-    }
-     
-}
-
-    namespace App\Http\Requests { 
-            /**
-     * 
-     *
-     */ 
-        class StoreRoomRequest {
-         
-    }
-            /**
-     * 
-     *
-     */ 
-        class StoreEstateRequest {
-         
-    }
-            /**
-     * 
-     *
-     */ 
-        class UpdateUserRequest {
-         
-    }
-            /**
-     * 
-     *
-     */ 
-        class UpdateRoomRequest {
-         
-    }
-            /**
-     * 
-     *
-     */ 
-        class RegisterRequest {
-         
-    }
-            /**
-     * 
-     *
-     */ 
-        class StoreImageRequest {
-         
-    }
-            /**
-     * 
-     *
-     */ 
-        class StoreUserRequest {
-         
-    }
-     
-}
-
-    namespace Illuminate\Foundation\Http { 
-            /**
-     * 
-     *
-     */ 
-        class FormRequest {
-         
-    }
-     
-}
-
-    namespace App\Http\Requests\Auth { 
-            /**
-     * 
-     *
-     */ 
-        class LoginRequest {
          
     }
      
@@ -21782,6 +21741,7 @@ namespace  {
             class URL extends \Illuminate\Support\Facades\URL {}
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
+            class Currency extends \AmrShawky\LaravelCurrency\Facade\Currency {}
             class Debugbar extends \Barryvdh\Debugbar\Facades\Debugbar {}
             class B2C extends \DrH\Mpesa\Facades\B2C {}
             class Identity extends \DrH\Mpesa\Facades\Identity {}

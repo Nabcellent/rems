@@ -3,7 +3,7 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import { Card, Col, Row } from 'react-bootstrap';
 import CountUp from 'react-countup';
 import { Link } from '@inertiajs/inertia-react';
-import { Button, Paper } from '@mui/material';
+import { Button, Chip, Paper } from '@mui/material';
 import { AccountBalanceWallet } from '@mui/icons-material';
 import TableDate from '@/components/TableDate';
 import DataTable from '@/components/common/datatable';
@@ -12,9 +12,10 @@ import { useState } from 'react';
 import Pay from '@/components/Pay';
 import { Inertia } from '@inertiajs/inertia';
 import { Description } from '@/utils/enums';
+import PaymentMethodBadge from '@/components/PaymentMethodBadge';
 
 const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
-    console.log(wallet, auth);
+    console.log(wallet, transactions);
     const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
 
     const handleDeposit = async () => {
@@ -113,7 +114,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                 <Col xl={8}>
                     <Paper className={'mb-3 h-100'}>
                         <Card.Body>
-                            <DataTable data={transactions} title={'Wallet Transactions'} perPage={5} columns={[
+                            <DataTable data={transactions} title={'Latest Wallet Transactions'} perPage={5} columns={[
                                 {
                                     accessor: 'amount',
                                     Header: 'Amount',
@@ -121,6 +122,11 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                                         style: 'currency',
                                         currency: 'KES'
                                     })).format(row.original.amount)
+                                },
+                                {
+                                    accessor: 'method',
+                                    Header: 'Method',
+                                    Cell: ({ row }) => <PaymentMethodBadge method={row.original.payment?.method}/>
                                 },
                                 {
                                     accessor: 'status',
@@ -146,7 +152,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                      amount,
                  }) => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), {
                      amount
-                 }, {preserveState:true})}/>
+                 }, { preserveState: true })}/>
         </Dashboard>
     );
 };

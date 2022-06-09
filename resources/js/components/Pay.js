@@ -41,8 +41,9 @@ const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
                             <ToggleButton value={PaymentMethod.MPESA} aria-label="mpesa">M-Pesa</ToggleButton>
                             <ToggleButton value={PaymentMethod.PAYPAL} aria-label="paypal">PayPal</ToggleButton>
                         </ToggleButtonGroup>
-                        <FormHelperText color={'#990000'}
-                                        className={'mt-0'}>{formik.touched.method && formik.errors.method}</FormHelperText>
+                        <FormHelperText color={'#990000'} className={'mt-0'}>
+                            {formik.touched.method && formik.errors.method}
+                        </FormHelperText>
                     </Grid>
                 </Grid>
             </Modal.Body>

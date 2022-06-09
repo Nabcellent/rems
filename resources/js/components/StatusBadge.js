@@ -1,5 +1,6 @@
 import { Badge } from 'react-bootstrap';
 import { Status } from '@/utils/enums';
+import PropTypes from 'prop-types';
 
 const StatusBadge = ({ status, bg = true }) => {
     let color;
@@ -18,6 +19,11 @@ const StatusBadge = ({ status, bg = true }) => {
                className={`font-weight-bold font-size-12`}>{status}
         </Badge>
     );
+};
+
+StatusBadge.propTypes = {
+    status: PropTypes.string.isRequired,
+    bg: PropTypes.bool
 };
 
 export default StatusBadge;

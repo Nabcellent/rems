@@ -17,7 +17,9 @@ const Dashboard = ({
     leftSideBarType,
     toggleRightSidebar
 }) => {
-    const { toast: toastData } = usePage().props;
+    const { toast: toastData, can } = usePage().props;
+
+    console.log(can);
 
     const [isMobile, setIsMobile] = useState(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
 

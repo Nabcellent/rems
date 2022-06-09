@@ -32,3 +32,12 @@ if(!function_exists('user')) {
         return Auth::user();
     }
 }
+
+if(!function_exists('convertCurrency')) {
+    /**
+     * @throws \Exception
+     */
+    function convertCurrency($value, $from, $to) {
+        return Currency::convert()->from($from)->to($to)->amount($value)->round(2)->get();
+    }
+}

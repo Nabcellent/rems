@@ -144,9 +144,9 @@ class User extends Authenticatable
         return $this->hasMany(Unit::class);
     }
 
-    public function lease(): HasOne
+    public function leases(): HasMany
     {
-        return $this->hasOne(Lease::class);
+        return $this->hasMany(Lease::class);
     }
 
     /**
