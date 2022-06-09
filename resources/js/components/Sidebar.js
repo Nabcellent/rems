@@ -38,9 +38,7 @@ const Sidebar = ({type}) => {
                     </div>
                 </div>
 
-                <div data-simplebar className="h-100">
-                    {type !== "condensed" ? <SidebarContent/> : <SidebarContent/>}
-                </div>
+                <div data-simplebar className="h-100"><SidebarContent/></div>
                 <div className="sidebar-background"></div>
             </div>
         </>

@@ -2,13 +2,12 @@
 
 namespace App\Policies;
 
-use App\Enums\Role;
-use App\Models\Unit;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class UnitPolicy
+class PaymentPolicy
 {
     use HandlesAuthorization;
 
@@ -20,17 +19,17 @@ class UnitPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->hasRole([Role::PROPERTY_MANAGER->value, Role::OWNER->value, Role::TENANT->value]);
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\User    $user
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Unit $unit)
+    public function view(User $user, Payment $payment)
     {
         //
     }
@@ -49,11 +48,11 @@ class UnitPolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\User    $user
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Unit $unit)
+    public function update(User $user, Payment $payment)
     {
         //
     }
@@ -61,11 +60,11 @@ class UnitPolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\User    $user
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Unit $unit)
+    public function delete(User $user, Payment $payment)
     {
         //
     }
@@ -73,11 +72,11 @@ class UnitPolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\User    $user
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Unit $unit)
+    public function restore(User $user, Payment $payment)
     {
         //
     }
@@ -85,11 +84,11 @@ class UnitPolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\User    $user
+     * @param \App\Models\Payment $payment
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Unit $unit)
+    public function forceDelete(User $user, Payment $payment)
     {
         //
     }

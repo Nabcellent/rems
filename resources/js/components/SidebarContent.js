@@ -62,21 +62,17 @@ const Section = ({ title, menu }) => {
 };
 
 //i18n
-const SidebarContent = ({ type }) => {
+const SidebarContent = () => {
     const refDiv = useRef();
-    const prevType = usePrevious(type);
     const { can } = usePage().props;
-    const [links, setLinks] = useState(null);
 
-    const initMenu = () => new MetisMenu("#side-menu");
+    const initMenu = () => {
+        new MetisMenu("#side-menu");
+    };
 
     useEffect(() => {
         initMenu();
-
-        if (type !== prevType) initMenu();
-
-        setLinks(sidebarLinks(can));
-    }, [type]);
+    }, []);
 
     return (
         <React.Fragment>
@@ -84,7 +80,7 @@ const SidebarContent = ({ type }) => {
                 <div id="sidebar-menu">
                     <ul className="metismenu list-unstyled" id="side-menu">
                         {
-                            links && links.map((section, i) => (
+                            sidebarLinks(can).map((section, i) => (
                                 <Section key={`section-${i}`} title={section.title} menu={section.menu}/>
                             ))
                         }
@@ -99,6 +95,7 @@ Section.propTypes = {
     title: PropTypes.string.isRequired,
     menu: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.string.isRequired,
+        link: PropTypes.string,
         startIcon: PropTypes.node,
         authorized: PropTypes.bool,
         subMenu: PropTypes.arrayOf(PropTypes.shape({
@@ -107,11 +104,6 @@ Section.propTypes = {
             authorized: PropTypes.bool,
         }))
     }))
-};
-
-SidebarContent.propTypes = {
-    location: PropTypes.object,
-    type: PropTypes.string,
 };
 
 export default SidebarContent;
