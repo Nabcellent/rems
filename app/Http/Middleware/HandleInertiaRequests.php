@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Property;
 use App\Models\Service;
 use App\Models\Setting;
+use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
@@ -66,9 +67,10 @@ class HandleInertiaRequests extends Middleware
                     "services"     => $request->user()?->can("viewAny", Service::class),
                     "users"        => $request->user()?->can("viewAny", User::class),
                     "settings"     => $request->user()?->can("viewAny", Setting::class),
+                    "tickets"      => $request->user()?->can("viewAny", Ticket::class),
                 ],
                 "create" => [
-                    "lease" => $request->user()?->can("create", Lease::class),
+                    "lease"   => $request->user()?->can("create", Lease::class),
                     "service" => $request->user()?->can("create", Service::class)
                 ]
             ],

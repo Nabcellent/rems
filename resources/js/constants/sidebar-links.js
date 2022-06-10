@@ -83,14 +83,31 @@ export const sidebarLinks = can => {
         {
             title: 'System',
             menu: [
-                { startIcon: <i className="bx bxs-hand"/>, title: 'Tickets', link: route('dashboard.tickets.index') },
+                {
+                    authorized: can.access.tickets,
+                    startIcon: <i className="bx bxs-hand"/>,
+                    title: 'Tickets',
+                    link: route('dashboard.tickets.index')
+                },
                 {
                     authorized: can.access.services,
                     startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
                         { authorized: true, link: route('dashboard.services.index'), title: 'List Services' },
-                        { authorized: true, link: route('dashboard.service-providers.index'), title: 'List Service Providers' },
-                        { authorized: can.create.service, link: route('dashboard.services.create'), title: 'Create Service' },
-                        { authorized: can.create.service_provider, link: route('dashboard.service-providers.create'), title: 'Create Service Provider' }
+                        {
+                            authorized: true,
+                            link: route('dashboard.service-providers.index'),
+                            title: 'List Service Providers'
+                        },
+                        {
+                            authorized: can.create.service,
+                            link: route('dashboard.services.create'),
+                            title: 'Create Service'
+                        },
+                        {
+                            authorized: can.create.service_provider,
+                            link: route('dashboard.service-providers.create'),
+                            title: 'Create Service Provider'
+                        }
                     ]
                 },
                 {
@@ -105,10 +122,14 @@ export const sidebarLinks = can => {
                     startIcon: <i className="bx bx-user-circle"/>, title: 'Profile', link: route('dashboard.profile')
                 },
                 {
+                    authorized: true,
+                    startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: route('dashboard.users.settings')
+                },
+                {
                     authorized: can.access.settings,
                     startIcon: <i className="bx bx-cog"/>, title: 'Settings', link: route('dashboard.settings')
                 },
             ]
         }
     ];
-}
+};

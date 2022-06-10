@@ -55,6 +55,10 @@ Route::middleware(['auth', 'verified'])->group(function() {
             Route::put('/', [SettingController::class, 'update'])->name('.update');
         });
 
+        Route::prefix('/users')->name('users')->group(function() {
+            Route::get('/settings', [SettingController::class, 'index'])->name(".settings");
+        });
+
         Route::resources([
             "users"             => UserController::class,
             "estates"           => EstateController::class,
