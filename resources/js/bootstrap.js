@@ -31,13 +31,32 @@ window.toast = data => {
     }).showToast();
 };
 
-window.sweet = async ({ duration, position, type, toast, showConfirmButton, message, text, footer, ...extra }) => {
-    const timer = (duration ?? 3) * 1000,
+window.sweet = async ({
+    duration,
+    position,
+    type,
+    toast,
+    showConfirmButton,
+    message,
+    text,
+    link,
+    footer,
+    ...extra
+}) => {
+    let timer = duration ?? 3,
         pos = position ?? 'bottom-end',
         icon = type ?? 'success',
         asToast = toast ?? true,
         showConfirmBtn = showConfirmButton ?? false,
-        sweetText = text ?? 'REMS';
+        sweetText = text ?? 'REMS',
+        swalFooter = footer;
+
+    if (link) {
+        timer = timer >= 7 ? timer : 7;
+        swalFooter = <a href={link.href}>{link.title}</a>;
+    }
+
+    timer = (timer ?? 3) * 1000;
 
     await Sweet.fire({
         icon,
@@ -47,6 +66,7 @@ window.sweet = async ({ duration, position, type, toast, showConfirmButton, mess
         title: message,
         showConfirmButton: showConfirmBtn,
         text: sweetText,
+        footer: swalFooter,
         ...extra,
     });
 };
