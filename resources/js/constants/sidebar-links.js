@@ -113,8 +113,8 @@ export const sidebarLinks = can => {
                 {
                     authorized: can.access.users,
                     startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
-                        { link: route('dashboard.users.index'), title: 'list' },
-                        { link: '/grid', title: 'Grid' }
+                        { authorized: true, link: route('dashboard.users.index'), title: 'list' },
+                        { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
                     ]
                 },
                 {

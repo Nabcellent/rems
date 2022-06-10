@@ -14078,15 +14078,6 @@ body[data-layout=horizontal][data-layout-size=boxed].vertical-collpsed .main-con
     z-index: 9999
 }
 
-#status {
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin: -20px 0 0 -20px
-}
-
 .spinner-chase {
     margin: 0 auto;
     width: 40px;

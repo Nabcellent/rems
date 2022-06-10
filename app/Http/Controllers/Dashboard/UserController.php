@@ -6,7 +6,9 @@ use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
 use App\Models\User;
+use App\Settings\UserSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -51,11 +53,15 @@ class UserController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/users/Upsert", [
+            "roles"           => Role::pluck("name"),
+            "action"          => "create",
+            "defaultPassword" => app(UserSettings::class)->default_password
+        ]);
     }
 
     /**
@@ -79,7 +85,7 @@ class UserController extends Controller
             }
         }
 
-        $data["password"] = Hash::make(setting(SettingKey::DEFAULT_USER_PASSWORD));
+        $data["password"] = Hash::make($data["password"] ?? app(UserSettings::class)->default_password);
 
         if($request->hasFile("image")) {
             $file = $request->file("image");

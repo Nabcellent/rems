@@ -1,11 +1,9 @@
 import Dashboard from '@/layouts/Dashboard';
-import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { Avatar, IconButton, Paper, useTheme } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
@@ -30,8 +28,6 @@ import { Link } from '@inertiajs/inertia-react';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
-
-const MySwal = withReactContent(Swal);
 
 const validationSchema = yup.object({
     first_name: yup.string().required('First name is required.'),
@@ -64,7 +60,7 @@ const Index = ({ users }) => {
             image: '',
             user_id: ''
         },
-        validationSchema: validationSchema,
+        validationSchema,
         validateOnChange: true,
         onSubmit: values => {
             let url = route(`dashboard.users.store`);
@@ -104,7 +100,7 @@ const Index = ({ users }) => {
 
     const handleDelete = user => {
         if (user) {
-            MySwal.fire({
+            Sweet.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',

@@ -52,6 +52,11 @@ export const str = {
         str = str.replaceAll('_', ' ').replaceAll('-', ' ');
 
         return str.replaceAll(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.substring(1).toLowerCase());
+    },
+    ucFirst: str => {
+        str = str.toLowerCase()
+
+        return str.charAt(0).toUpperCase() + str.slice(1)
     }
 };
 
