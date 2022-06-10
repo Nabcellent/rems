@@ -1,17 +1,14 @@
 import { Head } from '@inertiajs/inertia-react';
 
 // mui 
-import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 
-// custom componentes
+// custom
+import Guest from '@/layouts/Guest';
 import SectionBox from '@/components/home/SectionBox';
-import HomeFooter from '@/components/home/HomeFooter';
 
 // images
 import bannerImg from '../assets/images/home/banner_img.svg';
@@ -20,17 +17,12 @@ import ownerImg from '../assets/images/home/house_owner.svg';
 import searchImg from '../assets/images/home/house_search.svg';
 import serviceImg from '../assets/images/home/house_service.svg';
 import tenantImg from '../assets/images/home/house_tenant.svg';
-import HomeHeader from '@/components/home/HomeHeader';
 
 const Home = () => {
     return (
         <>
             <Head><title>Welcome</title></Head>
-
-            {/* Header */}
-            <HomeHeader />
-
-            <Container>
+            <Guest>
                 {/* Banner */}
                 <Grid container spacing={3} mt={3} sx={{
                     py: {
@@ -78,11 +70,7 @@ const Home = () => {
                     title={'Property Listings'}
                     desc={'Find your desired property here. Filter your selection based on your preferences to find your most suitable next home.'}
                 />
-
-
-            </Container>
-            {/* Footer */}
-            <HomeFooter />
+            </Guest>
         </>
     );
 }
