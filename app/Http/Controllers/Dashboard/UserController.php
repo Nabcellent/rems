@@ -120,11 +120,15 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(User $user)
+    public function edit(User $user): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/users/Upsert", [
+            "user"   => $user,
+            "roles"  => Role::pluck("name"),
+            "action" => "update",
+        ]);
     }
 
     /**
@@ -159,7 +163,10 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return back();
+        return redirect()->route("dashboard.users.index")->with("toast", [
+            "message" => "User Updated!",
+            "link"    => ["title" => "View User", "href" => route("dashboard.users.show", ["user" => $user])]
+        ]);
     }
 
     /**

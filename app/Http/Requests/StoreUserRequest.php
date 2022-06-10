@@ -33,9 +33,9 @@ class StoreUserRequest extends FormRequest
             "gender"     => "nullable|in:male,female",
             "image"      => "nullable|image|max:1024",
             "email"      => "required|string|email|max:100|unique:users",
-            "phone"      => "phone:KE",
+            "phone"      => "nullable|phone:KE",
             'password'   => ["required", Password::defaults()],
-            "role"       => [new Enum(Role::class)]
+            "role"       => ["required", new Enum(Role::class)]
         ];
     }
 }

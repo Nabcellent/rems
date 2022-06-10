@@ -30,8 +30,8 @@ class UpdateUserRequest extends FormRequest
             "last_name"  => "string|max:20",
             "gender"     => "nullable|in:male,female",
             "image"      => "nullable|image|max:1024",
-            "phone"      => "phone:KE",
-            "role"       => [new Enum(Role::class)]
+            "phone"      => "nullable|phone:KE",
+            "role"       => ["nullable", new Enum(Role::class)]
         ];
     }
 }

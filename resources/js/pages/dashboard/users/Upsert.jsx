@@ -1,18 +1,18 @@
 import Dashboard from '@/layouts/Dashboard';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import {
-    Autocomplete,
     FormControl,
     FormControlLabel,
     FormHelperText,
     FormLabel,
-    Grid, InputLabel, MenuItem,
+    Grid,
+    MenuItem,
     Paper,
     Radio,
-    RadioGroup, Select,
+    RadioGroup,
     TextField
 } from '@mui/material';
-import { Gender, Role, Status } from '@/utils/enums';
+import { Role, Status } from '@/utils/enums';
 import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
@@ -43,56 +43,54 @@ const validationSchema = yup.object({
     phone: yup.string().test({
         name: 'is-valid-phone',
         message: 'Invalid phone number',
-        test: value => isValidPhoneNumber(String(value), 'KE')
-    }).required('Phone number is required.'),
+        test: val => val == null || val === '' || isValidPhoneNumber(String(val), 'KE')
+    }),
     gender: yup.string().oneOf(['male', 'female']),
     email: yup.string().email().required('Email is required.'),
-    role: yup.string().oneOf(Object.values(Role), 'Invalid role').required('Role is required.'),
+    role: yup.string().oneOf(Object.values(Role), 'Invalid role'),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
-    password: yup.string().min(7).required('Password is required.'),
+    password: yup.string().min(7),
 });
 
-const Upsert = ({ action, roles, defaultPassword }) => {
+const Upsert = ({ user, action, roles, defaultPassword }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
     const formik = useFormik({
         initialValues: {
-            first_name: '',
-            last_name: '',
-            phone: '',
-            gender: '',
-            email: '',
+            first_name: user?.first_name ?? '',
+            last_name: user?.last_name ?? '',
+            phone: user?.phone ?? '',
+            gender: user?.gender ?? '',
+            email: user?.email ?? '',
             role: '',
-            status: Status.ACTIVE,
+            status: user?.status ?? Status.ACTIVE,
             image: '',
             password: defaultPassword,
-            user_id: ''
         },
         validationSchema,
         validateOnChange: true,
         onSubmit: values => {
             let url = route(`dashboard.users.store`);
 
-            if (action === 'update') {
-                url = route(`dashboard.users.update`, { user: values.id });
+            if (user) {
+                url = route(`dashboard.users.update`, { user: user.id });
                 values._method = Method.PUT;
             }
 
             Inertia.post(url, values, {
-                    forceFormData: true,
-                    onBefore: () => setIsLoading(true),
-                    onSuccess: () => formik.resetForm(),
-                    onError: errors => setErrors(errors),
-                    onFinish: () => setIsLoading(false)
-                }
-            );
+                forceFormData: true,
+                onBefore: () => setIsLoading(true),
+                onSuccess: () => formik.resetForm(),
+                onError: errors => setErrors(errors),
+                onFinish: () => setIsLoading(false)
+            });
         }
     });
 
     return (
         <Dashboard title={str.headline(`${action} User`)}>
-            <Breadcrumbs title={"Users"} breadcrumbItem={"Create"}/>
+            <Breadcrumbs title={"Users"} breadcrumbItem={str.ucFirst(action)}/>
 
             <Grid container spacing={2} justifyContent={'center'}>
                 <Grid item xs={12} xl={7}>
@@ -134,20 +132,24 @@ const Upsert = ({ action, roles, defaultPassword }) => {
                                            error={formik.touched.email && Boolean(formik.errors.email)}
                                            helperText={formik.touched.email && formik.errors.email}/>
                             </Grid>
-                            <Grid item md={6}>
+                            <Grid item md={user ? 12 : 6}>
                                 <TextField type={'tel'} label="Phone Number" placeholder="Phone number..."
                                            name={'phone'} value={formik.values.phone} fullWidth
                                            onChange={formik.handleChange}
                                            error={formik.touched.phone && Boolean(formik.errors.phone)}
                                            helperText={formik.touched.phone && formik.errors.phone}/>
                             </Grid>
-                            <Grid item md={6}>
-                                <TextField type="password" size={"small"} label="Password" placeholder="Password..."
-                                           name={'password'} value={formik.values.password}
-                                           error={formik.touched.password && Boolean(formik.errors.password)}
-                                           helperText={(formik.touched.password && formik.errors.password) ?? `default - ${defaultPassword}`}
-                                           onChange={formik.handleChange} autoComplete="off" fullWidth required/>
-                            </Grid>
+                            {
+                                !user && (
+                                    <Grid item md={6}>
+                                        <TextField type="password" size={"small"} label="Password" placeholder="Password..."
+                                                   name={'password'} value={formik.values.password}
+                                                   error={formik.touched.password && Boolean(formik.errors.password)}
+                                                   helperText={(formik.touched.password && formik.errors.password) ?? `default - ${defaultPassword}`}
+                                                   onChange={formik.handleChange} autoComplete="off" fullWidth required/>
+                                    </Grid>
+                                )
+                            }
                             <Grid item md={6}>
                                 <FormControl error={formik.touched.gender && Boolean(formik.errors.gender)}>
                                     <FormLabel className={'m-0'} id="gender">Gender</FormLabel>
@@ -180,6 +182,7 @@ const Upsert = ({ action, roles, defaultPassword }) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <FilePond maxFiles={3} name="image" maxFileSize={'1MB'} className={'mb-0'}
+                                          files={user?.image && `/images/users/${user?.image}`}
                                           labelMaxFileSizeExceeded={'Image is too large.'}
                                           labelFileTypeNotAllowed={'Invalid image type. allowed(jpg, png, jpeg)'}
                                           labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'
