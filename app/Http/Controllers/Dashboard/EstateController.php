@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEstateRequest;
 use App\Models\Estate;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -35,18 +34,23 @@ class EstateController extends Controller
     {
         return inertia('dashboard/estates', [
             "estates" => Estate::select(["id", "user_id", "name", "address"])
-                ->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
+                ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
+                    return $qry->whereBelongsTo(user());
+                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-
+        return inertia("dashboard/estates/Upsert", [
+            "action"          => "create",
+            "googleMapsKey" => config("rems.google.maps.api_key")
+        ]);
     }
 
     /**
