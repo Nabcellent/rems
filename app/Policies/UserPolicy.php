@@ -19,7 +19,7 @@ class UserPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->estates->isNotEmpty() && $user->hasRole([Role::PROPERTY_MANAGER->value]);
     }
 
     /**

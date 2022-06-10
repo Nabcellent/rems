@@ -21,6 +21,7 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
+import TableActions from '@/components/TableActions';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
@@ -89,27 +90,7 @@ const Index = ({ users }) => {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => {
-                                    const { id } = row.original;
-
-                                    return (
-                                        <>
-                                            <IconButton
-                                                onClick={() => Inertia.get(route("dashboard.users.edit", { user: id }))}
-                                                color={"primary"}>
-                                                <Edit fontSize={'small'}/>
-                                            </IconButton>
-                                            <Link href={route('dashboard.users.show', { user: id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                            <IconButton
-                                                onClick={() => handleDelete(route('dashboard.users.destroy', { user: id }), 'User')}
-                                                color={"error"}>
-                                                <Delete fontSize={'small'}/>
-                                            </IconButton>
-                                        </>
-                                    );
-                                }
+                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'user'}/>
                             }
                         ]} data={users} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}/>
                     </Paper>

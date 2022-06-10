@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Settings\UserSettings;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -46,7 +47,9 @@ class UserController extends Controller
                 "image",
                 "status",
                 "created_at"
-            ])->with("roles:id,name")->latest()->get()
+            ])->when(user()->hasAllRoles(\App\Enums\Role::PROPERTY_MANAGER->value), function(Builder $qry) {
+                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(\App\Enums\Role::OWNER->value));
+            })->with("roles:id,name")->latest()->get(),
         ]);
     }
 
