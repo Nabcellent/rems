@@ -168,8 +168,8 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                     <Paper className={'p-3'}>
                         <Map apiKey={googleMapsKey}
                              position={{
-                                 lat: parseFloat(formik.values.latitude),
-                                 lng: parseFloat(formik.values.longitude)
+                                 lat: parseFloat(mapPosition.lat),
+                                 lng: parseFloat(mapPosition.lng)
                              }}
                              onLocationChange={pos => {
                                  formik.setFieldValue('latitude', pos.lat, true);
