@@ -47,6 +47,10 @@ const validationSchema = yup.object({
 const Upsert = ({ estate, action, googleMapsKey }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [mapPosition, setMapPosition] = useState({
+        lat: -1.265788,
+        lng: 36.760435
+    });
 
     const formik = useFormik({
         initialValues: {
@@ -78,12 +82,21 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
         }
     });
 
+    const handlePositionChange = e => {
+        formik.setFieldValue(e.target.name, e.target.value);
+
+        setMapPosition({
+            lat: e.target.name === 'latitude' ? parseFloat(e.target.value) : mapPosition.lat,
+            lng: e.target.name === 'longitude' ? parseFloat(e.target.value) : mapPosition.lng,
+        });
+    };
+
     return (
         <Dashboard title={str.headline(`${action} User`)}>
             <Breadcrumbs title={"Users"} breadcrumbItem={str.ucFirst(action)}/>
 
-            <Grid container spacing={2} justifyContent={'center'}>
-                <Grid item xs={12} xl={7}>
+            <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
+                <Grid item xs={12} xl={6}>
                     <Paper className={'p-3'}>
                         <ValidationErrors errors={errors}/>
 
@@ -102,14 +115,16 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Latitude" placeholder="Latitude..." name={'latitude'}
-                                           value={formik.values.latitude} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.latitude} fullWidth
+                                           onChange={e => handlePositionChange(e)}
                                            error={formik.touched.latitude && Boolean(formik.errors.latitude)}
                                            helperText={formik.touched.latitude && formik.errors.latitude}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Longitude" placeholder="Longitude..."
                                            name={'longitude'}
-                                           value={formik.values.longitude} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.longitude} fullWidth
+                                           onChange={e => handlePositionChange(e)}
                                            error={formik.touched.longitude && Boolean(formik.errors.longitude)}
                                            helperText={formik.touched.longitude && formik.errors.longitude}/>
                             </Grid>
@@ -136,8 +151,8 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                                           labelIdle='Drag & Drop an image or <span class="filepond--label-action">Browse</span>'
                                           acceptedFileTypes={['image/jpg', 'image/png', 'image/jpeg']} dropOnPage
                                           imageResizeTargetWidth={300} imageResizeTargetHeight={300}
-                                          onupdatefiles={image => formik.setFieldValue('image', image[0]?.file, true)}
-                                          onremovefile={() => formik.setFieldValue('image', null, true)}/>
+                                          onupdatefiles={image => formik.setFieldValue('image', image[0]?.file)}
+                                          onremovefile={() => formik.setFieldValue('image', null)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
                                 <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
@@ -149,9 +164,17 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} xl={8}>
+                <Grid item xs={12} xl={6}>
                     <Paper className={'p-3'}>
-                        <Map apiKey={googleMapsKey}/>
+                        <Map apiKey={googleMapsKey}
+                             position={{
+                                 lat: parseFloat(formik.values.latitude),
+                                 lng: parseFloat(formik.values.longitude)
+                             }}
+                             onLocationChange={pos => {
+                                 formik.setFieldValue('latitude', pos.lat, true);
+                                 formik.setFieldValue('longitude', pos.lng, true);
+                             }}/>
                     </Paper>
                 </Grid>
             </Grid>
