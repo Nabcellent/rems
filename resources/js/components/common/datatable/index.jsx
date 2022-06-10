@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import AdvanceTableWrapper from './AdvanceTableWrapper';
 import AdvanceTable from './AdvanceTable';
 import AdvanceTableFooter from './AdvanceTableFooter';
@@ -10,8 +10,31 @@ import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
 import { Inertia } from '@inertiajs/inertia';
 
-function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions, viewAll }) {
+function BulkAction({ title, onCreateRow, selectedFlatRows, selectedRowIds = [], bulkActions, viewAll }) {
+    const [action, setAction] = useState(undefined);
+
     const selectedRowsCount = Object.keys(selectedRowIds).length;
+    const tableTitle = pluralize(title, selectedRowsCount);
+
+    const executeBulkAction = () => {
+        const ids = selectedFlatRows.map(row => row.original.id);
+
+        if (action === 'delete') {
+            Sweet.fire({
+                title: 'Are you sure?',
+                text: `You won't be able to revert this!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: `Yes, delete ${tableTitle}!`,
+                showLoaderOnConfirm: true
+            }).then(result => result.isConfirmed && Inertia.post(route("dashboard.delete"), {
+                ids,
+                model: pluralize(title, 1)
+            }));
+        }
+    };
 
     return (
         <Row className="flex-between-center mb-3">
@@ -19,7 +42,7 @@ function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions, view
                 <h5 className="fs-0 mb-0 text-nowrap py-2 py-xl-0">
                     {
                         selectedRowsCount
-                            ? `You have selected ${selectedRowsCount} ${pluralize(title, selectedRowsCount)}`
+                            ? `You have selected ${selectedRowsCount} ${tableTitle}`
                             : title
                     }
                 </h5>
@@ -28,13 +51,13 @@ function BulkAction({ title, onCreateRow, selectedRowIds = [], bulkActions, view
                 bulkActions && <Col xs={8} sm="auto" className="ms-auto text-end ps-0">
                     {Object.keys(selectedRowIds).length > 0 ? (
                         <div className="d-flex">
-                            <Form.Select size="sm" aria-label="Bulk actions">
-                                <option>Bulk Actions</option>
+                            <Form.Select size="sm" aria-label="Bulk actions" onChange={e => setAction(e.target.value)}>
+                                <option value={''} hidden>Bulk Actions</option>
                                 <option value="refund">Refund</option>
                                 <option value="delete">Delete</option>
-                                <option value="archive">Archive</option>
                             </Form.Select>
-                            <Button type="button" variant="contained" size="small" className="ms-2">
+                            <Button type="button" variant="contained" size="small" className="ms-2"
+                                    onClick={() => executeBulkAction()}>
                                 Apply
                             </Button>
                         </div>

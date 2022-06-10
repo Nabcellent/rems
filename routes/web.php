@@ -18,6 +18,7 @@ use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\WalletController;
+use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -76,6 +77,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "notices"           => NoticeController::class,
             "policies"          => PolicyController::class,
         ]);
+
+        Route::post("/delete", [GlobalController::class, "deleteMultiple"])->name("delete");
     });
 });
 

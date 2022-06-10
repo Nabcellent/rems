@@ -93,9 +93,12 @@ class UserController extends Controller
             $file->move("images/users", $data["image"]);
         }
 
-        User::create($data)->assignRole($data["role"])->wallet()->create();
+        $user = User::create($data)->assignRole($data["role"]);
 
-        return back()->with("toast", ["message" => "User Created!"]);
+        return redirect()->route("dashboard.users.index")->with("toast", [
+            "message" => "User Created!",
+            "link"    => ["title" => "View User", "href" => route("dashboard.users.show", ["user" => $user])]
+        ]);
     }
 
     /**

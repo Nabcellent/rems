@@ -42,11 +42,11 @@ const Dashboard = ({
         let body = document.body;
 
         if (window.screen.width <= 998) {
-            document.getElementById('sidebar-greeting').classList.toggle('d-none')
+            document.getElementById('sidebar-greeting').classList.toggle('d-none');
 
             body.classList.toggle("sidebar-enable");
         } else {
-            document.getElementById('sidebar-greeting').classList.toggle('d-none')
+            document.getElementById('sidebar-greeting').classList.toggle('d-none');
 
             body.classList.toggle("vertical-collpsed");
             body.classList.toggle("sidebar-enable");
