@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSliders } from '@fortawesome/free-solid-svg-icons';
 
 export const sidebarLinks = can => {
     return [
@@ -83,26 +85,49 @@ export const sidebarLinks = can => {
         {
             title: 'System',
             menu: [
-                { startIcon: <i className="bx bxs-hand"/>, title: 'Tickets', link: route('dashboard.tickets.index') },
+                {
+                    authorized: can.access.tickets,
+                    startIcon: <i className="bx bxs-hand"/>,
+                    title: 'Tickets',
+                    link: route('dashboard.tickets.index')
+                },
                 {
                     authorized: can.access.services,
                     startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
                         { authorized: true, link: route('dashboard.services.index'), title: 'List Services' },
-                        { authorized: true, link: route('dashboard.service-providers.index'), title: 'List Service Providers' },
-                        { authorized: can.create.service, link: route('dashboard.services.create'), title: 'Create Service' },
-                        { authorized: can.create.service_provider, link: route('dashboard.service-providers.create'), title: 'Create Service Provider' }
+                        {
+                            authorized: true,
+                            link: route('dashboard.service-providers.index'),
+                            title: 'List Service Providers'
+                        },
+                        {
+                            authorized: can.create.service,
+                            link: route('dashboard.services.create'),
+                            title: 'Create Service'
+                        },
+                        {
+                            authorized: can.create.service_provider,
+                            link: route('dashboard.service-providers.create'),
+                            title: 'Create Service Provider'
+                        }
                     ]
                 },
                 {
                     authorized: can.access.users,
                     startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
-                        { link: route('dashboard.users.index'), title: 'list' },
-                        { link: '/grid', title: 'Grid' }
+                        { authorized: true, link: route('dashboard.users.index'), title: 'list' },
+                        { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
                     ]
                 },
                 {
                     authorized: true,
                     startIcon: <i className="bx bx-user-circle"/>, title: 'Profile', link: route('dashboard.profile')
+                },
+                {
+                    authorized: true,
+                    startIcon: <i><FontAwesomeIcon icon={faSliders}/></i>,
+                    title: can.access.settings ? 'User Settings' : 'Settings',
+                    link: route('dashboard.users.settings')
                 },
                 {
                     authorized: can.access.settings,
@@ -111,4 +136,4 @@ export const sidebarLinks = can => {
             ]
         }
     ];
-}
+};

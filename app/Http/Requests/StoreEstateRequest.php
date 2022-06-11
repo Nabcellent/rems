@@ -22,11 +22,14 @@ class StoreEstateRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    #[ArrayShape(["name" => "string", "location" => "string"])] public function rules(): array
+    public function rules(): array
     {
         return [
-            "name"     => "required|string",
-            "location" => "required|string"
+            "name"      => "required|string",
+            "address"   => "required|string",
+            "longitude" => "required|numeric",
+            "latitude"  => "required|numeric",
+            "image"     => "nullable|image|max:1024",
         ];
     }
 }

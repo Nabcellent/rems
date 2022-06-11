@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from "react";
+import { lazy, useEffect } from "react";
 import PropTypes from 'prop-types';
 
 // Layout Related Components
@@ -13,20 +13,13 @@ const Dashboard = ({
     title,
     children,
     isPreloader,
-    leftSideBarTheme,
-    leftSideBarType,
-    toggleRightSidebar
 }) => {
-    const { toast: toastData, can } = usePage().props;
+    const { toast: toastData } = usePage().props;
 
-    console.log(can);
-
-    const [isMobile, setIsMobile] = useState(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     useEffect(() => {
         if (toastData) sweet(toastData);
-
-        document.body.addEventListener("click", hideRightBar, true);
 
         if (isPreloader === true) {
             document.getElementById("preloader").style.display = "block";
@@ -49,24 +42,14 @@ const Dashboard = ({
         let body = document.body;
 
         if (window.screen.width <= 998) {
-            document.getElementById('sidebar-greeting').classList.toggle('d-none')
+            document.getElementById('sidebar-greeting').classList.toggle('d-none');
 
             body.classList.toggle("sidebar-enable");
         } else {
-            document.getElementById('sidebar-greeting').classList.toggle('d-none')
+            document.getElementById('sidebar-greeting').classList.toggle('d-none');
 
             body.classList.toggle("vertical-collpsed");
             body.classList.toggle("sidebar-enable");
-        }
-    };
-
-    // //hides right sidebar on body click
-    const hideRightBar = (event) => {
-        let rightBar = document.getElementById("right-bar");
-
-        //if clicked in inside right bar, then do nothing
-        if (!(rightBar && rightBar.contains(event.target))) {
-            if (document.body.classList.contains('right-bar-enabled')) toggleRightSidebar(false);
         }
     };
 
@@ -89,7 +72,7 @@ const Dashboard = ({
 
             <div id="layout-wrapper">
                 <Header toggleMenuCallback={toggleMenuCallback}/>
-                <Sidebar theme={leftSideBarTheme} type={leftSideBarType} isMobile={isMobile}/>
+                <Sidebar isMobile={isMobile}/>
                 <div className="main-content">
                     <div className="page-content"><Container fluid>{children}</Container></div>
                 </div>
@@ -100,12 +83,9 @@ const Dashboard = ({
 };
 
 Dashboard.propTypes = {
-    title: PropTypes.string,
-    children: PropTypes.any,
+    title: PropTypes.string.isRequired,
+    children: PropTypes.any.isRequired,
     isPreloader: PropTypes.bool,
-    leftSideBarTheme: PropTypes.any,
-    leftSideBarThemeImage: PropTypes.any,
-    leftSideBarType: PropTypes.any,
 };
 
 export default Dashboard;

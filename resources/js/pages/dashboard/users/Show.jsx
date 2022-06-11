@@ -3,8 +3,10 @@ import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import { Female, Male, PhoneIphone, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Gender, Status } from '@/utils/enums';
-import StatusBadge from '@/components/StatusBadge';
-import PhoneBadge from '@/components/PhoneBadge';
+import StatusChip from '@/components/chips/StatusChip';
+import PhoneChip from '@/components/chips/PhoneChip';
+import MainImage from '@/components/MainImage';
+import React from 'react';
 
 const Show = ({ errors, user }) => {
     const theme = useTheme();
@@ -18,17 +20,7 @@ const Show = ({ errors, user }) => {
                 <div className="position-relative min-vh-25 mb-7 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                        backgroundColor: theme.palette.primary.main
-                    }} src={`/images/users/${user.image}`}>
-                        {user.initials}
-                    </Avatar>
+                    <MainImage image={user.image} imageable={'user'} imageableId={user.id}/>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -54,7 +46,7 @@ const Show = ({ errors, user }) => {
                                             : <ToggleOff fontSize={'small'}/>
                                     }
                                 </Avatar>
-                                <div className="flex-1"><StatusBadge status={user.status}/></div>
+                                <div className="flex-1"><StatusChip status={user.status}/></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
@@ -71,7 +63,7 @@ const Show = ({ errors, user }) => {
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     <PhoneIphone fontSize={'small'}/>
                                 </Avatar>
-                                <div className="flex-1"><PhoneBadge phone={user.phone}/></div>
+                                <div className="flex-1"><PhoneChip phone={user.phone}/></div>
                             </div>
                         </div>
                     </div>

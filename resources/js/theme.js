@@ -18,6 +18,12 @@ export const theme = createTheme({
         MuiRadio: {
             defaultProps: {
                 size: 'small'
+            },
+            styleOverrides: {
+                root: {
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                }
             }
         },
         MuiAvatar: {
@@ -25,6 +31,11 @@ export const theme = createTheme({
                 root: {
                     backgroundColor: '#990000',
                 }
+            }
+        },
+        MuiFormControl: {
+            defaultProps: {
+                size: 'small',
             }
         },
         MuiTextField: {

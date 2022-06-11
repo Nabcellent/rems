@@ -1,20 +1,20 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
+import { Avatar, Button, Divider, Paper } from '@mui/material';
 import { AlternateEmail, Badge, LocationOn, OtherHouses, PhoneIphone, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
-import StatusBadge from '@/components/StatusBadge';
-import PhoneBadge from '@/components/PhoneBadge';
-import { getInitials } from '@/utils/helpers';
+import StatusChip from '@/components/chips/StatusChip';
+import PhoneChip from '@/components/chips/PhoneChip';
 import CountUp from 'react-countup';
 import { Col, Row } from 'react-bootstrap';
 import Images from '@/components/Images';
 import Policies from '@/components/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
+import MainImage from '@/components/MainImage';
+import React from 'react';
 
 const Show = ({ errors, property }) => {
     console.log(property);
-    const theme = useTheme();
 
     return (
         <Dashboard errors={errors} title={'Properties'}>
@@ -24,17 +24,7 @@ const Show = ({ errors, property }) => {
                 <div className="position-relative min-vh-25 mb-7 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                        backgroundColor: theme.palette.primary.main
-                    }} src={`/images/properties/${property.image}`}>
-                        {getInitials(property.type)}
-                    </Avatar>
+                    <MainImage image={property.image} imageable={'property'} imageableId={property.id}/>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -65,7 +55,7 @@ const Show = ({ errors, property }) => {
                                             : <ToggleOff fontSize={'small'}/>
                                     }
                                 </Avatar>
-                                <div className="flex-1"><StatusBadge status={property.status}/></div>
+                                <div className="flex-1"><StatusChip status={property.status}/></div>
                             </div>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
@@ -90,7 +80,7 @@ const Show = ({ errors, property }) => {
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     <PhoneIphone fontSize={'small'}/>
                                 </Avatar>
-                                <div className="flex-1"><PhoneBadge phone={property.user.phone}/></div>
+                                <div className="flex-1"><PhoneChip phone={property.user.phone}/></div>
                             </div>
                             <Button variant={'outlined'}
                                     className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>

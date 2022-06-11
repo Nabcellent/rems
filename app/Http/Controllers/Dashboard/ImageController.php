@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageRequest;
-use App\Http\Requests\UpdateImageRequest;
 use App\Models\Estate;
 use App\Models\Image;
 use App\Models\Property;
 use App\Models\Room;
 use App\Models\Unit;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -39,11 +40,40 @@ class ImageController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param string                   $imageable
+     * @param int                      $imageableId
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create()
+    public function updateOrDeleteMain(Request $request, string $imageable, int $imageableId): JsonResponse
     {
-        //
+        $model = match ($imageable) {
+            "user" => new User,
+            "estate" => new Estate,
+            "property" => new Property,
+            "unit" => new Unit,
+        };
+
+        $model = $model->findOrFail($imageableId);
+
+        $dir = str()->plural($imageable);
+        $imageName = null;
+        $message = "Image Updated!";
+
+        if($request->isMethod("POST")) {
+            $file = $request->file("image");
+            $imageName = "{$imageable}_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/$dir", $imageName);
+        } else {
+            $message = "Image Deleted!";
+        }
+
+        if($model->image && file_exists("images/$dir/$model->image")) File::delete("images/$dir/$model->image");
+
+        $model->image = $imageName;
+        $model->save();
+
+        return response()->json(["message" => $message]);
     }
 
     /**
@@ -124,8 +154,7 @@ class ImageController extends Controller
             $data["image"] = "{$data['imageable']}_" . time() . ".{$file->guessClientExtension()}";
             $file->move("images/$dir", $data["image"]);
 
-            if($image->image && file_exists("images/$dir/$image->image"))
-                File::delete("images/$dir/$image->image");
+            if($image->image && file_exists("images/$dir/$image->image")) File::delete("images/$dir/$image->image");
         }
 
         $image->update($data);

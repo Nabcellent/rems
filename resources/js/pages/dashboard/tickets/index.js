@@ -7,7 +7,7 @@ import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 
 const Index = ({ tickets }) => {
     console.log(tickets);
@@ -59,7 +59,7 @@ const Index = ({ tickets }) => {
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                                Cell: ({ row }) => <StatusChip status={row.original.status}/>
                             },
                             {
                                 accessor: 'actions',

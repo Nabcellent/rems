@@ -26,6 +26,8 @@ export const currencyFormat = (number, currency = 'KES') => (new Intl.NumberForm
 })).format(number);
 
 export const getTelcoFromPhone = phone => {
+    phone = String(phone)
+
     const safRegEx = /^(?:254|\+254|0)?((?:7(?:[0129]\d|4[0123568]|5[789]|6[89])|(1(1[0-5])))\d{6})$/,
         airtelRegEx = /^(?:254|\+254|0)?((?:(7(?:(3\d)|(5[0-6])|(6[27])|(8\d)))|(1(0[0-6])))\d{6})$/,
         telkomRegEx = /^(?:254|\+254|0)?(7(7\d)\d{6})$/,
@@ -52,6 +54,11 @@ export const str = {
         str = str.replaceAll('_', ' ').replaceAll('-', ' ');
 
         return str.replaceAll(/\w\S*/g, (t) => t.charAt(0).toUpperCase() + t.substring(1).toLowerCase());
+    },
+    ucFirst: str => {
+        str = str.toLowerCase()
+
+        return str.charAt(0).toUpperCase() + str.slice(1)
     }
 };
 

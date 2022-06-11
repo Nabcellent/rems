@@ -1,4 +1,3 @@
-import PropTypes from "prop-types";
 import { Link, usePage } from "@inertiajs/inertia-react";
 
 import SidebarContent from "./SidebarContent";
@@ -8,7 +7,7 @@ import logoLightPng from "../assets/images/logo-light.png";
 import logoLightSvg from "../assets/images/logo-light.svg";
 import logoDarkSvg from "../assets/images/logo-dark.svg";
 
-const Sidebar = ({type}) => {
+const Sidebar = () => {
     const {auth: {user}} = usePage().props;
 
     return (
@@ -43,10 +42,6 @@ const Sidebar = ({type}) => {
             </div>
         </>
     );
-};
-
-Sidebar.propTypes = {
-    type: PropTypes.string,
 };
 
 export default Sidebar;

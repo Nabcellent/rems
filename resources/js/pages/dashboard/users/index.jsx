@@ -1,19 +1,14 @@
 import Dashboard from '@/layouts/Dashboard';
-import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { Avatar, IconButton, Paper, useTheme } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
-import { useState } from 'react';
-import { Inertia, Method } from '@inertiajs/inertia';
+import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import PhoneChip from '@/components/chips/PhoneChip';
 import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
-import UserModal from '@/pages/dashboard/users/components/UserModal';
 
 // Import React FilePond with plugins & styles
 import { registerPlugin } from 'react-filepond';
@@ -26,72 +21,23 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
+import TableActions from '@/components/TableActions';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
 
-const validationSchema = yup.object({
-    role: yup.string().oneOf(Object.values(Role), 'Invalid role').required('Role is required.'),
-});
-
-const Index = ({ providers }) => {
+const Index = ({ users }) => {
     const theme = useTheme();
-    const [showModal, setShowModal] = useState(false);
-    const [formAction, setFormAction] = useState("store");
-    const [isLoading, setIsLoading] = useState(false);
-    const [errors, setErrors] = useState({});
-
-    const formik = useFormik({
-        initialValues: {
-            user_id: ''
-        },
-        validationSchema: validationSchema,
-        validateOnChange: true,
-        onSubmit: values => {
-            let url = route(`dashboard.providers.store`);
-
-            if (formAction === 'update') {
-                url = route(`dashboard.providers.update`, { user: values.id });
-                values._method = Method.PUT;
-            }
-
-            Inertia.post(url, values, {
-                    forceFormData: true,
-                    onBefore: () => setIsLoading(true),
-                    onSuccess: () => {
-                        setShowModal(false);
-                        formik.resetForm();
-                    },
-                    onError: errors => setErrors(errors),
-                    onFinish: () => setIsLoading(false)
-                }
-            );
-        }
-    });
-
-    const handleCreate = () => {
-        setFormAction('store');
-        formik.resetForm();
-
-        setShowModal(true);
-    };
-
-    const handleUpdate = user => {
-        setFormAction('update');
-
-        formik.setValues(user, true);
-        setShowModal(true);
-    };
 
     return (
-        <Dashboard title={'Service Providers'}>
+        <Dashboard title={'Users'}>
             {/* Render Breadcrumbs */}
-            <Breadcrumbs title="Service Providers" breadcrumbItem="list"/>
+            <Breadcrumbs title="Users" breadcrumbItem="list"/>
 
             <Row>
                 <Col className="col-12">
                     <Paper className={'p-3'}>
-                        <DataTable title={'Service Providers'} columns={[
+                        <DataTable title={'Users'} columns={[
                             {
                                 accessor: 'name',
                                 Header: 'Name',
@@ -106,7 +52,7 @@ const Index = ({ providers }) => {
                                                 fontSize: '9pt',
                                                 marginRight: .5,
                                                 backgroundColor: theme.palette.primary.main
-                                            }} src={`/images/providers/${row.original.image}`}>
+                                            }} src={`/images/users/${row.original.image}`}>
                                                 {row.original.initials}
                                             </Avatar>
                                             <span>
@@ -125,6 +71,11 @@ const Index = ({ providers }) => {
                                     : "N/A"
                             },
                             {
+                                accessor: 'role',
+                                Header: 'Role',
+                                Cell: ({ row }) => <i>{row.original.user_roles_str}</i>
+                            },
+                            {
                                 accessor: 'status',
                                 Header: 'Status',
                                 Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
@@ -139,33 +90,12 @@ const Index = ({ providers }) => {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => {
-                                    return (
-                                        <>
-                                            <IconButton onClick={() => handleUpdate(row.original)}
-                                                        size={"small"} color={"primary"}>
-                                                <Edit fontSize={'small'}/>
-                                            </IconButton>
-                                            <Link
-                                                href={route('dashboard.users.show', { user: row.original.id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                            <IconButton
-                                                onClick={() => handleDelete(route('dashboard.users.destroy', { user: row.original.id }), 'Provider')}
-                                                size={"small"} color={"error"}>
-                                                <Delete fontSize={'small'}/>
-                                            </IconButton>
-                                        </>
-                                    );
-                                }
+                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'user'}/>
                             }
-                        ]} data={providers} onCreateRow={handleCreate}/>
+                        ]} data={users} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}/>
                     </Paper>
                 </Col>
             </Row>
-
-            <UserModal showModal={showModal} errors={errors} setShowModal={setShowModal} action={formAction}
-                       formik={formik} isLoading={isLoading}/>
         </Dashboard>
     );
 };

@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 
 const Show = ({ errors, lease }) => {
     console.log(lease);
@@ -17,7 +17,7 @@ const Show = ({ errors, lease }) => {
                 <Card.Body>
                     <Row>
                         <Col md={6} lg={4} className={'mb-4 mb-lg-0'}>
-                            <h5>Lease. <StatusBadge status={lease.status}/></h5>
+                            <h5>Lease. <StatusChip status={lease.status}/></h5>
                             <h6>Lease Address</h6>
                             <p className="mb-1 fs--1">{lease.unit.estate.address}</p>
                             <p className="mb-0 fs--1"><strong>Deposit:</strong> {currencyFormat(lease.deposit)}</p>

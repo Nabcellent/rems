@@ -5,7 +5,7 @@ import { Badge, Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap'
 import { Paper, Typography } from '@mui/material';
 import moment from 'moment';
 import { isToday, isYesterday } from '@/utils/helpers';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 import TableDate from '@/components/TableDate';
 
 const LatestTransactions = () => {
@@ -49,7 +49,7 @@ const LatestTransactions = () => {
                         {
                             accessor: 'status',
                             Header: 'Status',
-                            Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                            Cell: ({ row }) => <StatusChip status={row.original.status}/>
                         },
                         {
                             accessor: 'created_at',

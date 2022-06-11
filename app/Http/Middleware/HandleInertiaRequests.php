@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\Property;
 use App\Models\Service;
 use App\Models\Setting;
+use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
@@ -45,7 +46,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'auth'  => [
+            "auth"       => [
                 'user' => fn(Request $request) => $request->user() ? $request->user()->only([
                     'id',
                     'first_name',
@@ -54,7 +55,7 @@ class HandleInertiaRequests extends Middleware
                     "phone"
                 ]) : null,
             ],
-            "can"   => [
+            "can"        => [
                 "access" => [
                     "properties"   => $request->user()?->can("viewAny", Property::class),
                     "estates"      => $request->user()?->can("viewAny", Estate::class),
@@ -66,14 +67,17 @@ class HandleInertiaRequests extends Middleware
                     "services"     => $request->user()?->can("viewAny", Service::class),
                     "users"        => $request->user()?->can("viewAny", User::class),
                     "settings"     => $request->user()?->can("viewAny", Setting::class),
+                    "tickets"      => $request->user()?->can("viewAny", Ticket::class),
                 ],
                 "create" => [
-                    "lease" => $request->user()?->can("create", Lease::class),
+                    "user"    => $request->user()?->can("create", User::class),
+                    "lease"   => $request->user()?->can("create", Lease::class),
                     "service" => $request->user()?->can("create", Service::class)
                 ]
             ],
-            'ziggy' => fn() => (new Ziggy)->toArray(),
-            'toast' => fn() => session()->get("toast")
+            "ziggy"      => fn() => (new Ziggy)->toArray(),
+            "toast"      => fn() => session()->get("toast"),
+            "csrf_token" => csrf_token()
         ]);
     }
 }

@@ -15,18 +15,19 @@ import {
     ToggleOn
 } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
-import StatusBadge from '@/components/StatusBadge';
-import PhoneBadge from '@/components/PhoneBadge';
+import StatusChip from '@/components/chips/StatusChip';
+import PhoneChip from '@/components/chips/PhoneChip';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/Images';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Policies from '@/components/Policies';
+import MainImage from '@/components/MainImage';
 
 const Show = ({ errors, unit }) => {
     console.log(unit);
@@ -54,17 +55,7 @@ const Show = ({ errors, unit }) => {
                 <div className="position-relative min-vh-25 mb-7 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                        backgroundColor: theme.palette.primary.main
-                    }} src={`/images/units/${unit.image}`}>
-                        {unit.house_number}
-                    </Avatar>
+                    <MainImage image={unit.image} imageable={'unit'} imageableId={unit.id}/>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -95,7 +86,7 @@ const Show = ({ errors, unit }) => {
                                             : <ToggleOff fontSize={'small'}/>
                                     }
                                 </Avatar>
-                                <div className="flex-1"><StatusBadge status={unit.status}/></div>
+                                <div className="flex-1"><StatusChip status={unit.status}/></div>
                             </div>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
@@ -120,7 +111,7 @@ const Show = ({ errors, unit }) => {
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     <PhoneIphone fontSize={'small'}/>
                                 </Avatar>
-                                <div className="flex-1"><PhoneBadge phone={unit.user.phone}/></div>
+                                <div className="flex-1"><PhoneChip phone={unit.user.phone}/></div>
                             </div>
                             <Button variant={'outlined'}
                                     className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>

@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Estate;
+use App\Models\Role;
 use App\Models\User;
+use App\Settings\UserSettings;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -34,6 +37,8 @@ class UserController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
+        $estateIds = user()->estates()->pluck("id");
+
         return inertia('dashboard/users', [
             "users" => User::select([
                 "id",
@@ -44,18 +49,29 @@ class UserController extends Controller
                 "image",
                 "status",
                 "created_at"
-            ])->with("roles:id,name")->latest()->get()
+            ])->when(user()->hasAllRoles(\App\Enums\Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
+                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(\App\Enums\Role::OWNER->value))
+                    ->whereHas("property", function(Builder $qry) use ($estateIds) {
+                        return $qry->whereIn("estate_id", $estateIds);
+                    })->orWhereHas("unit", function(Builder $qry) use ($estateIds) {
+                        return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
+                    });
+            })->with("roles:id,name")->latest()->get(),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/users/Upsert", [
+            "roles"           => Role::pluck("name"),
+            "action"          => "create",
+            "defaultPassword" => app(UserSettings::class)->default_password
+        ]);
     }
 
     /**
@@ -79,7 +95,7 @@ class UserController extends Controller
             }
         }
 
-        $data["password"] = Hash::make(setting(SettingKey::DEFAULT_USER_PASSWORD));
+        $data["password"] = Hash::make($data["password"] ?? app(UserSettings::class)->default_password);
 
         if($request->hasFile("image")) {
             $file = $request->file("image");
@@ -87,9 +103,12 @@ class UserController extends Controller
             $file->move("images/users", $data["image"]);
         }
 
-        User::create($data)->assignRole($data["role"])->wallet()->create();
+        $user = User::create($data)->assignRole($data["role"]);
 
-        return back()->with("toast", ["message" => "User Created!"]);
+        return redirect()->route("dashboard.users.index")->with("toast", [
+            "message" => "User Created!",
+            "link"    => ["title" => "View User", "href" => route("dashboard.users.show", ["user" => $user])]
+        ]);
     }
 
     /**
@@ -111,11 +130,15 @@ class UserController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(User $user)
+    public function edit(User $user): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/users/Upsert", [
+            "user"   => $user,
+            "roles"  => Role::pluck("name"),
+            "action" => "update",
+        ]);
     }
 
     /**
@@ -150,7 +173,10 @@ class UserController extends Controller
 
         $user->update($data);
 
-        return back();
+        return redirect()->route("dashboard.users.index")->with("toast", [
+            "message" => "User Updated!",
+            "link"    => ["title" => "View User", "href" => route("dashboard.users.show", ["user" => $user])]
+        ]);
     }
 
     /**
@@ -164,5 +190,10 @@ class UserController extends Controller
         $user->delete();
 
         return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
+    }
+
+    public function settings()
+    {
+        dd("Wapi settings banaaa!");
     }
 }

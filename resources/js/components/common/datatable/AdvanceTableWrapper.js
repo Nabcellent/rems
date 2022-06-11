@@ -11,7 +11,6 @@ import {
 const IndeterminateCheckbox = forwardRef(
     ({ indeterminate, ...rest }, ref) => {
         const defaultRef = useRef();
-
         const resolvedRef = ref || defaultRef;
 
         useEffect(() => {
@@ -48,6 +47,7 @@ const AdvanceTableWrapper = ({
         setPageSize,
         gotoPage,
         pageCount,
+        selectedFlatRows,
         state: { pageIndex, pageSize, selectedRowIds, globalFilter },
         setGlobalFilter
     } = useTable(
@@ -113,6 +113,7 @@ const AdvanceTableWrapper = ({
                         pageCount,
                         pageIndex,
                         selectedRowIds,
+                        selectedFlatRows,
                         pageSize,
                         setPageSize,
                         globalFilter,

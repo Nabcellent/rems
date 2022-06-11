@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 import CardBgCorner from '@/components/CardBgCorner';
 
 const Show = ({ errors, ticket }) => {
@@ -19,7 +19,7 @@ const Show = ({ errors, ticket }) => {
                 <Card.Body>
                     <Row>
                         <Col xs={12} className={'d-flex justify-content-between align-items-start'}>
-                            <h4>Ticket.</h4><StatusBadge status={ticket.status}/>
+                            <h4>Ticket.</h4><StatusChip status={ticket.status}/>
                         </Col>
                         <Col lg={6} className={'mb-4 mb-lg-0'}>
                             <h5>Title.</h5>

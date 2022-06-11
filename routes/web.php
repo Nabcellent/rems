@@ -18,6 +18,7 @@ use App\Http\Controllers\Dashboard\TransactionController;
 use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\WalletController;
+use App\Http\Controllers\GlobalController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,14 @@ Route::middleware(['auth', 'verified'])->group(function() {
             Route::put('/', [SettingController::class, 'update'])->name('.update');
         });
 
+        Route::prefix('/users')->name('users')->group(function() {
+            Route::get('/profile/{user}', [UserController::class, 'show'])->name(".profile");
+            Route::get('/settings', [UserController::class, 'settings'])->name(".settings");
+        });
+
+        Route::match(["POST", "DELETE"], "/images/{imageable}/{imageableId}", [ImageController::class, "updateOrDeleteMain"])
+            ->name("images.main");
+
         Route::resources([
             "users"             => UserController::class,
             "estates"           => EstateController::class,
@@ -72,6 +81,8 @@ Route::middleware(['auth', 'verified'])->group(function() {
             "notices"           => NoticeController::class,
             "policies"          => PolicyController::class,
         ]);
+
+        Route::post("/delete", [GlobalController::class, "deleteMultiple"])->name("delete");
     });
 });
 

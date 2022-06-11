@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEstateRequest;
+use App\Http\Requests\UpdateEstateRequest;
 use App\Models\Estate;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\File;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -35,18 +35,23 @@ class EstateController extends Controller
     {
         return inertia('dashboard/estates', [
             "estates" => Estate::select(["id", "user_id", "name", "address"])
-                ->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
+                ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
+                    return $qry->whereBelongsTo(user());
+                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-
+        return inertia("dashboard/estates/Upsert", [
+            "action"        => "create",
+            "googleMapsKey" => config("rems.google.maps.api_key")
+        ]);
     }
 
     /**
@@ -59,9 +64,18 @@ class EstateController extends Controller
     {
         $data = $request->validated();
 
-        $request->user()->estates()->create($data);
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "est_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/estates", $data["image"]);
+        }
 
-        return redirect()->route('dashboard.estates.index');
+        $estate = $request->user()->estates()->create($data);
+
+        return redirect()->route("dashboard.estates.index")->with("toast", [
+            "message" => "Estate Created!",
+            "link"    => ["title" => "View Estate", "href" => route("dashboard.estates.show", ["estate" => $estate])]
+        ]);
     }
 
     /**
@@ -73,7 +87,7 @@ class EstateController extends Controller
     public function show(Estate $estate): Response|ResponseFactory
     {
         return inertia("dashboard/estates/Show", [
-            "estate"   => $estate->load([
+            "estate"        => $estate->load([
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
@@ -83,7 +97,8 @@ class EstateController extends Controller
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["properties", "units"]),
-            "services" => Service::select(["id", "name"])->get()
+            "services"      => Service::select(["id", "name"])->get(),
+            "googleMapsKey" => config("rems.google.maps.api_key")
         ]);
     }
 
@@ -91,11 +106,15 @@ class EstateController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Estate $estate
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(Estate $estate)
+    public function edit(Estate $estate): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/estates/Upsert", [
+            "estate"        => $estate,
+            "action"        => "update",
+            "googleMapsKey" => config("rems.google.maps.api_key")
+        ]);
     }
 
     /**
@@ -103,11 +122,26 @@ class EstateController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Estate       $estate
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Estate $estate)
+    public function update(UpdateEstateRequest $request, Estate $estate): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "est_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/estates", $data["image"]);
+
+            if($estate->image && file_exists("images/estates/$estate->image")) File::delete("images/estates/$estate->image");
+        }
+
+        $estate->update($data);
+
+        return redirect()->route("dashboard.estates.index")->with("toast", [
+            "message" => "Estate Updated!",
+            "link"    => ["title" => "View Estate", "href" => route("dashboard.estates.show", ["estate" => $estate])]
+        ]);
     }
 
     /**

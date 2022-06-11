@@ -15,7 +15,7 @@ const ProfileMenu = () => {
                 <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
             </Dropdown.Toggle>
             <Dropdown.Menu className="dropdown-menu-end">
-                <Dropdown.Item tag="a" href="/profile">
+                <Dropdown.Item tag="a" href={route("dashboard.users.profile", { user: user.id })}>
                     <i className="bx bx-user font-size-16 align-middle ms-1"/>
                     Profile
                 </Dropdown.Item>
@@ -23,7 +23,7 @@ const ProfileMenu = () => {
                     <i className="bx bx-wallet font-size-16 align-middle me-1"/>
                     My Wallet
                 </Dropdown.Item>
-                <Dropdown.Item tag="a" href="#">
+                <Dropdown.Item tag="a" href={route("dashboard.users.settings")}>
                     <span className="badge bg-success float-end">11</span>
                     <i className="bx bx-wrench font-size-17 align-middle me-1"/>
                     Settings

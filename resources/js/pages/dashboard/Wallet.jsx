@@ -7,12 +7,12 @@ import { Button, Chip, Paper } from '@mui/material';
 import { AccountBalanceWallet } from '@mui/icons-material';
 import TableDate from '@/components/TableDate';
 import DataTable from '@/components/common/datatable';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 import { useState } from 'react';
 import Pay from '@/components/Pay';
 import { Inertia } from '@inertiajs/inertia';
 import { Description } from '@/utils/enums';
-import PaymentMethodBadge from '@/components/PaymentMethodBadge';
+import PaymentMethodChip from '@/components/chips/PaymentMethodChip';
 
 const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
     console.log(wallet, transactions);
@@ -126,12 +126,12 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                                 {
                                     accessor: 'method',
                                     Header: 'Method',
-                                    Cell: ({ row }) => <PaymentMethodBadge method={row.original.payment?.method}/>
+                                    Cell: ({ row }) => <PaymentMethodChip method={row.original.payment?.method}/>
                                 },
                                 {
                                     accessor: 'status',
                                     Header: 'Status',
-                                    Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                                    Cell: ({ row }) => <StatusChip status={row.original.status}/>
                                 },
                                 {
                                     accessor: 'created_at',

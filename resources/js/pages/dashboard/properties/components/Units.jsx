@@ -96,8 +96,8 @@ const Units = ({ unitableId, units, unitable }) => {
             </Card.Header>
             <Card.Body>
                 {
-                    !units
-                        ? <Alert severity="info">This {unitable} hasn't any room yet.</Alert>
+                    !units.length
+                        ? <Alert severity="info">This {unitable} hasn't any unit yet.</Alert>
                         : units.map(unit => (
                             <Link key={`unit-${unit.id}`} className="d-flex align-items-center p-1"
                                   href={route('dashboard.units.show', { unit: unit.id })}>

@@ -2,7 +2,7 @@ import { Badge } from 'react-bootstrap';
 import { Status } from '@/utils/enums';
 import PropTypes from 'prop-types';
 
-const StatusBadge = ({ status, bg = true }) => {
+const StatusChip = ({ status, bg = true }) => {
     let color;
     if ([Status.COMPLETED, Status.ACTIVE, Status.RESOLVED].includes(status)) {
         color = 'success';
@@ -21,9 +21,9 @@ const StatusBadge = ({ status, bg = true }) => {
     );
 };
 
-StatusBadge.propTypes = {
+StatusChip.propTypes = {
     status: PropTypes.string.isRequired,
     bg: PropTypes.bool
 };
 
-export default StatusBadge;
+export default StatusChip;

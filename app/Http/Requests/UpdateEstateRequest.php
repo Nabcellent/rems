@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
 
-class UpdateUserRequest extends FormRequest
+class UpdateEstateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,12 +24,11 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "first_name" => "string|max:20",
-            "last_name"  => "string|max:20",
-            "gender"     => "nullable|in:male,female",
-            "image"      => "nullable|image|max:1024",
-            "phone"      => "nullable|phone:KE",
-            "role"       => ["nullable", new Enum(Role::class)]
+            "name"      => "required|string",
+            "address"   => "required|string",
+            "longitude" => "required|numeric",
+            "latitude"  => "required|numeric",
+            "image"     => "nullable|image|max:1024",
         ];
     }
 }

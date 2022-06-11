@@ -8,7 +8,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { currencyFormat, handleDelete } from '@/utils/helpers';
 import moment from 'moment';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 
 const Index = ({ leases }) => {
     console.log(leases);
@@ -65,7 +65,7 @@ const Index = ({ leases }) => {
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusBadge status={row.original.status} bg={false}/>
+                                Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
                             },
                             {
                                 accessor: 'actions',
