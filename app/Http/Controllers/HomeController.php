@@ -12,10 +12,10 @@ class HomeController extends Controller
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
+            'canLogin'       => Route::has('login'),
+            'canRegister'    => Route::has('register'),
             'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
+            'phpVersion'     => PHP_VERSION,
         ]);
     }
 }

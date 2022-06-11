@@ -2,6 +2,16 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Estate;
+use App\Models\Lease;
+use App\Models\Notice;
+use App\Models\Payment;
+use App\Models\Property;
+use App\Models\Service;
+use App\Models\Setting;
+use App\Models\Transaction;
+use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
@@ -44,9 +54,25 @@ class HandleInertiaRequests extends Middleware
                     "phone"
                 ]) : null,
             ],
-            'ziggy' => function() {
-                return (new Ziggy)->toArray();
-            },
+            "can"   => [
+                "access" => [
+                    "properties"   => $request->user()?->can("viewAny", Property::class),
+                    "estates"      => $request->user()?->can("viewAny", Estate::class),
+                    "leases"       => $request->user()?->can("viewAny", Lease::class),
+                    "units"        => $request->user()?->can("viewAny", Unit::class),
+                    "transactions" => $request->user()?->can("viewAny", Transaction::class),
+                    "payments"     => $request->user()?->can("viewAny", Payment::class),
+                    "notices"      => $request->user()?->can("viewAny", Notice::class),
+                    "services"     => $request->user()?->can("viewAny", Service::class),
+                    "users"        => $request->user()?->can("viewAny", User::class),
+                    "settings"     => $request->user()?->can("viewAny", Setting::class),
+                ],
+                "create" => [
+                    "lease" => $request->user()?->can("create", Lease::class),
+                    "service" => $request->user()?->can("create", Service::class)
+                ]
+            ],
+            'ziggy' => fn() => (new Ziggy)->toArray(),
             'toast' => fn() => session()->get("toast")
         ]);
     }
