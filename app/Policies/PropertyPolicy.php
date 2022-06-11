@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Enums\Role;
 use App\Models\Policy;
+use App\Models\Property;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
@@ -42,9 +43,9 @@ class PropertyPolicy
      * @param  \App\Models\Policy  $policy
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Policy $policy)
+    public function view(User $user, Property $property)
     {
-        //
+        return $property->user_id === $user->id;
     }
 
     /**
@@ -65,9 +66,9 @@ class PropertyPolicy
      * @param  \App\Models\Policy  $policy
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Policy $policy)
+    public function update(User $user, Property $property)
     {
-        //
+        return $property->user_id === $user->id;
     }
 
     /**
@@ -77,7 +78,7 @@ class PropertyPolicy
      * @param  \App\Models\Policy  $policy
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Policy $policy)
+    public function delete(User $user, Property $property)
     {
         //
     }
@@ -89,7 +90,7 @@ class PropertyPolicy
      * @param  \App\Models\Policy  $policy
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Policy $policy)
+    public function restore(User $user, Property $property)
     {
         //
     }
@@ -101,7 +102,7 @@ class PropertyPolicy
      * @param  \App\Models\Policy  $policy
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Policy $policy)
+    public function forceDelete(User $user, Property $property)
     {
         //
     }

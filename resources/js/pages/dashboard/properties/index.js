@@ -7,6 +7,7 @@ import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
+import TableActions from '@/components/TableActions';
 
 const Index = ({ properties }) => {
     console.log(properties);
@@ -26,6 +27,19 @@ const Index = ({ properties }) => {
                                 Cell: ({ row }) => row.original.name || ' - '
                             },
                             {
+                                accessor: 'estate',
+                                Header: 'Estate',
+                                Cell: ({ row }) => (
+                                    <span>
+                                        <Link
+                                            href={route('dashboard.estates.show', { estate: row.original.estate.id })}>
+                                            {row.original.estate.name}
+                                        </Link><br/>
+                                        <small>{row.original.estate.address}</small>
+                                    </span>
+                                )
+                            },
+                            {
                                 accessor: 'owner',
                                 Header: 'Owner',
                                 Cell: ({ row }) => (
@@ -42,11 +56,6 @@ const Index = ({ properties }) => {
                                 Header: 'Type',
                             },
                             {
-                                accessor: 'address',
-                                Header: 'Address',
-                                Cell: ({ row }) => row.original.estate.address
-                            },
-                            {
                                 accessor: 'units_count',
                                 Header: 'Units',
                                 Cell: ({ row }) => row.original.units_count
@@ -55,27 +64,7 @@ const Index = ({ properties }) => {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => {
-                                    return (
-                                        <>
-                                            <IconButton
-                                                onClick={() => Inertia.get(route('dashboard.properties.create'))}
-                                                size={"small"}
-                                                color={"primary"}>
-                                                <Edit fontSize={'small'}/>
-                                            </IconButton>
-                                            <Link
-                                                href={route('dashboard.properties.show', { property: row.original.id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                            <IconButton
-                                                onClick={() => handleDelete(route('dashboard.properties.destroy', { property: row.original.id }), 'property')}
-                                                size={"small"} color={"error"}>
-                                                <Delete fontSize={'small'}/>
-                                            </IconButton>
-                                        </>
-                                    );
-                                }
+                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'property'}/>
                             }
                         ]} data={properties} onCreateRow={() => Inertia.get(route('dashboard.properties.create'))}/>
                     </Paper>

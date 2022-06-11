@@ -48,7 +48,8 @@ const Index = ({ estates }) => {
                                     accessor: 'actions',
                                     disableSortBy: true,
                                     className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>                                }
+                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>
+                                }
                             ]} data={estates} onCreateRow={() => Inertia.get(route('dashboard.estates.create'))}/>
                         </Card.Body>
                     </Card>

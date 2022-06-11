@@ -13,9 +13,8 @@ const TableActions = ({ entity, entityId }) => {
 
     return (
         <>
-            <IconButton
-                onClick={() => Inertia.get(route(`dashboard.${entityPlural}.edit`, { [entity]: entityId }))}
-                color={"primary"}>
+            <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: entityId })}
+                        color={"primary"}>
                 <Edit fontSize={'small'}/>
             </IconButton>
             <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: entityId })}>

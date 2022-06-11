@@ -30,7 +30,7 @@ class StorePropertyRequest extends FormRequest
             "estate_id" => "required|numeric|exists:estates,id",
             "name"      => "required|string|max:100",
             "type"      => ["required", new Enum(PropertyType::class)],
-            "image"     => "nullable|image|1024",
+            "image"     => "nullable|image|max:1024",
             "status"    => ["nullable", new Enum(Status::class)]
         ];
     }
