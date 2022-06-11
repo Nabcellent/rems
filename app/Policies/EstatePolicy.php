@@ -65,9 +65,9 @@ class EstatePolicy
      * @param \App\Models\Estate $estate
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Estate $estate)
+    public function update(User $user, Estate $estate): Response|bool
     {
-        //
+        return $estate->user_id === $user->id;
     }
 
     /**

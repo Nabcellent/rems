@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEstateRequest;
+use App\Http\Requests\UpdateEstateRequest;
 use App\Models\Estate;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -65,7 +67,7 @@ class EstateController extends Controller
 
         if($request->hasFile("image")) {
             $file = $request->file("image");
-            $data["image"] = "estate_" . time() . ".{$file->guessClientExtension()}";
+            $data["image"] = "est_" . time() . ".{$file->guessClientExtension()}";
             $file->move("images/estates", $data["image"]);
         }
 
@@ -105,11 +107,15 @@ class EstateController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Estate $estate
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(Estate $estate)
+    public function edit(Estate $estate): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/estates/Upsert", [
+            "estate"        => $estate,
+            "action"        => "update",
+            "googleMapsKey" => config("rems.google.maps.api_key")
+        ]);
     }
 
     /**
@@ -117,11 +123,26 @@ class EstateController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Estate       $estate
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Estate $estate)
+    public function update(UpdateEstateRequest $request, Estate $estate)
     {
-        //
+        $data = $request->validated();
+
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "est_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/estates", $data["image"]);
+
+            if($estate->image && file_exists("images/estates/$estate->image")) File::delete("images/estates/$estate->image");
+        }
+
+        $estate->update($data);
+
+        return redirect()->route("dashboard.estates.index")->with("toast", [
+            "message" => "Estate Updated!",
+            "link"    => ["title" => "View Estate", "href" => route("dashboard.estates.show", ["estate" => $estate])]
+        ]);
     }
 
     /**

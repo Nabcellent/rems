@@ -50,11 +50,10 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
 
     const formik = useFormik({
         initialValues: {
-            name: estate?.first_name ?? '',
-            address: estate?.last_name ?? '',
-            latitude: estate?.phone ?? '',
-            longitude: estate?.gender ?? '',
-            email: estate?.email ?? '',
+            name: estate?.name ?? '',
+            address: estate?.address ?? '',
+            latitude: estate?.latitude ?? '',
+            longitude: estate?.longitude ?? '',
             status: estate?.status ?? Status.ACTIVE,
             image: '',
         },
@@ -64,7 +63,7 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
             let url = route(`dashboard.estates.store`);
 
             if (estate) {
-                url = route(`dashboard.estates.update`, { user: user.id });
+                url = route(`dashboard.estates.update`, { estate: estate.id });
                 values._method = Method.PUT;
             }
 
@@ -102,13 +101,14 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Latitude" placeholder="Latitude..." name={'latitude'}
+                                           disabled
                                            value={formik.values.latitude} fullWidth onChange={formik.handleChange}
                                            error={formik.touched.latitude && Boolean(formik.errors.latitude)}
                                            helperText={formik.touched.latitude && formik.errors.latitude}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Longitude" placeholder="Longitude..."
-                                           name={'longitude'}
+                                           name={'longitude'} disabled
                                            value={formik.values.longitude} fullWidth onChange={formik.handleChange}
                                            error={formik.touched.longitude && Boolean(formik.errors.longitude)}
                                            helperText={formik.touched.longitude && formik.errors.longitude}/>
