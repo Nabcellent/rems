@@ -19,6 +19,7 @@ use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\WalletController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ListingsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,18 +35,19 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [HomeController::class, 'home'])->name("home");
+Route::get('/listings', [ListingsController::class, 'listings'])->name("listings");
 
-Route::middleware(['auth', 'verified'])->group(function() {
-    Route::prefix('/dashboard')->name("dashboard.")->group(function() {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::prefix('/dashboard')->name("dashboard.")->group(function () {
         Route::get('/', [DashboardController::class, 'default'])->name("default");
         Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");
 
-        Route::prefix('/wallet')->name('wallet')->group(function() {
+        Route::prefix('/wallet')->name('wallet')->group(function () {
             Route::get('/', [WalletController::class, 'index']);
             Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
         });
 
-        Route::prefix('/settings')->name('settings')->group(function() {
+        Route::prefix('/settings')->name('settings')->group(function () {
             Route::get('/', [SettingController::class, 'index']);
             Route::put('/', [SettingController::class, 'update'])->name('.update');
         });
