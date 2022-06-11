@@ -1,4 +1,4 @@
-import Guest from '@/layouts/Guest';
+import Auth from '@/layouts/Auth';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
@@ -16,13 +16,13 @@ createInertiaApp({
     resolve: (name) => {
         const page = require(`./pages/${name}`).default;
 
-        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Guest children={page}/>;
+        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Auth children={page} />;
 
         return page;
     },
     setup: ({ el, App, props }) => {
-        return createRoot(el).render(<ThemeProvider theme={theme}><App {...props}/></ThemeProvider>);
+        return createRoot(el).render(<ThemeProvider theme={theme}><App {...props} /></ThemeProvider>);
     }
 });
 
-InertiaProgress.init({ color: '#4B5563', showSpinner:true });
+InertiaProgress.init({ color: '#4B5563', showSpinner: true });

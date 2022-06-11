@@ -1,10 +1,10 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/inertia-react';
-import '../assets/css/guest.css';
+import '../assets/css/auth.css';
 import logo from '@/assets/images/logo.svg';
 import logoDarkSvg from '@/assets/images/logo-dark.svg';
 
-export default function Welcome({auth, laravelVersion, phpVersion}) {
+export default function Welcome({ auth, laravelVersion, phpVersion }) {
     return (
         <>
             <Head><title>Welcome</title></Head>
@@ -31,8 +31,8 @@ export default function Welcome({auth, laravelVersion, phpVersion}) {
                 <div className="max-w-6xl mx-auto sm:px-6 lg:px-8">
                     <div className="flex justify-center pt-8 sm:justify-start sm:pt-0">
                         <Link href="/" className="logo logo-dark">
-                            <span className="logo-sm"><img src={logo} alt="" height="47"/></span>
-                            <span className="logo-lg"><img src={logoDarkSvg} alt="" height="40"/></span>
+                            <span className="logo-sm"><img src={logo} alt="" height="47" /></span>
+                            <span className="logo-lg"><img src={logoDarkSvg} alt="" height="40" /></span>
                         </Link>
                     </div>
 
