@@ -47,10 +47,6 @@ const validationSchema = yup.object({
 const Upsert = ({ estate, action, googleMapsKey }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
-    const [mapPosition, setMapPosition] = useState({
-        lat: -1.265788,
-        lng: 36.760435
-    });
 
     const formik = useFormik({
         initialValues: {
@@ -82,15 +78,6 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
         }
     });
 
-    const handlePositionChange = e => {
-        formik.setFieldValue(e.target.name, e.target.value);
-
-        setMapPosition({
-            lat: e.target.name === 'latitude' ? parseFloat(e.target.value) : mapPosition.lat,
-            lng: e.target.name === 'longitude' ? parseFloat(e.target.value) : mapPosition.lng,
-        });
-    };
-
     return (
         <Dashboard title={str.headline(`${action} User`)}>
             <Breadcrumbs title={"Users"} breadcrumbItem={str.ucFirst(action)}/>
@@ -108,23 +95,21 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                                            helperText={formik.touched.name && formik.errors.name}/>
                             </Grid>
                             <Grid item lg={6}>
-                                <TextField label="Address" placeholder="Address..." name={'last_name'}
+                                <TextField label="Address" placeholder="Address..." name={'address'}
                                            value={formik.values.address} fullWidth onChange={formik.handleChange}
                                            error={formik.touched.address && Boolean(formik.errors.address)}
                                            helperText={formik.touched.address && formik.errors.address}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Latitude" placeholder="Latitude..." name={'latitude'}
-                                           value={formik.values.latitude} fullWidth
-                                           onChange={e => handlePositionChange(e)}
+                                           value={formik.values.latitude} fullWidth onChange={formik.handleChange}
                                            error={formik.touched.latitude && Boolean(formik.errors.latitude)}
                                            helperText={formik.touched.latitude && formik.errors.latitude}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Longitude" placeholder="Longitude..."
                                            name={'longitude'}
-                                           value={formik.values.longitude} fullWidth
-                                           onChange={e => handlePositionChange(e)}
+                                           value={formik.values.longitude} fullWidth onChange={formik.handleChange}
                                            error={formik.touched.longitude && Boolean(formik.errors.longitude)}
                                            helperText={formik.touched.longitude && formik.errors.longitude}/>
                             </Grid>
@@ -166,12 +151,11 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
 
                 <Grid item xs={12} xl={6}>
                     <Paper className={'p-3'}>
-                        <Map apiKey={googleMapsKey}
-                             position={{
-                                 lat: parseFloat(mapPosition.lat),
-                                 lng: parseFloat(mapPosition.lng)
-                             }}
+                        <Map apiKey={googleMapsKey} searchable={true} editable={true}
+                             center={{ lat: estate?.latitude, lng: estate?.longitude }}
                              onLocationChange={pos => {
+                                 pos?.name && formik.setFieldValue('name', pos.name, true);
+                                 pos?.address && formik.setFieldValue('address', pos.address, true);
                                  formik.setFieldValue('latitude', pos.lat, true);
                                  formik.setFieldValue('longitude', pos.lng, true);
                              }}/>

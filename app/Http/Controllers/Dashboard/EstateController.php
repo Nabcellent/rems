@@ -48,7 +48,7 @@ class EstateController extends Controller
     public function create(): Response|ResponseFactory
     {
         return inertia("dashboard/estates/Upsert", [
-            "action"          => "create",
+            "action"        => "create",
             "googleMapsKey" => config("rems.google.maps.api_key")
         ]);
     }
@@ -63,9 +63,18 @@ class EstateController extends Controller
     {
         $data = $request->validated();
 
-        $request->user()->estates()->create($data);
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "estate_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/estates", $data["image"]);
+        }
 
-        return redirect()->route('dashboard.estates.index');
+        $estate = $request->user()->estates()->create($data);
+
+        return redirect()->route("dashboard.estates.index")->with("toast", [
+            "message" => "Estate Created!",
+            "link"    => ["title" => "View Estate", "href" => route("dashboard.estates.show", ["estate" => $estate])]
+        ]);
     }
 
     /**
@@ -77,7 +86,7 @@ class EstateController extends Controller
     public function show(Estate $estate): Response|ResponseFactory
     {
         return inertia("dashboard/estates/Show", [
-            "estate"   => $estate->load([
+            "estate"        => $estate->load([
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
@@ -87,7 +96,8 @@ class EstateController extends Controller
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["properties", "units"]),
-            "services" => Service::select(["id", "name"])->get()
+            "services"      => Service::select(["id", "name"])->get(),
+            "googleMapsKey" => config("rems.google.maps.api_key")
         ]);
     }
 

@@ -18,7 +18,11 @@ class Estate extends Model
 
     protected $fillable = [
         "name",
-        "location"
+        "address",
+        "image",
+        "latitude",
+        "longitude",
+        "status",
     ];
 
     /**

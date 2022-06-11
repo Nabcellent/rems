@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, Divider, Grid, Paper, useTheme } from '@mui/material';
 import {
     AlternateEmail,
     Apartment,
@@ -24,14 +24,15 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/Images';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
 import Policies from '@/components/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
+import Map from '@/components/Map';
 
-const Show = ({ errors, estate, services }) => {
+const Show = ({ errors, estate, services, googleMapsKey }) => {
     console.log(estate);
     const theme = useTheme();
     const [service, setService] = useState(undefined);
@@ -124,14 +125,11 @@ const Show = ({ errors, estate, services }) => {
                                     </Link>
                                 </div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <PhoneIphone fontSize={'small'}/>
-                                </Avatar>
-                                <div className="flex-1"><PhoneBadge phone={estate.user.phone}/></div>
+                            <div className="mb-2">
+                                <PhoneBadge phone={estate.user.phone}/>
                             </div>
                             <Button variant={'outlined'}
-                                    className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
+                                    className="px-3 btn btn-falcon-default btn-sm">Notify</Button>
                         </div>
                     </div>
                 </div>
@@ -186,6 +184,10 @@ const Show = ({ errors, estate, services }) => {
                     }
                     <Paper className={'mb-3'}>
                         <Images imageableId={estate.id} images={estate.images} imageable={Morphable.ESTATE}/>
+                    </Paper>
+
+                    <Paper className={'p-3'}>
+                        <Map apiKey={googleMapsKey} center={{ lat: estate.latitude, lng: estate.longitude }}/>
                     </Paper>
                 </Col>
                 <Col sm={5}>
