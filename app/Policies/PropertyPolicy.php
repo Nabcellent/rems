@@ -53,9 +53,9 @@ class PropertyPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user): Response|bool
     {
-        //
+        return $user->hasRole(Role::PROPERTY_MANAGER->value);
     }
 
     /**

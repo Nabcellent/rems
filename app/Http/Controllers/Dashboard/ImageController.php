@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImageRequest;
-use App\Http\Requests\UpdateImageRequest;
 use App\Models\Estate;
 use App\Models\Image;
 use App\Models\Property;
@@ -53,7 +52,6 @@ class ImageController extends Controller
             "estate" => new Estate,
             "property" => new Property,
             "unit" => new Unit,
-            "room" => new Room,
         };
 
         $model = $model->findOrFail($imageableId);

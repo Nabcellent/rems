@@ -23,10 +23,11 @@ import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/Images';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Policies from '@/components/Policies';
+import MainImage from '@/components/MainImage';
 
 const Show = ({ errors, unit }) => {
     console.log(unit);
@@ -54,17 +55,7 @@ const Show = ({ errors, unit }) => {
                 <div className="position-relative min-vh-25 mb-7 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                        backgroundColor: theme.palette.primary.main
-                    }} src={`/images/units/${unit.image}`}>
-                        {unit.house_number}
-                    </Avatar>
+                    <MainImage image={unit.image} imageable={'unit'} imageableId={unit.id}/>
                 </div>
                 <div className="card-body">
                     <div className="row">

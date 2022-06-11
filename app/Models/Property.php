@@ -14,6 +14,15 @@ class Property extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "estate_id",
+        "user_id",
+        "name",
+        "type",
+        "image",
+        "status",
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */

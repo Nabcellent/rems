@@ -134,12 +134,12 @@ class User extends Authenticatable
         return $this->hasMany(Estate::class);
     }
 
-    public function property(): HasMany
+    public function properties(): HasMany
     {
         return $this->hasMany(Property::class);
     }
 
-    public function unit(): HasMany
+    public function units(): HasMany
     {
         return $this->hasMany(Unit::class);
     }

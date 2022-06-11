@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Estate;
 use App\Models\Role;
 use App\Models\User;
 use App\Settings\UserSettings;
@@ -37,6 +37,8 @@ class UserController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
+        $estateIds = user()->estates()->pluck("id");
+
         return inertia('dashboard/users', [
             "users" => User::select([
                 "id",
@@ -47,8 +49,13 @@ class UserController extends Controller
                 "image",
                 "status",
                 "created_at"
-            ])->when(user()->hasAllRoles(\App\Enums\Role::PROPERTY_MANAGER->value), function(Builder $qry) {
-                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(\App\Enums\Role::OWNER->value));
+            ])->when(user()->hasAllRoles(\App\Enums\Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
+                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(\App\Enums\Role::OWNER->value))
+                    ->whereHas("property", function(Builder $qry) use ($estateIds) {
+                        return $qry->whereIn("estate_id", $estateIds);
+                    })->orWhereHas("unit", function(Builder $qry) use ($estateIds) {
+                        return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
+                    });
             })->with("roles:id,name")->latest()->get(),
         ]);
     }

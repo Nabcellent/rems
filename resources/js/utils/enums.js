@@ -71,3 +71,9 @@ export const PaymentMethod = {
     WALLET: 'WALLET',
     PAYPAL: 'PAYPAL'
 };
+
+export const PropertyType = {
+    BUNGALOW: 'BUNGALOW',
+    APARTMENT: 'APARTMENT',
+    MAISONETTE: 'MAISONETTE'
+};
