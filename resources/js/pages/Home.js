@@ -76,6 +76,7 @@ const Home = () => {
                     image={searchImg}
                     title={'Property Listings'}
                     desc={'Find your desired property here. Filter your selection based on your preferences to find your most suitable next home.'}
+                    onBtnClick={() => Inertia.get(route('listings'))}
                 />
             </Guest>
         </>
