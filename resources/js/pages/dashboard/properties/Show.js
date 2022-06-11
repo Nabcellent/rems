@@ -3,8 +3,8 @@ import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
 import { AlternateEmail, Badge, LocationOn, OtherHouses, PhoneIphone, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
-import StatusBadge from '@/components/StatusBadge';
-import PhoneBadge from '@/components/PhoneBadge';
+import StatusChip from '@/components/chips/StatusChip';
+import PhoneChip from '@/components/chips/PhoneChip';
 import { getInitials } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Col, Row } from 'react-bootstrap';
@@ -65,7 +65,7 @@ const Show = ({ errors, property }) => {
                                             : <ToggleOff fontSize={'small'}/>
                                     }
                                 </Avatar>
-                                <div className="flex-1"><StatusBadge status={property.status}/></div>
+                                <div className="flex-1"><StatusChip status={property.status}/></div>
                             </div>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
@@ -90,7 +90,7 @@ const Show = ({ errors, property }) => {
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     <PhoneIphone fontSize={'small'}/>
                                 </Avatar>
-                                <div className="flex-1"><PhoneBadge phone={property.user.phone}/></div>
+                                <div className="flex-1"><PhoneChip phone={property.user.phone}/></div>
                             </div>
                             <Button variant={'outlined'}
                                     className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>

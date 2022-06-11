@@ -46,7 +46,7 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         return array_merge(parent::share($request), [
-            'auth'  => [
+            "auth"       => [
                 'user' => fn(Request $request) => $request->user() ? $request->user()->only([
                     'id',
                     'first_name',
@@ -55,7 +55,7 @@ class HandleInertiaRequests extends Middleware
                     "phone"
                 ]) : null,
             ],
-            "can"   => [
+            "can"        => [
                 "access" => [
                     "properties"   => $request->user()?->can("viewAny", Property::class),
                     "estates"      => $request->user()?->can("viewAny", Estate::class),
@@ -75,8 +75,9 @@ class HandleInertiaRequests extends Middleware
                     "service" => $request->user()?->can("create", Service::class)
                 ]
             ],
-            'ziggy' => fn() => (new Ziggy)->toArray(),
-            'toast' => fn() => session()->get("toast")
+            "ziggy"      => fn() => (new Ziggy)->toArray(),
+            "toast"      => fn() => session()->get("toast"),
+            "csrf_token" => csrf_token()
         ]);
     }
 }

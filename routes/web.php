@@ -57,8 +57,12 @@ Route::middleware(['auth', 'verified'])->group(function() {
         });
 
         Route::prefix('/users')->name('users')->group(function() {
-            Route::get('/settings', [SettingController::class, 'index'])->name(".settings");
+            Route::get('/profile/{user}', [UserController::class, 'show'])->name(".profile");
+            Route::get('/settings', [UserController::class, 'settings'])->name(".settings");
         });
+
+        Route::match(["POST", "DELETE"], "/images/{imageable}/{imageableId}", [ImageController::class, "updateOrDeleteMain"])
+            ->name("images.main");
 
         Route::resources([
             "users"             => UserController::class,

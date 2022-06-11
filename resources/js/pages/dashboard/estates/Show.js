@@ -16,8 +16,8 @@ import {
     ToggleOn
 } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
-import StatusBadge from '@/components/StatusBadge';
-import PhoneBadge from '@/components/PhoneBadge';
+import StatusChip from '@/components/chips/StatusChip';
+import PhoneChip from '@/components/chips/PhoneChip';
 import { getInitials, handleDelete } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
@@ -31,6 +31,7 @@ import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
 import Policies from '@/components/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
 import Map from '@/components/Map';
+import MainImage from '@/components/MainImage';
 
 const Show = ({ errors, estate, services, googleMapsKey }) => {
     console.log(estate);
@@ -58,17 +59,7 @@ const Show = ({ errors, estate, services, googleMapsKey }) => {
                 <div className="position-relative min-vh-25 mb-7 card-header">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                        backgroundColor: theme.palette.primary.main
-                    }} src={`/images/estates/${estate.image}`}>
-                        {getInitials(estate.name)}
-                    </Avatar>
+                    <MainImage image={estate.image} imageable={'estate'} imageableId={estate.id}/>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -99,7 +90,7 @@ const Show = ({ errors, estate, services, googleMapsKey }) => {
                                             : <ToggleOff fontSize={'small'}/>
                                     }
                                 </Avatar>
-                                <div className="flex-1"><StatusBadge status={estate.status}/></div>
+                                <div className="flex-1"><StatusChip status={estate.status}/></div>
                             </div>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
@@ -126,7 +117,7 @@ const Show = ({ errors, estate, services, googleMapsKey }) => {
                                 </div>
                             </div>
                             <div className="mb-2">
-                                <PhoneBadge phone={estate.user.phone}/>
+                                <PhoneChip phone={estate.user.phone}/>
                             </div>
                             <Button variant={'outlined'}
                                     className="px-3 btn btn-falcon-default btn-sm">Notify</Button>

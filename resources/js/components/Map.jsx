@@ -19,8 +19,6 @@ const Map = ({ apiKey, center, searchable = false, editable = false, onLocationC
         libraries,
     });
 
-    console.log(isLoaded);
-
     const onLoad = useCallback(function callback(map) {
         setMap(map);
     }, []);

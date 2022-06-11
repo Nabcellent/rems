@@ -6,8 +6,8 @@ import { Avatar, IconButton, Paper, useTheme } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
-import PhoneBadge from '@/components/PhoneBadge';
-import StatusBadge from '@/components/StatusBadge';
+import PhoneChip from '@/components/chips/PhoneChip';
+import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
 
 // Import React FilePond with plugins & styles
@@ -67,7 +67,7 @@ const Index = ({ users }) => {
                                 accessor: 'phone',
                                 Header: 'Phone',
                                 Cell: ({ row }) => row.original.phone
-                                    ? <PhoneBadge phone={row.original.phone}/>
+                                    ? <PhoneChip phone={row.original.phone}/>
                                     : "N/A"
                             },
                             {
@@ -78,7 +78,7 @@ const Index = ({ users }) => {
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusBadge status={row.original.status} bg={false}/>
+                                Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
                             },
                             {
                                 accessor: 'created_at',

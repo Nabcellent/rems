@@ -4,7 +4,7 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { ListItemIcon, Paper } from '@mui/material';
 import { Cancel, Pending, ReadMore, TaskAlt, Update } from '@mui/icons-material';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 import { Link } from '@inertiajs/inertia-react';
 import IconMenuDropdown from '@/components/IconMenuDropdown';
 import { Inertia } from '@inertiajs/inertia';
@@ -63,7 +63,7 @@ const Index = ({ transactions }) => {
                                 {
                                     accessor: 'status',
                                     Header: 'Status',
-                                    Cell: ({ row }) => <StatusBadge status={row.original.status}/>
+                                    Cell: ({ row }) => <StatusChip status={row.original.status}/>
                                 },
                                 {
                                     accessor: 'created_at',

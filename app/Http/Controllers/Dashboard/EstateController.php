@@ -125,7 +125,7 @@ class EstateController extends Controller
      * @param \App\Models\Estate       $estate
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateEstateRequest $request, Estate $estate)
+    public function update(UpdateEstateRequest $request, Estate $estate): RedirectResponse
     {
         $data = $request->validated();
 

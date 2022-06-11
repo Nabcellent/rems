@@ -10,8 +10,8 @@ import { useState } from 'react';
 import { Inertia, Method } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
 import { isValidPhoneNumber } from 'libphonenumber-js';
-import PhoneBadge from '@/components/PhoneBadge';
-import StatusBadge from '@/components/StatusBadge';
+import PhoneChip from '@/components/chips/PhoneChip';
+import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
 import UserModal from '@/pages/dashboard/users/components/UserModal';
 
@@ -121,13 +121,13 @@ const Index = ({ providers }) => {
                                 accessor: 'phone',
                                 Header: 'Phone',
                                 Cell: ({ row }) => row.original.phone
-                                    ? <PhoneBadge phone={row.original.phone}/>
+                                    ? <PhoneChip phone={row.original.phone}/>
                                     : "N/A"
                             },
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusBadge status={row.original.status} bg={false}/>
+                                Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
                             },
                             {
                                 accessor: 'created_at',

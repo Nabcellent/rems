@@ -184,4 +184,9 @@ class UserController extends Controller
 
         return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
     }
+
+    public function settings()
+    {
+        dd("Wapi settings banaaa!");
+    }
 }

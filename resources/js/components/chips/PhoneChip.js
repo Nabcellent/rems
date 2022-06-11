@@ -5,7 +5,7 @@ import { Telco } from '@/utils/enums';
 import { Chip } from '@mui/material';
 import { Phone } from '@mui/icons-material';
 
-const PhoneBadge = ({ phone }) => {
+const PhoneChip = ({ phone }) => {
     const telco = getTelcoFromPhone(phone);
     let color = 'secondary';
 
@@ -20,8 +20,8 @@ const PhoneBadge = ({ phone }) => {
     return <Chip icon={<Phone/>} sx={{ px: .5, bgcolor: color }} className={`font-size-12`} label={phone ? parsePhone(phone) : 'N/A'}/>;
 };
 
-PhoneBadge.propTypes = {
+PhoneChip.propTypes = {
     phone: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
-export default PhoneBadge;
+export default PhoneChip;

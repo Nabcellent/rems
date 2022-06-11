@@ -2,11 +2,11 @@ import Dashboard from '@/layouts/Dashboard';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import { Card, Col, Dropdown, Row, Table } from 'react-bootstrap';
 import { currencyFormat, parsePhone } from '@/utils/helpers';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 import { CurrencyExchange } from '@mui/icons-material';
 import moment from 'moment';
 import { lazy } from 'react';
-import PhoneBadge from '@/components/PhoneBadge';
+import PhoneChip from '@/components/chips/PhoneChip';
 
 const TransactionTable = lazy(() => import('@/pages/dashboard/transactions/TransactionTable'));
 const PaymentTable = lazy(() => import('@/pages/dashboard/transactions/PaymentTable'));
@@ -42,7 +42,7 @@ const Show = ({ errors, transaction }) => {
                                     <div className={'col-xl-5'}>
                                         <h5 className="">{transaction.user.full_name}</h5>
                                         <p className="text-muted mb-1 text-truncate">{transaction.user.email}</p>
-                                        <PhoneBadge phone={transaction.user.phone}/>
+                                        <PhoneChip phone={transaction.user.phone}/>
                                         <p className="text-muted mb-1">{transaction.user.user_roles_str}</p>
                                     </div>
 
@@ -53,7 +53,7 @@ const Show = ({ errors, transaction }) => {
                                     <div className={'col-xl-5 text-end'}>
                                         <h5 className="">{transaction.destination.full_name}</h5>
                                         <p className="text-muted mb-1 text-truncate">{transaction.destination.email}</p>
-                                        <PhoneBadge phone={transaction.destination.phone}/>
+                                        <PhoneChip phone={transaction.destination.phone}/>
                                         <p className="text-muted mb-1">{transaction.destination.user_roles_str}</p>
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@ const Show = ({ errors, transaction }) => {
                                         <div>
                                             <h5 className={'fw-bold'}>{transaction.description}</h5>
                                             <div className={'d-flex align-items-center justify-content-between'}>
-                                                <p>Status: <StatusBadge status={transaction.status}/></p>
+                                                <p>Status: <StatusChip status={transaction.status}/></p>
                                                 <p>Type: {transaction.type}</p>
                                             </div>
                                         </div>
@@ -114,7 +114,7 @@ const Show = ({ errors, transaction }) => {
                                             <h5 className={'fw-bold'}>
                                                 {transaction.payment.method}
                                             </h5>
-                                            <p>Status: <StatusBadge status={transaction.payment.status}/></p>
+                                            <p>Status: <StatusChip status={transaction.payment.status}/></p>
                                         </div>
                                         <div
                                             className={'d-flex align-items-center justify-content-between flex-column'}>

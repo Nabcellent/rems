@@ -4,7 +4,7 @@ import { IconButton, Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import { currencyFormat, handleDelete } from '@/utils/helpers';
 import moment from 'moment';
-import StatusBadge from '@/components/StatusBadge';
+import StatusChip from '@/components/chips/StatusChip';
 import DataTable from '@/components/common/datatable';
 import { Inertia } from '@inertiajs/inertia';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
