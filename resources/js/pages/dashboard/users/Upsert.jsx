@@ -52,7 +52,7 @@ const validationSchema = yup.object({
     password: yup.string().min(7),
 });
 
-const Upsert = ({ user, action, roles, defaultPassword }) => {
+const Upsert = ({ user, createsOwnerFor, action, roles, defaultPassword }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -63,10 +63,11 @@ const Upsert = ({ user, action, roles, defaultPassword }) => {
             phone: user?.phone ?? '',
             gender: user?.gender ?? '',
             email: user?.email ?? '',
-            role: '',
+            role: createsOwnerFor ? Role.OWNER : '',
             status: user?.status ?? Status.ACTIVE,
             image: '',
             password: defaultPassword,
+            createsOwnerFor
         },
         validationSchema,
         validateOnChange: true,
@@ -102,6 +103,7 @@ const Upsert = ({ user, action, roles, defaultPassword }) => {
                                 action === "create" && (
                                     <Grid item lg={4}>
                                         <TextField label="Role" placeholder="Role..." name={'role'} autoFocus select
+                                                   disabled={Boolean(createsOwnerFor)}
                                                    value={formik.values.role} fullWidth onChange={formik.handleChange}
                                                    error={formik.touched.role && Boolean(formik.errors.role)}
                                                    helperText={formik.touched.role && formik.errors.role}>

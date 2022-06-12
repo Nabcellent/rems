@@ -61,6 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('/users')->name('users')->group(function() {
             Route::get('/profile/{user}', [UserController::class, 'show'])->name(".profile");
             Route::get('/settings', [UserController::class, 'settings'])->name(".settings");
+            Route::get('/owners/{entity}', [UserController::class, "owners"])->name(".owners");
         });
 
         Route::match(["POST", "DELETE"], "/images/{imageable}/{imageableId}", [ImageController::class, "updateOrDeleteMain"])
