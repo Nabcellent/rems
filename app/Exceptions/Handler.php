@@ -67,6 +67,10 @@ class Handler extends ExceptionHandler
             return back()->with("toast", ["message" => "The page expired, please try again.",]);
         }
 
+        if ($response->status() === 403) {
+            return back()->with("toast", ["message" => "This action is unauthorized.", "type" => "warning"]);
+        }
+
         return $response;
     }
 

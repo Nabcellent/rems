@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Estate;
-use App\Models\Role;
+use App\Models\Property;
+use App\Models\Role as RoleModel;
+use App\Models\Unit;
 use App\Models\User;
 use App\Settings\UserSettings;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -49,29 +54,58 @@ class UserController extends Controller
                 "image",
                 "status",
                 "created_at"
-            ])->when(user()->hasAllRoles(\App\Enums\Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
-                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(\App\Enums\Role::OWNER->value))
-                    ->whereHas("property", function(Builder $qry) use ($estateIds) {
+            ])->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
+                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))
+                    ->whereHas("properties", function(Builder $qry) use ($estateIds) {
                         return $qry->whereIn("estate_id", $estateIds);
-                    })->orWhereHas("unit", function(Builder $qry) use ($estateIds) {
+                    })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
                         return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
                     });
             })->with("roles:id,name")->latest()->get(),
         ]);
     }
 
+    public function owners(): JsonResponse
+    {
+        $estateIds = user()->estates()->pluck("id");
+
+        return response()->json([
+            "users" => User::select(["id", "email",])
+                ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
+                    return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))
+                        ->whereHas("properties", function(Builder $qry) use ($estateIds) {
+                            return $qry->whereIn("estate_id", $estateIds);
+                        })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
+                            return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
+                        });
+                })->latest("email")->get()
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create(): Response|ResponseFactory
+    public function create(Request $request): Response|ResponseFactory
     {
-        return inertia("dashboard/users/Upsert", [
-            "roles"           => Role::pluck("name"),
+        $props = [
+            "roles"           => RoleModel::when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
+                return $qry->whereIn("name", [Role::OWNER->value, Role::SERVICE_PROVIDER->value]);
+            })->when($request->has("entity"), fn(Builder $qry) => $qry->whereName(Role::OWNER->value))->pluck("name"),
             "action"          => "create",
-            "defaultPassword" => app(UserSettings::class)->default_password
-        ]);
+            "defaultPassword" => app(UserSettings::class)->default_password,
+        ];
+
+        if($request->has("entity")) {
+            $props["createsOwnerFor"] = [
+                "id"   => $request->input("entityId"),
+                "name" => $request->input("entity")
+            ];
+        }
+
+        return inertia("dashboard/users/Upsert", $props);
     }
 
     /**
@@ -105,6 +139,18 @@ class UserController extends Controller
 
         $user = User::create($data)->assignRole($data["role"]);
 
+        if($request->has("createsOwnerFor")) {
+            $propertyModel = match ($data["createsOwnerFor"]["name"]) {
+                "estate" => new Estate,
+                "property" => new Property,
+                "unit" => new Unit
+            };
+
+            $propertyModel = $propertyModel->findOrFail($data["createsOwnerFor"]["id"]);
+            $propertyModel->user_id = $user->id;
+            $propertyModel->save();
+        }
+
         return redirect()->route("dashboard.users.index")->with("toast", [
             "message" => "User Created!",
             "link"    => ["title" => "View User", "href" => route("dashboard.users.show", ["user" => $user])]
@@ -117,10 +163,24 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(User $user)
+    public function show(User $user): Response|ResponseFactory
     {
         return inertia("dashboard/users/Show", [
             "user" => $user->load([
+                "wallet:id,user_id,balance"
+            ])
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory
+     */
+    public function showProfile(): Response|ResponseFactory
+    {
+        return inertia("dashboard/users/Show", [
+            "user" => user()->load([
                 "wallet:id,user_id,balance"
             ])
         ]);
@@ -136,7 +196,7 @@ class UserController extends Controller
     {
         return inertia("dashboard/users/Upsert", [
             "user"   => $user,
-            "roles"  => Role::pluck("name"),
+            "roles"  => RoleModel::pluck("name"),
             "action" => "update",
         ]);
     }

@@ -28,14 +28,22 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "first_name" => "required|string|max:20",
-            "last_name"  => "required|string|max:20",
-            "gender"     => "nullable|in:male,female",
-            "image"      => "nullable|image|max:1024",
-            "email"      => "required|string|email|max:100|unique:users",
-            "phone"      => "nullable|phone:KE",
-            'password'   => ["required", Password::defaults()],
-            "role"       => ["required", new Enum(Role::class)]
+            "first_name"      => "required|string|max:20",
+            "last_name"       => "required|string|max:20",
+            "gender"          => "nullable|in:male,female",
+            "image"           => "nullable|image|max:1024",
+            "email"           => "required|string|email|max:100|unique:users",
+            "phone"           => "nullable|phone:KE",
+            'password'        => ["required", Password::defaults()],
+            "role"            => ["required", new Enum(Role::class)],
+            "createsOwnerFor" => "array:id,name"
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            "createsOwnerFor.array" => "Invalid input, please refresh and retry!"
         ];
     }
 }
