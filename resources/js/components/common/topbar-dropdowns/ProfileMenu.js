@@ -15,7 +15,7 @@ const ProfileMenu = () => {
                 <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
             </Dropdown.Toggle>
             <Dropdown.Menu className="dropdown-menu-end">
-                <Dropdown.Item tag="a" href={route("dashboard.users.profile", { user: user.id })}>
+                <Dropdown.Item tag="a" as={Link} href={route("dashboard.profile")}>
                     <i className="bx bx-user font-size-16 align-middle ms-1"/>
                     Profile
                 </Dropdown.Item>

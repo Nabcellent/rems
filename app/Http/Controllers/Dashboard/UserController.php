@@ -163,10 +163,24 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function show(User $user)
+    public function show(User $user): Response|ResponseFactory
     {
         return inertia("dashboard/users/Show", [
             "user" => $user->load([
+                "wallet:id,user_id,balance"
+            ])
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory
+     */
+    public function showProfile(): Response|ResponseFactory
+    {
+        return inertia("dashboard/users/Show", [
+            "user" => user()->load([
                 "wallet:id,user_id,balance"
             ])
         ]);
