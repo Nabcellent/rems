@@ -34,7 +34,8 @@ class PropertyController extends Controller
     {
         return inertia('dashboard/properties', [
             "properties" => Property::select(["id", "estate_id", "user_id", "name", "type"])
-                ->whereHas("estate", fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
+                ->whereHas("estate", fn(Builder $qry) => $qry->whereUserId(user()->id))->orWhere("user_id", user()->id)
+                ->with([
                     "user:id,first_name,last_name,email",
                     "estate:id,name,address"
                 ])->withCount(["units"])->latest()->get()
@@ -49,7 +50,7 @@ class PropertyController extends Controller
     public function create(): Response|ResponseFactory
     {
         return inertia("dashboard/properties/Upsert", [
-            "action" => "create",
+            "action"  => "create",
             "estates" => Estate::select(["id", "name"])
                 ->when(user()->hasRole(Role::PROPERTY_MANAGER->value), fn(Builder $qry) => $qry->whereUserId(user()->id))
                 ->get()
@@ -92,14 +93,15 @@ class PropertyController extends Controller
     public function show(Property $property): Response|ResponseFactory
     {
         return inertia("dashboard/properties/Show", [
-            "property" => $property->load([
+            "property"       => $property->load([
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "estate:id,name,address",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
-            ])->loadCount(["units"])
+            ])->loadCount(["units"]),
+            "canChangeOwner" => user()->hasRole(Role::PROPERTY_MANAGER->value)
         ]);
     }
 

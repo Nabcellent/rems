@@ -1,16 +1,7 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Button, Divider, Paper } from '@mui/material';
-import {
-    AlternateEmail,
-    Badge,
-    LocationOn,
-    ManageAccounts,
-    OtherHouses,
-    PhoneIphone,
-    ToggleOff,
-    ToggleOn
-} from '@mui/icons-material';
+import { Avatar, Divider, Paper } from '@mui/material';
+import { AlternateEmail, Badge, LocationOn, OtherHouses, PhoneIphone, ToggleOff, ToggleOn } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
@@ -21,10 +12,9 @@ import Policies from '@/components/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
 import MainImage from '@/components/MainImage';
 import React from 'react';
-import { Link } from '@inertiajs/inertia-react';
 import ChangeOwner from '@/components/ChangeOwner';
 
-const Show = ({ errors, property }) => {
+const Show = ({ errors, property, canChangeOwner }) => {
     console.log(property);
 
     return (
@@ -93,7 +83,7 @@ const Show = ({ errors, property }) => {
                                 </Avatar>
                                 <div className="flex-1"><PhoneChip phone={property.user.phone}/></div>
                             </div>
-                            <ChangeOwner entity={'property'} entityId={property.id}/>
+                            {canChangeOwner && <ChangeOwner entity={'property'} entityId={property.id}/>}
                         </div>
                     </div>
                 </div>
