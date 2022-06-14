@@ -252,8 +252,10 @@ class UserController extends Controller
         return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
     }
 
-    public function settings()
+    public function settings(): Response|ResponseFactory
     {
-        dd("Wapi settings banaaa!");
+        return inertia('dashboard/users/Settings', [
+            "user" => user()
+        ]);
     }
 }

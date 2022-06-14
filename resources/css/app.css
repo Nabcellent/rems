@@ -12375,11 +12375,9 @@ a {
 }
 
 #page-topbar {
-    position: fixed;
+    position: sticky;
     top: 0;
-    right: 0;
-    left: 250px;
-    z-index: 1002;
+    z-index: 1020;
     background-color: #fff;
     box-shadow: 0 .75rem 1.5rem rgba(18, 38, 63, .03)
 }
@@ -12469,10 +12467,6 @@ a {
     .logo span.logo-sm {
         display: inline-block
     }
-}
-
-.page-content {
-    padding: 94px 12px 60px
 }
 
 .header-item {
@@ -12638,36 +12632,6 @@ body[data-layout=horizontal] .page-content {
     font-size: 16px !important
 }
 
-.footer {
-    bottom: 0;
-    padding: 10px 12px;
-    position: absolute;
-    right: 0;
-    color: #9596a8;
-    left: 250px;
-    background-color: #f2f2f5
-}
-
-@media (max-width: 991.98px) {
-    .footer {
-        left: 0
-    }
-}
-
-.vertical-collpsed .footer {
-    left: 70px
-}
-
-@media (max-width: 991.98px) {
-    .vertical-collpsed .footer {
-        left: 0
-    }
-}
-
-body[data-layout=horizontal] .footer {
-    left: 0 !important
-}
-
 .right-bar {
     background-color: #fff;
     box-shadow: 0 0 24px 0 rgba(0, 0, 0, .06), 0 1px 0 0 rgba(0, 0, 0, .02);
@@ -12785,8 +12749,10 @@ body[data-layout=horizontal] .footer {
 }
 
 .main-content {
+    position: relative;
+    min-height: 100vh;
     margin-left: 250px;
-    overflow: hidden
+    padding-bottom: 4rem;
 }
 
 .main-content .content {
@@ -12921,7 +12887,6 @@ body[data-layout=horizontal] .footer {
 }
 
 .vertical-collpsed .vertical-menu {
-    position: absolute;
     width: 70px !important;
     z-index: 5
 }
@@ -14571,7 +14536,7 @@ body[data-layout=horizontal][data-layout-size=boxed].vertical-collpsed .main-con
         display: none !important
     }
 
-    .card-body, .main-content, .page-content, .right-bar, body {
+    .card-body, .main-content, .right-bar, body {
         padding: 0;
         margin: 0
     }

@@ -71,12 +71,15 @@ const Dashboard = ({
             </div>
 
             <div id="layout-wrapper">
-                <Header toggleMenuCallback={toggleMenuCallback}/>
                 <Sidebar isMobile={isMobile}/>
+
                 <div className="main-content">
-                    <div className="page-content"><Container fluid>{children}</Container></div>
+                    <Header toggleMenuCallback={toggleMenuCallback}/>
+
+                    <div className="p-3">{children}</div>
+
+                    <Footer/>
                 </div>
-                <Footer/>
             </div>
         </>
     );
