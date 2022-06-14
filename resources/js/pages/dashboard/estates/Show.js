@@ -32,10 +32,10 @@ import Policies from '@/components/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
 import Map from '@/components/Map';
 import MainImage from '@/components/MainImage';
+import ChangeOwner from '@/components/ChangeOwner';
 
-const Show = ({ errors, estate, services, googleMapsKey }) => {
+const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
     console.log(estate);
-    const theme = useTheme();
     const [service, setService] = useState(undefined);
     const [showServiceModal, setShowServiceModal] = useState(false);
 
@@ -116,11 +116,8 @@ const Show = ({ errors, estate, services, googleMapsKey }) => {
                                     </Link>
                                 </div>
                             </div>
-                            <div className="mb-2">
-                                <PhoneChip phone={estate.user.phone}/>
-                            </div>
-                            <Button variant={'outlined'}
-                                    className="px-3 btn btn-falcon-default btn-sm">Notify</Button>
+                            <div className="mb-2"><PhoneChip phone={estate.user.phone}/></div>
+                            {canChangeOwner && <ChangeOwner entity={'estate'} entityId={estate.id}/>}
                         </div>
                     </div>
                 </div>

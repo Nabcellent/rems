@@ -43,9 +43,9 @@ class PropertyPolicy
      * @param \App\Models\Policy $policy
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Property $property)
+    public function view(User $user, Property $property): Response|bool
     {
-        return $property->user_id === $user->id;
+        return $property->estate->user_id === $user->id || $property->user_id === $user->id;
     }
 
     /**

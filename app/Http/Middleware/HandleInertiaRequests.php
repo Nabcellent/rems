@@ -70,9 +70,11 @@ class HandleInertiaRequests extends Middleware
                     "tickets"      => $request->user()?->can("viewAny", Ticket::class),
                 ],
                 "create" => [
-                    "user"    => $request->user()?->can("create", User::class),
-                    "lease"   => $request->user()?->can("create", Lease::class),
-                    "service" => $request->user()?->can("create", Service::class)
+                    "user"     => $request->user()?->can("create", User::class),
+                    "lease"    => $request->user()?->can("create", Lease::class),
+                    "service"  => $request->user()?->can("create", Service::class),
+                    "property" => $request->user()?->can("create", Property::class),
+                    "estate"   => $request->user()?->can("create", Estate::class),
                 ]
             ],
             "ziggy"      => fn() => (new Ziggy)->toArray(),
