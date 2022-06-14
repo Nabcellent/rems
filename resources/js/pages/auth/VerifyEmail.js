@@ -1,8 +1,9 @@
 import React from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { Alert } from '@mui/material';
 
-export default function VerifyEmail({ status }) {
+export default function VerifyEmail({ status, email }) {
     const { post, processing } = useForm();
 
     const submit = (e) => {
@@ -21,9 +22,9 @@ export default function VerifyEmail({ status }) {
             </div>
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 font-medium text-sm text-green-600">
-                    A new verification link has been sent to the email address you provided during registration.
-                </div>
+                <Alert severity="success">
+                    A new verification link has been sent to <b>{email}</b>.
+                </Alert>
             )}
 
             <form onSubmit={submit}>
