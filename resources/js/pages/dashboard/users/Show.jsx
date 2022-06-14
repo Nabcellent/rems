@@ -26,28 +26,16 @@ const Show = ({ errors, user }) => {
                     <div className="row">
                         <div className="col-lg-8">
                             <h4 className="mb-1">
-                                {user.full_name}
-                                <i className={'bx bxs-check-circle'}/>
+                                {user.full_name}<i className={'bx bxs-check-circle'}/>
                             </h4>
                             <h6 className="fs-0 fw-normal">{user.email}</h6>
                             <p className="text-500">{user.user_roles_str}</p>
-                            <Button variant={'outlined'}
-                                    className="px-3 btn btn-falcon-primary btn-sm">Following</Button>
+                            <StatusChip status={user.status}/>
                             <Button variant={'outlined'}
                                     className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
                             <div className="border-dashed-bottom my-4 d-lg-none"></div>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {
-                                        user.status === Status.ACTIVE
-                                            ? <ToggleOn fontSize={'small'}/>
-                                            : <ToggleOff fontSize={'small'}/>
-                                    }
-                                </Avatar>
-                                <div className="flex-1"><StatusChip status={user.status}/></div>
-                            </div>
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
                                     {user.gender === Gender.MALE

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class UpdateUserRequest extends FormRequest
@@ -31,7 +32,18 @@ class UpdateUserRequest extends FormRequest
             "gender"     => "nullable|in:male,female",
             "image"      => "nullable|image|max:1024",
             "phone"      => "nullable|phone:KE",
-            "role"       => ["nullable", new Enum(Role::class)]
+            "role"       => ["nullable", new Enum(Role::class)],
+            'email'      => ["sometimes", Rule::unique('users')->ignore(user()->id)],
+
+            "password"              => "required_with:current_password,null|confirmed|min:7",
+            "password_confirmation" => "required_with:password"
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            "current"
         ];
     }
 }

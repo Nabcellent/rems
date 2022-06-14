@@ -1,5 +1,4 @@
-import React, { lazy } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 
 //Import Breadcrumb
 import Dashboard from '@/layouts/Dashboard';
@@ -7,8 +6,7 @@ import WelcomeCard from '@/pages/dashboard/default/WelcomeCard';
 import CountUp from 'react-countup';
 import LatestTransactions from '@/pages/dashboard/default/LatestTransactions';
 import { Grid, Paper } from '@mui/material';
-
-const Breadcrumbs = lazy(() => import('../../components/common/Breadcrumb'));
+import Breadcrumbs from '@/components/common/Breadcrumb';
 
 const Default = ({
     errors,

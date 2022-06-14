@@ -34,9 +34,7 @@ export default function VerifyEmail({ status }) {
                     </LoadingButton>
 
                     <Link href={route('logout')} method="post" as="span">
-                        <LoadingButton type={'submit'} size={'small'} loading={processing}>
-                            Sign Out
-                        </LoadingButton>
+                        <LoadingButton type={'submit'} size={'small'} loading={processing}>Sign Out</LoadingButton>
                     </Link>
                 </div>
             </form>

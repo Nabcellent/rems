@@ -1,5 +1,15 @@
 import { Card } from 'react-bootstrap';
-import { Grid, Paper, TextField } from '@mui/material';
+import {
+    FormControl,
+    FormControlLabel,
+    FormHelperText,
+    FormLabel,
+    Grid,
+    Paper,
+    Radio,
+    RadioGroup,
+    TextField
+} from '@mui/material';
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
@@ -42,7 +52,7 @@ const ProfileSettings = ({ user }) => {
             let url = route(`dashboard.users.update`, { user: user.id });
 
             Inertia.post(url, values, {
-                forceFormData: true,
+                preserveState: false,
                 onBefore: () => setIsLoading(true),
                 onSuccess: () => formik.resetForm(),
                 onError: errors => setErrors(errors),
@@ -52,13 +62,13 @@ const ProfileSettings = ({ user }) => {
     });
 
     return (
-        <Paper>
+        <Paper className={'mb-3'}>
             <Card.Header><h5 className={'mb-0'}>Profile Settings</h5></Card.Header>
-
-            <ValidationErrors errors={errors}/>
 
             <Grid component={Card.Body} container spacing={2}>
                 <Grid item lg={6}>
+                    <ValidationErrors errors={errors}/>
+
                     <TextField label="First Name" placeholder="First name..." name={'first_name'} autoFocus
                                value={formik.values.first_name} fullWidth onChange={formik.handleChange}
                                error={formik.touched.first_name && Boolean(formik.errors.first_name)}
@@ -74,7 +84,7 @@ const ProfileSettings = ({ user }) => {
                     <TextField type={'email'} label="Email" placeholder="Email..." name={'email'}
                                value={formik.values.email} fullWidth onChange={formik.handleChange}
                                error={formik.touched.email && Boolean(formik.errors.email)}
-                               helperText={formik.touched.email && formik.errors.email}/>
+                               helperText={(formik.touched.email && formik.errors.email) ?? "Requires verification!"}/>
                 </Grid>
                 <Grid item md={6}>
                     <TextField type={'tel'} label="Phone Number" placeholder="Phone number..."
@@ -82,6 +92,21 @@ const ProfileSettings = ({ user }) => {
                                onChange={formik.handleChange}
                                error={formik.touched.phone && Boolean(formik.errors.phone)}
                                helperText={formik.touched.phone && formik.errors.phone}/>
+                </Grid>
+                <Grid item md={6}>
+                    <FormControl error={formik.touched.gender && Boolean(formik.errors.gender)}>
+                        <FormLabel className={'m-0'} id="gender">Gender</FormLabel>
+                        <RadioGroup row aria-labelledby="gender" name="gender" value={formik.values.gender}
+                                    onChange={formik.handleChange}>
+                            <FormControlLabel className={'mb-0'} value={'male'} control={<Radio/>}
+                                              label="Male"/>
+                            <FormControlLabel className={'mb-0'} value={'female'} control={<Radio/>}
+                                              label="Female"/>
+                        </RadioGroup>
+                        <FormHelperText className={'mt-0'}>
+                            {formik.touched.gender && formik.errors.gender}
+                        </FormHelperText>
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} textAlign={'right'}>
                     <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
