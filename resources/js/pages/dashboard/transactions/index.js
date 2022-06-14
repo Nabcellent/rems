@@ -3,12 +3,13 @@ import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { ListItemIcon, Paper } from '@mui/material';
-import { Cancel, Pending, ReadMore, TaskAlt, Update } from '@mui/icons-material';
+import { Error, Info, Pending, ReadMore, TaskAlt, Update } from '@mui/icons-material';
 import StatusChip from '@/components/chips/StatusChip';
 import { Link } from '@inertiajs/inertia-react';
 import IconMenuDropdown from '@/components/IconMenuDropdown';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
+import { Status } from '@/utils/enums';
 
 const Index = ({ transactions }) => {
     const handleUpdate = (transactionId, data) => {
@@ -83,17 +84,22 @@ const Index = ({ transactions }) => {
                                                     title: 'Mark as completed', avatar: <ListItemIcon>
                                                         <TaskAlt color={'success'} fontSize="small"/>
                                                     </ListItemIcon>,
-                                                    onClick: () => handleUpdate(row.original, { status: 'COMPLETED' })
+                                                    onClick: () => handleUpdate(row.original, { status: Status.COMPLETED })
                                                 }, {
                                                     title: 'Mark as pending', avatar: <ListItemIcon>
                                                         <Pending color={'warning'} fontSize="small"/>
                                                     </ListItemIcon>,
-                                                    onClick: () => handleUpdate(row.original, { status: 'PENDING' })
+                                                    onClick: () => handleUpdate(row.original, { status: Status.PENDING })
                                                 }, {
                                                     title: 'Mark as failed', avatar: <ListItemIcon>
-                                                        <Cancel color={'error'} fontSize="small"/>
+                                                        <Error color={'error'} fontSize="small"/>
                                                     </ListItemIcon>,
-                                                    onClick: () => handleUpdate(row.original, { status: 'FAILED' })
+                                                    onClick: () => handleUpdate(row.original, { status: Status.FAILED })
+                                                }, {
+                                                    title: 'Mark as cancelled', avatar: <ListItemIcon>
+                                                        <Info color={'info'} fontSize="small"/>
+                                                    </ListItemIcon>,
+                                                    onClick: () => handleUpdate(row.original, { status: Status.CANCELLED })
                                                 },
                                             ]}/>
                                             <Link
