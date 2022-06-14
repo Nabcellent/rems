@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
 use App\Http\Controllers\Dashboard\EstateServiceController;
+use App\Http\Controllers\Dashboard\HelperController;
 use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\NoticeController;
@@ -60,6 +61,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('/users')->name('users')->group(function() {
             Route::get('/settings', [UserController::class, 'settings'])->name(".settings");
             Route::get('/owners/{entity}', [UserController::class, "owners"])->name(".owners");
+            Route::put('/password/update', [UserController::class, 'updatePassword'])->name(".password.update");
+        });
+
+        Route::prefix('/estates')->name("estates")->group(function() {
+            Route::put('/{estate}/owner', [HelperController::class, "changeOwner"])->name(".change-owner");
+        });
+
+        Route::prefix('/properties')->name("properties")->group(function() {
+            Route::put('/{property}/owner', [HelperController::class, "changeOwner"])->name(".change-owner");
         });
 
         Route::match(["POST", "DELETE"], "/images/{imageable}/{imageableId}", [ImageController::class, "updateOrDeleteMain"])

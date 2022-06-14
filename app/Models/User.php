@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\UserCreated;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -17,7 +18,7 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @mixin IdeHelperUser
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasConfig;
 

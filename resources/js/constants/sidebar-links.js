@@ -39,7 +39,7 @@ export const sidebarLinks = can => {
                     authorized: can.access.properties,
                     startIcon: <i className="bx bxs-home-circle"/>, title: 'Properties', subMenu: [
                         { authorized: true, link: route('dashboard.properties.index'), title: 'list' },
-                        { authorized: can.create.property, link: '/estates', title: 'create' }
+                        { authorized: can.create.property, link: route('dashboard.properties.create'), title: 'create' }
                     ]
                 },
                 {

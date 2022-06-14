@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -231,9 +232,25 @@ class UserController extends Controller
             if($user->image && file_exists("images/users/$user->image")) File::delete("images/users/$user->image");
         }
 
+        if($request->filled("password")) {
+            if(!Auth::guard()->validate([
+                "email"    => $user->email,
+                "password" => $request->input('current_password'),
+            ])) {
+                throw ValidationException::withMessages(['password' => __('auth.password'),]);
+            }
+
+            $data["password"] = Hash::make($data["password"]);
+        }
+
         $user->update($data);
 
-        return redirect()->route("dashboard.users.index")->with("toast", [
+        if($user->wasChanged("email")) {
+            $user->email_verified_at = null;
+            $user->save();
+        }
+
+        return back()->with("toast", [
             "message" => "User Updated!",
             "link"    => ["title" => "View User", "href" => route("dashboard.users.show", ["user" => $user])]
         ]);
@@ -252,8 +269,11 @@ class UserController extends Controller
         return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
     }
 
-    public function settings()
+    public function settings(): Response|ResponseFactory
     {
-        dd("Wapi settings banaaa!");
+        return inertia('dashboard/users/Settings', [
+            "user"     => user(),
+            "settings" => user()->settings,
+        ]);
     }
 }

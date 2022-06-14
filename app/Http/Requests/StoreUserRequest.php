@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\Role;
+use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
@@ -36,6 +37,7 @@ class StoreUserRequest extends FormRequest
             "phone"           => "nullable|phone:KE",
             'password'        => ["required", Password::defaults()],
             "role"            => ["required", new Enum(Role::class)],
+            "status"          => [new Enum(Status::class)],
             "createsOwnerFor" => "array:id,name"
         ];
     }

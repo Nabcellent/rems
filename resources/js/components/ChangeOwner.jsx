@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import { Inertia } from '@inertiajs/inertia';
 import PropTypes from 'prop-types';
 import { Link } from '@inertiajs/inertia-react';
+import pluralize from 'pluralize';
 
 const ChangeOwner = ({ entity, entityId }) => {
     const [showModal, setShowModal] = useState(false);
@@ -19,12 +20,14 @@ const ChangeOwner = ({ entity, entityId }) => {
 
     const formik = useFormik({
         initialValues: { entity, entity_id: entityId, user: '', },
-        validationSchema: yup.object({ description: yup.string().required(), }),
+        validationSchema: yup.object({ user: yup.object().required('New owner is required.'), }),
         validateOnChange: true,
         onSubmit: values => {
-            let url = route(`dashboard.policies.store`);
+            values.user_id = values.user.id;
 
-            Inertia.post(url, values, {
+            let url = route(`dashboard.${pluralize(entity)}.change-owner`, { [entity]: entityId });
+
+            Inertia.put(url, values, {
                     onBefore: () => setIsLoading(true),
                     onSuccess: () => {
                         setShowModal(false);

@@ -41,9 +41,9 @@ const Show = ({ errors, transaction }) => {
                                 <div className="row align-items-center justify-content-between">
                                     <div className={'col-xl-5'}>
                                         <h5 className="">{transaction.user.full_name}</h5>
-                                        <p className="text-muted mb-1 text-truncate">{transaction.user.email}</p>
+                                        <p className="text-muted mb-2 text-truncate">{transaction.user.email}</p>
                                         <PhoneChip phone={transaction.user.phone}/>
-                                        <p className="text-muted mb-1">{transaction.user.user_roles_str}</p>
+                                        <p className="text-muted mt-2">{transaction.user.user_roles_str}</p>
                                     </div>
 
                                     <div className={'col-xl-2 d-none d-xl-block'}>
@@ -52,9 +52,9 @@ const Show = ({ errors, transaction }) => {
 
                                     <div className={'col-xl-5 text-end'}>
                                         <h5 className="">{transaction.destination.full_name}</h5>
-                                        <p className="text-muted mb-1 text-truncate">{transaction.destination.email}</p>
+                                        <p className="text-muted mb-2 text-truncate">{transaction.destination.email}</p>
                                         <PhoneChip phone={transaction.destination.phone}/>
-                                        <p className="text-muted mb-1">{transaction.destination.user_roles_str}</p>
+                                        <p className="text-muted mt-2">{transaction.destination.user_roles_str}</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@ const Show = ({ errors, transaction }) => {
                         <Card.Body>
                             <h4 className="card-title">Details</h4>
 
-                            <Row>
+                            <Row className={'align-items-center'}>
                                 <Col lg={6}>
                                     <div className="border p-3 rounded mt-4">
                                         <div className="d-flex align-items-center mb-3">
@@ -88,12 +88,12 @@ const Show = ({ errors, transaction }) => {
                                         <div>
                                             <h5 className={'fw-bold'}>{transaction.description}</h5>
                                             <div className={'d-flex align-items-center justify-content-between'}>
-                                                <p>Status: <StatusChip status={transaction.status}/></p>
-                                                <p>Type: {transaction.type}</p>
+                                                <StatusChip status={transaction.status}/>
+                                                <p className={'m-0'}>Type: {transaction.type}</p>
                                             </div>
                                         </div>
                                         <div
-                                            className={'d-flex align-items-center justify-content-between flex-column'}>
+                                            className={'d-flex align-items-center justify-content-between flex-column my-3'}>
                                             <strong>Amount</strong>
                                             <p className={'m-0'}>{currencyFormat(transaction.amount)}</p>
                                         </div>
@@ -111,10 +111,8 @@ const Show = ({ errors, transaction }) => {
                                             <h5 className="font-size-14 mb-0">Payment</h5>
                                         </div>
                                         <div className={'mb-3'}>
-                                            <h5 className={'fw-bold'}>
-                                                {transaction.payment.method}
-                                            </h5>
-                                            <p>Status: <StatusChip status={transaction.payment.status}/></p>
+                                            <h5 className={'fw-bold'}>{transaction.payment.method}</h5>
+                                            <StatusChip status={transaction.payment.status}/>
                                         </div>
                                         <div
                                             className={'d-flex align-items-center justify-content-between flex-column'}>

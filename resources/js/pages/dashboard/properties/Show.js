@@ -77,12 +77,7 @@ const Show = ({ errors, property, canChangeOwner }) => {
                                 </Avatar>
                                 <div className="flex-1"><h6 className="mb-0">{property.user.email}</h6></div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <PhoneIphone fontSize={'small'}/>
-                                </Avatar>
-                                <div className="flex-1"><PhoneChip phone={property.user.phone}/></div>
-                            </div>
+                            <div className="mb-2"><PhoneChip phone={property.user.phone}/></div>
                             {canChangeOwner && <ChangeOwner entity={'property'} entityId={property.id}/>}
                         </div>
                     </div>
