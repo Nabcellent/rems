@@ -2,13 +2,13 @@ import Dashboard from '@/layouts/Dashboard';
 import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { Avatar, IconButton, Paper, useTheme } from '@mui/material';
-import { Delete, Edit, ReadMore } from '@mui/icons-material';
+import { Avatar, Paper, useTheme } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
 import PhoneChip from '@/components/chips/PhoneChip';
 import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
+import TableActions from '@/components/TableActions';
 
 // Import React FilePond with plugins & styles
 import { registerPlugin } from 'react-filepond';
@@ -19,9 +19,6 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginFileRename from 'filepond-plugin-file-rename';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import { Link } from '@inertiajs/inertia-react';
-import { handleDelete } from '@/utils/helpers';
-import TableActions from '@/components/TableActions';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
@@ -76,15 +73,16 @@ const Index = ({ users }) => {
                                 Cell: ({ row }) => <i>{row.original.user_roles_str}</i>
                             },
                             {
-                                accessor: 'status',
-                                Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
-                            },
-                            {
                                 accessor: 'created_at',
                                 Header: 'Date Joined',
                                 className: 'text-end',
                                 Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                            },
+                            {
+                                accessor: 'status',
+                                Header: 'Status',
+                                Cell: ({ row }) => <StatusChip status={row.original.status} canUpdate={true}
+                                                               entity={'user'} entityId={row.original.id}/>
                             },
                             {
                                 accessor: 'actions',

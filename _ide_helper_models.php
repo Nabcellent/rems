@@ -48,6 +48,7 @@ namespace App\Models{
  * @property string|null $image
  * @property float $latitude
  * @property float $longitude
+ * @property int $service_charge
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -75,6 +76,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLatitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLongitude($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereServiceCharge($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereUserId($value)
@@ -148,6 +150,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Unit $unit
  * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Lease active()
  * @method static \Database\Factories\LeaseFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Lease newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Lease newQuery()
@@ -215,6 +218,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $end_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $recipients
+ * @property-read int|null $recipients_count
  * @property-read \App\Models\User $user
  * @method static \Database\Factories\NoticeFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Notice newModelQuery()
@@ -230,6 +235,31 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Notice whereUserId($value)
  */
 	class IdeHelperNotice {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\NoticeRecipient
+ *
+ * @property int $id
+ * @property int $notice_id
+ * @property int $user_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Notice $notice
+ * @property-read \App\Models\User $user
+ * @method static \Database\Factories\NoticeRecipientFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient query()
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereNoticeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereUserId($value)
+ * @mixin \Eloquent
+ */
+	class IdeHelperNoticeRecipient {}
 }
 
 namespace App\Models{
@@ -266,9 +296,15 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\PaypalCallback
+ * App\Models\PaypalTransaction
  *
  * @property int $id
+ * @property string $order_id
+ * @property string|null $payer_id
+ * @property string|null $payer_email
+ * @property float|null $amount
+ * @property string|null $currency
+ * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
@@ -277,11 +313,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereCurrency($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction wherePayerEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction wherePayerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PaypalTransaction whereUpdatedAt($value)
  */
-	class IdeHelperPaypalCallback {}
+	class IdeHelperPaypalTransaction {}
 }
 
 namespace App\Models{
@@ -347,6 +389,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereUserId($value)
  */
 	class IdeHelperProperty {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Role
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $guard_name
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
+ * @property-read int|null $users_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereGuardName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
+	class IdeHelperRole {}
 }
 
 namespace App\Models{
@@ -585,15 +654,16 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Estate[] $estates
  * @property-read int|null $estates_count
- * @property-read \App\Models\Lease|null $lease
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lease[] $leases
+ * @property-read int|null $leases_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Notice[] $notices
  * @property-read int|null $notices_count
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Property[] $property
- * @property-read int|null $property_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Property[] $properties
+ * @property-read int|null $properties_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Service[] $services
@@ -604,8 +674,8 @@ namespace App\Models{
  * @property-read int|null $tokens_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Transaction[] $transactions
  * @property-read int|null $transactions_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $unit
- * @property-read int|null $unit_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
+ * @property-read int|null $units_count
  * @property-read \App\Models\Wallet|null $wallet
  * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()

@@ -32,6 +32,7 @@ class DashboardController extends Controller
                 "destination:id,email,last_name",
                 "payment:id,method"
             ])->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Transaction::class)
         ]);
     }
 }

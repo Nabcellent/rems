@@ -13,7 +13,9 @@ use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -48,8 +50,8 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             "auth"       => [
                 'user' => fn(Request $request) => $request->user() ? $request->user()->only([
-                    'id',
-                    'first_name',
+                    "id",
+                    "first_name",
                     'last_name',
                     'email',
                     "phone"

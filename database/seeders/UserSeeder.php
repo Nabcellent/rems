@@ -41,6 +41,12 @@ class UserSeeder extends Seeder
                 "role" => Role::SUPER_ADMIN
             ],
             [
+                "first_name" => "Rems",
+                "last_name"  => "Admin",
+                "email"      => "admin.rems@yopmail.com",
+                "role" => Role::ADMIN
+            ],
+            [
                 "first_name" => "Property",
                 "last_name"  => "Manager",
                 "email"      => "manager.rems@yopmail.com",

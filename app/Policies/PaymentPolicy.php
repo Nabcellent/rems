@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -10,6 +11,18 @@ use Illuminate\Auth\Access\Response;
 class PaymentPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Perform pre-authorization checks.
+     *
+     * @param \App\Models\User $user
+     * @param string           $ability
+     * @return void|bool
+     */
+    public function before(User $user, string $ability)
+    {
+        if($user->hasRole(Role::ADMIN->value)) return true;
+    }
 
     /**
      * Determine whether the user can view any models.
@@ -56,6 +69,15 @@ class PaymentPolicy
     {
         //
     }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param \App\Models\User $user
+     * @return void
+     */
+    public function updateStatus(User $user): void
+    {}
 
     /**
      * Determine whether the user can delete the model.
