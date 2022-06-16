@@ -32,7 +32,7 @@ COPY . /home/app
 
 # Run composer install
 RUN composer install
-RUN npm install
+RUN npm install -f
 
 # Expose the port
 EXPOSE 8080
