@@ -1,12 +1,16 @@
 FROM php:8.1-apache
 
+# Download node
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+
 # Install system libraries
 RUN apt-get update -y && apt-get install -y \
     build-essential \
     libicu-dev \
     zlib1g-dev \
     zip \
-    unzip
+    unzip \
+    nodejs
 
 # Install docker dependencies
 RUN apt-get install -y libc-client-dev libkrb5-dev \
@@ -28,6 +32,7 @@ COPY . /home/app
 
 # Run composer install
 RUN composer install
+RUN npm install
 
 # Expose the port
 EXPOSE 8080
