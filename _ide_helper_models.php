@@ -257,7 +257,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereNoticeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient whereUserId($value)
- * @mixin \Eloquent
  */
 	class IdeHelperNoticeRecipient {}
 }
@@ -413,7 +412,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
- * @mixin \Eloquent
  */
 	class IdeHelperRole {}
 }

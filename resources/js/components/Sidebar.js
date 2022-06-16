@@ -2,13 +2,13 @@ import { Link, usePage } from "@inertiajs/inertia-react";
 
 import SidebarContent from "./SidebarContent";
 
-import logo from "../assets/images/logo.svg";
-import logoLightPng from "../assets/images/logo-light.png";
+import logo from "../assets/images/logo-dark.svg";
+import logoLightPng from "../../../public/images/logo-light-skote.png";
 import logoLightSvg from "../assets/images/logo-light.svg";
-import logoDarkSvg from "../assets/images/logo-dark.svg";
+import logoDarkSvg from "../assets/images/logo-dark-full.svg";
 
 const Sidebar = () => {
-    const {auth: {user}} = usePage().props;
+    const {auth: {user}, greeting} = usePage().props;
 
     return (
         <>
@@ -31,8 +31,7 @@ const Sidebar = () => {
 
                 <div id={'sidebar-greeting'} className={'row justify-content-center'}>
                     <div className="col-auto">
-                        {/* TODO: Make the greeting dynamic */}
-                        <h6>Good Morning {user.last_name}</h6>
+                        <h6>{greeting} {user.last_name}</h6>
                         <hr className={'mb-0'}/>
                     </div>
                 </div>

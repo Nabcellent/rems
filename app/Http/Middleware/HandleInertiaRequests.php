@@ -13,6 +13,7 @@ use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -79,6 +80,7 @@ class HandleInertiaRequests extends Middleware
                     "estate"   => $request->user()?->can("create", Estate::class),
                 ]
             ],
+            "greeting"   => Carbon::timelyGreeting(),
             "ziggy"      => fn() => (new Ziggy)->toArray(),
             "toast"      => fn() => session()->get("toast"),
             "csrf_token" => csrf_token()

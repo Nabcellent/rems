@@ -11,7 +11,7 @@ return [
     |
     */
 
-    'filename'  => '_ide_helper.php',
+    'filename' => '_ide_helper.php',
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ return [
     | `.phpstorm.meta.php/laravel_ide_Helper.php'.
     |
     */
-    'meta_filename' => '.phpstorm.meta.php',
+    'meta_filename'   => '.phpstorm.meta.php',
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +122,6 @@ return [
     'include_helpers' => true,
 
     'helper_files' => [
-        base_path() . '/app/Helpers/helpers.php',
         base_path() . '/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
     ],
 
@@ -167,8 +166,7 @@ return [
     |
     */
 
-    'model_hooks' => [
-        // App\Support\IdeHelper\MyModelHook::class
+    'model_hooks' => [// App\Support\IdeHelper\MyModelHook::class
     ],
 
     /*
@@ -182,7 +180,7 @@ return [
 
     'extra' => [
         'Eloquent' => ['Illuminate\Database\Eloquent\Builder', 'Illuminate\Database\Query\Builder'],
-        'Session' => ['Illuminate\Session\Store'],
+        'Session'  => ['Illuminate\Session\Store'],
     ],
 
     'magic' => [],
@@ -197,7 +195,7 @@ return [
     |
     */
 
-    'interfaces' => [
+    'interfaces'                  => [
 
     ],
 
@@ -227,7 +225,7 @@ return [
     |  ),
     |
     */
-    'custom_db_types' => [
+    'custom_db_types'             => [
 
     ],
 
@@ -265,7 +263,7 @@ return [
     | Cast the given "real type" to the given "type".
     |
     */
-    'type_overrides' => [
+    'type_overrides'              => [
         'integer' => 'int',
         'boolean' => 'bool',
     ],
@@ -279,7 +277,7 @@ return [
     | magic methods and properties.
     |
     */
-    'include_class_docblocks' => true,
+    'include_class_docblocks'     => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -291,7 +289,7 @@ return [
     | or there is an import (use className) of a given class
     |
     */
-    'force_fqn' => false,
+    'force_fqn'                   => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -303,7 +301,7 @@ return [
     | name of the Relationship, e.g. `'relationName' => RelationShipClass::class`.
     |
     */
-    'additional_relation_types' => [],
+    'additional_relation_types'   => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -313,8 +311,6 @@ return [
     | The specified commands should run after migrations are finished running.
     |
     */
-    'post_migrate' => [
-         'ide-helper:models -M',
-    ],
+    'post_migrate'                => [],
 
 ];

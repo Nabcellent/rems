@@ -1,18 +1,11 @@
 import React from 'react';
-import { Link } from '@inertiajs/inertia-react';
 import '../assets/css/auth.css';
-import logo from '@/assets/images/logo.svg';
-import logoDarkSvg from '@/assets/images/logo-dark.svg';
+import Logo from '@/components/Logo';
 
 export default function Auth({ children }) {
     return (
         <div className="min-h-screen flex flex-col justify-center items-center sm:pt-0 bg-gray-100">
-            <div>
-                <Link href="/" className="logo logo-dark">
-                    <span className="logo-sm"><img src={logo} alt="" height="37" /></span>
-                    <span className="logo-lg"><img src={logoDarkSvg} alt="" height="30" /></span>
-                </Link>
-            </div>
+            <Logo dark/>
 
             <div className="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 {children}
