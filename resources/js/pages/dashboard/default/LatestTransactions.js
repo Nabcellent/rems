@@ -49,7 +49,8 @@ const LatestTransactions = () => {
                         {
                             accessor: 'status',
                             Header: 'Status',
-                            Cell: ({ row }) => <StatusChip status={row.original.status}/>
+                            Cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
+                                                           entityId={row.original.id}/>
                         },
                         {
                             accessor: 'created_at',

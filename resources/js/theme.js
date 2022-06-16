@@ -10,6 +10,11 @@ export const theme = createTheme({
         fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
     },
     components: {
+        MuiSvgIcon: {
+            defaultProps: {
+                fontSize: 'small'
+            }
+        },
         MuiChip: {
             defaultProps: {
                 size: 'small'

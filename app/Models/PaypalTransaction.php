@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
- * @mixin IdeHelperPaypalCallback
+ * @mixin IdeHelperPaypalTransaction
  */
 class PaypalTransaction extends Model
 {

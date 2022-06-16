@@ -8,6 +8,7 @@ import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import Logo from '@/components/Logo';
 import { Link } from '@inertiajs/inertia-react';
+import { Inertia } from '@inertiajs/inertia';
 
 const HomeHeader = () => {
     return (
@@ -17,12 +18,11 @@ const HomeHeader = () => {
                     <Logo/>
 
                     <Box>
-                        <Button component={Link} href={route("login")} as={Button} variant={'contained'}
-                                bgcolor={'blue'} endIcon={<FollowTheSignsIcon/>}>Sign In</Button>
-                        <Button variant={'contained'} bgcolor={'blue'} endIcon={<ContactSupportIcon/>}
+                        <Button onClick={() => Inertia.get(route("login"))} variant={'contained'}
+                                endIcon={<FollowTheSignsIcon/>}>Sign In</Button>
+                        <Button variant={'contained'} endIcon={<ContactSupportIcon/>}
                                 sx={{ ml: { xs: 1, sm: 2, md: 3 } }}>Contact Us</Button>
                     </Box>
-
                 </Toolbar>
             </Container>
         </AppBar>

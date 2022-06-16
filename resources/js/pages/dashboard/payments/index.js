@@ -55,7 +55,8 @@ const Index = ({ payments }) => {
                                 {
                                     accessor: 'status',
                                     Header: 'Status',
-                                    Cell: ({ row }) => <StatusChip status={row.original.status}/>
+                                    Cell: ({ row }) => <StatusChip status={row.original.status} entity={'payment'}
+                                                                   entityId={row.original.id}/>
                                 },
                                 {
                                     accessor: 'created_at',

@@ -28,7 +28,7 @@ class PaymentController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/payments', [
-            "payments" => Payment::select([
+            "payments"        => Payment::select([
                 "id",
                 "transaction_id",
                 "payable_id",
@@ -40,7 +40,8 @@ class PaymentController extends Controller
             ])->with([
                 "transaction:id,user_id,type,description",
                 "transaction.user:id,first_name,last_name,email",
-            ])->latest()->get()
+            ])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Payment::class)
         ]);
     }
 

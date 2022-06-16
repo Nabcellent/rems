@@ -46,7 +46,7 @@ class UserController extends Controller
         $estateIds = user()->estates()->pluck("id");
 
         return inertia('dashboard/users', [
-            "users" => User::select([
+            "users"           => User::select([
                 "id",
                 "first_name",
                 "last_name",
@@ -63,6 +63,7 @@ class UserController extends Controller
                         return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
                     });
             })->with("roles:id,name")->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", User::class)
         ]);
     }
 
