@@ -24,11 +24,12 @@ class UpdateEstateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"      => "required|string",
-            "address"   => "required|string",
-            "longitude" => "required|numeric",
-            "latitude"  => "required|numeric",
-            "image"     => "nullable|image|max:1024",
+            "name"           => "required|string",
+            "address"        => "required|string",
+            "longitude"      => "required|numeric",
+            "latitude"       => "required|numeric",
+            "service_charge" => "nullable|numeric",
+            "image"          => "nullable|image|max:1024",
         ];
     }
 }

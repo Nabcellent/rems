@@ -95,7 +95,7 @@ const Upsert = ({ user, createsOwnerFor, action, roles, defaultPassword }) => {
 
             <Grid container spacing={2} justifyContent={'center'}>
                 <Grid item xs={12} xl={7}>
-                    <Paper className={'p-3'}>
+                    <Paper className={'p-3'} component={'form'} onSubmit={formik.handleSubmit}>
                         <ValidationErrors errors={errors}/>
 
                         <Grid container spacing={2}>
@@ -194,9 +194,9 @@ const Upsert = ({ user, createsOwnerFor, action, roles, defaultPassword }) => {
                                           onremovefile={() => formik.setFieldValue('image', null, true)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
-                                               onClick={() => formik.submitForm()} endIcon={<Create/>}
-                                               variant="contained">{action}
+                                <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                               loadingPosition="end" onClick={() => formik.submitForm()}
+                                               endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>
                             </Grid>
                         </Grid>

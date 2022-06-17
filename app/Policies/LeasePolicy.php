@@ -20,7 +20,7 @@ class LeasePolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->hasRole([Role::OWNER->value, Role::TENANT->value]);
+        return $user->units()->exists();
     }
 
     /**

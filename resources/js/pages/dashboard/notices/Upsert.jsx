@@ -46,7 +46,6 @@ const Upsert = ({ notice, action, users }) => {
         validationSchema,
         validateOnChange: true,
         onSubmit: values => {
-            console.log(values);
             let url = route(`dashboard.notices.store`);
 
             if (notice) {
@@ -79,8 +78,9 @@ const Upsert = ({ notice, action, users }) => {
                             <Grid container spacing={2}>
                                 <Grid item lg={6}>
                                     <Autocomplete name={'recipients[]'} multiple value={formik.values.recipients}
+                                                  getOptionLabel={option => option.email}
                                                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                  options={users.map(e => ({ label: e.email.toLowerCase(), id: e.id }))}
+                                                  options={users.map(e => ({ email: e.email.toLowerCase(), id: e.id }))}
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('recipients', value, true);
                                                   }} renderInput={(params) => (
@@ -139,9 +139,9 @@ const Upsert = ({ notice, action, users }) => {
                             </Grid>
                         </LocalizationProvider>
                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                            <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
-                                           onClick={() => formik.submitForm()} endIcon={<Create/>}
-                                           variant="contained">{action}
+                            <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                           loadingPosition="end" onClick={() => formik.submitForm()}
+                                           endIcon={<Create/>} variant="contained">{action}
                             </LoadingButton>
                         </Grid>
                     </Paper>
