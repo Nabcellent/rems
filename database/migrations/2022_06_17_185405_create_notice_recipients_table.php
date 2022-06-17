@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('notice_recipients', function (Blueprint $table) {
             $table->id();
             $table->foreignId("notice_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId("user_id")->constrained("users")->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }

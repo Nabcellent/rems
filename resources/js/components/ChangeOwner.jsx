@@ -66,7 +66,7 @@ const ChangeOwner = ({ entity, entityId }) => {
                             {
                                 users
                                     ? users.length ? (
-                                        <Autocomplete name={'user'} freeSolo value={formik.values.estate}
+                                        <Autocomplete name={'user'} freeSolo value={formik.values.user}
                                                       getOptionLabel={o => o.email ?? o}
                                                       options={users.map(e => ({
                                                           email: str.headline(e.email),

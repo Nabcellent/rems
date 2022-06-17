@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\Notice;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -10,6 +11,18 @@ use Illuminate\Auth\Access\Response;
 class NoticePolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Perform pre-authorization checks.
+     *
+     * @param \App\Models\User $user
+     * @param string           $ability
+     * @return void|bool
+     */
+    public function before(User $user, string $ability)
+    {
+        if($user->hasRole(Role::ADMIN->value)) return true;
+    }
 
     /**
      * Determine whether the user can view any models.

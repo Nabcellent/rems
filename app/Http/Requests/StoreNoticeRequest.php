@@ -26,10 +26,11 @@ class StoreNoticeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "type"        => ["required", "string", new Enum(NoticeType::class)],
-            "description" => "required|string",
-            "start_at"    => "nullable|date",
-            "end_at"      => "required|date|after:start_at",
+            "recipients.*" => "required|integer|exists:users,id",
+            "type"         => ["required", "string", new Enum(NoticeType::class)],
+            "description"  => "required|string",
+            "start_at"     => "nullable|date",
+            "end_at"       => "required|date|after:start_at",
         ];
     }
 }

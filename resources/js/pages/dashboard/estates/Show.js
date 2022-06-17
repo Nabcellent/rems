@@ -1,24 +1,22 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Grid, Paper, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
 import {
     AlternateEmail,
     Apartment,
     Badge,
     DeleteSweep,
     Edit,
-    Home,
     HomeRepairService,
     LocationOn,
     OtherHouses,
-    PhoneIphone,
     ToggleOff,
     ToggleOn
 } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
-import { getInitials, handleDelete } from '@/utils/helpers';
+import { handleDelete } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
