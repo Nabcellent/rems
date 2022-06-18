@@ -48,7 +48,7 @@ const Show = ({ errors, property, canChangeOwner }) => {
                                     <CountUp end={property.units_count}/> Unit{property.units_count === 1 ? '' : 's'}
                                 </div>
                             </div>
-                            <StatusChip status={property.status}/>
+                            <StatusChip status={property.status} entity={'property'} entityId={property.id}/>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
                             <strong>Owner</strong>

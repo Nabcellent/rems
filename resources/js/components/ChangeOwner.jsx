@@ -49,7 +49,7 @@ const ChangeOwner = ({ entity, entityId }) => {
     return (
         <>
             <Button variant={'outlined'} onClick={() => setShowModal(true)} startIcon={<ManageAccounts/>}
-                    className="px-3 ms-2 btn btn-falcon-default btn-sm">
+                    className="px-3">
                 Change Owner
             </Button>
 

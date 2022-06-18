@@ -2,18 +2,16 @@ import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
 import {
-    AlternateEmail,
     Apartment,
-    Badge, CurrencyPound,
+    Badge,
+    CurrencyPound,
     DeleteSweep,
     Edit,
     HomeRepairService,
     LocationOn,
-    OtherHouses,
-    ToggleOff,
-    ToggleOn
+    OtherHouses
 } from '@mui/icons-material';
-import { Morphable, Status } from '@/utils/enums';
+import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
 import { handleDelete } from '@/utils/helpers';
@@ -83,7 +81,7 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                                     Service Charge
                                 </div>
                             </div>
-                            <StatusChip status={estate.status}/>
+                            <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
                             <div className="d-flex align-items-center">

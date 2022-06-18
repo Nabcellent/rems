@@ -5,6 +5,7 @@ import DataTable from '@/components/common/datatable';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import TableActions from '@/components/TableActions';
+import StatusChip from '@/components/chips/StatusChip';
 
 const Index = ({ estates }) => {
     console.log(estates);
@@ -41,8 +42,14 @@ const Index = ({ estates }) => {
                                 },
                                 {
                                     accessor: 'properties_count',
-                                    Header: 'Properties',
+                                    Header: 'Assets',
                                     Cell: ({ row }) => row.original.properties_count + row.original.units_count
+                                },
+                                {
+                                    accessor: 'status',
+                                    Header: 'Status',
+                                    Cell: ({ row }) => <StatusChip status={row.original.status} entity={'estate'}
+                                                                   entityId={row.original.id}/>
                                 },
                                 {
                                     accessor: 'actions',

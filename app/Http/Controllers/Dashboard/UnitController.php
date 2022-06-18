@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
 use App\Models\Estate;
 use App\Models\Property;
 use App\Models\Unit;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\File;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -54,11 +57,17 @@ class UnitController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/units/Upsert", [
+            "action"  => "create",
+            "estates" => Estate::select(["id", "name"])->when(!user()->hasRole([
+                Role::ADMIN->value,
+                Role::SUPER_ADMIN->value
+            ]), fn(Builder $qry) => $qry->whereUserId(user()->id))->with("properties:id,estate_id,name")->get()
+        ]);
     }
 
     /**
@@ -107,7 +116,8 @@ class UnitController extends Controller
                 "rooms:id,unit_id,type,image,length,width,description",
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
-            ])
+            ]),
+            "canChangeOwner" => user()->hasRole([Role::ADMIN->value, Role::PROPERTY_MANAGER->value])
         ]);
     }
 
@@ -115,11 +125,18 @@ class UnitController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Unit $unit
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(Unit $unit)
+    public function edit(Unit $unit): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/units/Upsert", [
+            "action"  => "update",
+            "unit"    => $unit->load("unitable"),
+            "estates" => Estate::select(["id", "name"])->when(!user()->hasRole([
+                Role::ADMIN->value,
+                Role::SUPER_ADMIN->value
+            ]), fn(Builder $qry) => $qry->whereUserId(user()->id))->with("properties:id,estate_id,name")->get()
+        ]);
     }
 
     /**
@@ -127,11 +144,29 @@ class UnitController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Unit         $unit
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateUnitRequest $request, Unit $unit)
+    public function update(UpdateUnitRequest $request, Unit $unit): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        if($request->hasFile("image")) {
+            $file = $request->file("image");
+            $data["image"] = "unit_" . time() . ".{$file->guessClientExtension()}";
+            $file->move("images/units", $data["image"]);
+
+            if($unit->image && file_exists("images/units/$unit->image")) File::delete("images/units/$unit->image");
+        }
+
+        $unit->update($data);
+
+        return redirect()->route("dashboard.units.index")->with("toast", [
+            "message" => "Unit Updated!",
+            "link"    => [
+                "title" => "View Unit",
+                "href"  => route("dashboard.units.show", ["unit" => $unit])
+            ]
+        ]);
     }
 
     /**

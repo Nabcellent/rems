@@ -44,7 +44,7 @@ const validationSchema = yup.object({
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
-const Upsert = ({ property, action, estates, defaultPassword }) => {
+const Upsert = ({ property, action, estates }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -89,7 +89,7 @@ const Upsert = ({ property, action, estates, defaultPassword }) => {
 
                         <Grid container spacing={2}>
                             <Grid item lg={6}>
-                                <Autocomplete name={'type'} freeSolo value={formik.values.estate}
+                                <Autocomplete name={'estate'} freeSolo value={formik.values.estate}
                                               getOptionLabel={o => o.name ?? o}
                                               options={estates.map(e => ({ name: str.headline(e.name), id: e.id }))}
                                               onChange={(event, value) => {

@@ -28,8 +28,9 @@ import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Policies from '@/components/Policies';
 import MainImage from '@/components/MainImage';
+import ChangeOwner from '@/components/ChangeOwner';
 
-const Show = ({ errors, unit }) => {
+const Show = ({ errors, unit, canChangeOwner }) => {
     console.log(unit);
     const theme = useTheme();
     const [room, setRoom] = useState(undefined);
@@ -78,43 +79,28 @@ const Show = ({ errors, unit }) => {
                                     <CountUp end={pastTenantsCount}/> Past {pluralize('tenant', pastTenantsCount)}
                                 </div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {
-                                        unit.status === Status.ACTIVE
-                                            ? <ToggleOn fontSize={'small'}/>
-                                            : <ToggleOff fontSize={'small'}/>
-                                    }
-                                </Avatar>
-                                <div className="flex-1"><StatusChip status={unit.status}/></div>
-                            </div>
+                            <StatusChip status={unit.status} entity={'unit'} entityId={unit.id}/>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
-                            <strong>Owner</strong>
+                            <div className="d-flex align-items-center">
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><Badge/></Avatar>
+                                <strong>Owner</strong>
+                            </div>
                             <Divider sx={{ my: 2 }}/>
+                            <div className="mb-2">
+                                <h6 className="mb-0">{unit.user.full_name}</h6>
+                                <small className="text-secondary">{unit.user.user_roles_str}</small>
+                            </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <Badge fontSize={'small'}/>
-                                </Avatar>
                                 <div className="flex-1">
-                                    <h6 className="mb-0">{unit.user.full_name}</h6>
-                                    <p className="text-secondary m-0">{unit.user.user_roles_str}</p>
+                                    <Link href={route('dashboard.users.show', { user: unit.user.id })}
+                                          className="mb-0">
+                                        @{unit.user.email}
+                                    </Link>
                                 </div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <AlternateEmail fontSize={'small'}/>
-                                </Avatar>
-                                <div className="flex-1"><h6 className="mb-0">{unit.user.email}</h6></div>
-                            </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <PhoneIphone fontSize={'small'}/>
-                                </Avatar>
-                                <div className="flex-1"><PhoneChip phone={unit.user.phone}/></div>
-                            </div>
-                            <Button variant={'outlined'}
-                                    className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
+                            <div className="mb-2"><PhoneChip phone={unit.user.phone}/></div>
+                            {canChangeOwner && <ChangeOwner entity={'unit'} entityId={unit.id}/>}
                         </div>
                     </div>
                 </div>

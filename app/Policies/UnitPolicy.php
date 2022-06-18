@@ -13,6 +13,18 @@ class UnitPolicy
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param \App\Models\User $user
+     * @param string           $ability
+     * @return void|bool
+     */
+    public function before(User $user)
+    {
+        if($user->hasRole(Role::ADMIN->value)) return true;
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param \App\Models\User $user
@@ -30,9 +42,9 @@ class UnitPolicy
      * @param \App\Models\Unit $unit
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Unit $unit)
+    public function view(User $user, Unit $unit): Response|bool
     {
-        //
+        return $user->id === $unit->user_id;
     }
 
     /**
@@ -41,9 +53,9 @@ class UnitPolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user)
+    public function create(User $user): Response|bool
     {
-        //
+        return $user->estates()->exists();
     }
 
     /**
@@ -53,9 +65,9 @@ class UnitPolicy
      * @param \App\Models\Unit $unit
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Unit $unit)
+    public function update(User $user, Unit $unit): Response|bool
     {
-        //
+        return $user->id === $unit->user_id;
     }
 
     /**

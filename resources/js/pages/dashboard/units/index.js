@@ -7,6 +7,7 @@ import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
+import TableActions from '@/components/TableActions';
 
 const Index = ({ units }) => {
     console.log(units);
@@ -58,28 +59,7 @@ const Index = ({ units }) => {
                                     accessor: 'actions',
                                     disableSortBy: true,
                                     className: 'text-end',
-                                    Cell: ({ row }) => {
-                                        const unit = row.original;
-
-                                        return (
-                                            <>
-                                                <IconButton onClick={() => Inertia.get(route('dashboard.units.create'))}
-                                                            size={"small"} color={"primary"}>
-                                                    <Edit fontSize={'small'}/>
-                                                </IconButton>
-                                                <Link
-                                                    href={route('dashboard.units.show', { unit: unit.id })}>
-                                                    <ReadMore fontSize={'small'}/>
-                                                </Link>
-                                                <IconButton
-                                                    onClick={() => handleDelete(route('dashboard.units.destroy', { unit: unit.id }), 'unit')}
-                                                    size={"small"} color={"error"}>
-                                                    <Delete fontSize={'small'}/>
-                                                </IconButton>
-                                            </>
-                                        );
-                                    }
-                                }
+                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'unit'}/>                                }
                             ]} data={units} onCreateRow={() => Inertia.get(route('dashboard.units.create'))}/>
                         </Card.Body>
                     </Paper>
