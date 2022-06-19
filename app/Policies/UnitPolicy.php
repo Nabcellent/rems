@@ -32,7 +32,7 @@ class UnitPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->hasRole([Role::PROPERTY_MANAGER->value, Role::OWNER->value, Role::TENANT->value]);
+        return $user->units->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
     }
 
     /**
@@ -104,5 +104,16 @@ class UnitPolicy
     public function forceDelete(User $user, Unit $unit)
     {
         //
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param \App\Models\User $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function changeOwner(User $user): Response|bool
+    {
+        return $user->hasRole([Role::PROPERTY_MANAGER->value]);
     }
 }

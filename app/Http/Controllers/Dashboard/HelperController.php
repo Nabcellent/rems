@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 
 class HelperController extends Controller
 {
-    public function changeOwner(Request $request, $entityId): RedirectResponse
+    public function changeOwner(Request $request): RedirectResponse
     {
         $data = $request->validate([
             "user_id"   => "required|exists:users,id",
@@ -29,7 +29,7 @@ class HelperController extends Controller
             "unit" => new Unit
         };
 
-        $entity = $entity->findOrFail($entityId);
+        $entity = $entity->findOrFail($data["entity_id"]);
         $entity->user_id = $user->id;
         $entity->save();
 

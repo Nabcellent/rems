@@ -47,7 +47,7 @@ class UnitController extends Controller
                 "description",
                 "status",
                 "created_at"
-            ])->with([
+            ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
                 "user:id,first_name,last_name,email",
                 "unitable"
             ])->withCount("rooms")->latest()->get()
@@ -63,10 +63,9 @@ class UnitController extends Controller
     {
         return inertia("dashboard/units/Upsert", [
             "action"  => "create",
-            "estates" => Estate::select(["id", "name"])->when(!user()->hasRole([
-                Role::ADMIN->value,
-                Role::SUPER_ADMIN->value
-            ]), fn(Builder $qry) => $qry->whereUserId(user()->id))->with("properties:id,estate_id,name")->get()
+            "estates" => Estate::select(["id", "name"])
+                ->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))
+                ->with("properties:id,estate_id,name")->get()
         ]);
     }
 
@@ -107,7 +106,7 @@ class UnitController extends Controller
     public function show(Unit $unit): Response|ResponseFactory
     {
         return inertia("dashboard/units/Show", [
-            "unit" => $unit->load([
+            "unit"           => $unit->load([
                 "unitable",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
@@ -117,7 +116,7 @@ class UnitController extends Controller
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ]),
-            "canChangeOwner" => user()->hasRole([Role::ADMIN->value, Role::PROPERTY_MANAGER->value])
+            "canChangeOwner" => user()->can("changeOwner", Unit::class)
         ]);
     }
 

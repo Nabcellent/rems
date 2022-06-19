@@ -49,8 +49,8 @@ const Show = ({ errors, unit, canChangeOwner }) => {
     };
 
     return (
-        <Dashboard errors={errors} title={'Properties'}>
-            <Breadcrumbs title="Properties" breadcrumbItem={`${unit.estate.name} ~ ${unit.house_number}`}/>
+        <Dashboard errors={errors} title={'Units'}>
+            <Breadcrumbs title="Units" breadcrumbItem={`${unit.estate.name} ~ ${unit.house_number}`}/>
 
             <Paper className={'mb-3'}>
                 <div className="position-relative min-vh-25 mb-7 card-header">

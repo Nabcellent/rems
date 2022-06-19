@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Estate;
 use App\Models\Lease;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,11 +42,20 @@ class LeaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/leases/Upsert", [
+            "action"  => "create",
+            "users"   => User::select(["id", "email"])->get(),
+            "estates" => Estate::select(["id", "name"])->when(!user()->isAdmin(), function(Builder $qry) {
+                return $qry->whereUserId(user()->id)
+                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+            })->with("properties:id,estate_id,name")->get()
+        ]);
     }
 
     /**

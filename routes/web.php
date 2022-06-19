@@ -64,12 +64,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/password/update', [UserController::class, 'updatePassword'])->name(".password.update");
         });
 
-        Route::prefix('/estates')->name("estates")->group(function() {
-            Route::put('/{estate}/owner', [HelperController::class, "changeOwner"])->name(".change-owner");
-        });
-
-        Route::prefix('/properties')->name("properties")->group(function() {
-            Route::put('/{property}/owner', [HelperController::class, "changeOwner"])->name(".change-owner");
+        Route::prefix('/assets')->name("assets")->group(function() {
+            Route::put('/owner', [HelperController::class, "changeOwner"])->name(".change-owner");
         });
 
         Route::match(["POST", "DELETE"], "/images/{imageable}/{imageableId}", [ImageController::class, "updateOrDeleteMain"])

@@ -178,4 +178,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Notice::class, "notice_recipients");
     }
+
+
+
+    /**
+     * .....................    _____________________HELPERS
+     */
+    public function isAdmin(): bool
+    {
+        return $this->hasRole([\App\Enums\Role::ADMIN->value, \App\Enums\Role::SUPER_ADMIN->value]);
+    }
 }

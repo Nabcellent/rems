@@ -46,7 +46,7 @@ export const sidebarLinks = can => {
                     authorized: can.access.leases,
                     startIcon: <i className="bx bxs-detail"/>, title: 'Leases', subMenu: [
                         { authorized: true, link: route('dashboard.leases.index'), title: 'list' },
-                        { authorized: can.create.lease, link: '/leases', title: 'create' }
+                        { authorized: can.create.lease, link: route('dashboard.leases.create'), title: 'create' }
                     ]
                 },
 

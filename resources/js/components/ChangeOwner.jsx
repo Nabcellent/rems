@@ -25,9 +25,7 @@ const ChangeOwner = ({ entity, entityId }) => {
         onSubmit: values => {
             values.user_id = values.user.id;
 
-            let url = route(`dashboard.${pluralize(entity)}.change-owner`, { [entity]: entityId });
-
-            Inertia.put(url, values, {
+            Inertia.put(route(`dashboard.assets.change-owner`), values, {
                     onBefore: () => setIsLoading(true),
                     onSuccess: () => {
                         setShowModal(false);
@@ -69,7 +67,7 @@ const ChangeOwner = ({ entity, entityId }) => {
                                         <Autocomplete name={'user'} freeSolo value={formik.values.user}
                                                       getOptionLabel={o => o.email ?? o}
                                                       options={users.map(e => ({
-                                                          email: str.headline(e.email),
+                                                          email: e.email.toLowerCase(),
                                                           id: e.id
                                                       }))}
                                                       onChange={(event, value) => {
