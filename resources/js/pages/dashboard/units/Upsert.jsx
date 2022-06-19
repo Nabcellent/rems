@@ -99,10 +99,7 @@ const Upsert = ({ unit, action, estates }) => {
                             <Grid item lg={6}>
                                 <Autocomplete name={'estate'} freeSolo value={formik.values.estate}
                                               getOptionLabel={o => o.name ?? o}
-                                              options={estates.map(e => ({
-                                                  name: str.headline(e.name),
-                                                  id: e.id, ...e
-                                              }))}
+                                              options={estates.map(e => ({ name: str.headline(e.name), ...e }))}
                                               onChange={(event, value) => {
                                                   formik.setFieldValue('unitable', Morphable.ESTATE, true);
                                                   formik.setFieldValue('estate', value, true);

@@ -39,8 +39,11 @@ const validationSchema = yup.object().shape({
 });
 
 const Upsert = ({ lease, action, users, estates }) => {
+    console.log(estates);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [properties, setProperties] = useState([]);
+    const [units, setUnits] = useState([]);
 
     const formik = useFormik({
         initialValues: {
@@ -85,15 +88,43 @@ const Upsert = ({ lease, action, users, estates }) => {
 
                         <LocalizationProvider dateAdapter={AdapterMoment}>
                             <Grid container spacing={2}>
-                                <Grid item lg={6}>
+                                <Grid item lg={4}>
                                     <Autocomplete name={'estate'} value={formik.values.estate}
-                                                  options={estates.map(e => ({ label: str.headline(e.name), id: e.id }))}
+                                                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                                                  options={estates.map(e => ({ label: str.headline(e.name), ...e }))}
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('estate', value, true);
+                                                      setProperties(value.properties);
                                                   }} renderInput={(params) => (
                                         <TextField {...params} label="Estate" required placeholder={'Estate...'}
                                                    error={formik.touched.estate && Boolean(formik.errors.estate)}
                                                    helperText={formik.touched.estate && formik.errors.estate}/>
+                                    )}/>
+                                </Grid>
+                                <Grid item lg={4}>
+                                    <Autocomplete name={'property'} value={formik.values.property}
+                                                  disabled={!properties.length}
+                                                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                                                  options={properties.map(e => ({ label: e.name, ...e }))}
+                                                  onChange={(event, value) => {
+                                                      formik.setFieldValue('property', value, true);
+                                                      setUnits(value.units);
+                                                  }} renderInput={(params) => (
+                                        <TextField {...params} label="Property" required placeholder={'Property...'}
+                                                   error={formik.touched.property && Boolean(formik.errors.property)}
+                                                   helperText={formik.touched.property && formik.errors.property}/>
+                                    )}/>
+                                </Grid>
+                                <Grid item lg={4}>
+                                    <Autocomplete name={'unit'} value={formik.values.unit} disabled={!units.length}
+                                                  isOptionEqualToValue={(option, value) => option.id === value.id}
+                                                  options={units.map(e => ({ label: str.headline(e.house_number), ...e }))}
+                                                  onChange={(event, value) => {
+                                                      formik.setFieldValue('unit', value, true);
+                                                  }} renderInput={(params) => (
+                                        <TextField {...params} label="Unit" required placeholder={'Unit...'}
+                                                   error={formik.touched.unit && Boolean(formik.errors.unit)}
+                                                   helperText={formik.touched.unit && formik.errors.unit}/>
                                     )}/>
                                 </Grid>
                                 <Grid item lg={6}>

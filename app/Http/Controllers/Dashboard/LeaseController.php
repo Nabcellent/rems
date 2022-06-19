@@ -54,7 +54,7 @@ class LeaseController extends Controller
                     ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
                         ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
                     ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
-            })->with("properties:id,estate_id,name")->get()
+            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
         ]);
     }
 
