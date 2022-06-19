@@ -15,6 +15,14 @@ class Lease extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "user_id",
+        "unit_id",
+        "rent_amount",
+        "expires_at",
+        "status",
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */

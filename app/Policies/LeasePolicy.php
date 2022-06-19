@@ -55,7 +55,7 @@ class LeasePolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->hasRole([Role::OWNER->value]);
+        return $user->units()->exists();
     }
 
     /**

@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\Purpose;
-use App\Enums\UnitType;
+use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreUnitRequest extends FormRequest
+class StoreLeaseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,13 +26,12 @@ class StoreUnitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "unitable_id"  => "required",
-            "unitable"     => "required|in:estate,property",
-            "house_number" => "required|string",
-            "purpose"      => ["required", new Enum(Purpose::class)],
-            "type"         => ["required", new Enum(UnitType::class)],
-            "description"  => "nullable|string",
-            "image"        => "nullable|image|max:1024",
+            "user_id"     => "required|exists:users,id",
+            "unit_id"     => "required|exists:units,id",
+            "deposit"     => "numeric",
+            "rent_amount" => "required|numeric",
+            "status"      => [new Enum(Status::class)],
+            "expires_at"  => "required|date|after:tomorrow",
         ];
     }
 }

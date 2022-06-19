@@ -31,10 +31,9 @@ const validationSchema = yup.object().shape({
     user: yup.object().required('User is required.'),
     deposit: yup.number(),
     rent_amount: yup.number().required('Amount for rent is required.'),
-    start_at: yup.date('Invalid date.').min(moment().toDate(), 'Must be today or after today.')
-                 .max(moment().add('1', 'y').toDate(), 'Must be within the year.').required('Start date is required.'),
-    end_at: yup.date('Invalid date.').min(yup.ref('start_at') ?? moment(), 'Must be after start date.')
-               .required('End date is required.').max(moment().add('1', 'y').toDate(), 'Must be within the year.'),
+    expires_at: yup.date('Invalid date.').min(moment().toDate(), 'Must be today or after today.')
+                   .max(moment().add('1', 'y').toDate(), 'Must be within the year.')
+                   .required('Start date is required.'),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
@@ -50,11 +49,11 @@ const Upsert = ({ lease, action, users, estates }) => {
             estate: '',
             property: '',
             unit: '',
-            user: lease?.user ?? [],
+            user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
             deposit: lease?.deposit ?? '',
             rent_amount: lease?.rent_amount ?? '',
-            start_at: lease?.start_at,
-            end_at: lease?.end_at,
+            expires_at: lease?.expires_at ?? '',
+            end_at: lease?.end_at ?? '',
             status: lease?.status ?? Status.ACTIVE,
         },
         validationSchema,
@@ -67,7 +66,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                 values._method = Method.PUT;
             }
 
-            Inertia.post(url, values, {
+            Inertia.post(url, { ...values, unit_id: values.unit.id, user_id: values.user.id }, {
                     onBefore: () => setIsLoading(true),
                     onSuccess: () => formik.resetForm(),
                     onError: errors => setErrors(errors),
@@ -127,52 +126,40 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                    helperText={formik.touched.unit && formik.errors.unit}/>
                                     )}/>
                                 </Grid>
-                                <Grid item lg={6}>
-                                    <Autocomplete name={'tenant'} value={formik.values.tenant}
-                                                  getOptionLabel={option => option.email}
+                                <Grid item lg={12}>
+                                    <Autocomplete name={'user'} value={formik.values.user}
                                                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                  options={users.map(e => ({ email: e.email.toLowerCase(), id: e.id }))}
+                                                  options={users.map(e => ({ label: e.email.toLowerCase(), id: e.id }))}
                                                   onChange={(event, value) => {
-                                                      formik.setFieldValue('tenant', value, true);
+                                                      formik.setFieldValue('user', value, true);
                                                   }} renderInput={(params) => (
-                                        <TextField {...params} label="Select Recipients" required
-                                                   placeholder={'Select tenant...'}
-                                                   error={formik.touched.tenant && Boolean(formik.errors.tenant)}
-                                                   helperText={formik.touched.tenant && formik.errors.tenant}/>
+                                        <TextField {...params} label="Select Tenant" placeholder={'Select user...'}
+                                                   error={formik.touched.user && Boolean(formik.errors.user)}
+                                                   helperText={formik.touched.user && formik.errors.user}/>
                                     )}/>
                                 </Grid>
                                 <Grid item lg={6}>
-                                    <Autocomplete name={'type'} freeSolo options={Object.values(NoticeType)}
-                                                  value={formik.values.type} onChange={(event, value) => {
-                                        formik.setFieldValue('type', value, true);
-                                    }} renderInput={(params) => (
-                                        <TextField {...params} label="Type" required placeholder={'Notice type...'}
-                                                   error={formik.touched.type && Boolean(formik.errors.type)}
-                                                   helperText={formik.touched.type && formik.errors.type}/>
-                                    )}/>
+                                    <TextField label="Deposit" type={'number'} placeholder="Deposit..." name={'deposit'}
+                                               value={formik.values.deposit} fullWidth onChange={formik.handleChange}
+                                               error={formik.touched.deposit && Boolean(formik.errors.deposit)}
+                                               helperText={formik.touched.deposit && formik.errors.deposit}/>
+                                </Grid>
+                                <Grid item lg={6}>
+                                    <TextField label="Amount Ror Rent" type={'number'} placeholder="Amount for rent..."
+                                               name={'rent_amount'} value={formik.values.rent_amount} fullWidth
+                                               onChange={formik.handleChange}
+                                               error={formik.touched.rent_amount && Boolean(formik.errors.rent_amount)}
+                                               helperText={formik.touched.rent_amount && formik.errors.rent_amount}/>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <DatePicker label="Start Date" value={formik.values.start_at} minDate={moment()}
-                                                maxDate={moment().add(1, 'year')}
-                                                onChange={(newValue) => formik.setFieldValue('start_at', newValue, true)}
+                                    <DatePicker label="Expiration Date" value={formik.values.expires_at}
+                                                minDate={moment()} maxDate={moment().add(1, 'year')}
+                                                onChange={(newValue) => formik.setFieldValue('expires_at', newValue, true)}
                                                 renderInput={params => (
                                                     <TextField {...params} fullWidth
-                                                               error={formik.touched.start_at && Boolean(formik.errors.start_at)}
-                                                               helperText={formik.touched.start_at && formik.errors.start_at}
-                                                               placeholder={'Start Date'}/>
-                                                )}/>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <DatePicker label={'End date'}
-                                                value={formik.values.end_at}
-                                                minDate={formik.values.start_at ?? moment()}
-                                                maxDate={moment().add(1, 'year')}
-                                                onChange={(newValue) => formik.setFieldValue('end_at', newValue, true)}
-                                                renderInput={params => (
-                                                    <TextField {...params} fullWidth
-                                                               error={formik.touched.end_at && Boolean(formik.errors.end_at)}
-                                                               helperText={formik.touched.end_at && formik.errors.end_at}
-                                                               placeholder={'End date'}/>
+                                                               error={formik.touched.expires_at && Boolean(formik.errors.expires_at)}
+                                                               helperText={formik.touched.expires_at && formik.errors.expires_at}
+                                                               placeholder={'Expiration Date'}/>
                                                 )}/>
                                 </Grid>
                                 <Grid item md={6}>
@@ -192,14 +179,6 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             {formik.touched.status && formik.errors.status}
                                         </FormHelperText>
                                     </FormControl>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField label="Description" multiline rows={4} placeholder="Description..."
-                                               fullWidth
-                                               name={'description'} value={formik.values.description}
-                                               onChange={formik.handleChange}
-                                               error={formik.touched.description && Boolean(formik.errors.description)}
-                                               helperText={formik.touched.description && formik.errors.description}/>
                                 </Grid>
                             </Grid>
                         </LocalizationProvider>

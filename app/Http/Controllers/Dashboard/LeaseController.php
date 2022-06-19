@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +17,16 @@ use Inertia\ResponseFactory;
 
 class LeaseController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Lease::class, 'lease');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,8 +40,7 @@ class LeaseController extends Controller
                 "user_id",
                 "unit_id",
                 "rent_amount",
-                "start_date",
-                "end_date",
+                "expires_at",
                 "status",
                 "created_at"
             ])->with([
@@ -62,11 +73,21 @@ class LeaseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreLeaseRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        $lease = Lease::create($data);
+
+        return redirect()->route("dashboard.leases.index")->with("toast", [
+            "message" => "Lease Created!",
+            "link"    => [
+                "title" => "View Lease",
+                "href"  => route("dashboard.leases.show", ["lease" => $lease])
+            ]
+        ]);
     }
 
     /**
