@@ -36,8 +36,10 @@ class PropertyController extends Controller
     {
         return inertia('dashboard/properties', [
             "properties" => Property::select(["id", "estate_id", "user_id", "name", "type"])
-                ->whereHas("estate", fn(Builder $qry) => $qry->whereUserId(user()->id))->orWhere("user_id", user()->id)
-                ->with([
+                ->when(!user()->can("viewAny", Property::class), function(Builder $qry) {
+                    return $qry->whereHas("estate", fn(Builder $qry) => $qry->whereUserId(user()->id))
+                        ->orWhere("user_id", user()->id);
+                })->with([
                     "user:id,first_name,last_name,email",
                     "estate:id,name,address"
                 ])->withCount(["units"])->latest()->get()

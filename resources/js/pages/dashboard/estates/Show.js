@@ -1,24 +1,20 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Grid, Paper, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
 import {
-    AlternateEmail,
     Apartment,
     Badge,
+    CurrencyPound,
     DeleteSweep,
     Edit,
-    Home,
     HomeRepairService,
     LocationOn,
-    OtherHouses,
-    PhoneIphone,
-    ToggleOff,
-    ToggleOn
+    OtherHouses
 } from '@mui/icons-material';
-import { Morphable, Status } from '@/utils/enums';
+import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
-import { getInitials, handleDelete } from '@/utils/helpers';
+import { handleDelete } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
@@ -64,55 +60,44 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                 <div className="card-body">
                     <div className="row">
                         <div className="col-lg-8">
-                            <h4 className="mb-1">
-                                {estate.name}<i className={'bx bxs-check-circle'}/>
-                            </h4>
+                            <h4 className="mb-1">{estate.name}<i className={'bx bxs-check-circle'}/></h4>
                             <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <LocationOn fontSize={'small'}/>
-                                </Avatar>
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><LocationOn/></Avatar>
                                 <div className="flex-1"><h6 className="mb-0">{estate.address}</h6></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <OtherHouses fontSize={'small'}/>
-                                </Avatar>
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><OtherHouses/></Avatar>
                                 <div className="flex-1">
                                     <CountUp end={assetCount}/> Asset{assetCount === 1 ? '' : 's'}
                                 </div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {
-                                        estate.status === Status.ACTIVE
-                                            ? <ToggleOn fontSize={'small'}/>
-                                            : <ToggleOff fontSize={'small'}/>
-                                    }
-                                </Avatar>
-                                <div className="flex-1"><StatusChip status={estate.status}/></div>
-                            </div>
-                        </div>
-                        <div className="ps-2 ps-lg-3 col">
-                            <strong>Owner</strong>
-                            <Divider sx={{ my: 2 }}/>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <Badge fontSize={'small'}/>
-                                </Avatar>
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><CurrencyPound/></Avatar>
                                 <div className="flex-1">
-                                    <h6 className="mb-0">{estate.user.full_name}</h6>
-                                    <p className="text-secondary m-0">{estate.user.user_roles_str}</p>
+                                    <strong>
+                                        <CountUp end={estate.service_charge} prefix={'KES '} separator={','}/> -
+                                    </strong>
+                                    Service Charge
                                 </div>
                             </div>
+                            <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
+                        </div>
+                        <div className="ps-2 ps-lg-3 col">
+                            <div className="d-flex align-items-center">
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><Badge/></Avatar>
+                                <strong>Owner</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
+                            <div className="mb-2">
+                                <h6 className="mb-0">{estate.user.full_name}</h6>
+                                <small className="text-secondary">{estate.user.user_roles_str}</small>
+                            </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <AlternateEmail fontSize={'small'}/>
-                                </Avatar>
                                 <div className="flex-1">
                                     <Link href={route('dashboard.users.show', { user: estate.user.id })}
                                           className="mb-0">
-                                        {estate.user.email}
+                                        @{estate.user.email}
                                     </Link>
                                 </div>
                             </div>
@@ -208,12 +193,12 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                                                 <div className="hover-actions end-0 top-50 translate-middle-y me-2">
                                                     <button onClick={() => handleUpdateService(service)}
                                                             className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                                        <Edit fontSize={'small'}/>
+                                                        <Edit/>
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(route('dashboard.estate-services.destroy', { estate_service: service.pivot.id }), 'Service')}
                                                         className="border-300 text-600 btn btn-danger btn-sm">
-                                                        <DeleteSweep fontSize={'small'}/>
+                                                        <DeleteSweep/>
                                                     </button>
                                                 </div>
                                             </div>

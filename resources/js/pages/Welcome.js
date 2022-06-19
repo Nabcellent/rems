@@ -1,8 +1,8 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/inertia-react';
 import '../assets/css/auth.css';
-import logo from '@/assets/images/logo.svg';
-import logoDarkSvg from '@/assets/images/logo-dark.svg';
+import logo from '@/assets/images/logo-dark.svg';
+import logoDarkSvg from '@/assets/images/logo-dark-full.svg';
 
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
     return (

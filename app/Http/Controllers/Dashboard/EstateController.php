@@ -36,10 +36,11 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates', [
-            "estates" => Estate::select(["id", "user_id", "name", "address"])
+            "estates"         => Estate::select(["id", "user_id", "name", "address", "status"])
                 ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
                     return $qry->whereBelongsTo(user());
-                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
+                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Estate::class)
         ]);
     }
 
@@ -89,7 +90,7 @@ class EstateController extends Controller
     public function show(Estate $estate): Response|ResponseFactory
     {
         return inertia("dashboard/estates/Show", [
-            "estate"         => $estate->load([
+            "estate"          => $estate->load([
                 "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
@@ -99,9 +100,10 @@ class EstateController extends Controller
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["properties", "units"]),
-            "services"       => Service::select(["id", "name"])->get(),
-            "googleMapsKey"  => config("rems.google.maps.api_key"),
-            "canChangeOwner" => user()->hasRole(Role::ADMIN->value)
+            "services"        => Service::select(["id", "name"])->get(),
+            "googleMapsKey"   => config("rems.google.maps.api_key"),
+            "canChangeOwner"  => user()->hasRole(Role::ADMIN->value),
+            "canUpdateStatus" => user()->can("updateStatus", Estate::class)
         ]);
     }
 

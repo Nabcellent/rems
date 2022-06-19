@@ -41,6 +41,7 @@ const validationSchema = yup.object({
     address: yup.string().required('Last name is required.'),
     latitude: yup.number().required('Latitude is required.'),
     longitude: yup.number().required('Longitude is required.'),
+    service_charge: yup.number(),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
@@ -54,6 +55,7 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
             address: estate?.address ?? '',
             latitude: estate?.latitude ?? '',
             longitude: estate?.longitude ?? '',
+            service_charge: estate?.service_charge ?? '',
             status: estate?.status ?? Status.ACTIVE,
             image: '',
         },
@@ -83,7 +85,7 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
 
             <Grid container spacing={2} justifyContent={'center'} alignItems={'center'}>
                 <Grid item xs={12} xl={6}>
-                    <Paper className={'p-3'}>
+                    <Paper className={'p-3'} component={'form'} onSubmit={formik.handleSubmit}>
                         <ValidationErrors errors={errors}/>
 
                         <Grid container spacing={2}>
@@ -113,6 +115,13 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                                            error={formik.touched.longitude && Boolean(formik.errors.longitude)}
                                            helperText={formik.touched.longitude && formik.errors.longitude}/>
                             </Grid>
+                            <Grid item xs={6}>
+                                <TextField type={'number'} label="Service charge" placeholder="Service charge..."
+                                           name={'service_charge'}
+                                           value={formik.values.service_charge} fullWidth onChange={formik.handleChange}
+                                           error={formik.touched.service_charge && Boolean(formik.errors.service_charge)}
+                                           helperText={formik.touched.service_charge && formik.errors.service_charge}/>
+                            </Grid>
                             <Grid item md={6}>
                                 <FormControl error={formik.touched.status && Boolean(formik.errors.status)}>
                                     <FormLabel className={'m-0'} id="status">Status</FormLabel>
@@ -140,9 +149,9 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                                           onremovefile={() => formik.setFieldValue('image', null)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
-                                               onClick={() => formik.submitForm()} endIcon={<Create/>}
-                                               variant="contained">{action}
+                                <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                               loadingPosition="end" onClick={() => formik.submitForm()}
+                                               endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>
                             </Grid>
                         </Grid>

@@ -22,6 +22,7 @@ class Estate extends Model
         "image",
         "latitude",
         "longitude",
+        "service_charge",
         "status",
     ];
 

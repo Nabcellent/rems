@@ -6,6 +6,7 @@ import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';
 import { NoticeType } from '@/utils/enums';
 import CardBgCorner from '@/components/CardBgCorner';
+import React from 'react';
 
 const Show = ({ errors, notice }) => {
     console.log(notice);
@@ -86,6 +87,37 @@ const Show = ({ errors, notice }) => {
                     </Row>
                 </Card.Body>
             </Paper>
+
+            <Row>
+                <Col lg={6}>
+                    <Paper>
+                        <Card.Header><h5 className={'mb-0'}>Recipients</h5></Card.Header>
+                        <Card.Body>
+                            {
+                                notice.recipients.map(recipient => (
+                                    <div key={`recipient-${recipient.id}`}
+                                        className="d-flex justify-content-between align-items-center rounded-3 bg-light p-3  mb-2">
+                                        <Link href={route("dashboard.users.show", { user: recipient.id })}>
+                                            <h6 className="mb-0">
+                                                <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                                     data-icon="circle" viewBox="0 0 512 512"
+                                                     className="svg-inline--fa fa-circle fa-w-16 fs--1 me-3 text-primary"
+                                                     role="img" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill="currentColor"
+                                                          d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"></path>
+                                                </svg>
+                                                {recipient.email}
+                                            </h6>
+                                        </Link>
+                                        <a className="fs--2 text-600 mb-0"
+                                           href="/dashboard/project-management#!">{recipient.user_roles_str}</a>
+                                    </div>
+                                ))
+                            }
+                        </Card.Body>
+                    </Paper>
+                </Col>
+            </Row>
         </Dashboard>
     );
 };

@@ -67,23 +67,6 @@ class UserController extends Controller
         ]);
     }
 
-    public function owners(): JsonResponse
-    {
-        $estateIds = user()->estates()->pluck("id");
-
-        return response()->json([
-            "users" => User::select(["id", "email",])
-                ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
-                    return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))
-                        ->whereHas("properties", function(Builder $qry) use ($estateIds) {
-                            return $qry->whereIn("estate_id", $estateIds);
-                        })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
-                            return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
-                        });
-                })->latest("email")->get()
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -175,20 +158,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @return \Inertia\Response|\Inertia\ResponseFactory
-     */
-    public function showProfile(): Response|ResponseFactory
-    {
-        return inertia("dashboard/users/Show", [
-            "user" => user()->load([
-                "wallet:id,user_id,balance"
-            ])
-        ]);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\User $user
@@ -268,6 +237,37 @@ class UserController extends Controller
         $user->delete();
 
         return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
+    }
+
+    public function owners(): JsonResponse
+    {
+        $estateIds = user()->estates()->pluck("id");
+
+        return response()->json([
+            "users" => User::select(["id", "email",])
+                ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
+                    return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))
+                        ->whereHas("properties", function(Builder $qry) use ($estateIds) {
+                            return $qry->whereIn("estate_id", $estateIds);
+                        })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
+                            return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
+                        });
+                })->latest("email")->get()
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory
+     */
+    public function showProfile(): Response|ResponseFactory
+    {
+        return inertia("dashboard/users/Show", [
+            "user" => user()->load([
+                "wallet:id,user_id,balance"
+            ])
+        ]);
     }
 
     public function settings(): Response|ResponseFactory

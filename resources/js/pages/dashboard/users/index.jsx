@@ -81,8 +81,8 @@ const Index = ({ users }) => {
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status} canUpdate={true}
-                                                               entity={'user'} entityId={row.original.id}/>
+                                Cell: ({ row }) => <StatusChip status={row.original.status} entity={'user'}
+                                                               entityId={row.original.id}/>
                             },
                             {
                                 accessor: 'actions',

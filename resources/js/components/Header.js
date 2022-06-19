@@ -1,4 +1,4 @@
-import logo from "../assets/images/logo.svg";
+import logo from "../assets/images/logo-dark.svg";
 import { Link } from "@inertiajs/inertia-react";
 import NotificationDropdown from '@/components/common/topbar-dropdowns/NotificationDropdown';
 import ProfileMenu from '@/components/common/topbar-dropdowns/ProfileMenu';

@@ -48,16 +48,7 @@ const Show = ({ errors, property, canChangeOwner }) => {
                                     <CountUp end={property.units_count}/> Unit{property.units_count === 1 ? '' : 's'}
                                 </div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {
-                                        property.status === Status.ACTIVE
-                                            ? <ToggleOn fontSize={'small'}/>
-                                            : <ToggleOff fontSize={'small'}/>
-                                    }
-                                </Avatar>
-                                <div className="flex-1"><StatusChip status={property.status}/></div>
-                            </div>
+                            <StatusChip status={property.status} entity={'property'} entityId={property.id}/>
                         </div>
                         <div className="ps-2 ps-lg-3 col">
                             <strong>Owner</strong>

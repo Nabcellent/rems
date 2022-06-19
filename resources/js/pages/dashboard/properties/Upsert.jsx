@@ -13,13 +13,12 @@ import {
     RadioGroup,
     TextField
 } from '@mui/material';
-import { PropertyType, Role, Status } from '@/utils/enums';
+import { PropertyType, Status } from '@/utils/enums';
 import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import React, { useState } from 'react';
 import * as yup from 'yup';
-import { isValidPhoneNumber } from 'libphonenumber-js';
 import { Create } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 
@@ -45,7 +44,7 @@ const validationSchema = yup.object({
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
-const Upsert = ({ property, action, estates, defaultPassword }) => {
+const Upsert = ({ property, action, estates }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -85,12 +84,12 @@ const Upsert = ({ property, action, estates, defaultPassword }) => {
 
             <Grid container spacing={2} justifyContent={'center'}>
                 <Grid item xs={12} xl={7}>
-                    <Paper className={'p-3'}>
+                    <Paper className={'p-3'} component={'form'} onSubmit={formik.handleSubmit}>
                         <ValidationErrors errors={errors}/>
 
                         <Grid container spacing={2}>
                             <Grid item lg={6}>
-                                <Autocomplete name={'type'} freeSolo value={formik.values.estate}
+                                <Autocomplete name={'estate'} freeSolo value={formik.values.estate}
                                               getOptionLabel={o => o.name ?? o}
                                               options={estates.map(e => ({ name: str.headline(e.name), id: e.id }))}
                                               onChange={(event, value) => {
@@ -146,9 +145,9 @@ const Upsert = ({ property, action, estates, defaultPassword }) => {
                                           onremovefile={() => formik.setFieldValue('image', null, true)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
-                                               onClick={() => formik.submitForm()} endIcon={<Create/>}
-                                               variant="contained">{action}
+                                <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                               loadingPosition="end" onClick={() => formik.submitForm()}
+                                               endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>
                             </Grid>
                         </Grid>
