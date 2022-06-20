@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Misc\IgnoreSuperScope;
 use App\Models\Estate;
 use App\Models\Property;
 use App\Models\Role as RoleModel;
@@ -76,7 +77,9 @@ class UserController extends Controller
     public function create(Request $request): Response|ResponseFactory
     {
         $props = [
-            "roles"           => RoleModel::when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
+            "roles"           => RoleModel::when(user()->hasRole(Role::SUPER_ADMIN->value), function(Builder $qry) {
+                return $qry->withoutGlobalScope(IgnoreSuperScope::class);
+            })->when(user()->hasRole(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
                 return $qry->whereIn("name", [Role::OWNER->value, Role::SERVICE_PROVIDER->value]);
             })->when($request->has("entity"), fn(Builder $qry) => $qry->whereName(Role::OWNER->value))->pluck("name"),
             "action"          => "create",
@@ -124,7 +127,7 @@ class UserController extends Controller
 
         $user = User::create($data)->assignRole($data["role"]);
 
-        if($request->has("createsOwnerFor")) {
+        if($request->filled("createsOwnerFor")) {
             $propertyModel = match ($data["createsOwnerFor"]["name"]) {
                 "estate" => new Estate,
                 "property" => new Property,
