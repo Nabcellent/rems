@@ -131,10 +131,12 @@ class UnitController extends Controller
         return inertia("dashboard/units/Upsert", [
             "action"  => "update",
             "unit"    => $unit->load("unitable"),
-            "estates" => Estate::select(["id", "name"])->when(!user()->hasRole([
-                Role::ADMIN->value,
-                Role::SUPER_ADMIN->value
-            ]), fn(Builder $qry) => $qry->whereUserId(user()->id))->with("properties:id,estate_id,name")->get()
+            "estates" => Estate::select(["id", "name"])->when(!user()->isAdmin(), function(Builder $qry) {
+                return $qry->whereUserId(user()->id)
+                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+            })->with("properties:id,estate_id,name")->get()
         ]);
     }
 

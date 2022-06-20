@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +17,16 @@ use Inertia\ResponseFactory;
 
 class LeaseController extends Controller
 {
+    /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Lease::class, 'lease');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -28,14 +40,14 @@ class LeaseController extends Controller
                 "user_id",
                 "unit_id",
                 "rent_amount",
-                "start_date",
-                "end_date",
+                "expires_at",
                 "status",
                 "created_at"
             ])->with([
                 "unit.user:id,first_name,last_name,email",
                 "user:id,first_name,last_name,email",
-            ])->latest()->get()
+            ])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Lease::class)
         ]);
     }
 
@@ -49,12 +61,12 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
             "users"   => User::select(["id", "email"])->get(),
-            "estates" => Estate::select(["id", "name"])->when(!user()->isAdmin(), function(Builder $qry) {
+            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
                 return $qry->whereUserId(user()->id)
                     ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
                         ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
                     ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
-            })->with("properties:id,estate_id,name")->get()
+            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
         ]);
     }
 
@@ -62,11 +74,21 @@ class LeaseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreLeaseRequest $request): RedirectResponse
     {
-        //
+        $data = $request->validated();
+
+        $lease = Lease::create($data);
+
+        return redirect()->route("dashboard.leases.index")->with("toast", [
+            "message" => "Lease Created!",
+            "link"    => [
+                "title" => "View Lease",
+                "href"  => route("dashboard.leases.show", ["lease" => $lease])
+            ]
+        ]);
     }
 
     /**
@@ -78,12 +100,13 @@ class LeaseController extends Controller
     public function show(Lease $lease): Response|ResponseFactory
     {
         return inertia("dashboard/leases/Show", [
-            "lease" => $lease->load([
+            "lease"           => $lease->load([
                 "unit",
                 "unit.user:id,email,phone",
                 "user:id,email,phone",
                 "user.roles:id,name",
-            ])
+            ]),
+            "canUpdateStatus" => user()->can("updateStatus", $lease)
         ]);
     }
 
@@ -91,11 +114,21 @@ class LeaseController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Lease $lease
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(Lease $lease)
+    public function edit(Lease $lease): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/leases/Upsert", [
+            "lease"   => $lease,
+            "action"  => "update",
+            "users"   => User::select(["id", "email"])->get(),
+            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
+                return $qry->whereUserId(user()->id)
+                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
+        ]);
     }
 
     /**
@@ -103,11 +136,19 @@ class LeaseController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Lease        $lease
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Lease $lease)
+    public function update(StoreLeaseRequest $request, Lease $lease): RedirectResponse
     {
-        //
+        $lease->update($request->validated());
+
+        return redirect()->route("dashboard.leases.index")->with("toast", [
+            "message" => "Lease Updated!",
+            "link"    => [
+                "title" => "View Lease",
+                "href"  => route("dashboard.leases.show", ["lease" => $lease])
+            ]
+        ]);
     }
 
     /**

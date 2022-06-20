@@ -9,6 +9,7 @@ import { Link } from '@inertiajs/inertia-react';
 import { currencyFormat, handleDelete } from '@/utils/helpers';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
+import TableActions from '@/components/TableActions';
 
 const Index = ({ leases }) => {
     console.log(leases);
@@ -29,7 +30,7 @@ const Index = ({ leases }) => {
                                     <span>
                                         {row.original.unit.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.unit.user.id })}>
-                                            <small>{row.original.user.email}</small>
+                                            <small>{row.original.unit.user.email}</small>
                                         </Link>
                                     </span>
                                 )
@@ -52,47 +53,20 @@ const Index = ({ leases }) => {
                                 Cell: ({ row }) => currencyFormat(row.original.rent_amount)
                             },
                             {
-                                accessor: 'duration',
-                                Header: 'Duration',
-                                Cell: ({ row }) => (
-                                    <span>
-                                        {moment(row.original.start_date).format("D.M.YY")}
-                                        &nbsp;-&nbsp;
-                                        {moment(row.original.end_date).format("D.M.YY")}
-                                    </span>
-                                )
-                            },
+                                accessor: 'expires_at',
+                                Header: 'Expiry',
+                                Cell: ({ row }) => moment(row.original.expires_at).format("ddd MMM YYYY")                            },
                             {
                                 accessor: 'status',
                                 Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
+                                Cell: ({ row }) => <StatusChip status={row.original.status} entity={'lease'}
+                                                               entityId={row.original.id}/>
                             },
                             {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => {
-                                    const lease = row.original;
-
-                                    return (
-                                        <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.leases.create'))}
-                                                        size={"small"} color={"primary"}>
-                                                <Edit fontSize={'small'}/>
-                                            </IconButton>
-                                            <Link
-                                                href={route('dashboard.leases.show', { lease: lease.id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                            <IconButton
-                                                onClick={() => handleDelete(route('dashboard.leases.destroy', { lease: lease.id }), 'lease')}
-                                                size={"small"} color={"error"}>
-                                                <Delete fontSize={'small'}/>
-                                            </IconButton>
-                                        </>
-                                    );
-                                }
-                            }
+                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'lease'}/>                            }
                         ]} data={leases} onCreateRow={() => Inertia.get(route('dashboard.leases.create'))}/>
                     </Paper>
                 </Col>

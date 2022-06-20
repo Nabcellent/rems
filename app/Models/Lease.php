@@ -15,6 +15,19 @@ class Lease extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "user_id",
+        "unit_id",
+        "rent_amount",
+        "expires_at",
+        "status",
+    ];
+
+    protected $casts = [
+        "status"     => Status::class,
+        "expires_at" => "datetime"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */
@@ -29,7 +42,6 @@ class Lease extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 
     /**
      * .....................    _____________________HELPERS

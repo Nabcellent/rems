@@ -77,3 +77,10 @@ export const PropertyType = {
     APARTMENT: 'APARTMENT',
     MAISONETTE: 'MAISONETTE'
 };
+
+export const RentFrequency = {
+    MONTHLY: 'MONTHLY',
+    QUARTERLY: 'QUARTERLY',
+    HALF_YEARLY: 'HALF_YEARLY',
+    YEARLY: 'YEARLY'
+};

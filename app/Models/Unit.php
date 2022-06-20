@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -92,5 +94,13 @@ class Unit extends Model
     public function amenities(): MorphMany
     {
         return $this->morphMany(Amenity::class, 'property');
+    }
+
+    /**
+     * .....................    _____________________HELPERS
+     */
+    public function scopeOccupied(Builder $qry): Builder
+    {
+        return $qry->whereHas("leases", fn(Builder $qry) => $qry->whereStatus(Status::ACTIVE));
     }
 }
