@@ -7,12 +7,12 @@ import { Link } from '@inertiajs/inertia-react';
 import { NoticeType } from '@/utils/enums';
 import CardBgCorner from '@/components/CardBgCorner';
 import React from 'react';
+import Banner from '@/components/Banner';
 
 const Show = ({ errors, notice }) => {
     console.log(notice);
 
     let date;
-
     if (notice.type === NoticeType.VACATION) {
         date = (
             <>
@@ -36,22 +36,7 @@ const Show = ({ errors, notice }) => {
         <Dashboard errors={errors} title={'Notice'}>
             <Breadcrumbs title="Notice" breadcrumbItem={`#${notice.id}`}/>
 
-            <Paper className={'mb-3 d-flex flex-column'}>
-                <div className="position-relative min-vh-25 mb-8 card-header">
-                    <div className="bg-holder rounded-3 rounded-bottom-0"
-                         style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}/>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                    }}>
-                        Notice.
-                    </Avatar>
-                </div>
-            </Paper>
+            <Banner title={'Notice.'}/>
 
             <Paper className={'mb-3'}>
                 <CardBgCorner/>

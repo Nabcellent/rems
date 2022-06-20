@@ -79,7 +79,6 @@ const Upsert = ({ lease, action, users, estates }) => {
         }
     });
 
-    console.log(formik.values.estate);
     const serviceCharge = formik.values.estate?.service_charge ?? 0,
         totalRent = formik.values.rent_amount + serviceCharge;
 
