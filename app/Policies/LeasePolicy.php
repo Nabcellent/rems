@@ -32,7 +32,7 @@ class LeasePolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->units()->exists();
+        return $user->units->isNotEmpty() || $user->leases->isNotEmpty();
     }
 
     /**
@@ -42,9 +42,9 @@ class LeasePolicy
      * @param \App\Models\Lease $lease
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Lease $lease)
+    public function view(User $user, Lease $lease): Response|bool
     {
-        //
+        return $user->id === $lease->unit->user_id || $user->id === $lease->user_id;
     }
 
     /**
@@ -55,7 +55,7 @@ class LeasePolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->units()->exists();
+        return $user->units->isNotEmpty();
     }
 
     /**
@@ -65,9 +65,21 @@ class LeasePolicy
      * @param \App\Models\Lease $lease
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Lease $lease)
+    public function update(User $user, Lease $lease): Response|bool
     {
-        //
+        return $user->id === $lease->unit->user_id;
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param \App\Models\User       $user
+     * @param \App\Models\Lease|null $lease
+     * @return bool
+     */
+    public function updateStatus(User $user, Lease $lease = null): bool
+    {
+        return $user->id === optional($lease?->unit)->user_id || $user->hasAnyRole(Role::PROPERTY_MANAGER->value, Role::OWNER->value);
     }
 
     /**

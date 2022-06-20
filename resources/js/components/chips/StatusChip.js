@@ -45,7 +45,7 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
 
     let statuses = Object.values(Status);
 
-    if (entity === 'user') {
+    if (['user', 'lease'].includes(entity)) {
         statuses = Arr.only(statuses, [Status.ACTIVE, Status.INACTIVE]);
     } else if (['transaction', 'payment'].includes(entity)) {
         statuses = Arr.removeItems(statuses, [Status.ACTIVE, Status.INACTIVE, Status.RESOLVED]);

@@ -32,7 +32,7 @@ class NoticePolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->leases()->active()->exists();
+        return $user->units()->occupied()->exists();
     }
 
     /**
@@ -55,7 +55,7 @@ class NoticePolicy
      */
     public function create(User $user)
     {
-        //
+        return $user->units()->occupied()->exists();
     }
 
     /**

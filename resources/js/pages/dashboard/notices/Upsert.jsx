@@ -1,7 +1,7 @@
 import Dashboard from '@/layouts/Dashboard';
 import Breadcrumbs from '@/components/common/Breadcrumb';
-import { Autocomplete, Grid, Paper, TextField } from '@mui/material';
-import { NoticeType } from '@/utils/enums';
+import { Autocomplete, Grid, MenuItem, Paper, TextField } from '@mui/material';
+import { NoticeType, RentFrequency } from '@/utils/enums';
 import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
@@ -91,14 +91,17 @@ const Upsert = ({ notice, action, users }) => {
                                     )}/>
                                 </Grid>
                                 <Grid item lg={6}>
-                                    <Autocomplete name={'type'} freeSolo options={Object.values(NoticeType)}
-                                                  value={formik.values.type} onChange={(event, value) => {
-                                        formik.setFieldValue('type', value, true);
-                                    }} renderInput={(params) => (
-                                        <TextField {...params} label="Type" required placeholder={'Notice type...'}
-                                                   error={formik.touched.type && Boolean(formik.errors.type)}
-                                                   helperText={formik.touched.type && formik.errors.type}/>
-                                    )}/>
+                                    <TextField label="Type" placeholder="Notice type..." select required
+                                               name={'type'} value={formik.values.type} fullWidth
+                                               onChange={formik.handleChange}
+                                               error={formik.touched.type && Boolean(formik.errors.type)}
+                                               helperText={formik.touched.type && formik.errors.type}>
+                                        {
+                                            Object.values(NoticeType).map((t, i) => (
+                                                <MenuItem key={`type-${i}`} value={t}>{str.headline(t)}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
                                 </Grid>
                                 {
                                     !isVacation && (

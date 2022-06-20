@@ -5,6 +5,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
+import PhoneChip from '@/components/chips/PhoneChip';
 
 const Show = ({ errors, lease }) => {
     console.log(lease);
@@ -17,7 +18,9 @@ const Show = ({ errors, lease }) => {
                 <Card.Body>
                     <Row>
                         <Col md={6} lg={4} className={'mb-4 mb-lg-0'}>
-                            <h5>Lease. <StatusChip status={lease.status}/></h5>
+                            <h5>
+                                Lease. <StatusChip status={lease.status} entity={'lease'} entityId={lease.id}/>
+                            </h5>
                             <h6>Lease Address</h6>
                             <p className="mb-1 fs--1">{lease.unit.estate.address}</p>
                             <p className="mb-0 fs--1"><strong>Deposit:</strong> {currencyFormat(lease.deposit)}</p>
@@ -25,10 +28,8 @@ const Show = ({ errors, lease }) => {
                                 <strong>Rent Amount:</strong> {currencyFormat(lease.rent_amount)}
                             </p>
                             <p className="mb-1 fs--1">
-                                <strong>Duration: </strong>
-                                {moment(lease.start_date).format("MMM Do YYYY")}
-                                &nbsp;-&nbsp;
-                                {moment(lease.end_date).format("MMM Do YYYY")}
+                                <strong>Expiry date: </strong>
+                                {moment(lease.expires_at).format("MMM Do YYYY")}
                             </p>
                         </Col>
                         <Col md={6} lg={4} className={'mb-4 mb-lg-0'}>
@@ -38,10 +39,8 @@ const Show = ({ errors, lease }) => {
                                 <strong>Email: </strong>
                                 <a href={`mailto:${lease.unit.user.email}`}>{lease.unit.user.email}</a>
                             </p>
-                            <p className="mb-0 fs--1">
-                                <strong>Phone: </strong>
-                                <a href={`tel:${lease.unit.user.phone}`}>{lease.unit.user.phone}</a>
-                            </p>
+                            <hr/>
+                            <PhoneChip phone={lease.unit.user.phone} link/>
                         </Col>
                         <Col md={6} lg={4}>
                             <h5>Tenant.</h5>
@@ -50,10 +49,8 @@ const Show = ({ errors, lease }) => {
                                 <strong>Email: </strong>
                                 <a href={`mailto:${lease.user.email}`}>{lease.user.email}</a>
                             </p>
-                            <p className="mb-0 fs--1">
-                                <strong>Phone: </strong>
-                                <a href={`tel:${lease.user.phone}`}>{lease.user.phone}</a>
-                            </p>
+                            <hr/>
+                            <PhoneChip phone={lease.user.phone} link/>
                         </Col>
                     </Row>
                 </Card.Body>

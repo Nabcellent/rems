@@ -6,17 +6,17 @@ import {
     FormControlLabel,
     FormHelperText,
     FormLabel,
-    Grid,
+    Grid, MenuItem,
     Paper,
     Radio,
     RadioGroup,
     TextField
 } from '@mui/material';
-import { NoticeType, Status } from '@/utils/enums';
+import { NoticeType, PropertyType, RentFrequency, Status } from '@/utils/enums';
 import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { Create } from '@mui/icons-material';
 import { DatePicker, LoadingButton, LocalizationProvider } from '@mui/lab';
@@ -31,6 +31,7 @@ const validationSchema = yup.object().shape({
     user: yup.object().required('User is required.'),
     deposit: yup.number(),
     rent_amount: yup.number().required('Amount for rent is required.'),
+    rent_frequency: yup.string().oneOf(Object.values(RentFrequency), 'Invalid rent frequency.'),
     expires_at: yup.date('Invalid date.').min(moment().toDate(), 'Must be today or after today.')
                    .max(moment().add('1', 'y').toDate(), 'Must be within the year.')
                    .required('Start date is required.'),
@@ -38,6 +39,7 @@ const validationSchema = yup.object().shape({
 });
 
 const Upsert = ({ lease, action, users, estates }) => {
+    console.log(lease);
     console.log(estates);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
@@ -52,6 +54,7 @@ const Upsert = ({ lease, action, users, estates }) => {
             user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
             deposit: lease?.deposit ?? '',
             rent_amount: lease?.rent_amount ?? '',
+            rent_frequency: lease?.rent_frequency ?? RentFrequency.MONTHLY,
             expires_at: lease?.expires_at ?? '',
             end_at: lease?.end_at ?? '',
             status: lease?.status ?? Status.ACTIVE,
@@ -75,6 +78,12 @@ const Upsert = ({ lease, action, users, estates }) => {
             );
         }
     });
+
+    useEffect(() => {
+        if(lease) {
+
+        }
+    }, [lease])
 
     return (
         <Dashboard title={str.headline(`${action} Lease`)}>
@@ -102,9 +111,9 @@ const Upsert = ({ lease, action, users, estates }) => {
                                 </Grid>
                                 <Grid item lg={4}>
                                     <Autocomplete name={'property'} value={formik.values.property}
-                                                  disabled={!properties.length}
+                                                  disabled={!properties.length} getOptionLabel={o => o.name ?? o}
                                                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                  options={properties.map(e => ({ label: e.name, ...e }))}
+                                                  options={properties}
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('property', value, true);
                                                       setUnits(value.units);
@@ -128,8 +137,8 @@ const Upsert = ({ lease, action, users, estates }) => {
                                 </Grid>
                                 <Grid item lg={12}>
                                     <Autocomplete name={'user'} value={formik.values.user}
+                                                  getOptionLabel={o => o.email ?? o} options={users}
                                                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                  options={users.map(e => ({ label: e.email.toLowerCase(), id: e.id }))}
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('user', value, true);
                                                   }} renderInput={(params) => (
@@ -138,18 +147,31 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                    helperText={formik.touched.user && formik.errors.user}/>
                                     )}/>
                                 </Grid>
-                                <Grid item lg={6}>
+                                <Grid item lg={4}>
                                     <TextField label="Deposit" type={'number'} placeholder="Deposit..." name={'deposit'}
                                                value={formik.values.deposit} fullWidth onChange={formik.handleChange}
                                                error={formik.touched.deposit && Boolean(formik.errors.deposit)}
                                                helperText={formik.touched.deposit && formik.errors.deposit}/>
                                 </Grid>
-                                <Grid item lg={6}>
+                                <Grid item lg={4}>
                                     <TextField label="Amount Ror Rent" type={'number'} placeholder="Amount for rent..."
                                                name={'rent_amount'} value={formik.values.rent_amount} fullWidth
                                                onChange={formik.handleChange}
                                                error={formik.touched.rent_amount && Boolean(formik.errors.rent_amount)}
                                                helperText={formik.touched.rent_amount && formik.errors.rent_amount}/>
+                                </Grid>
+                                <Grid item lg={4}>
+                                    <TextField label="Rent Frequency" placeholder="Rent frequency..." select
+                                               name={'rent_frequency'} value={formik.values.rent_frequency} fullWidth
+                                               onChange={formik.handleChange}
+                                               error={formik.touched.rent_frequency && Boolean(formik.errors.rent_frequency)}
+                                               helperText={formik.touched.rent_frequency && formik.errors.rent_frequency}>
+                                        {
+                                            Object.values(RentFrequency).map((freq, i) => (
+                                                <MenuItem key={`type-${i}`} value={freq}>{str.headline(freq)}</MenuItem>
+                                            ))
+                                        }
+                                    </TextField>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <DatePicker label="Expiration Date" value={formik.values.expires_at}
