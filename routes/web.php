@@ -59,7 +59,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         Route::prefix('/users')->name('users')->group(function() {
-            Route::get('/settings', [UserController::class, 'settings'])->name(".settings");
+            Route::get('/settings', [SettingController::class, 'getUserSettings'])->name(".settings");
+            Route::put('/settings', [SettingController::class, 'updateUserSettings'])->name(".settings.update");
             Route::get('/owners/{entity}', [UserController::class, "owners"])->name(".owners");
             Route::put('/password/update', [UserController::class, 'updatePassword'])->name(".password.update");
         });

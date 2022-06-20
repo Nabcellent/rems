@@ -26,6 +26,14 @@ class SettingController extends Controller
         ]);
     }
 
+    public function getUserSettings(): Response|ResponseFactory
+    {
+        return inertia('dashboard/users/Settings', [
+            "user"     => user(),
+            "settings" => user()->settings,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -96,6 +104,13 @@ class SettingController extends Controller
         $setting->save();
 
         return back()->with("toast", ["message" => str("{$data["group"]} Settings Updated!")->headline()]);
+    }
+
+    public function updateUserSettings(Request $request): RedirectResponse
+    {
+        user()->settings->set($request->all());
+
+        return back()->with("toast", ["message" => "Settings Updated!"]);
     }
 
     /**

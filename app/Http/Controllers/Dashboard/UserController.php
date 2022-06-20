@@ -272,12 +272,4 @@ class UserController extends Controller
             ])
         ]);
     }
-
-    public function settings(): Response|ResponseFactory
-    {
-        return inertia('dashboard/users/Settings', [
-            "user"     => user(),
-            "settings" => user()->settings,
-        ]);
-    }
 }
