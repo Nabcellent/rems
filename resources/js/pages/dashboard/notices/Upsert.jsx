@@ -84,8 +84,8 @@ const Upsert = ({ notice, action, users }) => {
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('recipients', value, true);
                                                   }} renderInput={(params) => (
-                                        <TextField {...params} label="Select Recipients" required
-                                                   placeholder={'Select recipients...'}
+                                        <TextField {...params} label="Choose Recipients" required
+                                                   placeholder={'Choose recipients...'}
                                                    error={formik.touched.recipients && Boolean(formik.errors.recipients)}
                                                    helperText={formik.touched.recipients && formik.errors.recipients}/>
                                     )}/>

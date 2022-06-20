@@ -3,9 +3,29 @@ import PropTypes from 'prop-types';
 import { Link, usePage } from '@inertiajs/inertia-react';
 
 import user1 from "../../../assets/images/users/avatar-1.jpg";
+import { Inertia } from '@inertiajs/inertia';
 
 const ProfileMenu = () => {
     const { auth: { user } } = usePage().props;
+
+    const handleSignOut = () => {
+        let timerInterval;
+        Sweet.fire({
+            title: <b>Bye Bye!👋</b>,
+            html: <small>Signing you out in <b></b>ms.</small>,
+            timer: 2000,
+            timerProgressBar: true,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Sweet.showLoading();
+                const b = Sweet.getHtmlContainer().querySelector('b');
+                timerInterval = setInterval(() => {
+                    b.textContent = Sweet.getTimerLeft();
+                }, 100);
+            },
+            willClose: () => clearInterval(timerInterval)
+        }).then(() => Inertia.post(route('logout')));
+    };
 
     return (
         <Dropdown className="d-inline-block">
@@ -33,10 +53,10 @@ const ProfileMenu = () => {
                     {("Lock screen")}
                 </Dropdown.Item>
                 <div className="dropdown-divider"/>
-                <Link href={route('logout')} method="post" as={'button'} className="dropdown-item">
+                <button onClick={() => handleSignOut()} className="dropdown-item">
                     <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger"/>
                     <span>Logout</span>
-                </Link>
+                </button>
             </Dropdown.Menu>
         </Dropdown>
     );
