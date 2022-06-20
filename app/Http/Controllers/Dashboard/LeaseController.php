@@ -61,7 +61,7 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
             "users"   => User::select(["id", "email"])->get(),
-            "estates" => Estate::select(["id", "name"])->when(!user()->isAdmin(), function(Builder $qry) {
+            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
                 return $qry->whereUserId(user()->id)
                     ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
                         ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))

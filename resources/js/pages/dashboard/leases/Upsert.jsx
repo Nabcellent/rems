@@ -12,7 +12,7 @@ import {
     RadioGroup,
     TextField
 } from '@mui/material';
-import { NoticeType, PropertyType, RentFrequency, Status } from '@/utils/enums';
+import { Morphable, NoticeType, PropertyType, RentFrequency, Status } from '@/utils/enums';
 import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
@@ -48,8 +48,8 @@ const Upsert = ({ lease, action, users, estates }) => {
 
     const formik = useFormik({
         initialValues: {
-            estate: '',
-            property: '',
+            estate: lease?.unit?.estate ?? '',
+            property: lease?.unit?.unitable_name === Morphable.PROPERTY ? lease?.unit?.unitable : '' ?? '',
             unit: lease?.unit ?? '',
             user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
             deposit: lease?.deposit ?? '',
@@ -79,6 +79,10 @@ const Upsert = ({ lease, action, users, estates }) => {
         }
     });
 
+    console.log(formik.values.estate);
+    const serviceCharge = formik.values.estate?.service_charge ?? 0,
+        totalRent = formik.values.rent_amount + serviceCharge;
+
     return (
         <Dashboard title={str.headline(`${action} Lease`)}>
             <Breadcrumbs title={"Leases"} breadcrumbItem={str.ucFirst(action)}/>
@@ -92,8 +96,9 @@ const Upsert = ({ lease, action, users, estates }) => {
                             <Grid container spacing={2}>
                                 <Grid item lg={4}>
                                     <Autocomplete name={'estate'} value={formik.values.estate}
+                                                  getOptionLabel={o => o.name ?? o}
                                                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                  options={estates.map(e => ({ label: str.headline(e.name), ...e }))}
+                                                  options={estates.map(e => ({ name: str.headline(e.name), ...e }))}
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('estate', value, true);
                                                       setProperties(value.properties);
@@ -152,7 +157,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                name={'rent_amount'} value={formik.values.rent_amount} fullWidth
                                                onChange={formik.handleChange}
                                                error={formik.touched.rent_amount && Boolean(formik.errors.rent_amount)}
-                                               helperText={formik.touched.rent_amount && formik.errors.rent_amount}/>
+                                               helperText={formik.errors.rent_amount ?? `+ service charge(${serviceCharge}) = ${totalRent}`}/>
                                 </Grid>
                                 <Grid item lg={4}>
                                     <TextField label="Rent Frequency" placeholder="Rent frequency..." select
