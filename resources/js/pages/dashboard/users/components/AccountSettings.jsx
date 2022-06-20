@@ -35,7 +35,10 @@ const AccountSettings = ({ settings }) => {
         <Paper className={'mb-3'}>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Account Settings</h5>
-                <LoadingButton loading={isLoading} onClick={() => formik.handleSubmit()}><Save/></LoadingButton>
+                {
+                    formik.dirty &&
+                    <LoadingButton loading={isLoading} onClick={() => formik.handleSubmit()}><Save/></LoadingButton>
+                }
             </Card.Header>
 
             <ValidationErrors errors={errors}/>

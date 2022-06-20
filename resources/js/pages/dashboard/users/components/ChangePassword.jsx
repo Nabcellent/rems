@@ -57,7 +57,7 @@ const ChangePassword = ({ user }) => {
                 <Grid item xs={12} textAlign={'right'}>
                     <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
                                    onClick={() => formik.submitForm()} endIcon={<Create/>}
-                                   variant="contained">Update
+                                   variant="contained">Change
                     </LoadingButton>
                 </Grid>
             </Grid>
