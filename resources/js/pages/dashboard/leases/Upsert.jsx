@@ -50,7 +50,7 @@ const Upsert = ({ lease, action, users, estates }) => {
         initialValues: {
             estate: '',
             property: '',
-            unit: '',
+            unit: lease?.unit ?? '',
             user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
             deposit: lease?.deposit ?? '',
             rent_amount: lease?.rent_amount ?? '',
@@ -78,12 +78,6 @@ const Upsert = ({ lease, action, users, estates }) => {
             );
         }
     });
-
-    useEffect(() => {
-        if(lease) {
-
-        }
-    }, [lease])
 
     return (
         <Dashboard title={str.headline(`${action} Lease`)}>
@@ -126,7 +120,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                 <Grid item lg={4}>
                                     <Autocomplete name={'unit'} value={formik.values.unit} disabled={!units.length}
                                                   isOptionEqualToValue={(option, value) => option.id === value.id}
-                                                  options={units.map(e => ({ label: str.headline(e.house_number), ...e }))}
+                                                  options={units} getOptionLabel={o => o.house_number ?? o}
                                                   onChange={(event, value) => {
                                                       formik.setFieldValue('unit', value, true);
                                                   }} renderInput={(params) => (
