@@ -9,7 +9,8 @@ const ProfileMenu = () => {
     const { auth: { user } } = usePage().props;
 
     const handleSignOut = () => {
-        let timerInterval;
+        Inertia.post(route('logout'))
+        /*let timerInterval;
         Sweet.fire({
             title: <b>Bye Bye!👋</b>,
             html: <small>Signing you out in <b></b>ms.</small>,
@@ -24,7 +25,7 @@ const ProfileMenu = () => {
                 }, 100);
             },
             willClose: () => clearInterval(timerInterval)
-        }).then(() => Inertia.post(route('logout')));
+        }).then(() => Inertia.post(route('logout')));*/
     };
 
     return (
