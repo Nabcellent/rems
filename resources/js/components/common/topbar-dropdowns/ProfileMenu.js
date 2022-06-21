@@ -4,12 +4,14 @@ import { Link, usePage } from '@inertiajs/inertia-react';
 
 import user1 from "../../../assets/images/users/avatar-1.jpg";
 import { Inertia } from '@inertiajs/inertia';
+import { getInitials } from '@/utils/helpers';
+import { Avatar } from '@mui/material';
 
 const ProfileMenu = () => {
     const { auth: { user } } = usePage().props;
 
     const handleSignOut = () => {
-        Inertia.post(route('logout'))
+        Inertia.post(route('logout'));
         /*let timerInterval;
         Sweet.fire({
             title: <b>Bye Bye!👋</b>,
@@ -30,8 +32,11 @@ const ProfileMenu = () => {
 
     return (
         <Dropdown className="d-inline-block">
-            <Dropdown.Toggle className="text-dark border-0 bg-transparent header-item" id="page-header-user-dropdown">
-                <img className="rounded-circle header-profile-user" src={user1} alt="Header Avatar"/>{" "}
+            <Dropdown.Toggle className="d-flex align-items-center text-dark border-0 bg-transparent header-item" id="page-header-user-dropdown">
+                <Avatar className={'header-profile-user'} imgProps={{ className: 'header-profile-user rounded-circle' }}
+                        sx={{ fontSize: '9pt', bgcolor: 'white' }}
+                        src={`/images/users/${user.image}`}>{getInitials(`${user.first_name} ${user.last_name}`)}
+                </Avatar>
                 <span className="d-none d-xl-inline-block ms-1">{user.last_name}</span>
                 <i className="mdi mdi-chevron-down d-none d-xl-inline-block"/>
             </Dropdown.Toggle>

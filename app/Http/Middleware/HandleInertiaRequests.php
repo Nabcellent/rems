@@ -55,7 +55,8 @@ class HandleInertiaRequests extends Middleware
                     "first_name",
                     'last_name',
                     'email',
-                    "phone"
+                    "phone",
+                    "image"
                 ]) : null,
             ],
             "can"        => [

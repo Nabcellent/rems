@@ -26,13 +26,15 @@ class DashboardController extends Controller
             "service_providers_count" => ServiceProvider::count(),
             "my_estates_count"        => Request::user()->estates()->count(),
             "wallet_balance"          => Request::user()->wallet?->balance ?? 0,
+            "transactions_count"      => Transaction::when(!user()->isAdmin(), fn($qry) => $qry->whereUserId(user()->id))
+                ->count(),
             "revenue"                 => Payment::whereStatus(Status::COMPLETED)->sum("amount"),
             "latest_transactions"     => Transaction::latest()->take(10)->with([
                 "user:id,email,last_name",
                 "destination:id,email,last_name",
                 "payment:id,method"
             ])->get(),
-            "canUpdateStatus" => user()->can("updateStatus", Transaction::class)
+            "canUpdateStatus"         => user()->can("updateStatus", Transaction::class)
         ]);
     }
 }

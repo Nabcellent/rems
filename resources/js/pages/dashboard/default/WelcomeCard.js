@@ -1,13 +1,13 @@
-import { Row, Col, Card } from "react-bootstrap";
+import { Card, Col, Row } from "react-bootstrap";
 import { Link, usePage } from "@inertiajs/inertia-react";
-
-import avatar1 from "../../../assets/images/users/avatar-1.jpg";
 import profileImg from "../../../assets/images/profile-img.png";
 import CountUp from 'react-countup';
-import { Button, Paper } from '@mui/material';
+import { Avatar, Button, Paper } from '@mui/material';
+import { getInitials } from '@/utils/helpers';
 
 const WelcomeCard = () => {
-    const { auth: { user }, my_estates_count, wallet_balance } = usePage().props;
+    const { auth: { user }, can, my_estates_count, wallet_balance } = usePage().props,
+        fullName = `${user.first_name} ${user.last_name}`;
 
     return (
         <>
@@ -25,22 +25,31 @@ const WelcomeCard = () => {
                         </Col>
                     </Row>
                 </div>
-                <Card.Body className="py-0">
+                <Card.Body className="pt-0 pb-1">
                     <Row>
                         <Col sm="4" className={'pe-0'}>
                             <div className="avatar-md profile-user-wid mb-4">
-                                <img src={avatar1} alt="" className="img-thumbnail rounded-circle"/>
+                                <Avatar imgProps={{ className: 'img-thumbnail rounded-circle' }}
+                                        sx={{ fontSize: '9pt', height: '100%', width: '100%', bgcolor: 'white' }}
+                                        src={`/images/users/${user.image}`}>{getInitials(fullName)}
+                                </Avatar>
                             </div>
-                            <h5 className="font-size-15 text-truncate">{user.full_name}</h5>
+                            <h5 className="mt-4 font-size-15 text-truncate">{user.first_name}</h5>
                             <p className="text-muted mb-0 text-truncate">{user.user_roles_str}</p>
                         </Col>
 
                         <Col sm="8">
                             <div className="pt-4">
-                                <Row>
+                                <Row className={'justify-content-between'}>
                                     <Col xs="6">
-                                        <h5 className="font-size-15"><CountUp end={my_estates_count}/></h5>
-                                        <p className="text-muted mb-0">Estates</p>
+                                        {
+                                            can.access.estates && (
+                                                <>
+                                                    <h5 className="font-size-15"><CountUp end={my_estates_count}/></h5>
+                                                    <p className="text-muted mb-0">Estates</p>
+                                                </>
+                                            )
+                                        }
                                     </Col>
                                     <Col xs="6">
                                         <h5 className="font-size-15">
@@ -50,7 +59,7 @@ const WelcomeCard = () => {
                                     </Col>
                                 </Row>
                                 <div className="mt-4 text-end">
-                                    <Button component={Link} href={'#'} size={'small'}
+                                    <Button component={Link} href={route('dashboard.profile')} size={'small'}
                                             endIcon={<i className="mdi mdi-arrow-right ms-1"/>}>
                                         View Profile
                                     </Button>
