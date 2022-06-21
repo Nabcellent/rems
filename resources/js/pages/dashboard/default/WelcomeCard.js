@@ -30,7 +30,7 @@ const WelcomeCard = () => {
                         <Col sm="4" className={'pe-0'}>
                             <div className="avatar-md profile-user-wid mb-4">
                                 <Avatar imgProps={{ className: 'img-thumbnail rounded-circle' }}
-                                        sx={{ fontSize: '9pt', height: '100%', width: '100%', bgcolor: 'white' }}
+                                        sx={{ fontSize: '9pt', height: '100%', width: '100%' }}
                                         src={`/images/users/${user.image}`}>{getInitials(fullName)}
                                 </Avatar>
                             </div>

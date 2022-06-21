@@ -1,14 +1,15 @@
-import { Divider, FormControlLabel, FormGroup, Grid, MenuItem, Paper, Switch, TextField } from '@mui/material';
+import { FormControlLabel, FormGroup, Grid, MenuItem, Paper, Switch, TextField } from '@mui/material';
 import { Card } from 'react-bootstrap';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import AccountSettings from '@/pages/dashboard/users/components/AccountSettings';
 import ColorDot from '@/components/ColorDot';
 import { useFormik } from 'formik';
 import { Inertia } from '@inertiajs/inertia';
 import { LoadingButton } from '@mui/lab';
 import { Save } from '@mui/icons-material';
 import ValidationErrors from '@/components/ValidationErrors';
+import { ThemeColor } from '@/utils/enums';
+import { str } from '@/utils/helpers';
 
 const ThemeSettings = ({ settings }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -21,6 +22,7 @@ const ThemeSettings = ({ settings }) => {
         },
         validateOnChange: true,
         onSubmit: values => {
+            console.log(formik.touched);
             Inertia.put(route(`dashboard.users.settings.update`,), values, {
                     preserveState: false,
                     onBefore: () => setIsLoading(true),
@@ -28,7 +30,7 @@ const ThemeSettings = ({ settings }) => {
                     onError: errors => setErrors(errors),
                     onFinish: () => setIsLoading(false)
                 }
-            )
+            );
         }
     });
 
@@ -57,9 +59,13 @@ const ThemeSettings = ({ settings }) => {
                                onChange={formik.handleChange}
                                error={formik.touched.color && Boolean(formik.errors.color)}
                                helperText={formik.touched.color && formik.errors.color}>
-                        <MenuItem value={'#990000'}><ColorDot color={'#990000'}/> Crimson Red</MenuItem>
-                        <MenuItem value={'#000'}><ColorDot color={'#000'}/> Black</MenuItem>
-                        <MenuItem value={'#157DEC'}><ColorDot color={'#157DEC'}/> Dress Blue</MenuItem>
+                        {
+                            Object.keys(ThemeColor).map((color, i) => (
+                                <MenuItem key={`color-${i}`} value={ThemeColor[color]}>
+                                    <ColorDot color={ThemeColor[color]}/> {str.headline(color)}
+                                </MenuItem>
+                            ))
+                        }
                     </TextField>
                 </Grid>
             </Grid>

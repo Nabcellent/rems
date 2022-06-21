@@ -1,7 +1,25 @@
-@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css");
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css');
 
 :root {
     --rems-100: #f9fafd;
+    --rems-primary: #990000;
+    --rems-primary-rgb: 153, 0, 0;
+}
+:root.dress-blue {
+    --rems-primary: #157DEC;
+    --rems-primary-rgb: 21, 125, 236;
+}
+:root.chrome-yellow {
+    --rems-primary: #fdbc00;
+    --rems-primary-rgb: 253, 165, 0;
+}
+:root.cloud-burst {
+    --rems-primary: #202E54;
+    --rems-primary-rgb: 32, 46, 84;
+}
+:root.black {
+    --rems-primary: #000;
+    --rems-primary-rgb: 0, 0, 0;
 }
 
 .z-index-1 {
@@ -15,13 +33,13 @@
 }
 
 .bg-primary {
-    background-color: #990000 !important;
+    background-color: var(--rems-primary) !important;
 }
 .bg-primary.bg-soft {
-    background-color: rgba(153, 0, 0, 0.25) !important;
+    background-color: rgba(var(--rems-primary-rgb), 0.25) !important;
 }
 .text-primary {
-    color: #990000 !important;
+    color: var(--rems-primary) !important;
 }
 
 .min-vh-25 {
@@ -64,12 +82,12 @@
 }
 
 a {
-    color: #990000;
+    color: var(--rems-primary);
     text-decoration: none;
 }
 
 a:hover {
-    color: #990000;
+    color: var(--rems-primary);
     text-decoration: underline;
 }
 .hover-actions {
@@ -97,4 +115,12 @@ a:hover {
     position: sticky;
     z-index: 1015;
     top: 4.3125rem;
+}
+
+#sidebar-menu ul li ul.sub-menu li a:hover {
+    color: var(--rems-primary)
+}
+
+.mm-active, .mm-active .active, .mm-active .active i, .mm-active > a, .mm-active > a i, .mm-active > i {
+    color: var(--rems-primary) !important
 }

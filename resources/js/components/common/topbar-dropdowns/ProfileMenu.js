@@ -34,7 +34,7 @@ const ProfileMenu = () => {
         <Dropdown className="d-inline-block">
             <Dropdown.Toggle className="d-flex align-items-center text-dark border-0 bg-transparent header-item" id="page-header-user-dropdown">
                 <Avatar className={'header-profile-user'} imgProps={{ className: 'header-profile-user rounded-circle' }}
-                        sx={{ fontSize: '9pt', bgcolor: 'white' }}
+                        sx={{ fontSize: '9pt' }}
                         src={`/images/users/${user.image}`}>{getInitials(`${user.first_name} ${user.last_name}`)}
                 </Avatar>
                 <span className="d-none d-xl-inline-block ms-1">{user.last_name}</span>

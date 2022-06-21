@@ -10725,10 +10725,6 @@ body[data-layout=horizontal] .page-content {
     color: #545a6d
 }
 
-#sidebar-menu ul li ul.sub-menu li a:hover {
-    color: #990000
-}
-
 #sidebar-menu ul li ul.sub-menu li ul.sub-menu {
     padding: 0
 }
@@ -10747,10 +10743,6 @@ body[data-layout=horizontal] .page-content {
     text-transform: uppercase;
     color: #7f8387;
     font-weight: 600
-}
-
-.mm-active, .mm-active .active, .mm-active .active i, .mm-active > a, .mm-active > a i, .mm-active > i {
-    color: #990000 !important
 }
 
 @media (max-width: 992px) {

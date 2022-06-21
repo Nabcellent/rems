@@ -84,3 +84,11 @@ export const RentFrequency = {
     HALF_YEARLY: 'HALF_YEARLY',
     YEARLY: 'YEARLY'
 };
+
+export const ThemeColor = {
+    BLACK: '#000',
+    CHROME_YELLOW: '#FFA700',
+    CLOUD_BURST: '#202E54',
+    CRIMSON_RED: '#990000',
+    DRESS_BLUE: '#157DEC',
+};

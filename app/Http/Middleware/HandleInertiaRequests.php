@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Enums\ThemeColor;
 use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\Notice;
@@ -13,6 +14,8 @@ use App\Models\Ticket;
 use App\Models\Transaction;
 use App\Models\Unit;
 use App\Models\User;
+use App\Settings\GeneralSettings;
+use App\Settings\UserSettings;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -61,17 +64,17 @@ class HandleInertiaRequests extends Middleware
             ],
             "can"        => [
                 "access" => [
-                    "properties"    => $request->user()?->can("viewAny", Property::class),
-                    "estates"       => $request->user()?->can("viewAny", Estate::class),
-                    "leases"        => $request->user()?->can("viewAny", Lease::class),
-                    "units"         => $request->user()?->can("viewAny", Unit::class),
-                    "transactions"  => $request->user()?->can("viewAny", Transaction::class),
-                    "payments"      => $request->user()?->can("viewAny", Payment::class),
-                    "notices"       => $request->user()?->can("viewAny", Notice::class),
-                    "services"      => $request->user()?->can("viewAny", Service::class),
-                    "users"         => $request->user()?->can("viewAny", User::class),
-                    "settings"      => $request->user()?->can("viewAny", Setting::class),
-                    "tickets"       => $request->user()?->can("viewAny", Ticket::class),
+                    "properties"   => $request->user()?->can("viewAny", Property::class),
+                    "estates"      => $request->user()?->can("viewAny", Estate::class),
+                    "leases"       => $request->user()?->can("viewAny", Lease::class),
+                    "units"        => $request->user()?->can("viewAny", Unit::class),
+                    "transactions" => $request->user()?->can("viewAny", Transaction::class),
+                    "payments"     => $request->user()?->can("viewAny", Payment::class),
+                    "notices"      => $request->user()?->can("viewAny", Notice::class),
+                    "services"     => $request->user()?->can("viewAny", Service::class),
+                    "users"        => $request->user()?->can("viewAny", User::class),
+                    "settings"     => $request->user()?->can("viewAny", Setting::class),
+                    "tickets"      => $request->user()?->can("viewAny", Ticket::class),
                 ],
                 "create" => [
                     "user"     => $request->user()?->can("create", User::class),
@@ -84,7 +87,20 @@ class HandleInertiaRequests extends Middleware
             "greeting"   => Carbon::timelyGreeting(),
             "ziggy"      => fn() => (new Ziggy)->toArray(),
             "toast"      => fn() => session()->get("toast"),
-            "csrf_token" => csrf_token()
+            "csrf_token" => csrf_token(),
+            "theme"      => [
+                "color"      => [
+                    "key"   => match (user()?->settings->color) {
+                        ThemeColor::BLACK->value => ThemeColor::BLACK->color(),
+                        ThemeColor::CLOUD_BURST->value => ThemeColor::CLOUD_BURST->color(),
+                        ThemeColor::CHROME_YELLOW->value => ThemeColor::CHROME_YELLOW->color(),
+                        ThemeColor::DRESS_BLUE->value => ThemeColor::DRESS_BLUE->color(),
+                        default => ThemeColor::CRIMSON_RED->color()
+                    },
+                    "value" => user()?->settings->color ?? ThemeColor::CRIMSON_RED->value
+                ],
+                "isDarkMode" => user()?->settings->dark_mode,
+            ]
         ]);
     }
 }

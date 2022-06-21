@@ -70,6 +70,7 @@ const Default = ({
     reports.map((r, i) => {
         if (reports.length === 1) r.col = 12;
         if (reports.length === 2) r.col = 6;
+        if (reports.length === 5) r.col = i > 2 ? 6 : 4;
     });
 
     return (
