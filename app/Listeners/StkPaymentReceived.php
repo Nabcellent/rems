@@ -7,6 +7,7 @@ use App\Models\Payment;
 use DrH\Mpesa\Events\StkPushPaymentSuccessEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class StkPaymentReceived
 {
@@ -15,10 +16,7 @@ class StkPaymentReceived
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
-    }
+    public function __construct() { }
 
     /**
      * Handle the event.
@@ -33,5 +31,6 @@ class StkPaymentReceived
         if($payment->status == Status::COMPLETED) return;
 
         $payment->update(["status" => Status::COMPLETED]);
+        $payment->transaction->update(["status" => Status::COMPLETED]);
     }
 }
