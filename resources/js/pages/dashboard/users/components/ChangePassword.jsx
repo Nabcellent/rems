@@ -40,9 +40,8 @@ const ChangePassword = ({ user }) => {
             <Card.Header><h5 className={'mb-0'}>Change Password</h5></Card.Header>
 
             <Grid component={Card.Body} container spacing={2}>
+                <Grid item xs={12}><ValidationErrors errors={errors}/></Grid>
                 <Grid item xs={12}>
-                    <ValidationErrors errors={errors}/>
-
                     <TextField type="password" size={"small"} label="Current Password" placeholder="Current Password..."
                                name={'current_password'} value={formik.values.current_password}
                                error={formik.touched.current_password && Boolean(formik.errors.current_password)}
@@ -64,7 +63,7 @@ const ChangePassword = ({ user }) => {
                                onChange={formik.handleChange} autoComplete="off" fullWidth required/>
                 </Grid>
                 <Grid item xs={12} textAlign={'right'}>
-                    <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
+                    <LoadingButton disabled={!formik.dirty} size="small" color="primary" loading={isLoading} loadingPosition="end"
                                    onClick={() => formik.submitForm()} endIcon={<Create/>}
                                    variant="contained">Change
                     </LoadingButton>
