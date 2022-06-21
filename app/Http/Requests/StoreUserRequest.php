@@ -38,11 +38,11 @@ class StoreUserRequest extends FormRequest
             'password'        => ["required", Password::defaults()],
             "role"            => ["required", new Enum(Role::class)],
             "status"          => [new Enum(Status::class)],
-            "createsOwnerFor" => "array:id,name"
+            "createsOwnerFor" => "nullable|array:id,name"
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             "createsOwnerFor.array" => "Invalid input, please refresh and retry!"

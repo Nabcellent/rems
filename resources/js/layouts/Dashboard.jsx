@@ -1,19 +1,13 @@
-import { lazy, useEffect } from "react";
+import { useEffect } from "react";
 import PropTypes from 'prop-types';
 
 // Layout Related Components
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
 import { Head, usePage } from '@inertiajs/inertia-react';
-import { Container } from 'react-bootstrap';
 
-const Footer = lazy(() => import('../components/Footer'));
-
-const Dashboard = ({
-    title,
-    children,
-    isPreloader,
-}) => {
+const Dashboard = ({ title, children, isPreloader }) => {
     const { toast: toastData } = usePage().props;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -74,7 +68,7 @@ const Dashboard = ({
                 <Sidebar isMobile={isMobile}/>
 
                 <div className="main-content">
-                    <Header toggleMenuCallback={toggleMenuCallback}/>
+                    <Header toggleMenuCallback={() => toggleMenuCallback()}/>
 
                     <div className="p-3">{children}</div>
 

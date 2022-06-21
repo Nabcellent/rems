@@ -182,6 +182,18 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     /**
+     * Check if the user should initialize settings automatically after creation.
+     *
+     * @return bool
+     */
+    protected function shouldInitializeConfig(): bool
+    {
+        // Don't initialize the settings if the user is not verified from the start.
+        // We will initialize them only once the email is properly verified.
+        return null !== $this->email_verified_at;
+    }
+
+    /**
      * .....................    _____________________HELPERS
      */
     public function isAdmin(): bool

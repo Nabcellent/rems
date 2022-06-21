@@ -76,7 +76,8 @@ class UserPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function updateStatus(User $user)
-    {}
+    {
+    }
 
     /**
      * Determine whether the user can delete the model.
@@ -85,9 +86,9 @@ class UserPolicy
      * @param \App\Models\User $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, User $model)
+    public function delete(User $user, User $model): Response|bool
     {
-        //
+        return $user->isAdmin() || $user->id === $model->id;
     }
 
     /**

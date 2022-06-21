@@ -4,17 +4,21 @@ namespace App\Http\Controllers\API;
 
 use App\Enums\Description;
 use App\Enums\PaymentMethod;
+use App\Enums\Status;
 use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Transaction;
 use DrH\Mpesa\Entities\MpesaStkCallback;
+use DrH\Mpesa\Events\StkPushPaymentFailedEvent;
+use DrH\Mpesa\Events\StkPushPaymentSuccessEvent;
 use DrH\Mpesa\Facades\STK;
 use DrH\Mpesa\Http\Requests\StkRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MpesaController extends Controller
 {
@@ -73,10 +77,27 @@ class MpesaController extends Controller
         $request->validate(["request_id" => "required"]);
 
         try {
-            $stkStatus = STK::status($request->input("request_id"));
+            $status = STK::status($request->input("request_id"));
 
-            return response()->json($stkStatus);
+            if(!isset($status->errorMessage)) {
+                $attributes = [
+                    "merchant_request_id" => $status["MerchantRequestID"],
+                    "checkout_request_id" => $status["CheckoutRequestID"],
+                    "result_code"         => $status["ResultCode"],
+                    "result_desc"         => $status["ResultDesc"],
+                    "amount"              => $request->input("amount"),
+                ];
+
+                $callback = MpesaStkCallback::create($attributes);
+
+                $callback->result_code == 0 ? StkPushPaymentSuccessEvent::dispatch($callback, $status)
+                    : StkPushPaymentFailedEvent::dispatch($callback, $status);
+            }
+
+            return response()->json($status);
         } catch (Exception $err) {
+            Log::error($err);
+
             return response()->json(json_decode($err->getMessage()));
         }
     }

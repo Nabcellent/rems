@@ -16,12 +16,16 @@ createInertiaApp({
     resolve: (name) => {
         const page = require(`./pages/${name}`).default;
 
-        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Auth children={page} />;
+        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Auth children={page}/>;
 
         return page;
     },
     setup: ({ el, App, props }) => {
-        return createRoot(el).render(<ThemeProvider theme={theme}><App {...props} /></ThemeProvider>);
+        const {color, isDarkMode} = props.initialPage.props.theme
+
+        return createRoot(el).render(
+            <ThemeProvider theme={theme(color, isDarkMode)}><App {...props} /></ThemeProvider>
+        );
     }
 });
 

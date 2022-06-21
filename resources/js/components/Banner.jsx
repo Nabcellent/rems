@@ -24,7 +24,7 @@ const Banner = ({ title }) => {
 };
 
 Banner.propTypes = {
-    title: PropTypes.string
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node])
 };
 
 export default Banner;

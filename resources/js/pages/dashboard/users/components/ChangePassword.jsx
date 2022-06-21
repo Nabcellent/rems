@@ -7,6 +7,14 @@ import { LoadingButton } from '@mui/lab';
 import { Inertia, Method } from '@inertiajs/inertia';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
+const validationSchema = yup.object().shape({
+    current_password: yup.string().required('Current password is required.'),
+    password: yup.string().min(7).max(20).required('New password is required.'),
+    password_confirmation: yup.string().oneOf([yup.ref('password')], 'Passwords do not match')
+                              .required('Password confirmation is required')
+});
 
 const ChangePassword = ({ user }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +22,7 @@ const ChangePassword = ({ user }) => {
 
     const formik = useFormik({
         initialValues: { current_password: '', password: '', password_confirmation: '', _method: Method.PUT },
+        validationSchema,
         onSubmit: values => {
             let url = route(`dashboard.users.update`, { user: user.id });
 
@@ -57,7 +66,7 @@ const ChangePassword = ({ user }) => {
                 <Grid item xs={12} textAlign={'right'}>
                     <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
                                    onClick={() => formik.submitForm()} endIcon={<Create/>}
-                                   variant="contained">Update
+                                   variant="contained">Change
                     </LoadingButton>
                 </Grid>
             </Grid>

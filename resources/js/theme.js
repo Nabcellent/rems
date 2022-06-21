@@ -1,75 +1,85 @@
 import { createTheme } from '@mui/material/styles';
 
-export const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#990000'
-        }
-    },
-    typography: {
-        fontFamily: `${['"Varela Round"', 'cursive',].join(',')}!important`,
-    },
-    components: {
-        MuiSvgIcon: {
-            defaultProps: {
-                fontSize: 'small'
+export const theme = (themeColor, isDarkMode) => {
+    document.documentElement.classList[isDarkMode ? 'add' : 'remove']('dark');
+    document.documentElement.classList.add(themeColor.key);
+
+    return createTheme({
+        palette: {
+            primary: {
+                main: themeColor.value
             }
         },
-        MuiChip: {
-            defaultProps: {
-                size: 'small'
-            }
+        typography: {
+            fontFamily: `${['"Varela Round"', 'cursive'].join(',')}!important`,
         },
-        MuiRadio: {
-            defaultProps: {
-                size: 'small'
+        components: {
+            MuiIconButton: {
+                defaultProps: {
+                    size: 'small'
+                }
             },
-            styleOverrides: {
-                root: {
-                    paddingTop: 0,
-                    paddingBottom: 0,
+            MuiSvgIcon: {
+                defaultProps: {
+                    fontSize: 'small'
                 }
-            }
-        },
-        MuiAvatar: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#990000',
+            },
+            MuiChip: {
+                defaultProps: {
+                    size: 'small'
                 }
-            }
-        },
-        MuiFormControl: {
-            defaultProps: {
-                size: 'small',
-            }
-        },
-        MuiTextField: {
-            defaultProps: {
-                size: 'small'
-            }
-        },
-        MuiOutlinedInput: {
-            styleOverrides: {
-                root: {
-                    borderRadius: '.375rem',
-                    boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)!important'
+            },
+            MuiRadio: {
+                defaultProps: {
+                    size: 'small'
+                },
+                styleOverrides: {
+                    root: {
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                    }
                 }
-            }
-        },
-        MuiButton: {
-            styleOverrides: {
-                root: {
-                    padding: '2px 10px',
-                    borderRadius: '2.5rem'
+            },
+            MuiAvatar: {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: themeColor.value,
+                    }
                 }
-            }
-        },
-        MuiPaper: {
-            styleOverrides: {
-                root: {
-                    position: 'relative',
+            },
+            MuiFormControl: {
+                defaultProps: {
+                    size: 'small',
+                }
+            },
+            MuiTextField: {
+                defaultProps: {
+                    size: 'small'
+                }
+            },
+            MuiOutlinedInput: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: '.375rem',
+                        boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)!important'
+                    }
+                }
+            },
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        padding: '2px 10px',
+                        borderRadius: '2.5rem'
+                    }
+                }
+            },
+            MuiPaper: {
+                styleOverrides: {
+                    root: {
+                        position: 'relative',
+                    }
                 }
             }
         }
-    }
-});
+    })
+};

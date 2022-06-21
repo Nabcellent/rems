@@ -6,17 +6,18 @@ import {
     FormControlLabel,
     FormHelperText,
     FormLabel,
-    Grid, MenuItem,
+    Grid,
+    MenuItem,
     Paper,
     Radio,
     RadioGroup,
     TextField
 } from '@mui/material';
-import { Morphable, NoticeType, PropertyType, RentFrequency, Status } from '@/utils/enums';
+import { Morphable, RentFrequency, Status } from '@/utils/enums';
 import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as yup from 'yup';
 import { Create } from '@mui/icons-material';
 import { DatePicker, LoadingButton, LocalizationProvider } from '@mui/lab';

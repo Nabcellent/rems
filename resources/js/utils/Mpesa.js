@@ -4,6 +4,7 @@ import { Description, Telco } from '@/utils/enums';
 export default class Mpesa {
     baseUrl = '/api/mpesa';
     request_id = null;
+    amount = 0;
     onSuccess = () => {
     };
 
@@ -13,7 +14,7 @@ export default class Mpesa {
                 '<small>Amount (min: 100)</small>' +
                 '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
                 '<small>Phone number (optional)</small>' +
-                `<input id="phone" type="tel" class="form-control" value="${details.user.phone}" placeholder="Enter phone to request.">`,
+                `<input id="phone" type="tel" class="form-control" value="${details.user.phone ?? ''}" placeholder="Enter phone to request.">`,
             showLoaderOnConfirm: true,
             backdrop: `rgba(150, 0, 0, 0.4)`,
             preConfirm: async () => {
@@ -45,6 +46,8 @@ export default class Mpesa {
     };
 
     init = async ({ phone, amount, reference, description, onSuccess, ...data }) => {
+        this.amount = amount;
+
         const { data: stkRequest } = await axios.post(`${this.baseUrl}/stk/initiate`, {
             phone,
             amount: 1,
@@ -62,37 +65,36 @@ export default class Mpesa {
     };
 
     fetchStkStatus = async () => {
-        return axios.post(`${this.baseUrl}/stk/query-status`, { request_id: this.request_id })
+        return axios.post(`${this.baseUrl}/stk/query-status`, { request_id: this.request_id, amount: this.amount })
                     .then(({ data }) => data);
     };
 
     alert = (data = {}) => {
-        let sweetText = data.sweetText ?? "Your request has been received and is being processed. PLEASE ENTER MPESA PIN when prompted, then click OK.";
+        let sweetText = data.sweetText ?? "<small>Your request has been received and is being processed. <b>PLEASE ENTER MPESA PIN</b> when prompted, WAIT for the MPESA message, then click OK.</small>";
 
         return Sweet.fire({
             icon: "info",
             titleText: "REMS",
-            text: sweetText,
+            html: sweetText,
             showLoaderOnConfirm: true,
             showCancelButton: true,
             backdrop: `rgba(0, 0, 123, 0.4)`,
             preConfirm: () => {
-                return axios.post(`${this.baseUrl}/stk/query-status`, { request_id: this.request_id })
-                            .then(({ data }) => data).catch(async err => {
-                        console.log(err);
-                        await sweet({
-                            type: 'error',
-                            message: 'Something went wrong!',
-                            toast: false,
-                            text: 'Oops...',
-                            position: 'center',
-                            duration: 30,
-                            backdrop: `rgba(150, 0, 0, 0.4)`,
-                            footer: '<a href="/contact-us">Report this issue?</a>'
-                        });
-
-                        return false;
+                return this.fetchStkStatus().catch(async err => {
+                    console.log(err);
+                    await sweet({
+                        type: 'error',
+                        message: 'Something went wrong!',
+                        toast: false,
+                        text: 'Oops...',
+                        position: 'center',
+                        duration: 30,
+                        backdrop: `rgba(150, 0, 0, 0.4)`,
+                        footer: '<a href="/contact-us">Report this issue?</a>'
                     });
+
+                    return false;
+                });
             },
             allowOutsideClick: () => !Sweet.isLoading(),
         }).then(async (result) => {
