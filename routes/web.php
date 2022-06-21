@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/settings', [SettingController::class, 'getUserSettings'])->name(".settings");
             Route::put('/settings', [SettingController::class, 'updateUserSettings'])->name(".settings.update");
             Route::get('/owners/{entity}', [UserController::class, "owners"])->name(".owners");
-            Route::put('/password/update', [UserController::class, 'updatePassword'])->name(".password.update");
+            Route::delete('/accounts', [UserController::class, "deleteAccount"])->name(".accounts.destroy");
         });
 
         Route::prefix('/assets')->name("assets")->group(function() {

@@ -77,8 +77,7 @@ export default class Mpesa {
             showCancelButton: true,
             backdrop: `rgba(0, 0, 123, 0.4)`,
             preConfirm: () => {
-                return axios.post(`${this.baseUrl}/stk/query-status`, { request_id: this.request_id })
-                            .then(({ data }) => data).catch(async err => {
+                return this.fetchStkStatus().catch(async err => {
                         console.log(err);
                         await sweet({
                             type: 'error',

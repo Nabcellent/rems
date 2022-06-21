@@ -242,6 +242,18 @@ class UserController extends Controller
         return back()->with(["toast" => ["message" => "User Deleted!", "type" => "info"]]);
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteAccount(): JsonResponse
+    {
+        user()->delete();
+
+        return response()->json(["status" => true]);
+    }
+
     public function owners(): JsonResponse
     {
         $estateIds = user()->estates()->pluck("id");

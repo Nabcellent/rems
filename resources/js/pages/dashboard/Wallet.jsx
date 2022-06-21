@@ -70,7 +70,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                                 <Col sm={6}>
                                     <div className="text-sm-end mt-4 mt-sm-0">
                                         <p className="text-muted mb-2">Last top up</p>
-                                        <TableDate date={last_top_up}/>
+                                        {last_top_up ? <TableDate date={last_top_up}/> : 'N / A'}
                                     </div>
                                 </Col>
                             </Row>
