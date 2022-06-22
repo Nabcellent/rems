@@ -22,11 +22,10 @@ const ThemeSettings = ({ settings }) => {
         },
         validateOnChange: true,
         onSubmit: values => {
-            console.log(formik.touched);
             Inertia.put(route(`dashboard.users.settings.update`,), values, {
                     preserveState: false,
                     onBefore: () => setIsLoading(true),
-                    onSuccess: () => formik.resetForm(),
+                    onSuccess: () => location.reload(),
                     onError: errors => setErrors(errors),
                     onFinish: () => setIsLoading(false)
                 }
