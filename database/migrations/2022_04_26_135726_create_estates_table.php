@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('address');
             $table->string('description')->nullable();
+            $table->integer('floor_count')->default(1);
             $table->string("image", 30)->nullable();
             $table->double('latitude', 180, 7);
             $table->double('longitude', 180, 7);
