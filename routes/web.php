@@ -38,6 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'home'])->name("home");
 Route::get('/listings', [ListingsController::class, 'listings'])->name("listings");
+Route::get('/listings/{estate}', [ListingsController::class, 'show'])->name("show");
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('/dashboard')->name("dashboard.")->group(function () {
@@ -58,14 +59,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/', [SettingController::class, 'update'])->name('.update');
         });
 
-        Route::prefix('/users')->name('users')->group(function() {
+        Route::prefix('/users')->name('users')->group(function () {
             Route::get('/settings', [SettingController::class, 'getUserSettings'])->name(".settings");
             Route::put('/settings', [SettingController::class, 'updateUserSettings'])->name(".settings.update");
             Route::get('/owners/{entity}', [UserController::class, "owners"])->name(".owners");
             Route::delete('/accounts', [UserController::class, "deleteAccount"])->name(".accounts.destroy");
         });
 
-        Route::prefix('/assets')->name("assets")->group(function() {
+        Route::prefix('/assets')->name("assets")->group(function () {
             Route::put('/owner', [HelperController::class, "changeOwner"])->name(".change-owner");
         });
 
