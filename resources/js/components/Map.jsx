@@ -1,11 +1,24 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Autocomplete, GoogleMap, InfoWindow, Marker, useJsApiLoader, useLoadScript } from '@react-google-maps/api';
-import { CircularProgress, TextField } from '@mui/material';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from "react";
+import {
+    Autocomplete,
+    GoogleMap,
+    InfoWindow,
+    Marker,
+    useJsApiLoader,
+    useLoadScript,
+} from "@react-google-maps/api";
+import { CircularProgress, TextField } from "@mui/material";
+import PropTypes from "prop-types";
 
 const libraries = ["places"];
 
-const Map = ({ apiKey, center, searchable = false, editable = false, onLocationChange }) => {
+const Map = ({
+    apiKey,
+    center,
+    searchable = false,
+    editable = false,
+    onLocationChange,
+}) => {
     const [mapCenter, setMapCenter] = useState(null);
     const [autocomplete, setAutocomplete] = useState(null);
     const [map, setMap] = useState(null);
@@ -14,7 +27,7 @@ const Map = ({ apiKey, center, searchable = false, editable = false, onLocationC
     const [markerPosition, setMarkerPosition] = useState(mapCenter);
 
     const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
+        id: "google-map-script",
         googleMapsApiKey: apiKey,
         libraries,
     });
@@ -39,12 +52,12 @@ const Map = ({ apiKey, center, searchable = false, editable = false, onLocationC
             onLocationChange({
                 ...pos,
                 name: place.name,
-                address: place.formatted_address
+                address: place.formatted_address,
             });
 
             console.log(place);
         } else {
-            console.log('Autocomplete is not loaded yet!');
+            console.log("Autocomplete is not loaded yet!");
         }
     };
 
@@ -60,7 +73,8 @@ const Map = ({ apiKey, center, searchable = false, editable = false, onLocationC
 
     const panToCurrentLocation = () => {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(position => {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
                     const pos = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude,
@@ -75,25 +89,26 @@ const Map = ({ apiKey, center, searchable = false, editable = false, onLocationC
 
                     onLocationChange({
                         lat: pos.lat.toFixed(10),
-                        lng: pos.lng.toFixed(10)
+                        lng: pos.lng.toFixed(10),
                     });
                 },
                 () => handleLocationError(true, infoWindow, map.getCenter())
             );
         } else {
-            handleLocationError(false, infoWindow, map.getCenter());    // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter()); // Browser doesn't support Geolocation
         }
     };
 
-    const handleLocationChange = e => {
+    const handleLocationChange = (e) => {
         onLocationChange({
             lat: e.latLng.lat().toFixed(10),
-            lng: e.latLng.lng().toFixed(10)
+            lng: e.latLng.lng().toFixed(10),
         });
     };
 
     useEffect(() => {
-        if (!(center && center.lat && center.lng)) center = { lat: -1.265788, lng: 36.760435 };
+        if (!(center && center.lat && center.lng))
+            center = { lat: -1.265788, lng: 36.760435 };
 
         setMapCenter(center);
         setMarkerPosition(center);
@@ -102,30 +117,49 @@ const Map = ({ apiKey, center, searchable = false, editable = false, onLocationC
     return isLoaded ? (
         <GoogleMap
             mapContainerStyle={{
-                width: '100%',
-                height: '400px'
+                width: "100%",
+                height: "400px",
+                borderRadius: "5px",
             }}
-            onClick={e => {
+            onClick={(e) => {
                 setMarkerPosition(e.latLng);
                 handleLocationChange(e);
             }}
             center={mapCenter}
             zoom={17}
             onLoad={onLoad}
-            onUnmount={onUnmount}>
-            {
-                searchable && (
-                    <Autocomplete onLoad={autocomplete => setAutocomplete(autocomplete)} onPlaceChanged={onPlaceChanged}>
-                        <TextField placeholder="Search location..." variant={'standard'}
-                                   sx={{ position: 'absolute', left: '50%', ml: '-10rem', width: '20rem', p: 1, mt: 1 }}/>
-                    </Autocomplete>
-                )
-            }
-            <Marker onLoad={marker => setMarker(marker)} position={markerPosition} draggable={editable}
-                    animation={google.maps.Animation.BOUNCE}
-                    onDragEnd={e => handleLocationChange(e)}/>
+            onUnmount={onUnmount}
+        >
+            {searchable && (
+                <Autocomplete
+                    onLoad={(autocomplete) => setAutocomplete(autocomplete)}
+                    onPlaceChanged={onPlaceChanged}
+                >
+                    <TextField
+                        placeholder="Search location..."
+                        variant={"standard"}
+                        sx={{
+                            position: "absolute",
+                            left: "50%",
+                            ml: "-10rem",
+                            width: "20rem",
+                            p: 1,
+                            mt: 1,
+                        }}
+                    />
+                </Autocomplete>
+            )}
+            <Marker
+                onLoad={(marker) => setMarker(marker)}
+                position={markerPosition}
+                draggable={editable}
+                animation={google.maps.Animation.BOUNCE}
+                onDragEnd={(e) => handleLocationChange(e)}
+            />
         </GoogleMap>
-    ) : <CircularProgress/>;
+    ) : (
+        <CircularProgress />
+    );
 };
 
 Map.propTypes = {
@@ -136,7 +170,7 @@ Map.propTypes = {
     }),
     searchable: PropTypes.bool,
     editable: PropTypes.bool,
-    onLocationChange: PropTypes.func
+    onLocationChange: PropTypes.func,
 };
 
 export default Map;
