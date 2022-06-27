@@ -267,7 +267,7 @@ class UserController extends Controller
                         })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
                             return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
                         });
-                })->latest("email")->get()
+                })->whereKeyNot(user()->id)->latest("email")->get()
         ]);
     }
 

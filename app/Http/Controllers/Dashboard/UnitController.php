@@ -92,9 +92,12 @@ class UnitController extends Controller
             $file->move("images/units", $data["image"]);
         }
 
-        $unitable->units()->create([...$data, "user_id" => user()->id]);
+        $unit = $unitable->units()->create([...$data, "user_id" => user()->id]);
 
-        return back()->with("toast", ["message" => "Unit Created!"]);
+        return redirect()->route("dashboard.units.index")->with("toast", [
+            "message" => "Unit Created!",
+            "link"    => ["title" => "View Unit", "href" => route("dashboard.units.show", ["unit" => $unit])]
+        ]);
     }
 
     /**

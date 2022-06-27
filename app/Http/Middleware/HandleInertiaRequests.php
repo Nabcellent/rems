@@ -82,6 +82,7 @@ class HandleInertiaRequests extends Middleware
                     "service"  => $request->user()?->can("create", Service::class),
                     "property" => $request->user()?->can("create", Property::class),
                     "estate"   => $request->user()?->can("create", Estate::class),
+                    "unit"     => $request->user()?->can("create", Unit::class),
                 ]
             ],
             "greeting"   => Carbon::timelyGreeting(),

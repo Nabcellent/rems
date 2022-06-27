@@ -4,13 +4,11 @@ import { Modal } from 'react-bootstrap';
 import ValidationErrors from '@/components/ValidationErrors';
 import { LoadingButton } from '@mui/lab';
 import React, { useEffect, useState } from 'react';
-import { str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Inertia } from '@inertiajs/inertia';
 import PropTypes from 'prop-types';
 import { Link } from '@inertiajs/inertia-react';
-import pluralize from 'pluralize';
 
 const ChangeOwner = ({ entity, entityId }) => {
     const [showModal, setShowModal] = useState(false);
