@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string("purpose")->comment("For Rent or For Sale");
             $table->string("type")->default(UnitType::UNFURNISHED->name)->comment("Furnished or Unfurnished");
             $table->text("description")->nullable();
+            $table->integer("price")->nullable();
             $table->string("image", 30)->nullable();
             $table->string("status")->default(Status::INACTIVE->value);
             $table->timestamps();
