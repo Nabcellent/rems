@@ -1,30 +1,21 @@
 import Dashboard from '@/layouts/Dashboard';
-import { Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { Avatar, Paper, useTheme } from '@mui/material';
+import { Avatar, IconButton, Paper, Tooltip } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
 import PhoneChip from '@/components/chips/PhoneChip';
 import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
 import TableActions from '@/components/TableActions';
-
-// Import React FilePond with plugins & styles
-import { registerPlugin } from 'react-filepond';
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import FilePondPluginFileRename from 'filepond-plugin-file-rename';
-import 'filepond/dist/filepond.min.css';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-
-// Register filepond plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
+import { Link } from '@inertiajs/inertia-react';
+import { HowToReg } from '@mui/icons-material';
+import { useState } from 'react';
+import { LoadingButton } from '@mui/lab';
 
 const Index = ({ users }) => {
-    const theme = useTheme();
+    console.log(users);
 
     return (
         <Dashboard title={'Users'}>
@@ -39,17 +30,10 @@ const Index = ({ users }) => {
                                 accessor: 'name',
                                 Header: 'Name',
                                 Cell: ({ row }) => (
-                                    <OverlayTrigger overlay={
-                                        <Tooltip><strong>{row.original.user_roles_str}</strong></Tooltip>
-                                    }>
+                                    <Tooltip title={row.original.user_roles_str}>
                                         <div className={'d-flex align-items-center'}>
-                                            <Avatar sx={{
-                                                width: 24,
-                                                height: 24,
-                                                fontSize: '9pt',
-                                                marginRight: .5,
-                                                backgroundColor: theme.palette.primary.main
-                                            }} src={`/images/users/${row.original.image}`}>
+                                            <Avatar sx={{ width: 24, height: 24, fontSize: '7pt', mr: .5 }}
+                                                    src={`/images/users/${row.original.image}`}>
                                                 {row.original.initials}
                                             </Avatar>
                                             <span>
@@ -57,7 +41,7 @@ const Index = ({ users }) => {
                                                 <small>{row.original.email}</small>
                                             </span>
                                         </div>
-                                    </OverlayTrigger>
+                                    </Tooltip>
                                 )
                             },
                             {
@@ -88,7 +72,36 @@ const Index = ({ users }) => {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'user'}/>
+                                Cell: ({ row }) => {
+                                    const [isLoading, setIsLoading] = useState(false);
+                                    const [errors, setErrors] = useState({});
+
+                                    const handleApproveAccount = () => {
+                                        Inertia.get(route(`approve.account`, row.original), {}, {
+                                            preserveScroll: true,
+                                            onBefore: () => setIsLoading(true),
+                                            onError: errors => setErrors(errors),
+                                            onFinish: () => setIsLoading(false)
+                                        });
+                                    };
+
+                                    return (
+                                        <>
+                                            {
+                                                !row.original.approved_at && (
+                                                    <Tooltip title={'Approve Account'}>
+                                                        <IconButton component={LoadingButton} loading={isLoading}
+                                                                    onClick={() => handleApproveAccount()}
+                                                                    color={"primary"}>
+                                                            <HowToReg/>
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                )
+                                            }
+                                            <TableActions entityId={row.original.id} entity={'user'}/>
+                                        </>
+                                    );
+                                }
                             }
                         ]} data={users} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}/>
                     </Paper>

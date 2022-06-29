@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
+use App\Http\Middleware\EnsureAccountIsApproved;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -77,15 +78,16 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth' => Authenticate::class,
-        'auth.basic' => AuthenticateWithBasicAuth::class,
-        'auth.session' => AuthenticateSession::class,
-        'cache.headers' => SetCacheHeaders::class,
-        'can' => Authorize::class,
-        'guest' => RedirectIfAuthenticated::class,
-        'password.confirm' => RequirePassword::class,
-        'signed' => ValidateSignature::class,
-        'throttle' => ThrottleRequests::class,
-        'verified' => EnsureEmailIsVerified::class,
+        "auth" => Authenticate::class,
+        "auth.basic" => AuthenticateWithBasicAuth::class,
+        "auth.session" => AuthenticateSession::class,
+        "cache.headers" => SetCacheHeaders::class,
+        "can" => Authorize::class,
+        "guest" => RedirectIfAuthenticated::class,
+        "password.confirm" => RequirePassword::class,
+        "signed" => ValidateSignature::class,
+        "throttle" => ThrottleRequests::class,
+        "verified" => EnsureEmailIsVerified::class,
+        "approved" => EnsureAccountIsApproved::class,
     ];
 }

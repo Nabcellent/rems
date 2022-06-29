@@ -34,13 +34,13 @@ class AppServiceProvider extends ServiceProvider
     {
         if(config('app.env') === 'production') URL::forceScheme('https');
 
-        Carbon::macro('timelyGreeting', function() {
-            $now = new CarbonImmutable(tz: 'Africa/Nairobi');
+        Carbon::macro("timelyGreeting", function() {
+            $now = new CarbonImmutable(tz: "Africa/Nairobi");
 
             return match (true) {
-                $now->isAfter($now->startOfDay()->addHours(18)) => 'Good Evening',
-                $now->isAfter($now->startOfDay()->addHours(12)) => 'Good Afternoon',
-                default => 'Good Morning',
+                $now->isAfter($now->startOfDay()->addHours(18)) => "Good Evening",
+                $now->isAfter($now->startOfDay()->addHours(12)) => "Good Afternoon",
+                default => "Good Morning",
             };
         });
 

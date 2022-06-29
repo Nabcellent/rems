@@ -55,6 +55,7 @@ class UserController extends Controller
                 "email",
                 "image",
                 "status",
+                "approved_at",
                 "created_at"
             ])->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
                 return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))

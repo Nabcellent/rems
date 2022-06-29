@@ -14,18 +14,12 @@ const TableActions = ({ entity, entityId }) => {
     return (
         <>
             <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: entityId })}
-                        color={"primary"}>
-                <Edit fontSize={'small'}/>
+                        color={"primary"}><Edit/>
             </IconButton>
-            <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: entityId })}>
-                <ReadMore fontSize={'small'}/>
-            </Link>
-            <IconButton
-                onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
-                    [entity]: entityId
-                }), str.ucFirst(entity))}
-                color={"error"}>
-                <Delete fontSize={'small'}/>
+            <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: entityId })}><ReadMore/></Link>
+            <IconButton onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
+                [entity]: entityId
+            }), str.ucFirst(entity))} color={"error"}><Delete/>
             </IconButton>
         </>
     );

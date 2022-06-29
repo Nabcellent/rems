@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
                 "email"      => "nabcellent.dev@yopmail.com",
                 "phone"      => 254110039317,
                 "gender"     => "male",
-                "role" => Role::SUPER_ADMIN
+                "role"       => Role::SUPER_ADMIN
             ],
             [
                 "first_name" => "Khalifa",
@@ -38,37 +38,37 @@ class UserSeeder extends Seeder
                 "email"      => "khalifa47@yopmail.com",
                 "phone"      => 254711144488,
                 "gender"     => "male",
-                "role" => Role::SUPER_ADMIN
+                "role"       => Role::SUPER_ADMIN
             ],
             [
                 "first_name" => "Rems",
                 "last_name"  => "Super",
                 "email"      => "super.admin@yopmail.com",
-                "role" => Role::SUPER_ADMIN
+                "role"       => Role::SUPER_ADMIN
             ],
             [
                 "first_name" => "Rems",
                 "last_name"  => "Admin",
                 "email"      => "admin.rems@yopmail.com",
-                "role" => Role::ADMIN
+                "role"       => Role::ADMIN
             ],
             [
                 "first_name" => "Property",
                 "last_name"  => "Manager",
                 "email"      => "manager.rems@yopmail.com",
-                "role" => Role::PROPERTY_MANAGER
+                "role"       => Role::PROPERTY_MANAGER
             ],
             [
                 "first_name" => "Rems",
                 "last_name"  => "Owner",
                 "email"      => "owner.rems@yopmail.com",
-                "role" => Role::OWNER
+                "role"       => Role::OWNER
             ],
             [
                 "first_name" => "Rems",
                 "last_name"  => "Tenant",
                 "email"      => "tenant.rems@yopmail.com",
-                "role" => Role::TENANT
+                "role"       => Role::TENANT
             ],
         ];
 
@@ -79,6 +79,7 @@ class UserSeeder extends Seeder
                 ...$user,
                 "password"          => Hash::make(12345678),
                 "email_verified_at" => now(),
+                "approved_at"       => now(),
                 "created_at"        => now(),
                 "updated_at"        => now()
             ])->assignRole($role->value)->wallet()->create();
