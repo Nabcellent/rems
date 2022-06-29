@@ -51,6 +51,8 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $settings = user()?->settings->isEmpty() ? null : user()?->settings;
+
         return array_merge(parent::share($request), [
             "auth"       => [
                 'user' => fn(Request $request) => $request->user() ? $request->user()->only([
@@ -82,6 +84,7 @@ class HandleInertiaRequests extends Middleware
                     "service"  => $request->user()?->can("create", Service::class),
                     "property" => $request->user()?->can("create", Property::class),
                     "estate"   => $request->user()?->can("create", Estate::class),
+                    "unit"     => $request->user()?->can("create", Unit::class),
                 ]
             ],
             "greeting"   => Carbon::timelyGreeting(),
@@ -90,16 +93,16 @@ class HandleInertiaRequests extends Middleware
             "csrf_token" => csrf_token(),
             "theme"      => [
                 "color"      => [
-                    "key"   => match (user()?->settings->color) {
+                    "key"   => match ($settings?->color) {
                         ThemeColor::BLACK->value => ThemeColor::BLACK->color(),
                         ThemeColor::CLOUD_BURST->value => ThemeColor::CLOUD_BURST->color(),
                         ThemeColor::CHROME_YELLOW->value => ThemeColor::CHROME_YELLOW->color(),
                         ThemeColor::DRESS_BLUE->value => ThemeColor::DRESS_BLUE->color(),
                         default => ThemeColor::CRIMSON_RED->color()
                     },
-                    "value" => user()?->settings->color ?? ThemeColor::CRIMSON_RED->value
+                    "value" => user()?->settings?->color ?? ThemeColor::CRIMSON_RED->value
                 ],
-                "isDarkMode" => user()?->settings->dark_mode,
+                "isDarkMode" => $settings?->dark_mode,
             ]
         ]);
     }

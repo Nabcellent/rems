@@ -58,7 +58,7 @@ const WelcomeCard = () => {
                                         <p className="text-muted mb-0">Wallet</p>
                                     </Col>
                                 </Row>
-                                <div className="mt-4 text-end">
+                                <div className="mt-3 text-end">
                                     <Button component={Link} href={route('dashboard.profile')} size={'small'}
                                             endIcon={<i className="mdi mdi-arrow-right ms-1"/>}>
                                         View Profile

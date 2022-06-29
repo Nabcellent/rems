@@ -55,6 +55,7 @@ class UserController extends Controller
                 "email",
                 "image",
                 "status",
+                "approved_at",
                 "created_at"
             ])->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
                 return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))
@@ -267,7 +268,7 @@ class UserController extends Controller
                         })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
                             return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
                         });
-                })->latest("email")->get()
+                })->whereKeyNot(user()->id)->latest("email")->get()
         ]);
     }
 

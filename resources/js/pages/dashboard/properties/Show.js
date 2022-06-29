@@ -35,14 +35,12 @@ const Show = ({ errors, property, canChangeOwner }) => {
                             </h4>
                             <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <LocationOn fontSize={'small'}/>
-                                </Avatar>
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><LocationOn/></Avatar>
                                 <div className="flex-1"><h6 className="mb-0">{property.estate.address}</h6></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <OtherHouses fontSize={'small'}/>
+                                    <OtherHouses/>
                                 </Avatar>
                                 <div className="flex-1">
                                     <CountUp end={property.units_count}/> Unit{property.units_count === 1 ? '' : 's'}
@@ -54,18 +52,14 @@ const Show = ({ errors, property, canChangeOwner }) => {
                             <strong>Owner</strong>
                             <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <Badge fontSize={'small'}/>
-                                </Avatar>
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><Badge/></Avatar>
                                 <div className="flex-1">
                                     <h6 className="mb-0">{property.user.full_name}</h6>
                                     <p className="text-secondary m-0">{property.user.user_roles_str}</p>
                                 </div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <AlternateEmail fontSize={'small'}/>
-                                </Avatar>
+                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><AlternateEmail/></Avatar>
                                 <div className="flex-1"><h6 className="mb-0">{property.user.email}</h6></div>
                             </div>
                             <div className="mb-2"><PhoneChip phone={property.user.phone}/></div>

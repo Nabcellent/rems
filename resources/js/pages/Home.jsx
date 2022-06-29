@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/inertia-react';
 
-// mui 
+// mui
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -33,7 +33,7 @@ const Home = () => {
                 }} justifyContent="center" alignItems="center">
                     <Grid item xs={12} md={6}>
                         <Typography variant="h1" fontSize={{ xs: '1.75rem', md: '2.25rem' }} fontWeight={800}
-                            color={'#192734'} mb={'1rem'} letterSpacing={'-0.025em'}>Your safe and reliable
+                                    color={'#192734'} mb={'1rem'} letterSpacing={'-0.025em'}>Your safe and reliable
                             online system for the management of properties</Typography>
                         <Typography variant="h6" fontSize={'1.25rem'} fontWeight={400} color={'#74808B'}>REMS is a
                             modern web-based real estate management system. Whether you are a tenant, owner, property
@@ -41,23 +41,26 @@ const Home = () => {
                             use.</Typography>
                     </Grid>
                     <Grid item xs={12} md={6} textAlign="center">
-                        <Box component={'img'} width={'100%'} src={bannerImg} alt={'banner'} />
+                        <Box component={'img'} width={'100%'} src={bannerImg} alt={'banner'}/>
                     </Grid>
                 </Grid>
 
-                <Divider variant="middle" sx={{ my: { xs: 5, lg: 10 } }} />
+                <Divider variant="middle" sx={{ my: { xs: 5, lg: 10 } }}/>
 
                 {/* Content */}
-                <SectionBox id={'owner'}
+                <SectionBox
+                    id={'owner'}
                     tint={true}
                     image={ownerImg}
                     title={'Become an Owner'}
                     desc={'Register your properties here and manage them easily at your comfort. You can also manage any issues related as well as the occupants if any.'}
+                    onBtnClick={() => Inertia.get(route('register', { role: 'owner' }))}
                 />
                 <SectionBox
                     image={managerImg}
                     title={'Become a Property Manager'}
                     desc={'Register here if you want to manage property and estates. This involves ensuring the property is well-maintained and habitable by managing issues raised.'}
+                    onBtnClick={() => Inertia.get(route('register', { role: 'manager' }))}
                 />
                 <SectionBox
                     tint={true}
@@ -70,6 +73,7 @@ const Home = () => {
                     image={serviceImg}
                     title={'Become a Service Provider'}
                     desc={'Service providers such as electrians, plumbers, carpenters, painters, laundry services and house managers can register from here and offer their services to residents.'}
+                    onBtnClick={() => Inertia.get(route('register', { role: 'provider' }))}
                 />
                 <SectionBox
                     tint={true}

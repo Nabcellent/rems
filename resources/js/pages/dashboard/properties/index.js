@@ -1,12 +1,10 @@
 import Dashboard from '@/layouts/Dashboard';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { IconButton, Paper } from '@mui/material';
-import { Delete, Edit, ReadMore } from '@mui/icons-material';
+import { Paper } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
-import { handleDelete } from '@/utils/helpers';
 import TableActions from '@/components/TableActions';
 
 const Index = ({ properties }) => {
