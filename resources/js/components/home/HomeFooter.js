@@ -1,5 +1,6 @@
 import { Box, IconButton, Divider, Grid, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { Link } from "@inertiajs/inertia-react";
+import Logo from "../Logo";
 
 import FacebookRoundedIcon from '@mui/icons-material/FacebookRounded';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -33,8 +34,9 @@ const HomeFooter = () => {
             <Grid container spacing={2} justifyItems={'space-around'} textAlign={'center'}>
                 <Grid item xs={6} md={3}>
                     <Link href="/">
-                        Logo and Name
+                        <Logo />
                     </Link>
+                    <Typography variant="body1">Real Estate Management System</Typography>
                 </Grid>
                 <Grid item xs={6} md={3}>
                     <Typography variant="h6" color={'white'} fontWeight={600} textAlign={'left'}>USEFUL LINKS</Typography>
@@ -71,7 +73,7 @@ const HomeFooter = () => {
                     </List>
                 </Grid>
                 <Grid item xs={6} md={3}>
-                    <Typography variant="body1">{new Date().getFullYear()} © Rems</Typography>
+                    <Typography variant="body1">{new Date().getFullYear()} © REMS</Typography>
                     <Typography variant="body1">Designed & Developed by Nabcellent & Ifatos</Typography>
                 </Grid>
             </Grid>
