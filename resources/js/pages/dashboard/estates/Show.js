@@ -1,20 +1,21 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
+import { Alert, Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
 import {
+    AlternateEmail, Android,
     Apartment,
     Badge,
     CurrencyPound,
     DeleteSweep,
     Edit,
-    HomeRepairService,
+    HomeRepairService, LocalPhone,
     LocationOn,
-    OtherHouses
+    OtherHouses, Person
 } from '@mui/icons-material';
 import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
-import { handleDelete } from '@/utils/helpers';
+import { handleDelete, parsePhone } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
@@ -59,21 +60,37 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                 </div>
                 <div className="card-body">
                     <div className="row">
-                        <div className="col-lg-8">
-                            <h4 className="mb-1">{estate.name}<i className={'bx bxs-check-circle'}/></h4>
+                        <Col xs={12}>
+                            <div className="d-flex justify-content-between">
+                                <h5 className="mb-0">{estate.name}<i className={'bx bxs-check-circle'}/></h5>
+                                <div>
+                                    <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
+                                    <Button variant={'outlined'} component={Link} className={'mx-1'}
+                                            href={route(`dashboard.estates.edit`, estate)}
+                                            startIcon={<Edit/>}> Edit
+                                    </Button>
+                                    {canChangeOwner && <ChangeOwner entity={'estate'} entityId={estate.id}/>}
+                                </div>
+                            </div>
                             <Divider sx={{ my: 2 }}/>
+                        </Col>
+                        <Col md={6} className={'mb-3 mb-lg-0'}>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Estate</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><LocationOn/></Avatar>
+                                <LocationOn className="me-2"/>
                                 <div className="flex-1"><h6 className="mb-0">{estate.address}</h6></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><OtherHouses/></Avatar>
+                                <OtherHouses className="me-2"/>
                                 <div className="flex-1">
                                     <CountUp end={assetCount}/> Asset{assetCount === 1 ? '' : 's'}
                                 </div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><CurrencyPound/></Avatar>
+                                <CurrencyPound className="me-2"/>
                                 <div className="flex-1">
                                     <strong>
                                         <CountUp end={estate.service_charge} prefix={'KES '} separator={','}/> -
@@ -81,29 +98,31 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                                     Service Charge
                                 </div>
                             </div>
-                            <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
-                        </div>
-                        <div className="ps-2 ps-lg-3 col">
-                            <div className="d-flex align-items-center">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><Badge/></Avatar>
-                                <strong>Owner</strong>
+                        </Col>
+                        <Col md={6}>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Owner</strong>
                             </div>
                             <Divider sx={{ my: 1 }}/>
-                            <div className="mb-2">
-                                <h6 className="mb-0">{estate.user.full_name}</h6>
-                                <small className="text-secondary">{estate.user.user_roles_str}</small>
+                            <div className="d-flex align-items-center mb-2">
+                                <Person className="me-2"/>
+                                <h6 className="mb-0">
+                                    {estate.user.full_name} -
+                                    <i><small className="text-secondary">{estate.user.user_roles_str}</small></i>
+                                </h6>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <div className="flex-1">
-                                    <Link href={route('dashboard.users.show', { user: estate.user.id })}
-                                          className="mb-0">
-                                        @{estate.user.email}
-                                    </Link>
-                                </div>
+                                <AlternateEmail className="me-2"/>
+                                <a href={`mailto:${estate.user.email}`} className="mb-0">{estate.user.email}</a>
                             </div>
-                            <div className="mb-2"><PhoneChip phone={estate.user.phone}/></div>
-                            {canChangeOwner && <ChangeOwner entity={'estate'} entityId={estate.id}/>}
-                        </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <LocalPhone className="me-2"/>
+                                <a href={estate.user.phone ? `tel:${parsePhone(estate.user.phone)}` : '#'}
+                                   className="mb-0">
+                                    {estate.user.phone ?? 'N/A'}
+                                </a>
+                            </div>
+                        </Col>
                     </div>
                 </div>
             </Paper>

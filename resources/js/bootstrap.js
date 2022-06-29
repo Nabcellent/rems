@@ -2,8 +2,6 @@ import Toastify from 'toastify-js';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-window.Sweet = withReactContent(Swal);
-
 window._ = require('lodash');
 
 /**
@@ -30,6 +28,8 @@ window.toast = data => {
         className: type,
     }).showToast();
 };
+
+window.Sweet = withReactContent(Swal);
 
 window.sweet = async ({
     duration,

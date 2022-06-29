@@ -37,9 +37,10 @@ const ChangeOwner = ({ entity, entityId }) => {
     });
 
     useEffect(() => {
-        axios.get(route("dashboard.users.owners", { entity })).then(({ data }) => {
-            setUsers(data.users);
-        }).catch(err => console.log(err));
+        fetch(route("dashboard.users.owners", { entity }))
+            .then(res => res.json())
+            .then(data => setUsers(data.users))
+            .catch(err => console.log(err));
     }, []);
 
     return (

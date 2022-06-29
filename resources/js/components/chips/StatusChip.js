@@ -43,9 +43,9 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
     const handleClose = () => setAnchorEl(null);
     const handleUpdate = status => Inertia.put(route(`dashboard.${pluralize(entity)}.update`, { [entity]: entityId }), { status }, { preserveState: false });
 
-    let statuses = Object.values(Status);
+    let statuses = Arr.removeItems(Object.values(Status), [status]);
 
-    if (['user', 'lease'].includes(entity)) {
+    if (['user', 'lease', 'estate'].includes(entity)) {
         statuses = Arr.only(statuses, [Status.ACTIVE, Status.INACTIVE]);
     } else if (['transaction', 'payment'].includes(entity)) {
         statuses = Arr.removeItems(statuses, [Status.ACTIVE, Status.INACTIVE, Status.RESOLVED]);

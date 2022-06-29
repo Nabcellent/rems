@@ -14,6 +14,13 @@ export const theme = (themeColor, isDarkMode) => {
             fontFamily: `${['"Varela Round"', 'cursive'].join(',')}!important`,
         },
         components: {
+            MuiMenuItem: {
+                styleOverrides: {
+                    root: {
+                        fontSize: '10pt'
+                    }
+                }
+            },
             MuiIconButton: {
                 defaultProps: {
                     size: 'small'
@@ -22,6 +29,12 @@ export const theme = (themeColor, isDarkMode) => {
             MuiSvgIcon: {
                 defaultProps: {
                     fontSize: 'small'
+                },
+                styleOverrides: {
+                    fontSizeSmall: {
+                        width: '.7em',
+                        height: '.7em',
+                    }
                 }
             },
             MuiChip: {
@@ -69,7 +82,8 @@ export const theme = (themeColor, isDarkMode) => {
                 styleOverrides: {
                     root: {
                         padding: '2px 10px',
-                        borderRadius: '2.5rem'
+                        borderRadius: '2.5rem',
+                        fontSize: '9pt'
                     }
                 }
             },
@@ -81,5 +95,5 @@ export const theme = (themeColor, isDarkMode) => {
                 }
             }
         }
-    })
+    });
 };
