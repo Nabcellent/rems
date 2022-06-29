@@ -33,9 +33,7 @@ const HomeFooter = () => {
 
             <Grid container spacing={2} justifyItems={'space-around'} textAlign={'center'}>
                 <Grid item xs={6} md={3}>
-                    <Link href="/">
-                        <Logo />
-                    </Link>
+                    <Logo />
                     <Typography variant="body1">Real Estate Management System</Typography>
                 </Grid>
                 <Grid item xs={6} md={3}>
