@@ -39,7 +39,7 @@ export const sidebarLinks = can => {
                     authorized: can.access.units,
                     startIcon: <i className="bx bxs-home"/>, title: 'Units', subMenu: [
                         { authorized: true, link: route('dashboard.units.index'), title: 'list' },
-                        { authorized: can.create.unit, link: '/units', title: 'create' }
+                        { authorized: can.create.unit, link: route('dashboard.units.create'), title: 'create' }
                     ]
                 },
                 {

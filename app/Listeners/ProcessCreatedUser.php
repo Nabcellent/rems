@@ -4,9 +4,8 @@ namespace App\Listeners;
 
 use App\Events\UserCreated;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ProcessCreatedUser implements ShouldQueue
+class ProcessCreatedUser
 {
     /**
      * Create the event listener.

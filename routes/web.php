@@ -40,7 +40,7 @@ Route::get('/', [HomeController::class, 'home'])->name("home");
 Route::get('/listings', [ListingsController::class, 'listings'])->name("listings");
 Route::get('/listings/{estate}', [ListingsController::class, 'show'])->name("show");
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(["auth", "verified", "approved"])->group(function () {
     Route::prefix('/dashboard')->name("dashboard.")->group(function () {
         Route::get('/', [DashboardController::class, 'default'])->name("default");
         Route::get('/analytics', [DashboardController::class, 'default'])->name("analytics");

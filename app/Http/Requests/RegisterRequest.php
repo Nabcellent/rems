@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Role;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Rules\Password;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -24,17 +26,19 @@ class RegisterRequest extends FormRequest
      * @return array<string, mixed>
      */
     #[ArrayShape([
-        'first_name' => "string",
-        'last_name'  => "string",
-        'email'      => "string",
-        'password'   => "array"
+        "first_name" => "string",
+        "last_name"  => "string",
+        "email"      => "string",
+        "role"       => "array",
+        "password"   => "array"
     ])] public function rules(): array
     {
         return [
-            'first_name' => 'required|string|max:20',
-            'last_name'  => 'required|string|max:20',
-            'email'      => 'required|string|email|max:100|unique:users',
-            'password'   => ['required', 'confirmed', Password::defaults()],
+            "first_name" => "required|string|max:20",
+            "last_name"  => "required|string|max:20",
+            "email"      => "required|string|email|max:100|unique:users",
+            "role"       => ["required", new Enum(Role::class)],
+            "password"   => ["required", "confirmed", Password::defaults()],
         ];
     }
 }

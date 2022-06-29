@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Enums\Role;
+use App\Events\UserCreated;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Listeners\ProcessCreatedUser;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
@@ -20,9 +22,18 @@ class RegisteredUserController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function create(): Response
+    public function create(string $role = null): Response
     {
-        return Inertia::render('auth/Register');
+        $role = match ($role) {
+            "manager" => Role::PROPERTY_MANAGER,
+            "owner" => Role::OWNER,
+            "provider" => Role::SERVICE_PROVIDER,
+            default => Role::TENANT
+        };
+
+        return Inertia::render("auth/Register", [
+            "role" => $role
+        ]);
     }
 
     /**
@@ -35,13 +46,11 @@ class RegisteredUserController extends Controller
     public function store(RegisterRequest $request): RedirectResponse
     {
         $data = $request->validated();
+        $data["password"] = Hash::make($data["password"]);
 
-        $data += [
-            "password" => Hash::make($request->input('password')),
-        ];
+        $user = User::create($data)->assignRole($data["role"]);
 
-        $user = User::create($data);
-        $user->assignRole(Role::TENANT->value);
+        UserCreated::dispatch($user);
 
         Auth::login($user);
 

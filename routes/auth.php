@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AccountApprovalController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function() {
-    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::get('register/{role?}', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store']);
 
     Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -25,6 +26,8 @@ Route::middleware('guest')->group(function() {
 });
 
 Route::middleware('auth')->group(function() {
+    Route::get('approve-account', [AccountApprovalController::class, '__invoke'])->name("approval.notice");
+    Route::get('approve-account/{user}', [AccountApprovalController::class, 'approveAccount'])->name("approve.account");
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])->name('verification.notice');
     Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware(
             ['signed', 'throttle:6,1']

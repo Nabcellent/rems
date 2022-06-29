@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\UserCreated;
+use App\Notifications\ApproveAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\HasApiTokens;
 use Nabcellent\Laraconfig\HasConfig;
 use Spatie\Permission\Traits\HasRoles;
@@ -44,8 +46,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        "password",
+        "remember_token",
     ];
 
     /**
@@ -54,7 +56,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        "email_verified_at" => "datetime",
+        "approved_at"       => "datetime",
     ];
 
     /**
@@ -63,15 +66,6 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $appends = ["full_name", "user_roles", "user_roles_str", "initials"];
-
-    /**
-     * The event map for the model.
-     *
-     * @var array
-     */
-    protected $dispatchesEvents = [
-        'created' => UserCreated::class,
-    ];
 
     /**
      * Get the user's full name.
@@ -179,6 +173,29 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Notice::class, "notice_recipients");
     }
 
+
+    public function hasApprovedAccount(): bool
+    {
+        return !is_null($this->approved_at);
+    }
+
+    /**
+     * Mark the given user's email as verified.
+     *
+     * @return bool
+     */
+    public function markAccountAsApproved(): bool
+    {
+        return $this->forceFill(["approved_at" => $this->freshTimestamp()])->save();
+    }
+
+    public function sendAccountApprovalNotification()
+    {
+        Notification::send(User::role([
+            \App\Enums\Role::ADMIN->value,
+            \App\Enums\Role::SUPER_ADMIN->value
+        ])->get(), new ApproveAccount($this));
+    }
 
 
     /**
