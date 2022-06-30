@@ -1,37 +1,39 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
+import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
 import {
-    AlternateEmail, Android,
+    AlternateEmail,
     Apartment,
     Badge,
     CurrencyPound,
     DeleteSweep,
     Edit,
-    HomeRepairService, LocalPhone,
+    HomeRepairService,
+    LocalPhone,
     LocationOn,
-    OtherHouses, Person
+    OtherHouses,
+    Person
 } from '@mui/icons-material';
 import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
-import PhoneChip from '@/components/chips/PhoneChip';
 import { handleDelete, parsePhone } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Images from '@/components/Images';
+import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
-import Policies from '@/components/Policies';
+import Policies from '@/components/crud/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
 import Map from '@/components/Map';
 import MainImage from '@/components/MainImage';
-import ChangeOwner from '@/components/ChangeOwner';
+import ChangeOwner from '@/components/crud/ChangeOwner';
+import Amenities from '@/components/crud/Amenities';
 
-const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
+const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwner }) => {
     console.log(estate);
     const [service, setService] = useState(undefined);
     const [showServiceModal, setShowServiceModal] = useState(false);
@@ -224,6 +226,10 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                                         ))
                                 }
                             </Card.Body>
+                        </Paper>
+
+                        <Paper className={'mb-3'}>
+                            <Amenities amenitiable={'estate'} allAmenities={amenities} amenities={estate.amenities} amenitiableId={estate.id}/>
                         </Paper>
 
                         <Paper className={'mb-3'}>

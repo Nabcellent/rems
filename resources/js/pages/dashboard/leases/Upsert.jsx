@@ -149,14 +149,14 @@ const Upsert = ({ lease, action, users, estates }) => {
                                 <Grid item lg={4}>
                                     <TextField label="Deposit" type={'number'} placeholder="Deposit..." name={'deposit'}
                                                value={formik.values.deposit} fullWidth onChange={formik.handleChange}
-                                               error={formik.touched.deposit && Boolean(formik.errors.deposit)}
+                                               error={formik.touched.deposit && formik.errors.deposit}
                                                helperText={formik.touched.deposit && formik.errors.deposit}/>
                                 </Grid>
                                 <Grid item lg={4}>
                                     <TextField label="Amount Ror Rent" type={'number'} placeholder="Amount for rent..."
                                                name={'rent_amount'} value={formik.values.rent_amount} fullWidth
                                                onChange={formik.handleChange}
-                                               error={formik.touched.rent_amount && Boolean(formik.errors.rent_amount)}
+                                               error={formik.touched.rent_amount && formik.errors.rent_amount}
                                                helperText={formik.errors.rent_amount ?? `+ service charge(${serviceCharge}) = ${totalRent}`}/>
                                 </Grid>
                                 <Grid item lg={4}>

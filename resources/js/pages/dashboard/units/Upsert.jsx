@@ -41,6 +41,7 @@ const validationSchema = yup.object({
     purpose: yup.string().oneOf(Object.values(Purpose), 'Invalid purpose.').required('Purpose is required.'),
     type: yup.string().oneOf(Object.values(UnitType), 'Invalid type.').required('Type is required.'),
     description: yup.string(),
+    price: yup.number(),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
@@ -54,6 +55,7 @@ const Upsert = ({ unit, action, estates }) => {
         initialValues: {
             house_number: unit?.house_number ?? '',
             type: unit?.type ?? '',
+            price: unit?.price ?? '',
             purpose: unit?.purpose ?? '',
             description: unit?.description ?? '',
             estate: unit?.estate ?? '',
@@ -123,12 +125,19 @@ const Upsert = ({ unit, action, estates }) => {
                                                helperText={formik.touched.property && formik.errors.property}/>
                                 )}/>
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item md={6}>
                                 <TextField label="House No." placeholder="House number..."
                                            name={'house_number'} value={formik.values.house_number} fullWidth
                                            onChange={formik.handleChange}
                                            error={formik.touched.house_number && Boolean(formik.errors.house_number)}
                                            helperText={formik.touched.house_number && formik.errors.house_number}/>
+                            </Grid>
+                            <Grid item md={6}>
+                                <TextField label="Unit Price" type={'number'} placeholder="Unit price..."
+                                           name={'price'} value={formik.values.price} fullWidth
+                                           onChange={formik.handleChange}
+                                           error={formik.touched.price && formik.errors.price}
+                                           helperText={formik.errors.price}/>
                             </Grid>
                             <Grid item xs={12} lg={6}>
                                 <FormControl error={formik.touched.type && Boolean(formik.errors.type)}>

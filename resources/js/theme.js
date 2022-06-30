@@ -32,8 +32,8 @@ export const theme = (themeColor, isDarkMode) => {
                 },
                 styleOverrides: {
                     fontSizeSmall: {
-                        width: '.7em',
-                        height: '.7em',
+                        width: '.8em',
+                        height: '.8em',
                     }
                 }
             },

@@ -22,13 +22,13 @@ import { Card, Col, Row } from 'react-bootstrap';
 import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Images from '@/components/Images';
+import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
 import { getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
-import Policies from '@/components/Policies';
+import Policies from '@/components/crud/Policies';
 import MainImage from '@/components/MainImage';
-import ChangeOwner from '@/components/ChangeOwner';
+import ChangeOwner from '@/components/crud/ChangeOwner';
 
 const Show = ({ errors, unit, canChangeOwner }) => {
     console.log(unit);

@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEstateRequest;
 use App\Http\Requests\UpdateEstateRequest;
+use App\Models\Amenity;
 use App\Models\Estate;
 use App\Models\Service;
 use App\Models\User;
@@ -97,10 +98,12 @@ class EstateController extends Controller
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
                 "services:id,name,icon,description",
+                "amenities:id,title,icon,description",
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["properties", "units"]),
             "services"        => Service::select(["id", "name"])->get(),
+            "amenities"       => Amenity::select(["id", "title"])->get(),
             "googleMapsKey"   => config("rems.google.maps.api_key"),
             "canChangeOwner"  => user()->hasRole(Role::ADMIN->value),
             "canUpdateStatus" => user()->can("updateStatus", Estate::class)

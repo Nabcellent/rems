@@ -7,12 +7,12 @@ import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
 import CountUp from 'react-countup';
 import { Col, Row } from 'react-bootstrap';
-import Images from '@/components/Images';
-import Policies from '@/components/Policies';
+import Images from '@/components/crud/Images';
+import Policies from '@/components/crud/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
 import MainImage from '@/components/MainImage';
 import React from 'react';
-import ChangeOwner from '@/components/ChangeOwner';
+import ChangeOwner from '@/components/crud/ChangeOwner';
 
 const Show = ({ errors, property, canChangeOwner }) => {
     console.log(property);
