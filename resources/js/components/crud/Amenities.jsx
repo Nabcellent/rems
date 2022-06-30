@@ -33,7 +33,7 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
             let url = route(`dashboard.amenitiable.store`);
 
             if (amenity) {
-                url = route(`dashboard.amenitiable.update`, { amenity: amenity.id });
+                url = route(`dashboard.amenitiable.update`, amenity.pivot);
                 values._method = Method.PUT;
             }
 
@@ -56,8 +56,10 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
     };
 
     const handleUpdate = amenity => {
+        console.log(amenity);
         setAmenity(amenity);
-        formik.setFieldValue('amenity', amenity ?? '', true);
+        formik.setFieldValue('amenity_id', amenity.id, true);
+        formik.setFieldValue('amenity', amenity, true);
         formik.setFieldValue('description', amenity.description ?? '', true);
         setShowModal(true);
     };

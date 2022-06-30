@@ -41,18 +41,18 @@ class AmenitiableController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param int                      $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $amenitiable)
+    public function update(Request $request, Amenitiable $amenitiable): RedirectResponse
     {
         $data = $request->validate([
             "amenity_id"  => "exists:services,id",
-            "description" => "string",
+            "description" => "nullable|string",
         ]);
 
         $amenitiable->update($data);
 
-        return back()->with("toast", ["message" => "Service Updated!"]);
+        return back()->with("toast", ["message" => "Amenity Updated!"]);
     }
 
     /**
