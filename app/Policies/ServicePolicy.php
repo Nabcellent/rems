@@ -13,6 +13,18 @@ class ServicePolicy
     use HandlesAuthorization;
 
     /**
+     * Perform pre-authorization checks.
+     *
+     * @param \App\Models\User $user
+     * @param string           $ability
+     * @return void|bool
+     */
+    public function before(User $user, string $ability)
+    {
+        if($user->hasRole(Role::ADMIN->value)) return true;
+    }
+
+    /**
      * Determine whether the user can view any models.
      *
      * @param  \App\Models\User  $user
@@ -57,6 +69,15 @@ class ServicePolicy
     {
         //
     }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param \App\Models\User $user
+     * @return \Illuminate\Auth\Access\Response|bool
+     */
+    public function updateStatus(User $user)
+    {}
 
     /**
      * Determine whether the user can delete the model.

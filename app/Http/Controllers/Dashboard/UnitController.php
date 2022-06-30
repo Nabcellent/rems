@@ -167,7 +167,7 @@ class UnitController extends Controller
 
         $unit->update($data);
 
-        return redirect()->route("dashboard.units.index")->with("toast", [
+        return back()->with("toast", [
             "message" => "Unit Updated!",
             "link"    => [
                 "title" => "View Unit",
