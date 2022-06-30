@@ -53,7 +53,7 @@ window.sweet = async ({
 
     if (link) {
         timer = timer >= 7 ? timer : 7;
-        swalFooter = <a href={link.href}>{link.title}</a>;
+        swalFooter = '<a href={link.href}>{link.title}</a>';
     }
 
     timer = (timer ?? 3) * 1000;
@@ -83,7 +83,7 @@ window.sweet = async ({
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });

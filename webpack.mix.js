@@ -15,7 +15,6 @@ mix.js('resources/js/app.js', 'public/js')
    .react().extract(['react'])
    .postCss('resources/css/app.css', 'public/css', [
        require('postcss-import'),
-       require('tailwindcss'),
        require('autoprefixer'),
    ])
    .postCss('resources/css/style.css', 'public/css', [

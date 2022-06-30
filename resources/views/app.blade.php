@@ -13,22 +13,16 @@
     <link rel="stylesheet" href="{{ asset("vendor/materialdesign/css/materialdesignicons.min.css") }}"
           referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="{{ asset("vendor/fontawesome/css/all.min.css") }}" referrerpolicy="no-referrer"/>
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}"/>
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+{{--    <link rel="stylesheet" href="{{ mix('css/app.css') }}"/>--}}
+{{--    <link rel="stylesheet" href="{{ mix('css/style.css') }}">--}}
 
     <!-- Scripts -->
     @routes
-    <script src="{{ mix('js/manifest.js') }}" defer></script>
-    <script src="{{ mix('js/vendor.js') }}" defer></script>
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    @viteReactRefresh
+    @vite(['resources/css/app.css', 'resources/css/style.css', 'resources/js/app.jsx'])
     @inertiaHead
 </head>
 <body class="font-sans antialiased">
 @inertia
-
-@env('local')
-    {{--    <script src="http://localhost:8080/js/bundle.js"></script>--}}
-@endenv
-
 </body>
 </html>

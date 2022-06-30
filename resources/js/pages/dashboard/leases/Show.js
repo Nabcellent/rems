@@ -9,7 +9,7 @@ import PhoneChip from '@/components/chips/PhoneChip';
 import React from 'react';
 import CardBgCorner from '@/components/CardBgCorner';
 import Banner from '@/components/Banner';
-import LeaderList from '@/LeaderList';
+import LeaderList from '@/components/LeaderList';
 
 const Show = ({ errors, lease }) => {
     console.log(lease);
