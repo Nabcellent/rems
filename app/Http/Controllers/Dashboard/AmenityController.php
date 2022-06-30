@@ -55,11 +55,11 @@ class AmenityController extends Controller
      */
     public function store(StoreAmenityRequest $request): RedirectResponse
     {
-        $amenity = Amenity::create($request->validated());
+        Amenity::create($request->validated());
 
         return redirect()->route("dashboard.amenities.index")->with("toast", [
             "message" => "Amenity Created!",
-            "link"    => ["title" => "View Amenity", "href" => route("dashboard.amenities.show", $amenity)]
+            "link"    => ["title" => "View All Amenities", "href" => route("dashboard.amenities.index")]
         ]);
     }
 

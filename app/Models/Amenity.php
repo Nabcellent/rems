@@ -15,6 +15,7 @@ class Amenity extends Model
 
     protected $fillable = [
         "title",
+        "icon",
         "description",
     ];
 

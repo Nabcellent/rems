@@ -40,7 +40,9 @@ const Index = ({ amenities }) => {
                                     accessor: 'actions',
                                     disableSortBy: true,
                                     className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'amenity'}/>                                }
+                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'amenity'}
+                                                                     showViewLink={false}/>
+                                }
                             ]} data={amenities} onCreateRow={() => Inertia.get(route('dashboard.amenities.create'))}/>
                         </Card.Body>
                     </Card>

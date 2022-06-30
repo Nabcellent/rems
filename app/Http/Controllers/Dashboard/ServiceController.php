@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreServiceRequest;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,22 +38,29 @@ class ServiceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/services/Upsert", [
+            "action" => "create",
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreServiceRequest $request): RedirectResponse
     {
-        //
+        Service::create($request->validated());
+
+        return redirect()->route("dashboard.services.index")->with("toast", [
+            "message" => "Service Created!",
+            "link"    => ["title" => "View All Services", "href" => route("dashboard.services.index")]
+        ]);
     }
 
     /**
@@ -74,11 +82,14 @@ class ServiceController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param \App\Models\Service $service
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function edit(Service $service)
+    public function edit(Service $service): Response|ResponseFactory
     {
-        //
+        return inertia("dashboard/services/Upsert", [
+            "action"  => "update",
+            "service" => $service,
+        ]);
     }
 
     /**
@@ -86,11 +97,13 @@ class ServiceController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Service      $service
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, Service $service)
+    public function update(StoreServiceRequest $request, Service $service): RedirectResponse
     {
-        //
+        $service->update($request->validated());
+
+        return back()->with("toast", ["message" => "Service Updated!"]);
     }
 
     /**
