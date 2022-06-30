@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('amenities', function(Blueprint $table) {
+        Schema::create("amenitiables", function (Blueprint $table) {
             $table->id();
-            $table->string("title", 100);
-            $table->string("icon", 50)->nullable();
+            $table->foreignId("amenity_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->morphs("amenitiable");
             $table->string("description")->nullable();
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('amenities');
+        Schema::dropIfExists('amenitiables');
     }
 };

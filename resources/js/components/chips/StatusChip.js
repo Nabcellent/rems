@@ -1,6 +1,6 @@
 import { Status } from '@/utils/enums';
 import PropTypes from 'prop-types';
-import { Chip, ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { Chip, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
 import { Check, Error, Info, Pending, TaskAlt } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import pluralize from 'pluralize';
@@ -41,11 +41,15 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClose = () => setAnchorEl(null);
-    const handleUpdate = status => Inertia.put(route(`dashboard.${pluralize(entity)}.update`, { [entity]: entityId }), { status }, { preserveState: false });
+    const handleUpdate = status => {
+        Inertia.put(route(`dashboard.${pluralize(entity)}.update`, { [entity]: entityId }), { status }, {
+            preserveState: false
+        });
+    };
 
-    let statuses = Object.values(Status);
+    let statuses = Arr.removeItems(Object.values(Status), [status]);
 
-    if (['user', 'lease'].includes(entity)) {
+    if (['user', 'lease', 'estate'].includes(entity)) {
         statuses = Arr.only(statuses, [Status.ACTIVE, Status.INACTIVE]);
     } else if (['transaction', 'payment'].includes(entity)) {
         statuses = Arr.removeItems(statuses, [Status.ACTIVE, Status.INACTIVE, Status.RESOLVED]);
@@ -59,16 +63,16 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
 
     return (
         <>
-            <Chip sx={{ px: .5 }} onClick={e => setAnchorEl(e.currentTarget)}
-                  variant={bg ? 'filled' : 'outlined'}
-                  color={color} className={`fw-bold font-size-11`}
-                  label={<span><b>Status:</b> {status}</span>}
-                  icon={icon}
-            />
-            <Menu
-                anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'left', }}
-                transformOrigin={{ vertical: 'top', horizontal: 'left', }}>
+            <Tooltip title={'Update Status'}>
+                <Chip sx={{ px: .5 }} onClick={e => setAnchorEl(e.currentTarget)}
+                      variant={bg ? 'filled' : 'outlined'}
+                      color={color} className={`fw-bold font-size-11`}
+                      label={<span><b>Status:</b> {status}</span>}
+                      icon={icon}/>
+            </Tooltip>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}
+                  anchorOrigin={{ vertical: 'top', horizontal: 'left', }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'left', }}>
                 {
                     menuItems.map((item, i) => {
                         return (

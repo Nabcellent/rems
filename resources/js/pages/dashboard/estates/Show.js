@@ -1,36 +1,40 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
+import { Alert, Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
 import {
+    AlternateEmail,
     Apartment,
     Badge,
     CurrencyPound,
     DeleteSweep,
     Edit,
     HomeRepairService,
+    LocalPhone,
     LocationOn,
-    OtherHouses
+    OtherHouses,
+    Person
 } from '@mui/icons-material';
 import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
-import PhoneChip from '@/components/chips/PhoneChip';
-import { handleDelete } from '@/utils/helpers';
+import { handleDelete, parsePhone } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
-import Images from '@/components/Images';
+import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
-import Policies from '@/components/Policies';
+import Policies from '@/components/crud/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
 import Map from '@/components/Map';
 import MainImage from '@/components/MainImage';
-import ChangeOwner from '@/components/ChangeOwner';
+import ChangeOwner from '@/components/crud/ChangeOwner';
+import Amenities from '@/components/crud/Amenities';
+import PhoneChip from '@/components/chips/PhoneChip';
 
-const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
+const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwner }) => {
     console.log(estate);
     const [service, setService] = useState(undefined);
     const [showServiceModal, setShowServiceModal] = useState(false);
@@ -52,28 +56,43 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
             <Breadcrumbs title="Estates" breadcrumbItem={estate.name}/>
 
             <Paper className={'mb-3'}>
-                <div className="position-relative min-vh-25 mb-7 card-header">
+                <Card.Header className="position-relative min-vh-25 mb-7">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
                     <MainImage image={estate.image} imageable={'estate'} imageableId={estate.id}/>
-                </div>
-                <div className="card-body">
-                    <div className="row">
-                        <div className="col-lg-8">
-                            <h4 className="mb-1">{estate.name}<i className={'bx bxs-check-circle'}/></h4>
+                </Card.Header>
+                <Card.Body>
+                    <Row>
+                        <Col xs={12}>
+                            <div className="d-flex justify-content-between">
+                                <h5 className="mb-0">{estate.name}</h5>
+                                <div>
+                                    <IconButton component={Link} className={'mx-1'}
+                                                href={route(`dashboard.estates.edit`, estate)}> <Edit/>
+                                    </IconButton>
+                                    {canChangeOwner && <ChangeOwner entity={'estate'} entityId={estate.id}/>}
+                                    <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
+                                </div>
+                            </div>
                             <Divider sx={{ my: 2 }}/>
+                        </Col>
+                        <Col md={7} className={'mb-3 mb-lg-0'}>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Estate</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><LocationOn/></Avatar>
+                                <LocationOn className="me-2"/>
                                 <div className="flex-1"><h6 className="mb-0">{estate.address}</h6></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><OtherHouses/></Avatar>
+                                <OtherHouses className="me-2"/>
                                 <div className="flex-1">
                                     <CountUp end={assetCount}/> Asset{assetCount === 1 ? '' : 's'}
                                 </div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><CurrencyPound/></Avatar>
+                                <CurrencyPound className="me-2"/>
                                 <div className="flex-1">
                                     <strong>
                                         <CountUp end={estate.service_charge} prefix={'KES '} separator={','}/> -
@@ -81,31 +100,30 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                                     Service Charge
                                 </div>
                             </div>
-                            <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
-                        </div>
-                        <div className="ps-2 ps-lg-3 col">
-                            <div className="d-flex align-items-center">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><Badge/></Avatar>
-                                <strong>Owner</strong>
+                        </Col>
+                        <Col md={5}>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Owner</strong>
                             </div>
                             <Divider sx={{ my: 1 }}/>
-                            <div className="mb-2">
-                                <h6 className="mb-0">{estate.user.full_name}</h6>
-                                <small className="text-secondary">{estate.user.user_roles_str}</small>
+                            <div className="d-flex align-items-center mb-2">
+                                <Person className="me-2"/>
+                                <Link href={route('dashboard.users.show', estate.user)}>
+                                    {estate.user.full_name} -
+                                    <i><small className="text-secondary">{estate.user.user_roles_str}</small></i>
+                                </Link>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <div className="flex-1">
-                                    <Link href={route('dashboard.users.show', { user: estate.user.id })}
-                                          className="mb-0">
-                                        @{estate.user.email}
-                                    </Link>
-                                </div>
+                                <AlternateEmail className="me-2"/>
+                                <a href={`mailto:${estate.user.email}`} className="mb-0">{estate.user.email}</a>
                             </div>
-                            <div className="mb-2"><PhoneChip phone={estate.user.phone}/></div>
-                            {canChangeOwner && <ChangeOwner entity={'estate'} entityId={estate.id}/>}
-                        </div>
-                    </div>
-                </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <LocalPhone className="me-2"/>
+                                <PhoneChip textOnly phone={property.user.phone}/>
+                            </div>
+                        </Col>
+                    </Row>
+                </Card.Body>
             </Paper>
 
             <Row className={'mb-3 g-3 justify-content-center'}>
@@ -205,6 +223,11 @@ const Show = ({ errors, estate, services, googleMapsKey, canChangeOwner }) => {
                                         ))
                                 }
                             </Card.Body>
+                        </Paper>
+
+                        <Paper className={'mb-3'}>
+                            <Amenities amenitiable={'estate'} allAmenities={amenities} amenities={estate.amenities}
+                                       amenitiableId={estate.id}/>
                         </Paper>
 
                         <Paper className={'mb-3'}>
