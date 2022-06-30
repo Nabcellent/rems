@@ -1,7 +1,17 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
-import { Edit, Female, LocalPhone, Male, PhoneIphone } from '@mui/icons-material';
+import {
+    AlternateEmail,
+    Badge,
+    Countertops,
+    DriveFileRenameOutline,
+    Edit,
+    Female,
+    LocalPhone,
+    Male,
+    PhoneIphone, WorkspacePremium
+} from '@mui/icons-material';
 import { Gender } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
@@ -10,6 +20,7 @@ import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import ChangeOwner from '@/components/crud/ChangeOwner';
+import pluralize from 'pluralize';
 
 const Show = ({ errors, user }) => {
     console.log(user);
@@ -39,24 +50,41 @@ const Show = ({ errors, user }) => {
                             <Divider sx={{ my: 2 }}/>
                         </Col>
                         <Col lg={7}>
-                            <h4 className="mb-1">{user.full_name}</h4>
-                            <h6 className="fs-0 fw-normal">{user.email}</h6>
-                            <p className="text-500">{user.user_roles_str}</p>
-                            <StatusChip status={user.status}/>
-                            <Button variant={'outlined'}
-                                    className="px-3 ms-2 btn btn-falcon-default btn-sm">Notify</Button>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>User</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
+                            <div className="d-flex align-items-center mb-2">
+                                <DriveFileRenameOutline className="me-2"/>
+                                <div className="flex-1">First Name: {user.first_name}</div>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <DriveFileRenameOutline className="me-2"/>
+                                <div className="flex-1">Last Name: {user.last_name}</div>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <AlternateEmail className="me-2"/>
+                                <a href={`mailto:${user.email}`} className="mb-0">{user.email}</a>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <WorkspacePremium className="me-2"/>
+                                <div className="flex-1">
+                                    {pluralize('Roles', user.roles.length)}: {user.user_roles_str}
+                                </div>
+                            </div>
                             <div className="border-dashed-bottom my-4 d-lg-none"></div>
                         </Col>
                         <Col className="ps-2 ps-lg-3">
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Personal</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    {user.gender === Gender.MALE ? <Male/> : <Female/>}
-                                </Avatar>
+                                {user.gender === Gender.MALE ? <Male className="me-2"/> : <Female className="me-2"/>}
                                 <div className="flex-1">
                                     <h6 className="mb-0">{user.gender ? user.gender.toUpperCase() : 'N/A'}</h6>
                                 </div>
                             </div>
-                            <Divider sx={{ my: 2 }}/>
                             <div className="d-flex align-items-center mb-2">
                                 <LocalPhone className="me-2"/>
                                 <PhoneChip textOnly phone={user.phone}/>

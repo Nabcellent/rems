@@ -157,7 +157,8 @@ class UserController extends Controller
         return inertia("dashboard/users/Show", [
             "user" => $user->load([
                 "wallet:id,user_id,balance"
-            ])
+            ]),
+            "canUpdateStatus" => user()->can("updateStatus", User::class)
         ]);
     }
 

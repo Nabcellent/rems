@@ -41,7 +41,11 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClose = () => setAnchorEl(null);
-    const handleUpdate = status => Inertia.put(route(`dashboard.${pluralize(entity)}.update`, { [entity]: entityId }), { status }, { preserveState: false });
+    const handleUpdate = status => {
+        Inertia.put(route(`dashboard.${pluralize(entity)}.update`, { [entity]: entityId }), { status }, {
+            preserveState: false
+        });
+    };
 
     let statuses = Arr.removeItems(Object.values(Status), [status]);
 

@@ -77,7 +77,7 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                             </div>
                             <Divider sx={{ my: 2 }}/>
                         </Col>
-                        <Col md={7} className={'mb-3 mb-lg-0'}>
+                        <Col lg={7}>
                             <div className="d-flex align-items-center mb-1">
                                 <Badge className={'me-2'}/><strong>Unit</strong>
                             </div>
@@ -100,8 +100,9 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                 <MonetizationOn className="me-2"/>
                                 <div className="flex-1">Purpose: {unit.purpose}</div>
                             </div>
+                            <div className="border-dashed-bottom my-4 d-lg-none"></div>
                         </Col>
-                        <Col md={5} className="ps-2 ps-lg-3">
+                        <Col lg={5} className="ps-2 ps-lg-3">
                             <div className="d-flex align-items-center mb-1">
                                 <Badge className={'me-2'}/><strong>Owner</strong>
                             </div>
