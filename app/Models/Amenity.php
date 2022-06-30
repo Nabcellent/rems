@@ -14,7 +14,7 @@ class Amenity extends Model
     use HasFactory;
 
     protected $fillable = [
-        "amenity_id",
+        "title",
         "description",
     ];
 

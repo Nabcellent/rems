@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Enums\ThemeColor;
+use App\Models\Amenity;
 use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\Notice;
@@ -74,6 +75,7 @@ class HandleInertiaRequests extends Middleware
                     "payments"     => $request->user()?->can("viewAny", Payment::class),
                     "notices"      => $request->user()?->can("viewAny", Notice::class),
                     "services"     => $request->user()?->can("viewAny", Service::class),
+                    "amenities"    => $request->user()?->can("viewAny", Amenity::class),
                     "users"        => $request->user()?->can("viewAny", User::class),
                     "settings"     => $request->user()?->can("viewAny", Setting::class),
                     "tickets"      => $request->user()?->can("viewAny", Ticket::class),
@@ -82,6 +84,7 @@ class HandleInertiaRequests extends Middleware
                     "user"     => $request->user()?->can("create", User::class),
                     "lease"    => $request->user()?->can("create", Lease::class),
                     "service"  => $request->user()?->can("create", Service::class),
+                    "amenity"  => $request->user()?->can("create", Amenity::class),
                     "property" => $request->user()?->can("create", Property::class),
                     "estate"   => $request->user()?->can("create", Estate::class),
                     "unit"     => $request->user()?->can("create", Unit::class),

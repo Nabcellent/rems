@@ -119,7 +119,7 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <LocalPhone className="me-2"/>
-                                <PhoneChip textOnly phone={property.user.phone}/>
+                                <PhoneChip textOnly phone={estate.user.phone}/>
                             </div>
                         </Col>
                     </Row>

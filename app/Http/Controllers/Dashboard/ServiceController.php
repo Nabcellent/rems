@@ -12,6 +12,16 @@ use Inertia\ResponseFactory;
 class ServiceController extends Controller
 {
     /**
+     * Create the controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->authorizeResource(Service::class, 'service');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Inertia\Response|\Inertia\ResponseFactory

@@ -5,25 +5,25 @@ import DataTable from '@/components/common/datatable';
 import { Inertia } from '@inertiajs/inertia';
 import TableActions from '@/components/TableActions';
 
-const Index = ({ services }) => {
-    console.log(services);
+const Index = ({ amenities }) => {
+    console.log(amenities);
 
     return (
-        <Dashboard title={'Services'}>
+        <Dashboard title={'Amenities'}>
             {/* Render Breadcrumbs */}
-            <Breadcrumbs title="Services" breadcrumbItem="list"/>
+            <Breadcrumbs title="Amenities" breadcrumbItem="list"/>
 
             <Row>
                 <Col className="col-12">
                     <Card>
                         <Card.Body>
-                            <DataTable title={'Services'} columns={[
+                            <DataTable title={'Amenities'} columns={[
                                 {
                                     accessor: 'icon',
                                     disableSortBy: true,
                                 },
                                 {
-                                    accessor: 'name',
+                                    accessor: 'title',
                                     Header: 'Service Name',
                                 },
                                 {
@@ -32,15 +32,16 @@ const Index = ({ services }) => {
                                     Cell: ({ row }) => row.original.description || 'N / A'
                                 },
                                 {
-                                    accessor: 'providers_count',
-                                    Header: 'No. of Providers',
+                                    accessor: 'amenitiables_count',
+                                    Header: 'Units & Estates',
+                                    Cell: ({ row }) => row.original.estates_count + row.original.units_count
                                 },
                                 {
                                     accessor: 'actions',
                                     disableSortBy: true,
                                     className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'service'}/>                                }
-                            ]} data={services} onCreateRow={() => Inertia.get(route('dashboard.services.create'))}/>
+                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'amenity'}/>                                }
+                            ]} data={amenities} onCreateRow={() => Inertia.get(route('dashboard.amenities.create'))}/>
                         </Card.Body>
                     </Card>
                 </Col>
