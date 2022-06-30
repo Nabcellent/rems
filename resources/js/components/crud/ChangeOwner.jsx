@@ -1,5 +1,15 @@
 import { Create, ManageAccounts } from '@mui/icons-material';
-import { Alert, Autocomplete, Button, CircularProgress, Divider, Grid, TextField } from '@mui/material';
+import {
+    Alert,
+    Autocomplete,
+    Button,
+    CircularProgress,
+    Divider,
+    Grid,
+    IconButton,
+    TextField,
+    Tooltip
+} from '@mui/material';
 import { Modal } from 'react-bootstrap';
 import ValidationErrors from '@/components/ValidationErrors';
 import { LoadingButton } from '@mui/lab';
@@ -45,10 +55,11 @@ const ChangeOwner = ({ entity, entityId }) => {
 
     return (
         <>
-            <Button variant={'outlined'} onClick={() => setShowModal(true)} startIcon={<ManageAccounts/>}
-                    className="px-3">
-                Change Owner
-            </Button>
+            <Tooltip title={'Change Owner'}>
+                <IconButton variant={'outlined'} onClick={() => setShowModal(true)} className={'mx-1'}>
+                    <ManageAccounts/>
+                </IconButton>
+            </Tooltip>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
                 <div className="position-absolute top-0 end-0 mt-2 me-2 z-index-1 translate-y-50">

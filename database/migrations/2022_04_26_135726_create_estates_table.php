@@ -23,7 +23,7 @@ return new class extends Migration
             $table->double("latitude", 180, 7);
             $table->double("longitude", 180, 7);
             $table->integer("service_charge")->default(0);
-            $table->string("status", 20)->default(Status::ACTIVE->value);
+            $table->string("status", 20)->default(Status::INACTIVE->value);
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,11 @@ class Estate extends Model
         "longitude",
         "service_charge",
         "status",
+    ];
+
+    protected $attributes = [
+        "status"         => Status::INACTIVE,
+        "service_charge" => 0
     ];
 
     /**

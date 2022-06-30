@@ -5,10 +5,10 @@ import { Chip } from '@mui/material';
 import { Phone } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 
-const PhoneChip = ({ phone, bg = false, link = true }) => {
+const PhoneChip = ({ phone, bg = false, link = true, textOnly = false }) => {
     const telco = getTelcoFromPhone(phone);
-    let color = 'secondary',
-        phoneNumber = phone ? <b>{parsePhone(phone)}</b> : 'N/A';
+    let color = 'grey',
+        phoneNumber = phone ? parsePhone(phone) : 'N/A';
 
     if (telco === Telco.SAFARICOM) {
         color = '#59BC58';
@@ -18,13 +18,15 @@ const PhoneChip = ({ phone, bg = false, link = true }) => {
         color = '#30AACB';
     }
 
+    if (textOnly) return <a href={phoneNumber ? `tel:${phoneNumber}` : '#'} style={{ color }}>{phoneNumber}</a>;
+
     return (
         <Chip component={'a'} href={(link && phone) ? `tel:${phone}` : '#'}
               icon={<Phone style={{ color }}/>}
               variant={bg ? 'filled' : 'outlined'}
               sx={{ px: .5, bgcolor: bg ? color : '', borderColor: bg ? '' : color, color: bg ? '' : color }}
               className={`font-size-12`}
-              label={phoneNumber}
+              label={<b>{phoneNumber}</b>}
         />
     );
 };

@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Paper } from '@mui/material';
+import { Alert, Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
 import {
     AlternateEmail,
     Apartment,
@@ -32,6 +32,7 @@ import Map from '@/components/Map';
 import MainImage from '@/components/MainImage';
 import ChangeOwner from '@/components/crud/ChangeOwner';
 import Amenities from '@/components/crud/Amenities';
+import PhoneChip from '@/components/chips/PhoneChip';
 
 const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwner }) => {
     console.log(estate);
@@ -55,28 +56,27 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
             <Breadcrumbs title="Estates" breadcrumbItem={estate.name}/>
 
             <Paper className={'mb-3'}>
-                <div className="position-relative min-vh-25 mb-7 card-header">
+                <Card.Header className="position-relative min-vh-25 mb-7">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
                     <MainImage image={estate.image} imageable={'estate'} imageableId={estate.id}/>
-                </div>
-                <div className="card-body">
-                    <div className="row">
+                </Card.Header>
+                <Card.Body>
+                    <Row>
                         <Col xs={12}>
                             <div className="d-flex justify-content-between">
-                                <h5 className="mb-0">{estate.name}<i className={'bx bxs-check-circle'}/></h5>
+                                <h5 className="mb-0">{estate.name}</h5>
                                 <div>
-                                    <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
-                                    <Button variant={'outlined'} component={Link} className={'mx-1'}
-                                            href={route(`dashboard.estates.edit`, estate)}
-                                            startIcon={<Edit/>}> Edit
-                                    </Button>
+                                    <IconButton component={Link} className={'mx-1'}
+                                                href={route(`dashboard.estates.edit`, estate)}> <Edit/>
+                                    </IconButton>
                                     {canChangeOwner && <ChangeOwner entity={'estate'} entityId={estate.id}/>}
+                                    <StatusChip status={estate.status} entity={'estate'} entityId={estate.id}/>
                                 </div>
                             </div>
                             <Divider sx={{ my: 2 }}/>
                         </Col>
-                        <Col md={6} className={'mb-3 mb-lg-0'}>
+                        <Col md={7} className={'mb-3 mb-lg-0'}>
                             <div className="d-flex align-items-center mb-1">
                                 <Badge className={'me-2'}/><strong>Estate</strong>
                             </div>
@@ -101,17 +101,17 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                                 </div>
                             </div>
                         </Col>
-                        <Col md={6}>
+                        <Col md={5}>
                             <div className="d-flex align-items-center mb-1">
                                 <Badge className={'me-2'}/><strong>Owner</strong>
                             </div>
                             <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
                                 <Person className="me-2"/>
-                                <h6 className="mb-0">
+                                <Link href={route('dashboard.users.show', estate.user)}>
                                     {estate.user.full_name} -
                                     <i><small className="text-secondary">{estate.user.user_roles_str}</small></i>
-                                </h6>
+                                </Link>
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <AlternateEmail className="me-2"/>
@@ -119,14 +119,11 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <LocalPhone className="me-2"/>
-                                <a href={estate.user.phone ? `tel:${parsePhone(estate.user.phone)}` : '#'}
-                                   className="mb-0">
-                                    {estate.user.phone ?? 'N/A'}
-                                </a>
+                                <PhoneChip textOnly phone={property.user.phone}/>
                             </div>
                         </Col>
-                    </div>
-                </div>
+                    </Row>
+                </Card.Body>
             </Paper>
 
             <Row className={'mb-3 g-3 justify-content-center'}>
@@ -229,7 +226,8 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                         </Paper>
 
                         <Paper className={'mb-3'}>
-                            <Amenities amenitiable={'estate'} allAmenities={amenities} amenities={estate.amenities} amenitiableId={estate.id}/>
+                            <Amenities amenitiable={'estate'} allAmenities={amenities} amenities={estate.amenities}
+                                       amenitiableId={estate.id}/>
                         </Paper>
 
                         <Paper className={'mb-3'}>

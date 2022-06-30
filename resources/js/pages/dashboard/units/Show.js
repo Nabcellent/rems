@@ -1,36 +1,37 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, Paper, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, Divider, IconButton, Paper, useTheme } from '@mui/material';
 import {
     AddBusiness,
     AlternateEmail,
     Badge,
+    Countertops,
     DeleteSweep,
     Edit,
+    LocalPhone,
     LocationOn,
-    PersonOutlined,
-    PhoneIphone,
-    SupervisorAccount,
-    ToggleOff,
-    ToggleOn
+    MonetizationOn,
+    Person,
+    PersonOutlined, SupervisorAccount
 } from '@mui/icons-material';
 import { Morphable, Status } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
-import PhoneChip from '@/components/chips/PhoneChip';
-import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
-import pluralize from 'pluralize';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
-import { getInitials, handleDelete } from '@/utils/helpers';
+import { getInitials, handleDelete, parsePhone } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Policies from '@/components/crud/Policies';
 import MainImage from '@/components/MainImage';
 import ChangeOwner from '@/components/crud/ChangeOwner';
+import Amenities from '@/components/crud/Amenities';
+import CountUp from 'react-countup';
+import pluralize from 'pluralize';
+import PhoneChip from '@/components/chips/PhoneChip';
 
-const Show = ({ errors, unit, canChangeOwner }) => {
+const Show = ({ errors, unit, amenities, canChangeOwner }) => {
     console.log(unit);
     const theme = useTheme();
     const [room, setRoom] = useState(undefined);
@@ -53,57 +54,76 @@ const Show = ({ errors, unit, canChangeOwner }) => {
             <Breadcrumbs title="Units" breadcrumbItem={`${unit.estate.name} ~ ${unit.house_number}`}/>
 
             <Paper className={'mb-3'}>
-                <div className="position-relative min-vh-25 mb-7 card-header">
+                <Card.Header className="position-relative min-vh-25 mb-7">
                     <div className="bg-holder rounded-3 rounded-bottom-0"
                          style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
                     <MainImage image={unit.image} imageable={'unit'} imageableId={unit.id}/>
-                </div>
-                <div className="card-body">
-                    <div className="row">
-                        <div className="col-lg-8">
-                            <h4 className="mb-1">
-                                Hse No. {unit.house_number}<i className={'bx bxs-check-circle'}/>
-                            </h4>
+                </Card.Header>
+                <Card.Body>
+                    <Row>
+                        <Col xs={12}>
+                            <div className="d-flex justify-content-between">
+                                <h5 className="mb-0">
+                                    <Link href={route('dashboard.estates.show', unit.estate)}>{unit.estate.name}</Link>
+                                    : Hse No. {unit.house_number}
+                                </h5>
+                                <div>
+                                    <IconButton component={Link} className={'mx-1'}
+                                                href={route(`dashboard.units.edit`, unit)}> <Edit/>
+                                    </IconButton>
+                                    {canChangeOwner && <ChangeOwner entity={'unit'} entityId={unit.id}/>}
+                                    <StatusChip status={unit.status} entity={'unit'} entityId={unit.id}/>
+                                </div>
+                            </div>
                             <Divider sx={{ my: 2 }}/>
+                        </Col>
+                        <Col md={7} className={'mb-3 mb-lg-0'}>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Unit</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <LocationOn fontSize={'small'}/>
-                                </Avatar>
+                                <LocationOn className="me-2"/>
                                 <div className="flex-1"><h6 className="mb-0">{unit.estate.address}</h6></div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2">
-                                    <SupervisorAccount fontSize={'small'}/>
-                                </Avatar>
+                                <SupervisorAccount className="me-2"/>
                                 <div className="flex-1">
                                     <CountUp end={pastTenantsCount}/> Past {pluralize('tenant', pastTenantsCount)}
                                 </div>
                             </div>
-                            <StatusChip status={unit.status} entity={'unit'} entityId={unit.id}/>
-                        </div>
-                        <div className="ps-2 ps-lg-3 col">
-                            <div className="d-flex align-items-center">
-                                <Avatar sx={{ width: 30, height: 30 }} className="me-2"><Badge/></Avatar>
-                                <strong>Owner</strong>
-                            </div>
-                            <Divider sx={{ my: 2 }}/>
-                            <div className="mb-2">
-                                <h6 className="mb-0">{unit.user.full_name}</h6>
-                                <small className="text-secondary">{unit.user.user_roles_str}</small>
+                            <div className="d-flex align-items-center mb-2">
+                                <Countertops className="me-2"/>
+                                <div className="flex-1">Type: {unit.type}</div>
                             </div>
                             <div className="d-flex align-items-center mb-2">
-                                <div className="flex-1">
-                                    <Link href={route('dashboard.users.show', { user: unit.user.id })}
-                                          className="mb-0">
-                                        @{unit.user.email}
-                                    </Link>
-                                </div>
+                                <MonetizationOn className="me-2"/>
+                                <div className="flex-1">Purpose: {unit.purpose}</div>
                             </div>
-                            <div className="mb-2"><PhoneChip phone={unit.user.phone}/></div>
-                            {canChangeOwner && <ChangeOwner entity={'unit'} entityId={unit.id}/>}
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                        <Col md={5} className="ps-2 ps-lg-3">
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Owner</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
+                            <div className="d-flex align-items-center mb-2">
+                                <Person className="me-2"/>
+                                <Link href={route('dashboard.users.show', unit.user)}>
+                                    {unit.user.full_name} -
+                                    <i><small className="text-secondary">{unit.user.user_roles_str}</small></i>
+                                </Link>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <AlternateEmail className="me-2"/>
+                                <a href={`mailto:${unit.user.email}`} className="mb-0">{unit.user.email}</a>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <LocalPhone className="me-2"/>
+                                <PhoneChip textOnly phone={property.user.phone}/>
+                            </div>
+                        </Col>
+                    </Row>
+                </Card.Body>
             </Paper>
 
             <Row className={'mb-3 g-3'}>
@@ -185,21 +205,27 @@ const Show = ({ errors, unit, canChangeOwner }) => {
                                                         <div className="hover-actions end-0 top-50 translate-middle-y">
                                                             <button onClick={() => handleUpdateRoom(room)}
                                                                     className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                                                <Edit fontSize={'small'}/>
+                                                                <Edit />
                                                             </button>
                                                             <button
                                                                 onClick={() => handleDelete(route('dashboard.rooms.destroy', { room: room.id }), 'room')}
                                                                 className="border-300 text-600 btn btn-danger btn-sm">
-                                                                <DeleteSweep fontSize={'small'}/>
+                                                                <DeleteSweep />
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {i < unit.rooms.length - 1 && <div className={'border-dashed-bottom my-3'}/>}
+                                                {i < unit.rooms.length - 1 &&
+                                                    <div className={'border-dashed-bottom my-3'}/>}
                                             </div>
                                         ))
                                 }
                             </Card.Body>
+                        </Paper>
+
+                        <Paper className={'mb-3'}>
+                            <Amenities amenitiable={'unit'} allAmenities={amenities} amenities={unit.amenities}
+                                       amenitiableId={unit.id}/>
                         </Paper>
 
                         <Paper className={'mb-3'}>

@@ -104,9 +104,7 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
                     <button className="btn-close btn btn-sm btn-circle d-flex" onClick={() => setShowModal(false)}/>
                 </div>
                 <Modal.Body className={'modal-body'}>
-                    <div className="pb-3">
-                        <h4 className="mb-1">{(amenity ? 'Update' : 'New') + ' Amenity'}</h4>
-                    </div>
+                    <div className="pb-3"><h4 className="mb-1">{(amenity ? 'Update' : 'New') + ' Amenity'}</h4></div>
                     <ValidationErrors errors={errors}/>
 
                     <Grid container spacing={2}>
