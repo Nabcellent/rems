@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLeaseRequest;
+use App\Http\Requests\UpdateLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\Unit;
@@ -146,11 +147,11 @@ class LeaseController extends Controller
      * @param \App\Models\Lease        $lease
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StoreLeaseRequest $request, Lease $lease): RedirectResponse
+    public function update(UpdateLeaseRequest $request, Lease $lease): RedirectResponse
     {
         $lease->update($request->validated());
 
-        return redirect()->route("dashboard.leases.index")->with("toast", [
+        return back()->with("toast", [
             "message" => "Lease Updated!",
             "link"    => [
                 "title" => "View Lease",
