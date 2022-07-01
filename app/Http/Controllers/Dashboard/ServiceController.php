@@ -29,7 +29,7 @@ class ServiceController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/services', [
+        return inertia('dashboard/services/index', [
             "services" => Service::select(["id", "name", "description", "icon", "created_at"])->withCount(["providers"])
                 ->latest()->get()
         ]);

@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         $estateIds = user()->estates()->pluck("id");
 
-        return inertia('dashboard/users', [
+        return inertia('dashboard/users/index', [
             "users"           => User::select([
                 "id",
                 "first_name",

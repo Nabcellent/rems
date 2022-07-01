@@ -34,7 +34,7 @@ class PropertyController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/properties', [
+        return inertia('dashboard/properties/index', [
             "properties" => Property::select(["id", "estate_id", "user_id", "name", "type"])
                 ->when(!user()->can("viewAny", Property::class), function(Builder $qry) {
                     return $qry->whereHas("estate", fn(Builder $qry) => $qry->whereUserId(user()->id))

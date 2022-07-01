@@ -2,6 +2,7 @@ import React from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { Alert } from '@mui/material';
+import Auth from '@/layouts/Auth';
 
 export default function VerifyEmail({ status, email }) {
     const { post, processing } = useForm();
@@ -13,8 +14,8 @@ export default function VerifyEmail({ status, email }) {
     };
 
     return (
-        <>
-            <Head title="Email Verification"/>
+        <Auth>
+            <Head><title>Email Verification</title></Head>
 
             <div className="mb-4 text-sm text-gray-600">
                 Thanks for signing up! Before getting started, could you verify your email address by clicking on the
@@ -39,6 +40,6 @@ export default function VerifyEmail({ status, email }) {
                     </Link>
                 </div>
             </form>
-        </>
+        </Auth>
     );
 }

@@ -36,7 +36,7 @@ class UnitController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/units', [
+        return inertia('dashboard/units/index', [
             "units" => Unit::select([
                 "id",
                 "unitable_id",

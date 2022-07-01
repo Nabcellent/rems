@@ -36,7 +36,7 @@ class EstateController extends Controller
      */
     public function index(): Response
     {
-        return inertia('dashboard/estates', [
+        return inertia('dashboard/estates/index', [
             "estates"         => Estate::select(["id", "user_id", "name", "address", "status"])
                 ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
                     return $qry->whereBelongsTo(user());

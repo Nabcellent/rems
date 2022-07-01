@@ -1,4 +1,4 @@
-import Auth from '@/layouts/Auth';
+import './bootstrap';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
@@ -8,21 +8,14 @@ import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '@/theme';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 
-import './bootstrap';
 import '../css/app.css';
+import '../css/style.css';
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'REMS';
 
 createInertiaApp({
-    title: (title) => `${title && title + ' |'} ${appName}`,
-    resolve: (name) => {
-        // const page = require(`./pages/${name}`).default;
-        const page = resolvePageComponent(`./Pages/${name}`, import.meta.glob('./Pages/**/*')).default;
-
-        if (page.layout === undefined && name.startsWith('auth/')) page.layout = page => <Auth children={page}/>;
-
-        return page;
-    },
+    title: title => `${title && title + ' |'} ${appName}`,
+    resolve: name => resolvePageComponent(`./pages/${name}.jsx`, import.meta.glob('./pages/**/*.jsx')),
     setup: ({ el, App, props }) => {
         const { color, isDarkMode } = props.initialPage.props.theme;
 

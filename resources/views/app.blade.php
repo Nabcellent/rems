@@ -13,13 +13,11 @@
     <link rel="stylesheet" href="{{ asset("vendor/materialdesign/css/materialdesignicons.min.css") }}"
           referrerpolicy="no-referrer"/>
     <link rel="stylesheet" href="{{ asset("vendor/fontawesome/css/all.min.css") }}" referrerpolicy="no-referrer"/>
-{{--    <link rel="stylesheet" href="{{ mix('css/app.css') }}"/>--}}
-{{--    <link rel="stylesheet" href="{{ mix('css/style.css') }}">--}}
 
     <!-- Scripts -->
     @routes
     @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/css/style.css', 'resources/js/app.jsx'])
+    @vite('resources/js/app.jsx')
     @inertiaHead
 </head>
 <body class="font-sans antialiased">

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AmenitiableController;
+use App\Http\Controllers\Dashboard\AmenitiableController;
 use App\Http\Controllers\Dashboard\AmenityController;
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\EstateController;
