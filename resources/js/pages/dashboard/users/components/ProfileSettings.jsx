@@ -52,6 +52,7 @@ const ProfileSettings = ({ user }) => {
             let url = route(`dashboard.users.update`, { user: user.id });
 
             Inertia.post(url, values, {
+                preserveState: false,
                 onBefore: () => setIsLoading(true),
                 onSuccess: () => formik.resetForm(),
                 onError: errors => setErrors(errors),
@@ -61,7 +62,7 @@ const ProfileSettings = ({ user }) => {
     });
 
     return (
-        <Paper className={'mb-3'}>
+        <Paper className={'mb-3'} component={'form'} onSubmit={formik.handleSubmit}>
             <Card.Header><h5 className={'mb-0'}>Profile Settings</h5></Card.Header>
 
             <Grid component={Card.Body} container spacing={2}>
@@ -108,7 +109,7 @@ const ProfileSettings = ({ user }) => {
                 </Grid>
                 <Grid item xs={12} textAlign={'right'}>
                     <LoadingButton disabled={!formik.dirty} size="small" color="primary" loading={isLoading}
-                                   loadingPosition="end"
+                                   loadingPosition="end" type={'submit'}
                                    onClick={() => formik.submitForm()} endIcon={<Create/>}
                                    variant="contained">Update
                     </LoadingButton>

@@ -4,6 +4,7 @@ import Input from '@/components/Input';
 import Label from '@/components/Label';
 import ValidationErrors from '@/components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
+import Auth from '@/layouts/Auth';
 
 export default function ConfirmPassword() {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -27,7 +28,7 @@ export default function ConfirmPassword() {
     };
 
     return (
-        <>
+        <Auth>
             <Head title="Confirm Password" />
 
             <div className="mb-4 text-sm text-gray-600">
@@ -56,6 +57,6 @@ export default function ConfirmPassword() {
                     </LoadingButton>
                 </div>
             </form>
-        </>
+        </Auth>
     );
 }

@@ -20,7 +20,7 @@ class EstateServiceController extends Controller
         $data = $request->validate([
             "estate_id"   => "required|exists:estates,id",
             "service_id"  => "required|exists:services,id",
-            "description" => "string",
+            "description" => "nullable|string",
         ]);
 
         EstateService::create($data);

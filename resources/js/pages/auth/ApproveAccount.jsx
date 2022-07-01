@@ -1,10 +1,11 @@
 import React from 'react';
 import { LoadingButton } from '@mui/lab';
 import { Head, Link } from '@inertiajs/inertia-react';
+import Auth from '@/layouts/Auth';
 
 export default function ApproveAccount({ auth }) {
     return (
-        <>
+        <Auth>
             <Head><title>Account Approval</title></Head>
 
             <h4 className={'text-primary'}><b>Hey {auth.user.first_name}!</b></h4>
@@ -19,6 +20,6 @@ export default function ApproveAccount({ auth }) {
                     <LoadingButton type={'submit'} size={'small'}>Sign Out</LoadingButton>
                 </Link>
             </div>
-        </>
+        </Auth>
     );
 }

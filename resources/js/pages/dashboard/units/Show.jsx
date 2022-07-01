@@ -12,16 +12,16 @@ import {
     LocationOn,
     MonetizationOn,
     Person,
-    PersonOutlined, SupervisorAccount
+    PersonOutlined, PriceCheck, Sell, SupervisorAccount
 } from '@mui/icons-material';
-import { Morphable, Status } from '@/utils/enums';
+import { Morphable, Purpose, Status } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
-import { getInitials, handleDelete, parsePhone } from '@/utils/helpers';
+import { currencyFormat, getInitials, handleDelete, parsePhone } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Policies from '@/components/crud/Policies';
 import MainImage from '@/components/MainImage';
@@ -100,6 +100,14 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                 <MonetizationOn className="me-2"/>
                                 <div className="flex-1">Purpose: {unit.purpose}</div>
                             </div>
+                            {
+                                unit.purpose === Purpose.SALE && (
+                                    <div className="d-flex align-items-center mb-2">
+                                        <Sell className="me-2"/>
+                                        <div className="flex-1">Price: {currencyFormat(unit.price)}</div>
+                                    </div>
+                                )
+                            }
                             <div className="border-dashed-bottom my-4 d-lg-none"></div>
                         </Col>
                         <Col lg={5} className="ps-2 ps-lg-3">
@@ -120,7 +128,7 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                             </div>
                             <div className="d-flex align-items-center mb-2">
                                 <LocalPhone className="me-2"/>
-                                <PhoneChip textOnly phone={property.user.phone}/>
+                                <PhoneChip textOnly phone={unit.user.phone}/>
                             </div>
                         </Col>
                     </Row>
@@ -206,12 +214,12 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                                         <div className="hover-actions end-0 top-50 translate-middle-y">
                                                             <button onClick={() => handleUpdateRoom(room)}
                                                                     className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                                                <Edit />
+                                                                <Edit/>
                                                             </button>
                                                             <button
                                                                 onClick={() => handleDelete(route('dashboard.rooms.destroy', { room: room.id }), 'room')}
                                                                 className="border-300 text-600 btn btn-danger btn-sm">
-                                                                <DeleteSweep />
+                                                                <DeleteSweep/>
                                                             </button>
                                                         </div>
                                                     </div>

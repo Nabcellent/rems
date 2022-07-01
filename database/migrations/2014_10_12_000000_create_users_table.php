@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string("status", 20)->default(Status::ACTIVE->value);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp("approved_at")->nullable();
-            $table->string('password')->invisible();
+            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });

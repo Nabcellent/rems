@@ -20,7 +20,7 @@ class ServiceProviderController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/service-providers', [
+        return inertia('dashboard/service-providers/index', [
             "providers" => User::select([
                 "id", "first_name", "last_name", "email", "phone", "status", "created_at"
             ])->role(Role::SERVICE_PROVIDER->value)->latest()->get()

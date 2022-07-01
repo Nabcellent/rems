@@ -2,11 +2,8 @@ import Dashboard from '@/layouts/Dashboard';
 import { Card, Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { IconButton, Paper } from '@mui/material';
-import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
-import { handleDelete } from '@/utils/helpers';
 import TableActions from '@/components/TableActions';
 
 const Index = ({ units }) => {
@@ -18,8 +15,8 @@ const Index = ({ units }) => {
             <Breadcrumbs title="Units" breadcrumbItem="list"/>
 
             <Row>
-                <Col className="col-12">
-                    <Paper className={'mb-3'}>
+                <Col>
+                    <Card>
                         <Card.Body>
                             <DataTable title={'Units'} columns={[
                                 {
@@ -62,7 +59,7 @@ const Index = ({ units }) => {
                                     Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'unit'}/>                                }
                             ]} data={units} onCreateRow={() => Inertia.get(route('dashboard.units.create'))}/>
                         </Card.Body>
-                    </Paper>
+                    </Card>
                 </Col>
             </Row>
         </Dashboard>

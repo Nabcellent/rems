@@ -27,7 +27,7 @@ class PaymentController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/payments', [
+        return inertia('dashboard/payments/index', [
             "payments"        => Payment::select([
                 "id",
                 "transaction_id",

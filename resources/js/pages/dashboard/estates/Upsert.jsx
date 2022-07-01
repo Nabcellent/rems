@@ -55,7 +55,7 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
             address: estate?.address ?? '',
             latitude: estate?.latitude ?? '',
             longitude: estate?.longitude ?? '',
-            service_charge: estate?.service_charge ?? '',
+            service_charge: estate?.service_charge ?? 0,
             status: estate?.status ?? Status.ACTIVE,
             image: '',
         },

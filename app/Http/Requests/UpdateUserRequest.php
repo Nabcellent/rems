@@ -34,11 +34,11 @@ class UpdateUserRequest extends FormRequest
             "image"      => "nullable|image|max:1024",
             "phone"      => "nullable|phone:KE",
             "role"       => ["nullable", new Enum(Role::class)],
-            'email'      => ["sometimes", Rule::unique('users')->ignore(user()->id)],
+            'email'      => ["sometimes", Rule::unique('users')->ignore($this->route()->parameter("user")->id)],
             "status"     => new Enum(Status::class),
 
-            "password"              => "required_with:current_password,null|confirmed|min:7",
-            "password_confirmation" => "required_with:password"
+//            "password"              => "required_with:current_password,null|confirmed|min:7",
+//            "password_confirmation" => "required_with:password"
         ];
     }
 

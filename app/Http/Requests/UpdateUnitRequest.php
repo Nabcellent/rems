@@ -33,7 +33,7 @@ class UpdateUnitRequest extends FormRequest
             "price"        => "nullable|numeric",
             "purpose"      => ["required", new Enum(Purpose::class)],
             "type"         => ["required", new Enum(UnitType::class)],
-            "description"  => "string",
+            "description"  => "nullable|string",
             "image"        => "nullable|image|max:1024",
         ];
     }

@@ -5,7 +5,6 @@ import CountUp from 'react-countup';
 import LatestTransactions from '@/pages/dashboard/default/LatestTransactions';
 import { Grid, Paper } from '@mui/material';
 import Breadcrumbs from '@/components/common/Breadcrumb';
-import { Role } from '@/utils/enums';
 
 const Default = ({
     can,

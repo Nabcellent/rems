@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         $estateIds = user()->estates()->pluck("id");
 
-        return inertia('dashboard/users', [
+        return inertia('dashboard/users/index', [
             "users"           => User::select([
                 "id",
                 "first_name",
@@ -84,6 +84,7 @@ class UserController extends Controller
                 return $qry->whereIn("name", [Role::OWNER->value, Role::SERVICE_PROVIDER->value]);
             })->when($request->has("entity"), fn(Builder $qry) => $qry->whereName(Role::OWNER->value))->pluck("name"),
             "action"          => "create",
+            "role"            => $request->query("role"),
             "defaultPassword" => app(UserSettings::class)->default_password,
         ];
 
@@ -155,7 +156,7 @@ class UserController extends Controller
     public function show(User $user): Response|ResponseFactory
     {
         return inertia("dashboard/users/Show", [
-            "user" => $user->load([
+            "user"            => $user->load([
                 "wallet:id,user_id,balance"
             ]),
             "canUpdateStatus" => user()->can("updateStatus", User::class)

@@ -36,7 +36,7 @@ const ChangePassword = ({ user }) => {
     });
 
     return (
-        <Paper className={'mb-3'}>
+        <Paper className={'mb-3'} component={'form'} onSubmit={formik.handleSubmit}>
             <Card.Header><h5 className={'mb-0'}>Change Password</h5></Card.Header>
 
             <Grid component={Card.Body} container spacing={2}>
@@ -64,7 +64,7 @@ const ChangePassword = ({ user }) => {
                 </Grid>
                 <Grid item xs={12} textAlign={'right'}>
                     <LoadingButton disabled={!formik.dirty} size="small" color="primary" loading={isLoading} loadingPosition="end"
-                                   onClick={() => formik.submitForm()} endIcon={<Create/>}
+                                   onClick={() => formik.submitForm()} endIcon={<Create/>} type={'submit'}
                                    variant="contained">Change
                     </LoadingButton>
                 </Grid>

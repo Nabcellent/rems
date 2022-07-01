@@ -34,7 +34,7 @@ class LeaseController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/leases', [
+        return inertia('dashboard/leases/index', [
             "leases" => Lease::select([
                 "id",
                 "user_id",

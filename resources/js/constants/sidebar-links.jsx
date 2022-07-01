@@ -24,29 +24,29 @@ export const sidebarLinks = can => {
                 {
                     authorized: can.access.estates,
                     startIcon: <i className="bx bxs-building-house"/>, title: 'Estates', subMenu: [
-                        { authorized: true, link: route('dashboard.estates.index'), title: 'list' },
-                        { authorized: can.create.estate, link: route('dashboard.estates.create'), title: 'create' }
+                        { authorized: true, link: route('dashboard.estates.index'), title: 'List' },
+                        { authorized: can.create.estate, link: route('dashboard.estates.create'), title: 'Create' }
                     ]
                 },
                 {
                     authorized: can.access.properties,
                     startIcon: <i className="bx bxs-home-circle"/>, title: 'Properties', subMenu: [
-                        { authorized: true, link: route('dashboard.properties.index'), title: 'list' },
-                        { authorized: can.create.property, link: route('dashboard.properties.create'), title: 'create' }
+                        { authorized: true, link: route('dashboard.properties.index'), title: 'List' },
+                        { authorized: can.create.property, link: route('dashboard.properties.create'), title: 'Create' }
                     ]
                 },
                 {
                     authorized: can.access.units,
                     startIcon: <i className="bx bxs-home"/>, title: 'Units', subMenu: [
-                        { authorized: true, link: route('dashboard.units.index'), title: 'list' },
-                        { authorized: can.create.unit, link: route('dashboard.units.create'), title: 'create' }
+                        { authorized: true, link: route('dashboard.units.index'), title: 'List' },
+                        { authorized: can.create.unit, link: route('dashboard.units.create'), title: 'Create' }
                     ]
                 },
                 {
                     authorized: can.access.leases,
                     startIcon: <i className="bx bxs-detail"/>, title: 'Leases', subMenu: [
-                        { authorized: true, link: route('dashboard.leases.index'), title: 'list' },
-                        { authorized: can.create.lease, link: route('dashboard.leases.create'), title: 'create' }
+                        { authorized: true, link: route('dashboard.leases.index'), title: 'List' },
+                        { authorized: can.create.lease, link: route('dashboard.leases.create'), title: 'Create' }
                     ]
                 },
 
@@ -57,7 +57,7 @@ export const sidebarLinks = can => {
             menu: [
                 {
                     startIcon: <i className="bx bxs-user-detail"/>, title: 'Contacts', subMenu: [
-                        { link: '/contacts', title: 'list' },
+                        { link: '/contacts', title: 'List' },
                         { link: '/notify', title: 'Notify' }
                     ]
                 },
@@ -70,15 +70,15 @@ export const sidebarLinks = can => {
                 {
                     authorized: can.access.payments,
                     startIcon: <i className="bx bxs-coin-stack"/>, title: 'Payments', subMenu: [
-                        { authorized: true, link: route('dashboard.payments.index'), title: 'list' },
-                        { authorized: true, link: '/notify', title: 'plans' }
+                        { authorized: true, link: route('dashboard.payments.index'), title: 'List' },
+                        { authorized: true, link: '/notify', title: 'Plans' }
                     ]
                 },
                 {
                     authorized: can.access.notices,
                     startIcon: <i className="bx bxs-notification"/>, title: 'Notices', subMenu: [
-                        { authorized: true, link: route('dashboard.notices.index'), title: 'list' },
-                        { authorized: true, link: route('dashboard.notices.create'), title: 'create' }
+                        { authorized: true, link: route('dashboard.notices.index'), title: 'List' },
+                        { authorized: true, link: route('dashboard.notices.create'), title: 'Create' }
                     ]
                 }
             ]
@@ -91,6 +91,15 @@ export const sidebarLinks = can => {
                     startIcon: <i className="bx bxs-hand"/>,
                     title: 'Tickets',
                     link: route('dashboard.tickets.index')
+                },
+                {
+                    authorized: can.access.amenities,
+                    startIcon: <i className="bx bx-dumbbell"/>,
+                    title: 'Amenities',
+                    subMenu: [
+                        { authorized: true, link: route('dashboard.amenities.index'), title: 'List' },
+                        { authorized: can.create.amenity, link: route('dashboard.amenities.create'), title: 'Create' }
+                    ],
                 },
                 {
                     authorized: can.access.services,
@@ -116,7 +125,7 @@ export const sidebarLinks = can => {
                 {
                     authorized: can.access.users,
                     startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
-                        { authorized: true, link: route('dashboard.users.index'), title: 'list' },
+                        { authorized: true, link: route('dashboard.users.index'), title: 'List' },
                         { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
                     ]
                 },
