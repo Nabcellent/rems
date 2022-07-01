@@ -2,8 +2,11 @@ import logo from "../assets/images/logo-dark.svg";
 import { Link } from "@inertiajs/inertia-react";
 import NotificationDropdown from '@/components/common/topbar-dropdowns/NotificationDropdown';
 import ProfileMenu from '@/components/common/topbar-dropdowns/ProfileMenu';
+import { useEffect, useState } from 'react';
 
-const Header = ({toggleMenuCallback, isSearch}) => {
+const Header = ({ toggleMenuCallback, isSearch }) => {
+    const [canSearch, setCanSearch] = useState(false);
+
     const toggleMenu = () => toggleMenuCallback();
 
     const toggleFullscreen = () => {
@@ -33,6 +36,10 @@ const Header = ({toggleMenuCallback, isSearch}) => {
         }
     };
 
+    useEffect(() => {
+        setCanSearch(isSearch);
+    }, [isSearch]);
+
     return (
         <header id="page-topbar">
             <div className="navbar-header">
@@ -61,9 +68,7 @@ const Header = ({toggleMenuCallback, isSearch}) => {
                 <div className="d-flex">
                     <div className="dropdown d-inline-block d-lg-none ms-2">
                         <button
-                            onClick={() => {
-                                this.setState({isSearch: !this.state.isSearch});
-                            }}
+                            onClick={() => setCanSearch(!canSearch)}
                             type="button"
                             className="btn header-item noti-icon"
                             id="page-header-search-dropdown"
@@ -71,7 +76,7 @@ const Header = ({toggleMenuCallback, isSearch}) => {
                             <i className="mdi mdi-magnify"></i>
                         </button>
                         <div className={
-                            isSearch
+                            canSearch
                                 ? "dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 show"
                                 : "dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
                         } aria-labelledby="page-header-search-dropdown">
@@ -106,8 +111,8 @@ const Header = ({toggleMenuCallback, isSearch}) => {
                         </button>
                     </div>
 
-                    <NotificationDropdown />
-                    <ProfileMenu />
+                    <NotificationDropdown/>
+                    <ProfileMenu/>
                 </div>
             </div>
         </header>

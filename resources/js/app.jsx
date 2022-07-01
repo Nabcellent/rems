@@ -3,6 +3,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/inertia-react';
 import { InertiaProgress } from '@inertiajs/progress';
+import 'boxicons';
 import 'boxicons/css/boxicons.min.css';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '@/theme';

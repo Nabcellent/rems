@@ -35,7 +35,7 @@ class LeaseController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/leases/index', [
-            "leases" => Lease::select([
+            "leases"          => Lease::select([
                 "id",
                 "user_id",
                 "unit_id",
@@ -61,12 +61,17 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
             "users"   => User::select(["id", "email"])->get(),
-            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
-                return $qry->whereUserId(user()->id)
-                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
-                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
-                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
-            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
+            "estates" => Estate::select(["id", "name", "service_charge"])
+                ->when(!user()->isAdmin(), function(Builder $qry) {
+                    return $qry->whereUserId(user()->id)
+                        ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                            ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+                })->with([
+                "properties:id,estate_id,name",
+                "properties.units:id,unitable_id,house_number",
+                "units:id,unitable_id,house_number"
+            ])->get()
         ]);
     }
 
@@ -79,6 +84,8 @@ class LeaseController extends Controller
     public function store(StoreLeaseRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
+        dd($data);
 
         $lease = Lease::create($data);
 
@@ -122,12 +129,13 @@ class LeaseController extends Controller
             "lease"   => $lease,
             "action"  => "update",
             "users"   => User::select(["id", "email"])->get(),
-            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
-                return $qry->whereUserId(user()->id)
-                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
-                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
-                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
-            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
+            "estates" => Estate::select(["id", "name", "service_charge"])
+                ->when(!user()->isAdmin(), function(Builder $qry) {
+                    return $qry->whereUserId(user()->id)
+                        ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                            ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+                })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
         ]);
     }
 

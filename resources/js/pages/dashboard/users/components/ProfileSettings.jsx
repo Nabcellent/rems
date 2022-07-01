@@ -108,7 +108,7 @@ const ProfileSettings = ({ user }) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} textAlign={'right'}>
-                    <LoadingButton disabled={!formik.dirty} size="small" color="primary" loading={isLoading}
+                    <LoadingButton disabled={!formik.dirty} color="primary" loading={isLoading}
                                    loadingPosition="end" type={'submit'}
                                    onClick={() => formik.submitForm()} endIcon={<Create/>}
                                    variant="contained">Update

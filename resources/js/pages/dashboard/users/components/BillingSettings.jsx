@@ -1,4 +1,4 @@
-import { Divider, FormControlLabel, FormGroup, Grid, Paper, Switch } from '@mui/material';
+import { Button, Divider, FormControlLabel, FormGroup, Grid, Paper, Switch } from '@mui/material';
 import { Card } from 'react-bootstrap';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -7,9 +7,10 @@ import { useFormik } from 'formik';
 import { Inertia } from '@inertiajs/inertia';
 import ValidationErrors from '@/components/ValidationErrors';
 import { LoadingButton } from '@mui/lab';
-import { Save } from '@mui/icons-material';
+import { Add, Create, Save } from '@mui/icons-material';
 
 const BillingSettings = ({ settings }) => {
+    const [showPlansModal, setShowPlansModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -26,7 +27,7 @@ const BillingSettings = ({ settings }) => {
                     onError: errors => setErrors(errors),
                     onFinish: () => setIsLoading(false)
                 }
-            )
+            );
         }
     });
 
@@ -45,17 +46,17 @@ const BillingSettings = ({ settings }) => {
             <Grid component={Card.Body} container spacing={2}>
                 <Grid item xs={12}>
                     <FormGroup>
-                        <FormControlLabel name={'auto_charge_wallet'} control={<Switch checked={formik.values.auto_charge_wallet}/>}
+                        <FormControlLabel name={'auto_charge_wallet'}
+                                          control={<Switch checked={formik.values.auto_charge_wallet}/>}
                                           label="Enable wallet auto charge" onChange={formik.handleChange}/>
                     </FormGroup>
                     <div className={'border-dashed-bottom'}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <h5>Plans</h5>
-                    <div className={'border-dashed-bottom'}/>
-                </Grid>
-                <Grid item xs={12}>
                     <h5>Payments</h5>
+                    <Button color="primary" onClick={() => setShowPlansModal(true)} endIcon={<Add/>}
+                            variant="contained">Add Payment
+                    </Button>
                 </Grid>
             </Grid>
         </Paper>
