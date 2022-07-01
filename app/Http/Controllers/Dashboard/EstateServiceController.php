@@ -10,26 +10,6 @@ use Illuminate\Http\Request;
 class EstateServiceController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -40,34 +20,12 @@ class EstateServiceController extends Controller
         $data = $request->validate([
             "estate_id"   => "required|exists:estates,id",
             "service_id"  => "required|exists:services,id",
-            "description" => "string",
+            "description" => "nullable|string",
         ]);
 
         EstateService::create($data);
 
         return back()->with("toast", ["message" => "Service Added!"]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\EstateService $estateService
-     * @return \Illuminate\Http\Response
-     */
-    public function show(EstateService $estateService)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\EstateService $estateService
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(EstateService $estateService)
-    {
-        //
     }
 
     /**

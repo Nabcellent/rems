@@ -66,8 +66,8 @@ const Upsert = ({ notice, action, users }) => {
     const isVacation = formik.values.type === NoticeType.VACATION;
 
     return (
-        <Dashboard title={str.headline(`${action} Property`)}>
-            <Breadcrumbs title={"Properties"} breadcrumbItem={str.ucFirst(action)}/>
+        <Dashboard title={str.headline(`${action} Notice`)}>
+            <Breadcrumbs title={"Notices"} breadcrumbItem={str.ucFirst(action)}/>
 
             <Grid container spacing={2} justifyContent={'center'}>
                 <Grid item xs={12} xl={7}>

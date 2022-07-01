@@ -4,6 +4,7 @@ import Label from '@/components/Label';
 import ValidationErrors from '@/components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
+import Auth from '@/layouts/Auth';
 
 export default function ResetPassword({ token, email }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,8 +31,8 @@ export default function ResetPassword({ token, email }) {
     };
 
     return (
-        <>
-            <Head title="Reset Password"/>
+        <Auth>
+            <Head><title>Reset Password</title></Head>
 
             <ValidationErrors errors={errors}/>
 
@@ -83,6 +84,6 @@ export default function ResetPassword({ token, email }) {
                     </LoadingButton>
                 </div>
             </form>
-        </>
+        </Auth>
     );
 }

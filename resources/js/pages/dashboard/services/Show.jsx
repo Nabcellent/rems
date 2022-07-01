@@ -6,6 +6,8 @@ import moment from 'moment';
 import DataTable from '@/components/common/datatable';
 import { ReadMore } from '@mui/icons-material';
 import { Link } from '@inertiajs/inertia-react';
+import CardBgCorner from '@/components/CardBgCorner';
+import React from 'react';
 
 const Show = ({ errors, service }) => {
     console.log(service);
@@ -15,6 +17,7 @@ const Show = ({ errors, service }) => {
             <Breadcrumbs title="Service" breadcrumbItem={`#${service.id}`}/>
 
             <Paper className={'mb-3'}>
+                <CardBgCorner corner={3}/>
                 <Card.Body>
                     <Row>
                         <Col md={6} lg={4} className={'mb-4 mb-lg-0'}>

@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('amenities', function(Blueprint $table) {
             $table->id();
-            $table->morphs("property");
             $table->string("title", 100);
-            $table->text("description");
+            $table->string("icon", 50)->nullable();
+            $table->string("description")->nullable();
             $table->timestamps();
         });
     }

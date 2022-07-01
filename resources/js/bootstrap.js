@@ -2,9 +2,8 @@ import Toastify from 'toastify-js';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-window.Sweet = withReactContent(Swal);
-
-window._ = require('lodash');
+import _ from 'lodash';
+window._ = _;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -12,7 +11,8 @@ window._ = require('lodash');
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+import axios from 'axios';
+window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -30,6 +30,8 @@ window.toast = data => {
         className: type,
     }).showToast();
 };
+
+window.Sweet = withReactContent(Swal);
 
 window.sweet = async ({
     duration,
@@ -53,7 +55,7 @@ window.sweet = async ({
 
     if (link) {
         timer = timer >= 7 ? timer : 7;
-        swalFooter = <a href={link.href}>{link.title}</a>;
+        swalFooter = `<a href='${link.href}'>${link.title}</a>`;
     }
 
     timer = (timer ?? 3) * 1000;
@@ -83,7 +85,7 @@ window.sweet = async ({
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });

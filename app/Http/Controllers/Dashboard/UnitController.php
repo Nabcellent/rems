@@ -6,6 +6,7 @@ use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
+use App\Models\Amenity;
 use App\Models\Estate;
 use App\Models\Property;
 use App\Models\Unit;
@@ -35,7 +36,7 @@ class UnitController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/units', [
+        return inertia('dashboard/units/index', [
             "units" => Unit::select([
                 "id",
                 "unitable_id",
@@ -116,9 +117,11 @@ class UnitController extends Controller
                 "leases" => fn(HasMany $qry) => $qry->orderByDesc('status'),
                 "leases.user:id,first_name,last_name,email,phone",
                 "rooms:id,unit_id,type,image,length,width,description",
+                "amenities:id,title,icon,description",
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ]),
+            "amenities"      => Amenity::select(["id", "title"])->get(),
             "canChangeOwner" => user()->can("changeOwner", Unit::class)
         ]);
     }
@@ -164,7 +167,7 @@ class UnitController extends Controller
 
         $unit->update($data);
 
-        return redirect()->route("dashboard.units.index")->with("toast", [
+        return back()->with("toast", [
             "message" => "Unit Updated!",
             "link"    => [
                 "title" => "View Unit",

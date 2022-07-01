@@ -2,6 +2,7 @@ import React from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
 import { Head, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
+import Auth from '@/layouts/Auth';
 
 export default function ForgotPassword({status}) {
     const {data, setData, post, processing, errors} = useForm({
@@ -19,7 +20,7 @@ export default function ForgotPassword({status}) {
     };
 
     return (
-        <>
+        <Auth>
             <Head title="Forgot Password"/>
 
             <div className="mb-4 text-sm text-secondary">
@@ -49,6 +50,6 @@ export default function ForgotPassword({status}) {
                     </LoadingButton>
                 </div>
             </form>
-        </>
+        </Auth>
     );
 }

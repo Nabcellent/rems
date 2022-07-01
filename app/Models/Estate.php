@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,6 +25,11 @@ class Estate extends Model
         "longitude",
         "service_charge",
         "status",
+    ];
+
+    protected $attributes = [
+        "status"         => Status::INACTIVE,
+        "service_charge" => 0
     ];
 
     /**
@@ -54,16 +60,13 @@ class Estate extends Model
         return $this->morphMany(Policy::class, 'policeable');
     }
 
-    public function amenities(): MorphMany
+    public function amenities(): BelongsToMany
     {
-        return $this->morphMany(Amenity::class, 'property');
+        return $this->morphToMany(Amenity::class, "amenitiable")->withPivot("id", "description");
     }
 
-    /**
-     * The services that belong to the user(provider).
-     */
     public function services(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class, 'estate_services')->withPivot('id', 'description');
+        return $this->belongsToMany(Service::class, "estate_services")->withPivot('id', 'description');
     }
 }

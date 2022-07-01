@@ -4,6 +4,7 @@ import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 import { HowToReg } from '@mui/icons-material';
 import { Grid, TextField } from '@mui/material';
+import Auth from '@/layouts/Auth';
 
 export default function Register({ role }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,7 +31,7 @@ export default function Register({ role }) {
     };
 
     return (
-        <>
+        <Auth>
             <Head><title>Sign Up</title></Head>
             <h4>Sign Up</h4>
 
@@ -78,6 +79,6 @@ export default function Register({ role }) {
                     </Grid>
                 </Grid>
             </form>
-        </>
+        </Auth>
     );
 }

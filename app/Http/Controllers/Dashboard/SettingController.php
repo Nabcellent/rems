@@ -21,7 +21,7 @@ class SettingController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/settings', [
+        return inertia('dashboard/settings/index', [
             "general" => app(GeneralSettings::class)
         ]);
     }

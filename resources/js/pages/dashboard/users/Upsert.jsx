@@ -52,7 +52,7 @@ const validationSchema = yup.object({
     password: yup.string().min(7),
 });
 
-const Upsert = ({ user, createsOwnerFor, action, roles, defaultPassword }) => {
+const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -63,7 +63,7 @@ const Upsert = ({ user, createsOwnerFor, action, roles, defaultPassword }) => {
             phone: user?.phone ?? '',
             gender: user?.gender ?? '',
             email: user?.email ?? '',
-            role: createsOwnerFor ? Role.OWNER : '',
+            role: createsOwnerFor ? Role.OWNER : role ?? '',
             status: user?.status ?? Status.ACTIVE,
             image: '',
             password: defaultPassword,

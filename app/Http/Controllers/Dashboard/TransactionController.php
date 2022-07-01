@@ -31,7 +31,7 @@ class TransactionController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/transactions', [
+        return inertia('dashboard/transactions/index', [
             "transactions" => Transaction::select([
                 "id",
                 "user_id",

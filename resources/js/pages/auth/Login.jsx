@@ -5,6 +5,7 @@ import { Head, Link, useForm } from '@inertiajs/inertia-react';
 import { LoadingButton } from '@mui/lab';
 import { VpnKey } from '@mui/icons-material';
 import { TextField } from '@mui/material';
+import Auth from '@/layouts/Auth';
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -30,7 +31,7 @@ export default function Login({ status, canResetPassword }) {
     };
 
     return (
-        <>
+        <Auth>
             <Head><title>Sign In</title></Head>
             <h4>Sign In</h4>
 
@@ -76,6 +77,6 @@ export default function Login({ status, canResetPassword }) {
                     </LoadingButton>
                 </div>
             </form>
-        </>
+        </Auth>
     );
 }

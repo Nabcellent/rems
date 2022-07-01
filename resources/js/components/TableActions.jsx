@@ -1,14 +1,11 @@
 import { IconButton } from '@mui/material';
-import { Inertia } from '@inertiajs/inertia';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
-import { Link, usePage } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/inertia-react';
 import { handleDelete, str } from '@/utils/helpers';
 import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
 
-const TableActions = ({ entity, entityId }) => {
-    const { can } = usePage().props;
-
+const TableActions = ({ entity, entityId, showViewLink = true }) => {
     const entityPlural = pluralize(entity);
 
     return (
@@ -16,7 +13,13 @@ const TableActions = ({ entity, entityId }) => {
             <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: entityId })}
                         color={"primary"}><Edit/>
             </IconButton>
-            <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: entityId })}><ReadMore/></Link>
+            {
+                showViewLink && (
+                    <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: entityId })} className={'mx-1'}>
+                        <ReadMore/>
+                    </Link>
+                )
+            }
             <IconButton onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
                 [entity]: entityId
             }), str.ucFirst(entity))} color={"error"}><Delete/>
@@ -27,7 +30,8 @@ const TableActions = ({ entity, entityId }) => {
 
 TableActions.propTypes = {
     entity: PropTypes.string.isRequired,
-    entityId: PropTypes.number.isRequired
+    entityId: PropTypes.number.isRequired,
+    showViewLink: PropTypes.bool,
 };
 
 export default TableActions;

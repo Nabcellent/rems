@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateEstateRequest extends FormRequest
 {
@@ -24,10 +26,11 @@ class UpdateEstateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"           => "required|string",
-            "address"        => "required|string",
-            "longitude"      => "required|numeric",
-            "latitude"       => "required|numeric",
+            "name"           => "string",
+            "address"        => "string",
+            "longitude"      => "numeric",
+            "latitude"       => "numeric",
+            "status"         => [new Enum(Status::class)],
             "service_charge" => "nullable|numeric",
             "image"          => "nullable|image|max:1024",
         ];

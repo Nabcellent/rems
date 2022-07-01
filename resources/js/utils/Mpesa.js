@@ -1,5 +1,5 @@
 import { getTelcoFromPhone } from '@/utils/helpers';
-import { Description, Telco } from '@/utils/enums';
+import { Telco } from '@/utils/enums';
 
 export default class Mpesa {
     baseUrl = '/api/mpesa';
@@ -13,7 +13,7 @@ export default class Mpesa {
             html:
                 '<small>Amount (min: 100)</small>' +
                 '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
-                '<small>Phone number (optional)</small>' +
+                `<small>Phone number ${details.user.phone ? '(optional)' : ''}</small>` +
                 `<input id="phone" type="tel" class="form-control" value="${details.user.phone ?? ''}" placeholder="Enter phone to request.">`,
             showLoaderOnConfirm: true,
             backdrop: `rgba(150, 0, 0, 0.4)`,

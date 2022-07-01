@@ -5,7 +5,7 @@ import sample from 'lodash/sample';
 import { Card } from 'react-bootstrap';
 import { AddAPhoto, DeleteSweep, Edit } from '@mui/icons-material';
 import { useState } from 'react';
-import ImageModal from '@/components/ImageModal';
+import ImageModal from '@/components/crud/ImageModal';
 import pluralize from 'pluralize';
 import { handleDelete } from '@/utils/helpers';
 

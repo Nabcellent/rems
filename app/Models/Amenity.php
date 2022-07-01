@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 /**
  * @mixin IdeHelperAmenity
@@ -13,11 +13,25 @@ class Amenity extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "title",
+        "icon",
+        "description",
+    ];
+
     /**
-     * .....................    _____________________RELATIONSHIPS
+     * Get all the estates that are assigned this amenity.
      */
-    public function payable(): MorphTo
+    public function estates(): MorphToMany
     {
-        return $this->morphTo();
+        return $this->morphedByMany(Estate::class, "amenitiable");
+    }
+
+    /**
+     * Get all the units that are assigned this amenity.
+     */
+    public function units(): MorphToMany
+    {
+        return $this->morphedByMany(Unit::class, "amenitiable");
     }
 }

@@ -9,7 +9,6 @@ import PhoneChip from '@/components/chips/PhoneChip';
 import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
 import TableActions from '@/components/TableActions';
-import { Link } from '@inertiajs/inertia-react';
 import { HowToReg } from '@mui/icons-material';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
