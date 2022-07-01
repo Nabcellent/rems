@@ -55,7 +55,7 @@ window.sweet = async ({
 
     if (link) {
         timer = timer >= 7 ? timer : 7;
-        swalFooter = '<a href={link.href}>{link.title}</a>';
+        swalFooter = `<a href='${link.href}'>${link.title}</a>`;
     }
 
     timer = (timer ?? 3) * 1000;
