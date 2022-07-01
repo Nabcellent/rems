@@ -39,7 +39,7 @@ const validationSchema = yup.object().shape({
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
     plans: yup.array().of(yup.object().shape({
         deposit: yup.number(),
-        amount: yup.number().min(1).required('Amount for rent is required.'),
+        rent_amount: yup.number().min(1).required('Amount for rent is required.'),
         frequency: yup.string().oneOf(Object.values(RentFrequency), 'Invalid rent frequency.'),
     })).min(1, 'Minimum of 1 payment plan').required("Must have a plan.")
 });
@@ -79,7 +79,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                             plans: [
                                 {
                                     deposit: lease?.deposit ?? 0,
-                                    amount: lease?.amount ?? '',
+                                    rent_amount: lease?.rent_amount ?? '',
                                     frequency: lease?.frequency ?? RentFrequency.MONTHLY,
                                 }
                             ],
@@ -239,11 +239,11 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                     <TextField label="Amount Ror Rent"
                                                                                type={'number'}
                                                                                placeholder="Amount for rent..."
-                                                                               name={`plans.${i}.amount`}
-                                                                               value={plan.amount} fullWidth
+                                                                               name={`plans.${i}.rent_amount`}
+                                                                               value={plan.rent_amount} fullWidth
                                                                                onChange={handleChange}
-                                                                               error={isError(errors, touched, i, 'amount')}
-                                                                               helperText={errorMessage(errors, i, 'amount') ?? `+ service charge(${serviceCharge}) = ${plan.amount + serviceCharge}`}/>
+                                                                               error={isError(errors, touched, i, 'rent_amount')}
+                                                                               helperText={errorMessage(errors, i, 'rent_amount') ?? `+ service charge(${serviceCharge}) = ${plan.rent_amount + serviceCharge}`}/>
                                                                 </Grid>
                                                                 <Grid item lg={4}>
                                                                     <TextField label="Rent Frequency"
@@ -270,7 +270,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                         <IconButton color={'primary'} size={'large'}
                                                                     onClick={() => push({
                                                                         deposit: 0,
-                                                                        amount: '',
+                                                                        rent_amount: '',
                                                                         frequency: RentFrequency.MONTHLY
                                                                     })}>
                                                             <Add/>

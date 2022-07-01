@@ -39,13 +39,13 @@ class LeaseController extends Controller
                 "id",
                 "user_id",
                 "unit_id",
-                "rent_amount",
                 "expires_at",
                 "status",
                 "created_at"
             ])->with([
                 "unit.user:id,first_name,last_name,email",
                 "user:id,first_name,last_name,email",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
             ])->latest()->get(),
             "canUpdateStatus" => user()->can("updateStatus", Lease::class)
         ]);
@@ -85,15 +85,14 @@ class LeaseController extends Controller
     {
         $data = $request->validated();
 
-        dd($data);
-
         $lease = Lease::create($data);
+        $lease->paymentPlans()->createMany($data["plans"]);
 
         return redirect()->route("dashboard.leases.index")->with("toast", [
             "message" => "Lease Created!",
             "link"    => [
                 "title" => "View Lease",
-                "href"  => route("dashboard.leases.show", ["lease" => $lease])
+                "href"  => route("dashboard.leases.show", $lease)
             ]
         ]);
     }
@@ -112,6 +111,7 @@ class LeaseController extends Controller
                 "unit.user:id,email,phone",
                 "user:id,email,phone",
                 "user.roles:id,name",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
             ]),
             "canUpdateStatus" => user()->can("updateStatus", $lease)
         ]);

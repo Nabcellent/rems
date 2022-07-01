@@ -28,14 +28,14 @@ class StoreLeaseRequest extends FormRequest
     {
 //        dd($this->input("plans"));
         return [
-            "user_id"           => "required|exists:users,id",
-            "unit_id"           => "required|exists:units,id",
-            "plans.*"             => "required|array:deposit,amount,frequency|min:1",
-            "plans.*.deposit"   => "nullable|integer",
-            "plans.*.amount"    => "required|integer",
-            "plans.*.frequency" => [new Enum(RentFrequency::class)],
-            "status"            => [new Enum(Status::class)],
-            "expires_at"        => "required|date|after:tomorrow",
+            "user_id"             => "required|exists:users,id",
+            "unit_id"             => "required|exists:units,id",
+            "plans.*"             => "required|array:deposit,rent_amount,frequency|min:1",
+            "plans.*.deposit"     => "nullable|integer",
+            "plans.*.rent_amount" => "required|integer",
+            "plans.*.frequency"   => [new Enum(RentFrequency::class)],
+            "status"              => [new Enum(Status::class)],
+            "expires_at"          => "required|date|after:tomorrow",
         ];
     }
 

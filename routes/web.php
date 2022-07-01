@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\ImageController;
 use App\Http\Controllers\Dashboard\LeaseController;
 use App\Http\Controllers\Dashboard\NoticeController;
 use App\Http\Controllers\Dashboard\PaymentController;
+use App\Http\Controllers\Dashboard\PaymentPlanController;
 use App\Http\Controllers\Dashboard\PolicyController;
 use App\Http\Controllers\Dashboard\PropertyController;
 use App\Http\Controllers\Dashboard\RoomController;
@@ -94,6 +95,7 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
             "estate-services"   => EstateServiceController::class,
             "notices"           => NoticeController::class,
             "policies"          => PolicyController::class,
+            "payment-plans"     => PaymentPlanController::class,
         ]);
 
         Route::post("/delete", [GlobalController::class, "deleteMultiple"])->name("delete");

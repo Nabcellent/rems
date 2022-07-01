@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId("lease_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->integer("deposit")->default(0);
-            $table->integer("amount");
+            $table->integer("rent_amount");
             $table->string("frequency", 20)->default(RentFrequency::MONTHLY->value);
             $table->timestamps();
         });

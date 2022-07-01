@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Paper } from '@mui/material';
+import { Avatar, Divider, Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
@@ -10,6 +10,8 @@ import React from 'react';
 import CardBgCorner from '@/components/CardBgCorner';
 import Banner from '@/components/Banner';
 import LeaderList from '@/components/LeaderList';
+import pluralize from 'pluralize';
+import PaymentPlans from '@/components/crud/PaymentPlans';
 
 const Show = ({ errors, lease }) => {
     console.log(lease);
@@ -30,11 +32,6 @@ const Show = ({ errors, lease }) => {
                             </h5>
                             <h6>Lease Address</h6>
                             <p className="mb-2 fs--1">{lease.unit.estate.address}</p>
-                            <LeaderList items={[
-                                {key: <strong>Deposit</strong>, value: currencyFormat(lease.deposit)},
-                                {key: <strong>Rent Amount</strong>, value: currencyFormat(lease.rent_amount)},
-                                {key: <strong>Rent Frequency</strong>, value: lease.rent_frequency},
-                            ]}/>
                             <p className="mb-0 fs--1">
                                 <strong>Expiry date: </strong>
                                 {moment(lease.expires_at).format("MMM Do YYYY")}
@@ -63,6 +60,12 @@ const Show = ({ errors, lease }) => {
                     </Row>
                 </Card.Body>
             </Paper>
+
+            <Row>
+                <Col>
+                    <PaymentPlans plans={lease.payment_plans} leaseId={lease.id}/>
+                </Col>
+            </Row>
         </Dashboard>
     );
 };
