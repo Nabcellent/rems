@@ -7,17 +7,18 @@ import ListItemText from "@mui/material/ListItemText";
 
 import { Carousel } from "react-bootstrap";
 
-const Listing = ({ imgSources, status, price, location, bedrooms, amenities }) => {
+const Listing = ({ imgSource, status, price, location, bedrooms, amenities }) => {
     return (
         <Grid container spacing={2} mt={'2rem'} justifyContent="center" alignItems="center" borderRadius={'4px'} pb={2} boxShadow={2}>
             <Grid item xs={12} md={6}>
-                <Carousel fade>
+                {/* <Carousel fade>
                     {imgSources.map((imgSource, i) => (
                         <Carousel.Item key={i}>
                             <Box component={'img'} src={imgSource} display={'block'} width={'100%'} height={'330px'} borderRadius={'4px'} sx={{ objectFit: 'cover' }} />
                         </Carousel.Item>
                     ))}
-                </Carousel>
+                </Carousel> */}
+                <Box component={'img'} src={imgSource} display={'block'} width={'100%'} height={'330px'} borderRadius={'4px'} sx={{ objectFit: 'cover' }} />
             </Grid>
             <Grid item xs={12} md={6}>
                 <Grid container spacing={1} columnSpacing={0}>
