@@ -77,7 +77,9 @@ class EstatePolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function updateStatus(User $user)
-    {}
+    {
+        return $user->hasAnyRole(Role::PROPERTY_MANAGER->value, Role::OWNER->value);
+    }
 
     /**
      * Determine whether the user can delete the model.

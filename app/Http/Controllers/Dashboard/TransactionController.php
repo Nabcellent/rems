@@ -45,7 +45,8 @@ class TransactionController extends Controller
                 "user.roles",
                 "destination.roles",
                 "destination:id,last_name,email,phone"
-            ])->latest()->get()
+            ])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Transaction::class)
         ]);
     }
 

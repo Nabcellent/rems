@@ -7,7 +7,7 @@ use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class StoreLeaseRequest extends FormRequest
+class UpdateLeaseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,15 +27,15 @@ class StoreLeaseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user_id"             => "required|exists:users,id",
-            "unit_id"             => "required|exists:units,id",
-            "plans.*"             => "required|array:deposit,rent_amount,frequency,due_day|min:1",
-            "plans.*.deposit"     => "nullable|integer",
-            "plans.*.rent_amount" => "required|integer",
-            "plans.*.due_day"    => "required|integer",
+            "user_id"             => "exists:users,id",
+            "unit_id"             => "exists:units,id",
+            "plans.*"             => "array:id,lease_id,deposit,rent_amount,frequency,due_day|min:1",
+            "plans.*.deposit"     => "integer",
+            "plans.*.rent_amount" => "integer",
+            "plans.*.due_day"     => "integer",
             "plans.*.frequency"   => [new Enum(RentFrequency::class)],
             "status"              => [new Enum(Status::class)],
-            "expires_at"          => "required|date|after:tomorrow",
+            "expires_at"          => "date|after:tomorrow",
         ];
     }
 

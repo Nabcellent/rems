@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @mixin IdeHelperLease
@@ -18,7 +19,6 @@ class Lease extends Model
     protected $fillable = [
         "user_id",
         "unit_id",
-        "rent_amount",
         "expires_at",
         "status",
     ];
@@ -41,6 +41,11 @@ class Lease extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function paymentPlans(): HasMany
+    {
+        return $this->hasMany(PaymentPlan::class);
     }
 
     /**

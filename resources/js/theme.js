@@ -67,7 +67,8 @@ export const theme = (themeColor, isDarkMode) => {
             },
             MuiTextField: {
                 defaultProps: {
-                    size: 'small'
+                    size: 'small',
+                    fullWidth: true
                 }
             },
             MuiOutlinedInput: {

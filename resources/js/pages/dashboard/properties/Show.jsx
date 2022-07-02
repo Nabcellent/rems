@@ -1,13 +1,13 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Divider, IconButton, Paper } from '@mui/material';
+import { Divider, IconButton, Paper } from '@mui/material';
 import {
     AlternateEmail,
     Badge,
-    Countertops,
     Edit,
     LocalPhone,
-    LocationOn, MapsHomeWork,
+    LocationOn,
+    MapsHomeWork,
     OtherHouses,
     Person
 } from '@mui/icons-material';
@@ -15,7 +15,7 @@ import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
 import CountUp from 'react-countup';
-import { Col, Row, Card } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import Images from '@/components/crud/Images';
 import Policies from '@/components/crud/Policies';
 import Units from '@/pages/dashboard/properties/components/Units';
@@ -23,7 +23,6 @@ import MainImage from '@/components/MainImage';
 import React from 'react';
 import ChangeOwner from '@/components/crud/ChangeOwner';
 import { Link } from '@inertiajs/inertia-react';
-import { parsePhone } from '@/utils/helpers';
 import pluralize from 'pluralize';
 
 const Show = ({ errors, property, canChangeOwner }) => {

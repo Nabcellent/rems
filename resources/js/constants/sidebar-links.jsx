@@ -1,7 +1,3 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSliders } from '@fortawesome/free-solid-svg-icons';
-
 export const sidebarLinks = can => {
     return [
         {
@@ -135,7 +131,7 @@ export const sidebarLinks = can => {
                 },
                 {
                     authorized: true,
-                    startIcon: <i><FontAwesomeIcon icon={faSliders}/></i>,
+                    startIcon: <i className="bx bxs-cog"/>,
                     title: can.access.settings ? 'User Settings' : 'Settings',
                     link: route('dashboard.users.settings')
                 },

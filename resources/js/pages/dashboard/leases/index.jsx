@@ -10,6 +10,7 @@ import { currencyFormat, handleDelete } from '@/utils/helpers';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
 import TableActions from '@/components/TableActions';
+import TableDate from '@/components/TableDate';
 
 const Index = ({ leases }) => {
     console.log(leases);
@@ -48,14 +49,15 @@ const Index = ({ leases }) => {
                                 )
                             },
                             {
-                                accessor: 'rent_amount',
-                                Header: 'Rent',
-                                Cell: ({ row }) => currencyFormat(row.original.rent_amount)
-                            },
-                            {
                                 accessor: 'expires_at',
                                 Header: 'Expiry',
-                                Cell: ({ row }) => moment(row.original.expires_at).format("ddd MMM YYYY")                            },
+                                Cell: ({ row }) => moment(row.original.expires_at).format("ddd Do MMM YYYY")
+                            },
+                            {
+                                accessor: 'created_at',
+                                Header: 'Date Created',
+                                Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                            },
                             {
                                 accessor: 'status',
                                 Header: 'Status',
@@ -66,7 +68,8 @@ const Index = ({ leases }) => {
                                 accessor: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'lease'}/>                            }
+                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'lease'}/>
+                            }
                         ]} data={leases} onCreateRow={() => Inertia.get(route('dashboard.leases.create'))}/>
                     </Paper>
                 </Col>
