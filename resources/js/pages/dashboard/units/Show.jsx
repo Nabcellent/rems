@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, IconButton, Paper, useTheme } from '@mui/material';
+import { Alert, Avatar, Button, Divider, IconButton, Paper, Tooltip, useTheme } from '@mui/material';
 import {
     AddBusiness,
     AlternateEmail,
@@ -12,7 +12,9 @@ import {
     LocationOn,
     MonetizationOn,
     Person,
-    PersonOutlined, PriceCheck, Sell, SupervisorAccount
+    PersonOutlined,
+    Sell,
+    SupervisorAccount
 } from '@mui/icons-material';
 import { Morphable, Purpose, Status } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
@@ -21,7 +23,7 @@ import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
-import { currencyFormat, getInitials, handleDelete, parsePhone } from '@/utils/helpers';
+import { currencyFormat, getInitials, handleDelete } from '@/utils/helpers';
 import RoomModal from '@/pages/dashboard/units/components/RoomModal';
 import Policies from '@/components/crud/Policies';
 import MainImage from '@/components/MainImage';
@@ -144,28 +146,28 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                 !unit.leases.length
                                     ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
                                     : unit.leases.map((lease, i) => (
-                                        <div key={`lease-${lease.id}`} className="d-flex">
-                                            <Link href="/user/profile#!">
-                                                <PersonOutlined/>
-                                            </Link>
-                                            <div className="flex-1 position-relative ps-3">
-                                                <h6 className="fs-0 mb-0">
-                                                    <Link href="/user/profile#!">{lease.user.full_name}</Link>
-                                                    {
-                                                        lease.status === Status.ACTIVE &&
-                                                        <span><i className={'fas fa-check-circle'}></i></span>
-                                                    }
-                                                </h6>
-                                                <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
-                                                <p className="text-muted mb-0">
-                                                    {moment(lease.start_date).format("LL")}
-                                                    &nbsp;-&nbsp;
-                                                    {moment(lease.end_date).format("LL")}
-                                                </p>
-                                                {i < unit.leases.length - 1 &&
-                                                    <div className="border-dashed-bottom my-3"/>}
+                                        <Tooltip key={`lease-${lease.id}`} title={`${lease.status === Status.ACTIVE ? 'Active' : 'Past'} Tenant`}>
+                                            <div className={`d-flex ${lease.status === Status.ACTIVE && 'fw-bolder'}`}>
+                                                <Link href="/user/profile#!"><PersonOutlined/></Link>
+                                                <div className="flex-1 position-relative ps-3">
+                                                    <h6 className={`fs-0 mb-0 ${lease.status === Status.ACTIVE && 'text-primary'}`}>
+                                                        <Link href="/user/profile#!">{lease.user.full_name}</Link>
+                                                        {
+                                                            lease.status === Status.ACTIVE &&
+                                                            <i className={'fas fa-check-circle ps-2'}></i>
+                                                        }
+                                                    </h6>
+                                                    <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
+                                                    <p className="text-muted mb-0">
+                                                        {moment(lease.start_date).format("LL")}
+                                                        &nbsp;-&nbsp;
+                                                        {moment(lease.end_date).format("LL")}
+                                                    </p>
+                                                    {i < unit.leases.length - 1 &&
+                                                        <div className="border-dashed-bottom my-3"/>}
+                                                </div>
                                             </div>
-                                        </div>
+                                        </Tooltip>
                                     ))
                             }
                         </Card.Body>

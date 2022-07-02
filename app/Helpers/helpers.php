@@ -29,3 +29,28 @@ if(!function_exists('convertCurrency')) {
         return Currency::convert()->from($from)->to($to)->amount($value)->round(2)->get();
     }
 }
+
+if(!function_exists('getModelNames')) {
+    function getModelNames($path = null): array
+    {
+        if(!$path) $path = app_path() . "/Models";
+
+        $out = [];
+        $results = scandir($path);
+
+        foreach($results as $result) {
+            if($result === '.' or $result === '..') continue;
+
+            $filename = $path . '/' . $result;
+            $result = "App\\Models\\".substr($result, 0, -4);
+
+            if(is_dir($filename)) {
+                $out = array_merge($out, getModelNames($filename));
+            } else {
+                $out[] = $result;
+            }
+        }
+
+        return $out;
+    }
+}

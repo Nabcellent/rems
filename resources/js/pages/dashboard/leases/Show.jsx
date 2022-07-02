@@ -1,17 +1,16 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Divider, Paper } from '@mui/material';
+import { IconButton, Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
-import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
 import React from 'react';
 import CardBgCorner from '@/components/CardBgCorner';
 import Banner from '@/components/Banner';
-import LeaderList from '@/components/LeaderList';
-import pluralize from 'pluralize';
 import PaymentPlans from '@/components/crud/PaymentPlans';
+import { Link } from '@inertiajs/inertia-react';
+import { Edit } from '@mui/icons-material';
 
 const Show = ({ errors, lease }) => {
     console.log(lease);
@@ -20,7 +19,11 @@ const Show = ({ errors, lease }) => {
         <Dashboard errors={errors} title={`Leases #${lease.id}`}>
             <Breadcrumbs title="Leases" breadcrumbItem={`#${lease.id}`}/>
 
-            <Banner title={'Lease.'}/>
+            <Banner title={'Lease.'} actions={[
+                <IconButton component={Link} className={'mx-1'}
+                            href={route(`dashboard.leases.edit`, lease)}> <Edit/>
+                </IconButton>
+            ]}/>
 
             <Paper className={'mb-3'}>
                 <CardBgCorner corner={2}/>

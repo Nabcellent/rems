@@ -114,7 +114,7 @@ class UnitController extends Controller
                 "unitable",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
-                "leases" => fn(HasMany $qry) => $qry->orderByDesc('status'),
+                "leases" => fn(HasMany $qry) => $qry->orderByRaw('status, created_at'),
                 "leases.user:id,first_name,last_name,email,phone",
                 "rooms:id,unit_id,type,image,length,width,description",
                 "amenities:id,title,icon,description",
@@ -122,7 +122,8 @@ class UnitController extends Controller
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ]),
             "amenities"      => Amenity::select(["id", "title"])->get(),
-            "canChangeOwner" => user()->can("changeOwner", Unit::class)
+            "canChangeOwner" => user()->can("changeOwner", Unit::class),
+            "canUpdateStatus" => user()->can("updateStatus", Unit::class)
         ]);
     }
 

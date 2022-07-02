@@ -1,6 +1,6 @@
 import { Alert, Button, Grid, MenuItem, Paper, TextField } from '@mui/material';
 import { Create, DeleteSweep, Edit, LocalPoliceTwoTone } from '@mui/icons-material';
-import { Card, Modal } from 'react-bootstrap';
+import { Card, Col, Modal } from 'react-bootstrap';
 import React, { useState } from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
@@ -58,8 +58,10 @@ const Policies = ({ plans, leaseId }) => {
 
     const handleCreate = () => {
         setPlan(undefined);
+        formik.setValues(formik.initialValues)
         setShowModal(true);
     };
+    console.log(formik.initialValues);
 
     const handleUpdate = plan => {
         setPlan(plan);
@@ -78,7 +80,7 @@ const Policies = ({ plans, leaseId }) => {
                 <h5 className={'mb-0'}>Payment {pluralize('Plan', plans.length)}</h5>
                 <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
             </Card.Header>
-            <Card.Body>
+            <Card.Body className={'row'}>
                 {
                     !plans.length
                         ? (
@@ -89,7 +91,7 @@ const Policies = ({ plans, leaseId }) => {
                                 </a>
                             </Alert>
                         ) : plans.map(plan => (
-                            <div key={`policy-${plan.id}`}
+                            <Col lg={plans.length > 1 ? 6 : 12} key={`policy-${plan.id}`}
                                  className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
                                 <LeaderList items={[
                                     { key: <strong>Deposit</strong>, value: currencyFormat(plan.deposit) },
@@ -108,7 +110,7 @@ const Policies = ({ plans, leaseId }) => {
                                         <DeleteSweep fontSize={'small'}/>
                                     </button>
                                 </div>
-                            </div>
+                            </Col>
                         ))
                 }
             </Card.Body>
@@ -153,7 +155,7 @@ const Policies = ({ plans, leaseId }) => {
                 <Modal.Footer>
                     <Button size={'small'} className={'me-2'} onClick={() => setShowModal(false)}
                             color={'inherit'}>Cancel</Button>
-                    <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
+                    <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading} loadingPosition="end"
                                    onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
                         {plan ? "Update" : "Create"}
                     </LoadingButton>

@@ -20,7 +20,7 @@ import { FieldArray, Formik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import React, { useState } from 'react';
 import * as yup from 'yup';
-import { Add, Create } from '@mui/icons-material';
+import { Add, Create, Remove } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import ValidationErrors from '@/components/ValidationErrors';
 import moment from 'moment';
@@ -40,6 +40,7 @@ const validationSchema = yup.object().shape({
     plans: yup.array().of(yup.object().shape({
         deposit: yup.number(),
         rent_amount: yup.number().min(1).required('Amount for rent is required.'),
+        due_date: yup.number().oneOf(Array.from({length: 31}, (_, i) => i + 1)).required('Amount for rent is required.'),
         frequency: yup.string().oneOf(Object.values(RentFrequency), 'Invalid rent frequency.'),
     })).min(1, 'Minimum of 1 payment plan').required("Must have a plan.")
 });
@@ -76,11 +77,12 @@ const Upsert = ({ lease, action, users, estates }) => {
                             user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
                             expires_at: lease?.expires_at ?? '',
                             status: lease?.status ?? Status.ACTIVE,
-                            plans: [
+                            plans: lease?.payment_plans ? lease?.payment_plans : [
                                 {
                                     deposit: lease?.deposit ?? 0,
                                     rent_amount: lease?.rent_amount ?? '',
                                     frequency: lease?.frequency ?? RentFrequency.MONTHLY,
+                                    due_date: lease?.due_date ?? '',
                                 }
                             ],
                         }}
@@ -99,10 +101,11 @@ const Upsert = ({ lease, action, users, estates }) => {
 
                             if (lease) {
                                 url = route(`dashboard.leases.update`, { lease: lease.id });
-                                values._method = Method.PUT;
+                                data._method = Method.PUT;
                             }
 
                             Inertia.post(url, data, {
+                                    preserveState: false,
                                     onBefore: () => setIsLoading(true),
                                     onSuccess: () => resetForm(),
                                     onError: errors => setServerErrors(errors),
@@ -116,7 +119,7 @@ const Upsert = ({ lease, action, users, estates }) => {
 
                                 <LocalizationProvider dateAdapter={AdapterMoment}>
                                     <Grid container spacing={2}>
-                                        <Grid item lg={4}>
+                                        <Grid item xs={12} lg={4}>
                                             <ControlledAutoComplete
                                                 name={'estate'}
                                                 value={values.estate}
@@ -134,7 +137,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                helperText={touched.estate && errors.estate}/>
                                                 )}/>
                                         </Grid>
-                                        <Grid item lg={4}>
+                                        <Grid item xs={12} lg={4}>
                                             <ControlledAutoComplete name={'property'}
                                                                     value={values.property}
                                                                     disabled={!properties.length}
@@ -150,7 +153,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                            helperText={touched.property && errors.property}/>
                                             )}/>
                                         </Grid>
-                                        <Grid item lg={4}>
+                                        <Grid item xs={12} lg={4}>
                                             <ControlledAutoComplete name={'unit'} value={values.unit}
                                                                     disabled={!units.length}
                                                                     options={units}
@@ -164,7 +167,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                            helperText={touched.unit && errors.unit}/>
                                             )}/>
                                         </Grid>
-                                        <Grid item lg={12}>
+                                        <Grid item xs={12} lg={12}>
                                             <ControlledAutoComplete name={'user'} value={values.user}
                                                                     getOptionLabel={o => o.email ?? o}
                                                                     options={users}
@@ -178,7 +181,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                            helperText={touched.user && errors.user}/>
                                             )}/>
                                         </Grid>
-                                        <Grid item xs={6}>
+                                        <Grid item xs={12} lg={6}>
                                             <DatePicker label="Expiration Date"
                                                         value={values.expires_at}
                                                         minDate={moment().add(1, 'd')}
@@ -191,7 +194,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                        placeholder={'Expiration Date'}/>
                                                         )}/>
                                         </Grid>
-                                        <Grid item md={6}>
+                                        <Grid item lg={6}>
                                             <FormControl
                                                 error={touched.status && Boolean(errors.status)}>
                                                 <FormLabel className={'m-0'}
@@ -214,7 +217,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             </FormControl>
                                         </Grid>
 
-                                        <Grid item xs={12} textAlign={'center'}>
+                                        <Grid item xs={12} textAlign={'center'} mt={5}>
                                             <Divider variant={'middle'}/>
                                             <h5 className={'mt-2'}>Payment Plan(s)</h5>
                                         </Grid>
@@ -226,7 +229,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                         values.plans.length &&
                                                         values.plans.map((plan, i) => (
                                                             <React.Fragment key={`plan-${i}`}>
-                                                                <Grid item lg={4}>
+                                                                <Grid item xs={12} lg={3}>
                                                                     <TextField label="Deposit" type={'number'}
                                                                                placeholder="Deposit..."
                                                                                name={`plans.${i}.deposit`}
@@ -235,7 +238,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                                error={isError(errors, touched, i, 'deposit')}
                                                                                helperText={errorMessage(errors, i, 'deposit')}/>
                                                                 </Grid>
-                                                                <Grid item lg={4}>
+                                                                <Grid item xs={12} lg={3}>
                                                                     <TextField label="Amount Ror Rent"
                                                                                type={'number'}
                                                                                placeholder="Amount for rent..."
@@ -243,9 +246,9 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                                value={plan.rent_amount} fullWidth
                                                                                onChange={handleChange}
                                                                                error={isError(errors, touched, i, 'rent_amount')}
-                                                                               helperText={errorMessage(errors, i, 'rent_amount') ?? `+ service charge(${serviceCharge}) = ${plan.rent_amount + serviceCharge}`}/>
+                                                                               helperText={isError(errors, touched, i, 'rent_amount') ? errorMessage(errors, i, 'rent_amount') : `+ service charge(${serviceCharge}) = ${plan.rent_amount + serviceCharge}`}/>
                                                                 </Grid>
-                                                                <Grid item lg={4}>
+                                                                <Grid item xs={12} lg={3}>
                                                                     <TextField label="Rent Frequency"
                                                                                placeholder="Rent frequency..."
                                                                                select name={`plans.${i}.frequency`}
@@ -263,15 +266,42 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                         }
                                                                     </TextField>
                                                                 </Grid>
+                                                                <Grid item xs={12} lg={2}>
+                                                                    <TextField label="Due Date"
+                                                                               placeholder="Due date..."
+                                                                               select name={`plans.${i}.due_date`}
+                                                                               value={plan.due_date} fullWidth
+                                                                               onChange={handleChange}
+                                                                               error={isError(errors, touched, i, 'due_date')}
+                                                                               helperText={errorMessage(errors, i, 'due_date')}>
+                                                                        {
+                                                                            Array(31).fill(0)
+                                                                                     .map((d, i) => (
+                                                                                         <MenuItem key={`day-${i}`}
+                                                                                                   value={i + 1}>{i + 1}</MenuItem>
+                                                                                     ))
+                                                                        }
+                                                                    </TextField>
+                                                                </Grid>
+                                                                <Grid item lg={1} textAlign={'center'}>
+                                                                    <IconButton color={'primary'} size={'large'}
+                                                                                disabled={values.plans.length < 2}
+                                                                                onClick={() => remove(i)}>
+                                                                        <Remove/>
+                                                                    </IconButton>
+                                                                </Grid>
                                                             </React.Fragment>
                                                         ))
                                                     }
                                                     <Grid item xs={12} textAlign={'end'}>
                                                         <IconButton color={'primary'} size={'large'}
                                                                     onClick={() => push({
+                                                                        id: null,
+                                                                        lease_id: lease?.payment_plans[0]?.lease_id,
                                                                         deposit: 0,
                                                                         rent_amount: '',
-                                                                        frequency: RentFrequency.MONTHLY
+                                                                        frequency: RentFrequency.MONTHLY,
+                                                                        due_date: '',
                                                                     })}>
                                                             <Add/>
                                                         </IconButton>

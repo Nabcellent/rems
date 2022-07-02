@@ -77,6 +77,8 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
             "updateOrDeleteMain"
         ])->name("images.main");
 
+        Route::put("/status", [GlobalController::class, "updateStatus"])->name("status.update");
+
         Route::resources([
             "users"             => UserController::class,
             "estates"           => EstateController::class,

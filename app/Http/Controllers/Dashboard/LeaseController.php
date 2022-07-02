@@ -69,10 +69,10 @@ class LeaseController extends Controller
                             ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
                         ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
                 })->with([
-                "properties:id,estate_id,name",
-                "properties.units:id,unitable_id,house_number",
-                "units:id,unitable_id,house_number"
-            ])->get()
+                    "properties:id,estate_id,name",
+                    "properties.units:id,unitable_id,house_number",
+                    "units:id,unitable_id,house_number"
+                ])->get()
         ]);
     }
 
@@ -127,7 +127,10 @@ class LeaseController extends Controller
     public function edit(Lease $lease): Response|ResponseFactory
     {
         return inertia("dashboard/leases/Upsert", [
-            "lease"   => $lease,
+            "lease"   => $lease->load([
+                "unit:id,user_id,unitable_id,unitable_type,house_number",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency"
+            ]),
             "action"  => "update",
             "users"   => User::select(["id", "email"])->get(),
             "estates" => Estate::select(["id", "name", "service_charge"])
@@ -149,7 +152,11 @@ class LeaseController extends Controller
      */
     public function update(UpdateLeaseRequest $request, Lease $lease): RedirectResponse
     {
-        $lease->update($request->validated());
+        $data = $request->validated();
+
+        $lease->update($data);
+        $lease->paymentPlans()->delete();
+        $lease->paymentPlans()->createMany($data["plans"]);
 
         return back()->with("toast", [
             "message" => "Lease Updated!",
