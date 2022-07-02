@@ -29,9 +29,10 @@ class UpdateLeaseRequest extends FormRequest
         return [
             "user_id"             => "exists:users,id",
             "unit_id"             => "exists:units,id",
-            "plans.*"             => "array:id,lease_id,deposit,rent_amount,frequency|min:1",
+            "plans.*"             => "array:id,lease_id,deposit,rent_amount,frequency,due_day|min:1",
             "plans.*.deposit"     => "integer",
             "plans.*.rent_amount" => "integer",
+            "plans.*.due_day"     => "integer",
             "plans.*.frequency"   => [new Enum(RentFrequency::class)],
             "status"              => [new Enum(Status::class)],
             "expires_at"          => "date|after:tomorrow",

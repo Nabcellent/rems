@@ -14,6 +14,7 @@ class PaymentPlan extends Pivot
         "lease_id",
         "deposit",
         "rent_amount",
+        "due_day",
         "frequency"
     ];
 

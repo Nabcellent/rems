@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer("deposit")->default(0);
             $table->integer("rent_amount");
             $table->string("frequency", 20)->default(RentFrequency::MONTHLY->value);
+            $table->tinyInteger("due_day");
             $table->timestamps();
         });
     }

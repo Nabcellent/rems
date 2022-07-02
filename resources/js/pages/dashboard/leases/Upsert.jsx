@@ -40,7 +40,7 @@ const validationSchema = yup.object().shape({
     plans: yup.array().of(yup.object().shape({
         deposit: yup.number(),
         rent_amount: yup.number().min(1).required('Amount for rent is required.'),
-        due_date: yup.number().oneOf(Array.from({length: 31}, (_, i) => i + 1)).required('Amount for rent is required.'),
+        due_day: yup.number().min(1).max(31).required('Due date is required.'),
         frequency: yup.string().oneOf(Object.values(RentFrequency), 'Invalid rent frequency.'),
     })).min(1, 'Minimum of 1 payment plan').required("Must have a plan.")
 });
@@ -82,7 +82,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                     deposit: lease?.deposit ?? 0,
                                     rent_amount: lease?.rent_amount ?? '',
                                     frequency: lease?.frequency ?? RentFrequency.MONTHLY,
-                                    due_date: lease?.due_date ?? '',
+                                    due_day: lease?.due_day ?? '',
                                 }
                             ],
                         }}
@@ -96,7 +96,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                     user_id: values.user.id,
                                     plans: values.plans,
                                     status: values.status,
-                                    expires_at: values.expires_at
+                                    expires_at: values.expires_at,
                                 };
 
                             if (lease) {
@@ -269,11 +269,11 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                 <Grid item xs={12} lg={2}>
                                                                     <TextField label="Due Date"
                                                                                placeholder="Due date..."
-                                                                               select name={`plans.${i}.due_date`}
-                                                                               value={plan.due_date} fullWidth
+                                                                               select name={`plans.${i}.due_day`}
+                                                                               value={plan.due_day} fullWidth
                                                                                onChange={handleChange}
-                                                                               error={isError(errors, touched, i, 'due_date')}
-                                                                               helperText={errorMessage(errors, i, 'due_date')}>
+                                                                               error={isError(errors, touched, i, 'due_day')}
+                                                                               helperText={errorMessage(errors, i, 'due_day')}>
                                                                         {
                                                                             Array(31).fill(0)
                                                                                      .map((d, i) => (
@@ -301,7 +301,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                         deposit: 0,
                                                                         rent_amount: '',
                                                                         frequency: RentFrequency.MONTHLY,
-                                                                        due_date: '',
+                                                                        due_day: '',
                                                                     })}>
                                                             <Add/>
                                                         </IconButton>

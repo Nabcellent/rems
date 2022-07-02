@@ -14,6 +14,7 @@ import { currencyFormat, handleDelete, str } from '@/utils/helpers';
 import { RentFrequency } from '@/utils/enums';
 import pluralize from 'pluralize';
 import LeaderList from '@/components/LeaderList';
+import moment from 'moment';
 
 const Policies = ({ plans, leaseId }) => {
     const [plan, setPlan] = useState(undefined);
@@ -27,11 +28,13 @@ const Policies = ({ plans, leaseId }) => {
             deposit: plan?.deposit ?? 0,
             rent_amount: plan?.rent_amount ?? '',
             frequency: RentFrequency.MONTHLY,
+            due_day: plan?.due_day ?? '',
         },
         validationSchema: yup.object().shape({
             deposit: yup.number(),
             rent_amount: yup.number().min(1).required('Amount for rent is required.'),
             frequency: yup.string().oneOf(Object.values(RentFrequency), 'Invalid rent frequency.'),
+            due_day: yup.number().integer().positive().moreThan(1).lessThan(31).required('Due date is required.')
         }),
         validateOnChange: true,
         onSubmit: values => {
@@ -58,10 +61,9 @@ const Policies = ({ plans, leaseId }) => {
 
     const handleCreate = () => {
         setPlan(undefined);
-        formik.setValues(formik.initialValues)
+        formik.setValues(formik.initialValues);
         setShowModal(true);
     };
-    console.log(formik.initialValues);
 
     const handleUpdate = plan => {
         setPlan(plan);
@@ -70,6 +72,7 @@ const Policies = ({ plans, leaseId }) => {
             deposit: plan.deposit,
             rent_amount: plan.rent_amount,
             frequency: plan.frequency,
+            due_day: plan.due_day,
         }, true);
         setShowModal(true);
     };
@@ -97,6 +100,7 @@ const Policies = ({ plans, leaseId }) => {
                                     { key: <strong>Deposit</strong>, value: currencyFormat(plan.deposit) },
                                     { key: <strong>Rent Amount</strong>, value: currencyFormat(plan.rent_amount) },
                                     { key: <strong>Rent Frequency</strong>, value: plan.frequency },
+                                    { key: <strong>Due Date</strong>, value: moment(plan.due_day, 'D').format('Do') },
                                 ]}/>
 
                                 <div className="hover-actions end-0 top-50 translate-middle-y me-2">
@@ -128,19 +132,20 @@ const Policies = ({ plans, leaseId }) => {
                     <Grid container spacing={2}>
                         <Grid item lg={6}>
                             <TextField label="Deposit" type={'number'} placeholder="Deposit..." name={`deposit`}
-                                       value={formik.values.deposit} fullWidth onChange={formik.handleChange}
-                                       error={Boolean(formik.errors.deposit)} helperText={formik.errors.deposit}/>
+                                       value={formik.values.deposit} onChange={e => formik.handleChange(e)}
+                                       error={formik.touched.deposit && Boolean(formik.errors.deposit)}
+                                       helperText={formik.errors.deposit}/>
                         </Grid>
                         <Grid item lg={6}>
                             <TextField label="Amount Ror Rent" type={'number'} placeholder="Amount for rent..."
                                        name={`rent_amount`}
-                                       value={formik.values.rent_amount} fullWidth onChange={formik.handleChange}
-                                       error={Boolean(formik.errors.rent_amount)}
-                                       helperText={formik.errors.rent_amount}/>
+                                       value={formik.values.rent_amount} onChange={e => formik.handleChange(e)}
+                                       error={formik.touched.rent_amount && Boolean(formik.errors.rent_amount)}
+                                       helperText={formik.touched.rent_amount && formik.errors.rent_amount}/>
                         </Grid>
                         <Grid item lg={12}>
                             <TextField label="Rent Frequency" placeholder="Rent frequency..." select name={`frequency`}
-                                       value={formik.values.frequency} fullWidth onChange={formik.handleChange}
+                                       value={formik.values.frequency} onChange={e => formik.handleChange(e)}
                                        error={Boolean(formik.errors.frequency)} helperText={formik.errors.frequency}>
                                 {
                                     Object.values(RentFrequency)
@@ -150,12 +155,26 @@ const Policies = ({ plans, leaseId }) => {
                                 }
                             </TextField>
                         </Grid>
+                        <Grid item lg={12}>
+                            <TextField label="Due Date" placeholder="Due date..." select name={`due_day`}
+                                       value={formik.values.due_day} onChange={e => formik.handleChange(e)}
+                                       error={formik.touched.due_day && Boolean(formik.errors.due_day)}
+                                       helperText={formik.touched.due_day && formik.errors.due_day}>
+                                {
+                                    Array(31).fill(0)
+                                             .map((d, i) => (
+                                                 <MenuItem key={`day-${i}`} value={i + 1}>{i + 1}</MenuItem>
+                                             ))
+                                }
+                            </TextField>
+                        </Grid>
                     </Grid>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button size={'small'} className={'me-2'} onClick={() => setShowModal(false)}
                             color={'inherit'}>Cancel</Button>
-                    <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading} loadingPosition="end"
+                    <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                   loadingPosition="end"
                                    onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
                         {plan ? "Update" : "Create"}
                     </LoadingButton>

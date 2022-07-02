@@ -3,7 +3,7 @@ import Dashboard from '@/layouts/Dashboard';
 import { Alert, Avatar, Button, Divider, IconButton, Paper, Tooltip, useTheme } from '@mui/material';
 import {
     AddBusiness,
-    AlternateEmail,
+    AlternateEmail, Assignment,
     Badge,
     Countertops,
     DeleteSweep,
@@ -32,6 +32,7 @@ import Amenities from '@/components/crud/Amenities';
 import CountUp from 'react-countup';
 import pluralize from 'pluralize';
 import PhoneChip from '@/components/chips/PhoneChip';
+import { Inertia } from '@inertiajs/inertia';
 
 const Show = ({ errors, unit, amenities, canChangeOwner }) => {
     console.log(unit);
@@ -140,7 +141,12 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
             <Row className={'mb-3 g-3'}>
                 <Col lg={8}>
                     <Paper className={'mb-3'}>
-                        <Card.Header><h5 className={'mb-0'}>Tenant History</h5></Card.Header>
+                        <Card.Header className={'d-flex justify-content-between'}>
+                            <h5 className={'mb-0'}>Tenant History</h5>
+                            <Button startIcon={<Assignment/>} onClick={() => Inertia.get(route('dashboard.leases.create'))}>
+                                New lease
+                            </Button>
+                        </Card.Header>
                         <Card.Body>
                             {
                                 !unit.leases.length

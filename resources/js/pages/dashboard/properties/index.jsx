@@ -6,6 +6,7 @@ import { Paper } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import TableActions from '@/components/TableActions';
+import StatusChip from '@/components/chips/StatusChip';
 
 const Index = ({ properties }) => {
     console.log(properties);
@@ -57,6 +58,12 @@ const Index = ({ properties }) => {
                                 accessor: 'units_count',
                                 Header: 'Units',
                                 Cell: ({ row }) => row.original.units_count
+                            },
+                            {
+                                accessor: 'status',
+                                Header: 'Status',
+                                Cell: ({ row }) => <StatusChip status={row.original.status} entity={'property'}
+                                                               entityId={row.original.id}/>
                             },
                             {
                                 accessor: 'actions',

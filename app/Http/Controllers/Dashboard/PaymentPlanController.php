@@ -44,6 +44,7 @@ class PaymentPlanController extends Controller
             "lease_id"    => "required|integer|exists:leases,id",
             "deposit"     => "nullable|integer",
             "rent_amount" => "required|integer",
+            "due_day"     => "required|integer",
             "frequency"   => [new Enum(RentFrequency::class)],
         ]);
 

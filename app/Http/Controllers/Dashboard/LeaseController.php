@@ -112,7 +112,7 @@ class LeaseController extends Controller
                 "unit.user:id,email,phone",
                 "user:id,email,phone",
                 "user.roles:id,name",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day",
             ]),
             "canUpdateStatus" => user()->can("updateStatus", $lease)
         ]);
