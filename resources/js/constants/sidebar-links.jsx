@@ -83,6 +83,13 @@ export const sidebarLinks = can => {
             title: 'System',
             menu: [
                 {
+                    authorized: can.access.users,
+                    startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
+                        { authorized: true, link: route('dashboard.users.index'), title: 'List' },
+                        { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
+                    ]
+                },
+                {
                     authorized: can.access.tickets,
                     startIcon: <i className="bx bxs-hand"/>,
                     title: 'Tickets',
@@ -116,13 +123,6 @@ export const sidebarLinks = can => {
                             link: route('dashboard.service-providers.create'),
                             title: 'Create Service Provider'
                         }
-                    ]
-                },
-                {
-                    authorized: can.access.users,
-                    startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
-                        { authorized: true, link: route('dashboard.users.index'), title: 'List' },
-                        { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
                     ]
                 },
                 {
