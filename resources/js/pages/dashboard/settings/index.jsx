@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Grid, Paper, TextField } from '@mui/material';
+import { Avatar, Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import General from '@/pages/dashboard/settings/General';
 

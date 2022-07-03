@@ -6,6 +6,7 @@ import StatusChip from '@/components/chips/StatusChip';
 import TableDate from '@/components/TableDate';
 import DataTable from '@/components/common/datatable';
 import { currencyFormat } from '@/utils/helpers';
+import moment from 'moment';
 
 const LatestTransactions = () => {
     const { latest_transactions } = usePage().props;
@@ -51,6 +52,7 @@ const LatestTransactions = () => {
                         {
                             accessorKey: 'created_at',
                             header: 'Date',
+                            accessorFn: row => moment(row.created_at).calendar(),
                             cell: ({ row }) => <TableDate date={row.original.created_at}/>
                         },
                         {

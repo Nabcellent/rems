@@ -42,7 +42,8 @@ class PropertyController extends Controller
                 })->with([
                     "user:id,first_name,last_name,email",
                     "estate:id,name,address"
-                ])->withCount(["units"])->latest()->get()
+                ])->withCount(["units"])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Property::class)
         ]);
     }
 

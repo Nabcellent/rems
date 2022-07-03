@@ -8,6 +8,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete } from '@/utils/helpers';
 import StatusChip from '@/components/chips/StatusChip';
+import TableActions from '@/components/TableActions';
 
 const Index = ({ tickets }) => {
     console.log(tickets);
@@ -22,9 +23,9 @@ const Index = ({ tickets }) => {
                     <Paper className={'p-3'}>
                         <DataTable title={'Tickets'} columns={[
                             {
-                                accessor: 'user',
-                                Header: 'User',
-                                Cell: ({ row }) => (
+                                accessorKey: 'user',
+                                header: 'User',
+                                cell: ({ row }) => (
                                     <span>
                                         {row.original.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
@@ -34,16 +35,16 @@ const Index = ({ tickets }) => {
                                 )
                             },
                             {
-                                accessor: 'title',
-                                Header: 'Title',
-                                Cell: ({ row }) => (
+                                accessorKey: 'title',
+                                header: 'Title',
+                                cell: ({ row }) => (
                                     <div className={'text-truncate'} style={{ maxWidth: '10rem' }}>{row.original.title}</div>
                                 )
                             },
                             {
-                                accessor: 'description',
-                                Header: 'Description',
-                                Cell: ({ row }) => (
+                                accessorKey: 'description',
+                                header: 'Description',
+                                cell: ({ row }) => (
                                     <Tooltip title={row.original.description || 'N / A'}>
                                         <Typography variant={"body2"} style={{
                                             display: "-webkit-box",
@@ -57,34 +58,14 @@ const Index = ({ tickets }) => {
                                 )
                             },
                             {
-                                accessor: 'status',
-                                Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status}/>
+                                accessorKey: 'status',
+                                header: 'Status',
+                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'payment'}
+                                                               entityId={row.original.id}/>
                             },
                             {
-                                accessor: 'actions',
-                                disableSortBy: true,
-                                className: 'text-end',
-                                Cell: ({ row }) => {
-                                    const ticket = row.original;
-
-                                    return (
-                                        <>
-                                            <IconButton onClick={() => Inertia.get(route('dashboard.tickets.create'))}
-                                                        size={"small"} color={"primary"}>
-                                                <Edit fontSize={'small'}/>
-                                            </IconButton>
-                                            <Link href={route('dashboard.tickets.show', { ticket: ticket.id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                            <IconButton
-                                                onClick={() => handleDelete(route('dashboard.tickets.destroy', { ticket: ticket.id }), 'ticket')}
-                                                size={"small"} color={"error"}>
-                                                <Delete fontSize={'small'}/>
-                                            </IconButton>
-                                        </>
-                                    );
-                                }
+                                id: 'actions',
+                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'ticket'}/>
                             }
                         ]} data={tickets} onCreateRow={() => Inertia.get(route('dashboard.tickets.create'))}/>
                     </Paper>
