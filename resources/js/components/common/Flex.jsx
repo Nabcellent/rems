@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const Flex = ({
     justifyContent,
-    alignItems,
+    alignItems = 'center',
     alignContent,
     inline,
     wrap,

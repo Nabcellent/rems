@@ -32,19 +32,14 @@ export const AdvanceTableFooter = ({
                         </span>
                     </p>
                 )}
+
                 {rowsPerPageSelection && (
                     <>
                         <p className="mb-0 mx-2">Rows per page:</p>
-                        <Form.Select
-                            size="sm"
-                            className="w-auto"
-                            onChange={e => setPageSize(e.target.value)}
-                            defaultValue={pageSize}
-                        >
+                        <Form.Select size="sm" className="w-auto" onChange={e => setPageSize(e.target.value)}
+                                     defaultValue={pageSize}>
                             {rowsPerPageOptions.map(value => (
-                                <option value={value} key={value}>
-                                    {value}
-                                </option>
+                                <option value={value} key={value}>{value}</option>
                             ))}
                         </Form.Select>
                     </>

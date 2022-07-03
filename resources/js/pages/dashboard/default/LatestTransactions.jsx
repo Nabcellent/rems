@@ -1,12 +1,11 @@
 import { Link, usePage } from '@inertiajs/inertia-react';
-import DataTable from '@/components/common/datatable';
 import { ReadMore } from '@mui/icons-material';
-import { Badge, Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
-import { Paper, Typography } from '@mui/material';
-import moment from 'moment';
-import { isToday, isYesterday } from '@/utils/helpers';
+import { Col, Row } from 'react-bootstrap';
+import { Paper, Tooltip } from '@mui/material';
 import StatusChip from '@/components/chips/StatusChip';
 import TableDate from '@/components/TableDate';
+import DataTable from '@/components/common/datatable/ReactTable';
+import { currencyFormat } from '@/utils/helpers';
 
 const LatestTransactions = () => {
     const { latest_transactions } = usePage().props;
@@ -17,58 +16,52 @@ const LatestTransactions = () => {
                 <Paper className={'p-3'}>
                     <DataTable title={'Latest Transactions'} perPage={5} searchable={false} columns={[
                         {
-                            accessor: 'user',
-                            Header: 'Billing name',
-                            Cell: ({ row }) => (
-                                <OverlayTrigger overlay={<Tooltip>{row.original.user.email}</Tooltip>}>
+                            accessorKey: 'user',
+                            header: 'Initiator',
+                            cell: ({ row }) => (
+                                <Tooltip title={row.original.user.email}>
                                     <span>{row.original.user.last_name}</span>
-                                </OverlayTrigger>
+                                </Tooltip>
                             )
                         },
                         {
-                            accessor: 'destination',
-                            Header: 'Destination',
-                            Cell: ({ row }) => (
-                                <OverlayTrigger overlay={<Tooltip>{row.original.destination.email}</Tooltip>}>
+                            accessorKey: 'destination',
+                            header: 'Destination',
+                            cell: ({ row }) => (
+                                <Tooltip title={row.original.destination.email}>
                                     <span>{row.original.destination.last_name}</span>
-                                </OverlayTrigger>
+                                </Tooltip>
                             )
                         },
                         {
-                            accessor: 'description',
-                            Header: 'Description',
+                            accessorKey: 'description',
+                            header: 'Description',
                         },
                         {
-                            accessor: 'amount',
-                            Header: 'Amount',
-                            Cell: ({ row }) => (new Intl.NumberFormat('en-GB', {
-                                style: 'currency',
-                                currency: 'KES'
-                            })).format(row.original.amount)
+                            accessorKey: 'amount',
+                            header: 'Amount',
+                            cell: ({ row }) => currencyFormat(row.original.amount)
                         },
                         {
-                            accessor: 'status',
-                            Header: 'Status',
-                            Cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
+                            accessorKey: 'status',
+                            header: 'Status',
+                            cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
                                                            entityId={row.original.id}/>
                         },
                         {
-                            accessor: 'created_at',
-                            Header: 'Date',
-                            className: 'text-end',
-                            Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                            accessorKey: 'created_at',
+                            header: 'Date',
+                            cell: ({ row }) => <TableDate date={row.original.created_at}/>
                         },
                         {
-                            accessor: 'actions',
-                            disableSortBy: true,
-                            className: 'text-end',
-                            Cell: ({ row }) => (
+                            id: 'actions',
+                            cell: ({ row }) => (
                                 <Link href={route('dashboard.transactions.show', { transaction: row.original.id })}>
                                     <ReadMore fontSize={'small'}/>
                                 </Link>
                             )
                         }
-                    ]} data={latest_transactions}/>
+                    ]} data={latest_transactions} viewAllLink={route('dashboard.transactions.index')}/>
                 </Paper>
             </Col>
         </Row>

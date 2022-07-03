@@ -3,6 +3,8 @@ import { Link } from "@inertiajs/inertia-react";
 import NotificationDropdown from '@/components/common/topbar-dropdowns/NotificationDropdown';
 import ProfileMenu from '@/components/common/topbar-dropdowns/ProfileMenu';
 import { useEffect, useState } from 'react';
+import { ThemeSwitch } from '@/components/ThemeSwitch';
+import Flex from '@/components/common/Flex';
 
 const Header = ({ toggleMenuCallback, isSearch }) => {
     const [canSearch, setCanSearch] = useState(false);
@@ -43,7 +45,7 @@ const Header = ({ toggleMenuCallback, isSearch }) => {
     return (
         <header id="page-topbar">
             <div className="navbar-header">
-                <div className="d-flex">
+                <Flex>
                     <div className="navbar-brand-box d-lg-none d-md-block">
                         <Link href="/" className="logo logo-dark">
                             <span className="logo-sm">
@@ -63,16 +65,13 @@ const Header = ({ toggleMenuCallback, isSearch }) => {
                             <span className="bx bx-search-alt"></span>
                         </div>
                     </form>
-                </div>
+                </Flex>
 
-                <div className="d-flex">
+                <Flex>
                     <div className="dropdown d-inline-block d-lg-none ms-2">
-                        <button
-                            onClick={() => setCanSearch(!canSearch)}
-                            type="button"
-                            className="btn header-item noti-icon"
-                            id="page-header-search-dropdown"
-                        >
+                        <button onClick={() => setCanSearch(!canSearch)}
+                                type="button" className="btn header-item noti-icon"
+                                id="page-header-search-dropdown">
                             <i className="mdi mdi-magnify"></i>
                         </button>
                         <div className={
@@ -101,19 +100,16 @@ const Header = ({ toggleMenuCallback, isSearch }) => {
                     </div>
 
                     <div className="dropdown d-none d-lg-inline-block ms-1">
-                        <button
-                            type="button"
-                            onClick={toggleFullscreen}
-                            className="btn header-item noti-icon"
-                            data-toggle="fullscreen"
-                        >
+                        <button type="button" onClick={toggleFullscreen}
+                                className="btn header-item noti-icon" data-toggle="fullscreen">
                             <i className="bx bx-fullscreen"></i>
                         </button>
                     </div>
 
+                    <ThemeSwitch defaultChecked={false}/>
                     <NotificationDropdown/>
                     <ProfileMenu/>
-                </div>
+                </Flex>
             </div>
         </header>
     );

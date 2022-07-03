@@ -48,7 +48,8 @@ function BulkAction({ title, onCreateRow, selectedFlatRows, selectedRowIds = [],
                 </h5>
             </Col>
             {
-                bulkActions && <Col xs={8} sm="auto" className="ms-auto text-end ps-0">
+                bulkActions &&
+                <Col xs={8} sm="auto" className="ms-auto text-end ps-0">
                     {Object.keys(selectedRowIds).length > 0 ? (
                         <div className="d-flex">
                             <Form.Select size="sm" aria-label="Bulk actions" onChange={e => setAction(e.target.value)}>
