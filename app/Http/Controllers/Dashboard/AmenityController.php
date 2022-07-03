@@ -29,7 +29,7 @@ class AmenityController extends Controller
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('dashboard/amenities', [
+        return inertia('dashboard/amenities/index', [
             "amenities" => Amenity::select(["id", "title", "icon", "description"])->withCount(["estates", "units"])
                 ->latest()->get()
         ]);

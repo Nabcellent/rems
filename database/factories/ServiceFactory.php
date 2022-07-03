@@ -17,8 +17,9 @@ class ServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            "name" => $this->faker->jobTitle,
-            "icon" => $this->faker->emoji()
+            "name"        => $this->faker->jobTitle,
+            "icon"        => $this->faker->emoji(),
+            "description" => $this->faker->randomElement([$this->faker->realText(), null]),
         ];
     }
 }

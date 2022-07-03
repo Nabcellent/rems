@@ -8,6 +8,7 @@ import TableDate from '@/components/TableDate';
 import PhoneChip from '@/components/chips/PhoneChip';
 import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
+import TableActions from '@/components/TableActions';
 
 const Index = ({ providers }) => {
     console.log(providers);
@@ -22,9 +23,9 @@ const Index = ({ providers }) => {
                     <Paper className={'p-3'}>
                         <DataTable title={'Service Providers'} columns={[
                             {
-                                accessor: 'name',
-                                Header: 'Name',
-                                Cell: ({ row }) => (
+                                accessorKey: 'name',
+                                header: 'Name',
+                                cell: ({ row }) => (
                                     <Tooltip title={<strong>{row.original.user_roles_str}</strong>}>
                                         <div className={'d-flex align-items-center'}>
                                             <Avatar sx={{
@@ -44,28 +45,27 @@ const Index = ({ providers }) => {
                                 )
                             },
                             {
-                                accessor: 'phone',
-                                Header: 'Phone',
-                                Cell: ({ row }) => row.original.phone
-                                    ? <PhoneChip phone={row.original.phone}/>
-                                    : "N/A"
+                                accessorKey: 'phone',
+                                header: 'Phone',
+                                cell: ({ row }) => <PhoneChip phone={row.original.phone}/>
                             },
                             {
-                                accessor: 'status',
-                                Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status} bg={false}/>
+                                accessorKey: 'status',
+                                header: 'Status',
+                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'user'}
+                                                               entityId={row.original.id}/>
                             },
                             {
-                                accessor: 'created_at',
-                                Header: 'Date Joined',
+                                accessorKey: 'created_at',
+                                header: 'Date Joined',
                                 className: 'text-end',
-                                Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                                cell: ({ row }) => <TableDate date={row.original.created_at}/>
                             },
                             {
-                                accessor: 'actions',
+                                accessorKey: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'user'}/>
+                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'user'}/>
                             }
                         ]} data={providers}
                                    onCreateRow={() => Inertia.get(route('dashboard.users.create', { role: Role.SERVICE_PROVIDER }))}/>

@@ -19,27 +19,26 @@ const Index = ({ services }) => {
                         <Card.Body>
                             <DataTable title={'Services'} columns={[
                                 {
-                                    accessor: 'icon',
-                                    disableSortBy: true,
+                                    accessorKey: 'icon',
+                                    enableSorting: false,
                                 },
                                 {
-                                    accessor: 'name',
-                                    Header: 'Service Name',
+                                    accessorKey: 'name',
+                                    header: 'Service Name',
                                 },
                                 {
-                                    accessor: 'description',
-                                    Header: 'Description',
-                                    Cell: ({ row }) => row.original.description || 'N / A'
+                                    accessorKey: 'description',
+                                    header: 'Description',
+                                    cell: ({ row }) => row.original.description || 'N / A'
                                 },
                                 {
-                                    accessor: 'providers_count',
-                                    Header: 'No. of Providers',
+                                    accessorKey: 'providers_count',
+                                    header: 'No. of Providers',
                                 },
                                 {
-                                    accessor: 'actions',
-                                    disableSortBy: true,
-                                    className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'service'}/>                                }
+                                    id: 'actions',
+                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'service'}/>
+                                }
                             ]} data={services} onCreateRow={() => Inertia.get(route('dashboard.services.create'))}/>
                         </Card.Body>
                     </Card>

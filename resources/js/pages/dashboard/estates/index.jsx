@@ -21,17 +21,17 @@ const Index = ({ estates }) => {
                         <Card.Body>
                             <DataTable title={'Estates'} columns={[
                                 {
-                                    accessor: 'name',
-                                    Header: 'Name',
+                                    accessorKey: 'name',
+                                    header: 'Name',
                                 },
                                 {
-                                    accessor: 'address',
-                                    Header: 'Address',
+                                    accessorKey: 'address',
+                                    header: 'Address',
                                 },
                                 {
-                                    accessor: 'owner',
-                                    Header: 'Owner',
-                                    Cell: ({ row }) => (
+                                    accessorKey: 'owner',
+                                    header: 'Owner',
+                                    cell: ({ row }) => (
                                         <span>
                                         {row.original.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
@@ -41,21 +41,19 @@ const Index = ({ estates }) => {
                                     )
                                 },
                                 {
-                                    accessor: 'properties_count',
-                                    Header: 'Assets',
-                                    Cell: ({ row }) => row.original.properties_count + row.original.units_count
+                                    accessorKey: 'properties_count',
+                                    header: 'Assets',
+                                    cell: ({ row }) => row.original.properties_count + row.original.units_count
                                 },
                                 {
-                                    accessor: 'status',
-                                    Header: 'Status',
-                                    Cell: ({ row }) => <StatusChip status={row.original.status} entity={'estate'}
+                                    accessorKey: 'status',
+                                    header: 'Status',
+                                    cell: ({ row }) => <StatusChip status={row.original.status} entity={'estate'}
                                                                    entityId={row.original.id}/>
                                 },
                                 {
-                                    accessor: 'actions',
-                                    disableSortBy: true,
-                                    className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>
+                                    id: 'actions',
+                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>
                                 }
                             ]} data={estates} onCreateRow={() => Inertia.get(route('dashboard.estates.create'))}/>
                         </Card.Body>

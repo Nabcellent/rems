@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
@@ -37,7 +36,7 @@ class UnitController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/units/index', [
-            "units" => Unit::select([
+            "units"           => Unit::select([
                 "id",
                 "unitable_id",
                 "unitable_type",
@@ -51,7 +50,8 @@ class UnitController extends Controller
             ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
                 "user:id,first_name,last_name,email",
                 "unitable"
-            ])->withCount("rooms")->latest()->get()
+            ])->withCount("rooms")->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Unit::class)
         ]);
     }
 
@@ -110,7 +110,7 @@ class UnitController extends Controller
     public function show(Unit $unit): Response|ResponseFactory
     {
         return inertia("dashboard/units/Show", [
-            "unit"           => $unit->load([
+            "unit"            => $unit->load([
                 "unitable",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
@@ -121,8 +121,8 @@ class UnitController extends Controller
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ]),
-            "amenities"      => Amenity::select(["id", "title"])->get(),
-            "canChangeOwner" => user()->can("changeOwner", Unit::class),
+            "amenities"       => Amenity::select(["id", "title"])->get(),
+            "canChangeOwner"  => user()->can("changeOwner", Unit::class),
             "canUpdateStatus" => user()->can("updateStatus", Unit::class)
         ]);
     }

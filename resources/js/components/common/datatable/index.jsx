@@ -1,133 +1,154 @@
-import { memo, useState } from 'react';
-import AdvanceTableWrapper from './AdvanceTableWrapper';
-import AdvanceTable from './AdvanceTable';
-import AdvanceTableFooter from './AdvanceTableFooter';
-import { Card, Col, Form, Row } from 'react-bootstrap';
-import AdvanceTableSearchBox from './AdvanceTableSearchBox';
-import { Button } from '@mui/material';
-import { Add, ArrowRightAltRounded } from '@mui/icons-material';
-import pluralize from 'pluralize';
-import PropTypes from 'prop-types';
-import { Inertia } from '@inertiajs/inertia';
+import { useMemo, useState } from 'react';
+import {
+    flexRender,
+    getCoreRowModel,
+    getFacetedMinMaxValues,
+    getFacetedRowModel,
+    getFacetedUniqueValues,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable
+} from '@tanstack/react-table';
+import { Col, Row, Table } from 'react-bootstrap';
+import DebouncedInput from '@/components/DebouncedInput';
+import { rankItem } from '@tanstack/match-sorter-utils';
+import { KeyboardArrowDown, KeyboardArrowUp, Sort } from '@mui/icons-material';
+import Filter from '@/components/common/datatable/Filter';
+import IndeterminateCheckbox from '@/components/common/datatable/IndeterminateCheckbox';
+import Header from '@/components/common/datatable/Header';
+import Footer from '@/components/common/datatable/Footer';
 
-function BulkAction({ title, onCreateRow, selectedFlatRows, selectedRowIds = [], bulkActions, viewAll }) {
-    const [action, setAction] = useState(undefined);
+const fuzzyFilter = (row, columnId, value, addMeta) => {
+    // Rank the item
+    const itemRank = rankItem(row.getValue(columnId), value);
 
-    const selectedRowsCount = Object.keys(selectedRowIds).length;
-    const tableTitle = pluralize(title, selectedRowsCount);
+    // Store the ranking info
+    addMeta(itemRank);
 
-    const executeBulkAction = () => {
-        const ids = selectedFlatRows.map(row => row.original.id);
+    // Return if the item should be filtered in/out
+    return itemRank.passed;
+};
 
-        if (action === 'delete') {
-            Sweet.fire({
-                title: 'Are you sure?',
-                text: `You won't be able to revert this!`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: `Yes, delete ${tableTitle}!`,
-                showLoaderOnConfirm: true
-            }).then(result => result.isConfirmed && Inertia.post(route("dashboard.delete"), {
-                ids,
-                model: pluralize(title, 1)
-            }));
-        }
-    };
+const DataTable = ({ title, data, columns, onCreateRow, viewAllLink }) => {
+    const [columnVisibility, setColumnVisibility] = useState({});
+    const [rowSelection, setRowSelection] = useState({});
+    const [globalFilter, setGlobalFilter] = useState('');
+    const [columnFilters, setColumnFilters] = useState([]);
+    const [sorting, setSorting] = useState([]);
+    const [filtering, setFiltering] = useState(false);
 
-    return (
-        <Row className="flex-between-center mb-3">
-            <Col xs={4} sm="auto" className="d-flex align-items-center pe-0">
-                <h5 className="fs-0 mb-0 text-nowrap py-2 py-xl-0">
-                    {
-                        selectedRowsCount
-                            ? `You have selected ${selectedRowsCount} ${tableTitle}`
-                            : title
-                    }
-                </h5>
-            </Col>
+    const table = useReactTable({
+        data,
+        columns: useMemo(() => [
             {
-                bulkActions && <Col xs={8} sm="auto" className="ms-auto text-end ps-0">
-                    {Object.keys(selectedRowIds).length > 0 ? (
-                        <div className="d-flex">
-                            <Form.Select size="sm" aria-label="Bulk actions" onChange={e => setAction(e.target.value)}>
-                                <option value={''} hidden>Bulk Actions</option>
-                                <option value="refund">Refund</option>
-                                <option value="delete">Delete</option>
-                            </Form.Select>
-                            <Button type="button" variant="contained" size="small" className="ms-2"
-                                    onClick={() => executeBulkAction()}>
-                                Apply
-                            </Button>
-                        </div>
-                    ) : (
-                        <div className={'d-flex align-items-center'}>
-                            {
-                                onCreateRow &&
-                                <Button size="small" startIcon={<Add/>} transform="shrink-3" className="me-2"
-                                        onClick={onCreateRow} variant={'contained'}>
-                                    <span className="d-none d-sm-inline-block ms-1">New</span>
-                                </Button>
-                            }
-                            {
-                                viewAll &&
-                                <Button size="small" icon="external-link-alt" transform="shrink-3"
-                                        onClick={() => Inertia.get(viewAll)}>
-                                    <span className="d-none d-sm-inline-block ms-1">View All</span>
-                                    <ArrowRightAltRounded/>
-                                </Button>
-                            }
-                        </div>
-                    )}
-                </Col>}
-        </Row>
-    );
-}
+                id: 'select',
+                header: ({ table }) => (
+                    <IndeterminateCheckbox {...{
+                        checked: table.getIsAllRowsSelected(),
+                        indeterminate: table.getIsSomeRowsSelected(),
+                        onChange: table.getToggleAllRowsSelectedHandler(),
+                    }}/>
+                ),
+                cell: ({ row }) => (
+                    <div className="px-1">
+                        <IndeterminateCheckbox {...{
+                            checked: row.getIsSelected(),
+                            indeterminate: row.getIsSomeSelected(),
+                            onChange: row.getToggleSelectedHandler(),
+                        }}/>
+                    </div>
+                ),
+            },
+            ...columns,
+        ], []),
+        state: {
+            columnVisibility,
+            globalFilter,
+            columnFilters,
+            sorting,
+            rowSelection
+        },
+        onSortingChange: setSorting,
+        onRowSelectionChange: setRowSelection,
+        onColumnVisibilityChange: setColumnVisibility,
+        onGlobalFilterChange: setGlobalFilter,
+        onColumnFiltersChange: setColumnFilters,
+        globalFilterFn: fuzzyFilter,
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getFacetedRowModel: getFacetedRowModel(),
+        getFacetedUniqueValues: getFacetedUniqueValues(),
+        getFacetedMinMaxValues: getFacetedMinMaxValues(),
+        getCoreRowModel: getCoreRowModel(),
 
-const DataTable = ({
-    columns,
-    data,
-    title = 'DataTable',
-    perPage = 10,
-    tableClassName,
-    bulkActions = true,
-    onCreateRow,
-    searchable = true,
-    viewAll = null
-}) => {
+        debugTable: true,
+        debugHeaders: true,
+        debugColumns: false,
+    });
+
     return (
-        <AdvanceTableWrapper columns={columns} data={data} sortable pagination perPage={perPage}
-                             selection={bulkActions} selectionColumnWidth={30}>
-            <BulkAction table title={title} onCreateRow={onCreateRow} bulkActions={bulkActions}
-                        viewAll={viewAll}/>
-            <Row className="flex-end-center">
-                {
-                    searchable && <Col xs="auto" sm={6} lg={4}><AdvanceTableSearchBox table/></Col>
-                }
+        <>
+            <Header table={table} rowSelection={rowSelection} filtering={filtering} setFiltering={setFiltering}
+                    title={title} onCreateRow={onCreateRow}/>
+            <Row>
+                <Col xs="auto" sm={6} lg={4}>
+                    <div className="search-box me-2 mb-2 d-inline-block">
+                        <div className="position-relative">
+                            <DebouncedInput type={'search'} value={globalFilter ?? ''}
+                                            onChange={value => setGlobalFilter(String(value))}
+                                            className="shadow" placeholder="Search..." label={'Search all columns...'}/>
+                            <i className="bx bx-search-alt search-icon"/>
+                        </div>
+                    </div>
+                </Col>
             </Row>
-            <AdvanceTable table headerClassName="bg-200 text-900 text-nowrap align-middle"
-                          rowClassName="align-middle"
-                          tableProps={{
-                              striped: true,
-                              className: `fs--1 mb-0 overflow-hidden ${tableClassName}`
-                          }}
-            />
-            <div className="mt-3">
-                <AdvanceTableFooter rowCount={data.length} table rowInfo navButtons rowsPerPageSelection/>
-            </div>
-        </AdvanceTableWrapper>
+            <Table>
+                <thead>
+                {table.getHeaderGroups().map(headerGroup => (
+                    <tr key={headerGroup.id}>
+                        {headerGroup.headers.map(header => (
+                            <th key={header.id} colSpan={header.colSpan}>
+                                {!header.isPlaceholder && (
+                                    <>
+                                        <div {...{
+                                            className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+                                            onClick: header.column.getToggleSortingHandler(),
+                                        }}>
+                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                            {header.column.getCanSort() && (
+                                                {
+                                                    asc: <KeyboardArrowUp sx={{ ml: 1 }}/>,
+                                                    desc: <KeyboardArrowDown sx={{ ml: 1 }}/>
+                                                }[header.column.getIsSorted()] ?? <Sort sx={{ ml: 1 }}/>
+                                            )}
+                                        </div>
+                                        {filtering && header.column.getCanFilter() && (
+                                            <div><Filter column={header.column} table={table}/></div>
+                                        )}
+                                    </>
+                                )}
+                            </th>
+                        ))}
+                    </tr>
+                ))}
+                </thead>
+                <tbody>
+                {table.getRowModel().rows.map(row => (
+                    <tr key={row.id}>
+                        {row.getVisibleCells().map(cell => (
+                            <td key={cell.id} className={'py-2'}>
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                            </td>
+                        ))}
+                    </tr>
+                ))}
+                </tbody>
+            </Table>
+            <Footer table={table} rowSelection={rowSelection} viewAllLink={viewAllLink}/>
+        </>
     );
 };
 
-DataTable.propTypes = {
-    title: PropTypes.string.isRequired,
-    columns: PropTypes.arrayOf(PropTypes.object).isRequired,
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
-    perPage: PropTypes.number,
-    bulkActions: PropTypes.bool,
-    searchable: PropTypes.bool,
-    viewAll: PropTypes.string
-};
-
-export default memo(DataTable);
+export default DataTable;

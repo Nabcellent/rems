@@ -22,9 +22,9 @@ const Index = ({ notices }) => {
                     <Paper className={'p-3'}>
                         <DataTable title={'Notices'} columns={[
                             {
-                                accessor: 'user',
-                                Header: 'User',
-                                Cell: ({ row }) => (
+                                accessorKey: 'user',
+                                header: 'User',
+                                cell: ({ row }) => (
                                     <span>
                                     {row.original.user.full_name} <br/>
                                     <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
@@ -34,13 +34,13 @@ const Index = ({ notices }) => {
                                 )
                             },
                             {
-                                accessor: 'type',
-                                Header: 'Type',
+                                accessorKey: 'type',
+                                header: 'Type',
                             },
                             {
-                                accessor: 'description',
-                                Header: 'Description',
-                                Cell: ({ row }) => (
+                                accessorKey: 'description',
+                                header: 'Description',
+                                cell: ({ row }) => (
                                     <Tooltip title={row.original.description || 'N / A'}>
                                         <Typography variant={"body2"} style={{
                                             display: "-webkit-box",
@@ -54,9 +54,9 @@ const Index = ({ notices }) => {
                                 )
                             },
                             {
-                                accessor: 'created_at',
-                                Header: 'Date',
-                                Cell: ({ row }) => {
+                                accessorKey: 'created_at',
+                                header: 'Date',
+                                cell: ({ row }) => {
                                     let date, notice = row.original;
 
                                     if (notice.type === NoticeType.VACATION) {
@@ -75,10 +75,8 @@ const Index = ({ notices }) => {
                                 }
                             },
                             {
-                                accessor: 'actions',
-                                disableSortBy: true,
-                                className: 'text-end',
-                                Cell: ({ row }) => <TableActions entity={'notice'} entityId={row.original.id}/>
+                                id: 'actions',
+                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>
                             }
                         ]} data={notices} onCreateRow={() => Inertia.get(route('dashboard.notices.create'))}/>
                     </Paper>

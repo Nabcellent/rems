@@ -5,6 +5,7 @@ import DataTable from '@/components/common/datatable';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
 import TableActions from '@/components/TableActions';
+import StatusChip from '@/components/chips/StatusChip';
 
 const Index = ({ units }) => {
     console.log(units);
@@ -20,9 +21,9 @@ const Index = ({ units }) => {
                         <Card.Body>
                             <DataTable title={'Units'} columns={[
                                 {
-                                    accessor: 'owner',
-                                    Header: 'Owner',
-                                    Cell: ({ row }) => (
+                                    accessorKey: 'owner',
+                                    header: 'Owner',
+                                    cell: ({ row }) => (
                                         <span>
                                         {row.original.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
@@ -32,31 +33,39 @@ const Index = ({ units }) => {
                                     )
                                 },
                                 {
-                                    accessor: 'estate',
-                                    Header: 'Estate',
-                                    Cell: ({ row }) => row.original.estate.name
+                                    accessorKey: 'house_number',
+                                    header: 'Hse No.',
+                                    cell: ({ row }) => (
+                                        <span>
+                                        <b>{row.original.house_number}</b> <br/>
+                                        <Link href={route('dashboard.estates.show', { estate: row.original.user.id })}>
+                                            <small>Estate: {row.original.estate.name}</small>
+                                        </Link>
+                                    </span>
+                                    ),
                                 },
                                 {
-                                    accessor: 'house_number',
-                                    Header: 'House Number',
+                                    accessorKey: 'purpose',
+                                    header: 'Rent / Sale',
                                 },
                                 {
-                                    accessor: 'purpose',
-                                    Header: 'Rent / Sale',
+                                    accessorKey: 'type',
+                                    header: 'Type',
                                 },
                                 {
-                                    accessor: 'type',
-                                    Header: 'Type',
+                                    accessorKey: 'rooms_count',
+                                    header: 'Rooms',
                                 },
                                 {
-                                    accessor: 'rooms_count',
-                                    Header: 'Rooms',
+                                    accessorKey: 'status',
+                                    header: 'Status',
+                                    cell: ({ row }) => <StatusChip status={row.original.status} entity={'unit'}
+                                                                   entityId={row.original.id}/>
                                 },
                                 {
-                                    accessor: 'actions',
-                                    disableSortBy: true,
-                                    className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'unit'}/>                                }
+                                    id: 'actions',
+                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'unit'}/>
+                                }
                             ]} data={units} onCreateRow={() => Inertia.get(route('dashboard.units.create'))}/>
                         </Card.Body>
                     </Card>
