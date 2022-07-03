@@ -1,4 +1,4 @@
-import { IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete, str } from '@/utils/helpers';
@@ -9,7 +9,7 @@ const TableActions = ({ entity, entityId, showViewLink = true }) => {
     const entityPlural = pluralize(entity);
 
     return (
-        <>
+        <Box display={'flex'}>
             <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: entityId })}
                         color={"primary"}><Edit/>
             </IconButton>
@@ -24,7 +24,7 @@ const TableActions = ({ entity, entityId, showViewLink = true }) => {
                 [entity]: entityId
             }), str.ucFirst(entity))} color={"error"}><Delete/>
             </IconButton>
-        </>
+        </Box>
     );
 };
 

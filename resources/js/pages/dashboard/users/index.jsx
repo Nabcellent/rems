@@ -1,7 +1,6 @@
 import Dashboard from '@/layouts/Dashboard';
 import { Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
-import DataTable from '@/components/common/datatable';
 import { Avatar, IconButton, Paper, Tooltip } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import TableDate from '@/components/TableDate';
@@ -12,6 +11,8 @@ import TableActions from '@/components/TableActions';
 import { HowToReg } from '@mui/icons-material';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
+import moment from 'moment';
+import DataTable from '@/components/common/datatable/ReactTable';
 
 const Index = ({ users }) => {
     console.log(users);
@@ -24,85 +25,77 @@ const Index = ({ users }) => {
             <Row>
                 <Col className="col-12">
                     <Paper className={'p-3'}>
-                        <DataTable title={'Users'} columns={[
+                        <DataTable title={'React Table'} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}
+                                    data={users} columns={[
                             {
-                                accessor: 'name',
-                                Header: 'Name',
-                                Cell: ({ row }) => (
+                                header: 'Name',
+                                accessorKey: 'name',
+                                accessorFn: row => `${row.full_name}: ${row.email}`,
+                                cell: ({ row }) => (
                                     <Tooltip title={row.original.user_roles_str}>
                                         <div className={'d-flex align-items-center'}>
                                             <Avatar sx={{ width: 24, height: 24, fontSize: '7pt', mr: .5 }}
                                                     src={`/images/users/${row.original.image}`}>
                                                 {row.original.initials}
                                             </Avatar>
-                                            <span>
-                                                {row.original.full_name} <br/>
-                                                <small>{row.original.email}</small>
-                                            </span>
+                                            <span>{row.original.full_name} <br/><small>{row.original.email}</small></span>
                                         </div>
                                     </Tooltip>
                                 )
                             },
                             {
-                                accessor: 'phone',
-                                Header: 'Phone',
-                                Cell: ({ row }) => row.original.phone
-                                    ? <PhoneChip phone={row.original.phone}/>
-                                    : "N/A"
+                                header: 'Phone',
+                                accessorKey: 'phone',
+                                cell: ({ row }) => <PhoneChip phone={row.original.phone}/>
                             },
                             {
-                                accessor: 'role',
-                                Header: 'Role',
-                                Cell: ({ row }) => <i>{row.original.user_roles_str}</i>
+                                header: 'Role',
+                                accessorKey: 'role',
+                                accessorFn: row => row.user_roles_str,
                             },
                             {
-                                accessor: 'created_at',
-                                Header: 'Date Joined',
-                                className: 'text-end',
-                                Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                                header: 'Date Joined',
+                                accessorKey: 'created_at',
+                                accessorFn: row => moment(row.created_at).calendar(),
+                                cell: ({ row }) => <TableDate date={row.original.created_at}/>,
                             },
                             {
-                                accessor: 'status',
-                                Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status} entity={'user'}
+                                header: 'Status',
+                                accessorKey: 'status',
+                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'user'}
                                                                entityId={row.original.id}/>
                             },
                             {
-                                accessor: 'actions',
-                                disableSortBy: true,
-                                className: 'text-end',
-                                Cell: ({ row }) => {
+                                id: 'actions',
+                                cell: ({ row }) => {
                                     const [isLoading, setIsLoading] = useState(false);
-                                    const [errors, setErrors] = useState({});
 
                                     const handleApproveAccount = () => {
                                         Inertia.get(route(`approve.account`, row.original), {}, {
                                             preserveScroll: true,
                                             onBefore: () => setIsLoading(true),
-                                            onError: errors => setErrors(errors),
+                                            onError: errors => console.log(errors),
                                             onFinish: () => setIsLoading(false)
                                         });
                                     };
 
                                     return (
                                         <>
-                                            {
-                                                !row.original.approved_at && (
-                                                    <Tooltip title={'Approve Account'}>
-                                                        <IconButton component={LoadingButton} loading={isLoading}
-                                                                    onClick={() => handleApproveAccount()}
-                                                                    color={"primary"}>
-                                                            <HowToReg/>
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                )
-                                            }
+                                            {!row.original.approved_at && (
+                                                <Tooltip title={'Approve Account'}>
+                                                    <IconButton component={LoadingButton} loading={isLoading}
+                                                                onClick={() => handleApproveAccount()}
+                                                                color={"primary"}>
+                                                        <HowToReg/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
                                             <TableActions entityId={row.original.id} entity={'user'}/>
                                         </>
                                     );
                                 }
-                            }
-                        ]} data={users} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}/>
+                            },
+                        ]}/>
                     </Paper>
                 </Col>
             </Row>
