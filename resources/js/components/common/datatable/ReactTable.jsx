@@ -30,12 +30,13 @@ const fuzzyFilter = (row, columnId, value, addMeta) => {
     return itemRank.passed;
 };
 
-const DataTable = ({ title, data, columns, onCreateRow }) => {
+const DataTable = ({ title, data, columns, onCreateRow, viewAllLink }) => {
     const [columnVisibility, setColumnVisibility] = useState({});
     const [rowSelection, setRowSelection] = useState({});
     const [globalFilter, setGlobalFilter] = useState('');
     const [columnFilters, setColumnFilters] = useState([]);
     const [sorting, setSorting] = useState([]);
+    const [filtering, setFiltering] = useState(false);
 
     const table = useReactTable({
         data,
@@ -89,7 +90,8 @@ const DataTable = ({ title, data, columns, onCreateRow }) => {
 
     return (
         <>
-            <Header table={table} rowSelection={rowSelection} title={title} onCreateRow={onCreateRow}/>
+            <Header table={table} rowSelection={rowSelection} filtering={filtering} setFiltering={setFiltering}
+                    title={title} onCreateRow={onCreateRow}/>
             <Row>
                 <Col xs="auto" sm={6} lg={4}>
                     <div className="search-box me-2 mb-2 d-inline-block">
@@ -122,7 +124,7 @@ const DataTable = ({ title, data, columns, onCreateRow }) => {
                                                 }[header.column.getIsSorted()] ?? <Sort sx={{ ml: 1 }}/>
                                             )}
                                         </div>
-                                        {header.column.getCanFilter() && (
+                                        {filtering && header.column.getCanFilter() && (
                                             <div><Filter column={header.column} table={table}/></div>
                                         )}
                                     </>
@@ -144,7 +146,7 @@ const DataTable = ({ title, data, columns, onCreateRow }) => {
                 ))}
                 </tbody>
             </Table>
-            <Footer table={table} rowSelection={rowSelection}/>
+            <Footer table={table} rowSelection={rowSelection} viewAllLink={viewAllLink}/>
         </>
     );
 };

@@ -1,10 +1,11 @@
 import Flex from '@/components/common/Flex';
 import { Form } from 'react-bootstrap';
-import { IconButton } from '@mui/material';
-import { NavigateBefore, NavigateNext, SkipNext, SkipPrevious } from '@mui/icons-material';
+import { Button, IconButton } from '@mui/material';
+import { ArrowRightAltRounded, NavigateBefore, NavigateNext, SkipNext, SkipPrevious } from '@mui/icons-material';
 import PropTypes from 'prop-types';
+import { Inertia } from '@inertiajs/inertia';
 
-const Footer = ({table, rowSelection}) => {
+const Footer = ({table, rowSelection, viewAllLink}) => {
     return (
         <Flex alignItems={'center'} justifyContent={'between'}>
             <Flex alignItems="center" className="fs--1">
@@ -25,6 +26,14 @@ const Footer = ({table, rowSelection}) => {
                 </div>
             </Flex>
             <Flex>
+                {
+                    viewAllLink &&
+                    <Button size="small" icon="external-link-alt" transform="shrink-3"
+                            onClick={() => Inertia.get(viewAllLink)}>
+                        <span className="d-none d-sm-inline-block ms-1">View All</span>
+                        <ArrowRightAltRounded/>
+                    </Button>
+                }
                 <IconButton disabled={!table.getCanPreviousPage()} onClick={() => table.setPageIndex(0)}>
                     <SkipPrevious/>
                 </IconButton>
@@ -46,6 +55,7 @@ const Footer = ({table, rowSelection}) => {
 Footer.propTypes = {
     table: PropTypes.object.isRequired,
     rowSelection: PropTypes.object.isRequired,
+    viewAllLink: PropTypes.string,
 }
 
 export default Footer;

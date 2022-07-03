@@ -1,12 +1,15 @@
 import { Col, Form, Row } from 'react-bootstrap';
-import { Button, Checkbox, ListItemText, Menu, MenuItem } from '@mui/material';
+import { Button, Checkbox, ListItemText, Menu, MenuItem, Switch, Tooltip } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
 import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
 
-const Header = ({ table, rowSelection, title, onCreateRow }) => {
+const Header = ({
+    table, rowSelection, filtering = false, setFiltering = () => {
+    }, title, onCreateRow
+}) => {
     const [action, setAction] = useState(undefined);
     const [anchorEl, setAnchorEl] = useState(undefined);
 
@@ -61,6 +64,9 @@ const Header = ({ table, rowSelection, title, onCreateRow }) => {
                                 <span className="d-none d-sm-inline-block ms-1">New</span>
                             </Button>
                         )}
+                        <Tooltip title={`${filtering ? 'Disable' : 'Enable'} Filtering`}>
+                            <Switch checked={filtering} onChange={() => setFiltering(!filtering)}/>
+                        </Tooltip>
                         <Button id="demo-positioned-button"
                                 aria-controls={Boolean(anchorEl) ? 'demo-positioned-menu' : undefined}
                                 aria-haspopup="true" aria-expanded={Boolean(anchorEl) ? 'true' : undefined}
@@ -93,6 +99,7 @@ const Header = ({ table, rowSelection, title, onCreateRow }) => {
 Header.propTypes = {
     table: PropTypes.object.isRequired,
     rowSelection: PropTypes.object.isRequired,
+    setFiltering: PropTypes.func,
     title: PropTypes.string.isRequired,
     onCreateRow: PropTypes.func
 };
