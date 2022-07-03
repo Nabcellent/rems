@@ -3,6 +3,7 @@ import Dashboard from '@/layouts/Dashboard';
 import { Avatar, Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import General from '@/pages/dashboard/settings/General';
+import Banner from '@/components/Banner';
 
 const Index = ({ general }) => {
     console.log(general);
@@ -11,22 +12,7 @@ const Index = ({ general }) => {
         <Dashboard title={'Settings'}>
             <Breadcrumbs title={'REMS'} breadcrumbItem={'Settings'}/>
 
-            <Paper className={'mb-3'}>
-                <div className="position-relative min-vh-25 mb-8 card-header">
-                    <div className="bg-holder rounded-3 rounded-bottom-0"
-                         style={{ backgroundImage: 'url(/images/users/profile-default.jpg)' }}></div>
-                    <Avatar sx={{
-                        position: 'absolute',
-                        bottom: 0,
-                        fontSize: '20pt',
-                        transform: 'translateY(50%)',
-                        width: '10rem',
-                        height: '10rem',
-                    }}>
-                        REMS
-                    </Avatar>
-                </div>
-            </Paper>
+            <Banner title={'REMS.'}/>
 
             <Row className={'g-3'}>
                 <Col sm={8}>

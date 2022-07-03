@@ -10668,7 +10668,7 @@ body[data-layout=horizontal] .page-content {
 }
 
 #sidebar-menu {
-    padding: 10px 0 30px
+    padding: 10px 0 5rem
 }
 
 #sidebar-menu .mm-active > .has-arrow:after {
