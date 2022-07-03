@@ -57,6 +57,20 @@ export default class Mpesa {
 
         if (stkRequest) {
             console.log(stkRequest);
+
+            if(Number(stkRequest.ResponseCode) !== 0) {
+                return await sweet({
+                    type: 'error',
+                    message: 'Something went wrong!',
+                    toast: false,
+                    text: 'Oops...',
+                    position: 'center',
+                    duration: 30,
+                    backdrop: `rgba(150, 0, 0, 0.4)`,
+                    footer: '<a href="/contact-us">Report this issue?</a>'
+                });
+            }
+
             this.request_id = stkRequest.id;
             this.onSuccess = onSuccess;
 

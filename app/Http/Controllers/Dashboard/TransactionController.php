@@ -85,7 +85,8 @@ class TransactionController extends Controller
                 'user.roles',
                 'destination:id,first_name,last_name,email,phone',
                 'destination.roles',
-                "payment:id,transaction_id,amount,method,status"
+                "payment:id,transaction_id,amount,method,status",
+                "payment.payable",
             ])
         ]);
     }

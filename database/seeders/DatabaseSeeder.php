@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
 //            UnitSeeder::class,
 //            LeaseSeeder::class,
 //            ServiceSeeder::class,
-            AmenitySeeder::class,
+//            AmenitySeeder::class,
 //            ServiceProviderSeeder::class,
 //            TransactionSeeder::class,
-//            PaymentSeeder::class,
+            PaymentSeeder::class,
 //            TicketSeeder::class,
 //            NoticeSeeder::class,
         ]);

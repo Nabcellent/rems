@@ -74,7 +74,16 @@ class PaymentController extends Controller
      */
     public function show(Payment $payment): Response|ResponseFactory
     {
-
+        return inertia("dashboard/transactions/Show", [
+            "transaction" => $payment->transaction->load([
+                'user:id,first_name,last_name,email,phone',
+                'user.roles',
+                'destination:id,first_name,last_name,email,phone',
+                'destination.roles',
+                "payment:id,transaction_id,payable_id,payable_type,amount,method,status",
+                "payment.payable",
+            ])
+        ]);
     }
 
     /**
