@@ -124,3 +124,9 @@ a:hover {
 .mm-active, .mm-active .active, .mm-active .active i, .mm-active > a, .mm-active > a i, .mm-active > i {
     color: var(--rems-primary) !important
 }
+.select-none {
+    user-select: none;
+}
+.cursor-pointer {
+    cursor: pointer;
+}

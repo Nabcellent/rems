@@ -38,7 +38,6 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
     }
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
     const handleClose = () => setAnchorEl(null);
     const handleUpdate = status => {
         Inertia.put(route(`dashboard.status.update`), { entity, entity_id: entityId, status }, {
@@ -75,7 +74,7 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
                       label={<span><b>Status:</b> {status}</span>}
                       icon={icon}/>
             </Tooltip>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} onClick={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'left', }}
                   transformOrigin={{ vertical: 'top', horizontal: 'left', }}>
                 {
