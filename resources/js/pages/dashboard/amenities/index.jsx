@@ -19,28 +19,26 @@ const Index = ({ amenities }) => {
                         <Card.Body>
                             <DataTable title={'Amenities'} columns={[
                                 {
-                                    accessor: 'icon',
-                                    disableSortBy: true,
+                                    accessorKey: 'icon',
+                                    enableSorting: false,
                                 },
                                 {
-                                    accessor: 'title',
-                                    Header: 'Service Name',
+                                    accessorKey: 'title',
+                                    header: 'Service Name',
                                 },
                                 {
-                                    accessor: 'description',
-                                    Header: 'Description',
-                                    Cell: ({ row }) => row.original.description || 'N / A'
+                                    accessorKey: 'description',
+                                    header: 'Description',
+                                    cell: ({ row }) => row.original.description || 'N / A'
                                 },
                                 {
-                                    accessor: 'amenitiables_count',
-                                    Header: 'Units & Estates',
-                                    Cell: ({ row }) => row.original.estates_count + row.original.units_count
+                                    accessorKey: 'amenitiables_count',
+                                    header: 'Units & Estates',
+                                    cell: ({ row }) => row.original.estates_count + row.original.units_count
                                 },
                                 {
-                                    accessor: 'actions',
-                                    disableSortBy: true,
-                                    className: 'text-end',
-                                    Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'amenity'}
+                                    id: 'actions',
+                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'amenity'}
                                                                      showViewLink={false}/>
                                 }
                             ]} data={amenities} onCreateRow={() => Inertia.get(route('dashboard.amenities.create'))}/>

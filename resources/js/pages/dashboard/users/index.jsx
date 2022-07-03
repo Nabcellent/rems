@@ -12,7 +12,7 @@ import { HowToReg } from '@mui/icons-material';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import moment from 'moment';
-import DataTable from '@/components/common/datatable/ReactTable';
+import DataTable from '@/components/common/datatable';
 
 const Index = ({ users }) => {
     console.log(users);

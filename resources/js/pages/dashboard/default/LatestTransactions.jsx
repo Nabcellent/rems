@@ -4,7 +4,7 @@ import { Col, Row } from 'react-bootstrap';
 import { Paper, Tooltip } from '@mui/material';
 import StatusChip from '@/components/chips/StatusChip';
 import TableDate from '@/components/TableDate';
-import DataTable from '@/components/common/datatable/ReactTable';
+import DataTable from '@/components/common/datatable';
 import { currencyFormat } from '@/utils/helpers';
 
 const LatestTransactions = () => {

@@ -101,8 +101,6 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
         ]);
 
         Route::post("/delete", [GlobalController::class, "deleteMultiple"])->name("delete");
-
-        Route::get("/react-table", [HelperController::class, "reactTable"])->name("react-table");
     });
 });
 

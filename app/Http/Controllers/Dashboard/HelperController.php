@@ -37,11 +37,4 @@ class HelperController extends Controller
 
         return back()->with("toast", ["message" => "Owner Changed!"]);
     }
-
-    public function reactTable()
-    {
-        return inertia("dashboard/ReactTable",[
-            "users" => User::all()
-        ]);
-    }
 }

@@ -4,12 +4,13 @@ import { Link } from '@inertiajs/inertia-react';
 import { handleDelete, str } from '@/utils/helpers';
 import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
+import Flex from '@/components/common/Flex';
 
 const TableActions = ({ entity, entityId, showViewLink = true }) => {
     const entityPlural = pluralize(entity);
 
     return (
-        <Box display={'flex'}>
+        <Flex>
             <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: entityId })}
                         color={"primary"}><Edit/>
             </IconButton>
@@ -24,7 +25,7 @@ const TableActions = ({ entity, entityId, showViewLink = true }) => {
                 [entity]: entityId
             }), str.ucFirst(entity))} color={"error"}><Delete/>
             </IconButton>
-        </Box>
+        </Flex>
     );
 };
 
