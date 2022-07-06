@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Enums\Description;
 use App\Enums\PaymentMethod;
-use App\Enums\Status;
 use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
 use App\Models\Transaction;
 use DrH\Mpesa\Entities\MpesaStkCallback;
 use DrH\Mpesa\Events\StkPushPaymentFailedEvent;
@@ -17,7 +14,6 @@ use DrH\Mpesa\Http\Requests\StkRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class MpesaController extends Controller

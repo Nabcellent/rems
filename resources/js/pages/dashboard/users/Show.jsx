@@ -1,26 +1,25 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
+import { Divider, IconButton, Paper } from '@mui/material';
 import {
     AlternateEmail,
     Badge,
-    Countertops,
     DriveFileRenameOutline,
     Edit,
     Female,
     LocalPhone,
     Male,
-    PhoneIphone, WorkspacePremium
+    WorkspacePremium
 } from '@mui/icons-material';
-import { Gender } from '@/utils/enums';
+import { Gender, Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
 import MainImage from '@/components/MainImage';
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
-import ChangeOwner from '@/components/crud/ChangeOwner';
 import pluralize from 'pluralize';
+import Units from '@/pages/dashboard/properties/components/Units';
 
 const Show = ({ errors, user }) => {
     console.log(user);
@@ -93,6 +92,14 @@ const Show = ({ errors, user }) => {
                     </Row>
                 </Card.Body>
             </Paper>
+
+            <Row>
+                <Col lg={8}>
+                    <Paper className={'mb-3'}>
+                        <Units units={user.units}/>
+                    </Paper>
+                </Col>
+            </Row>
         </Dashboard>
     );
 };

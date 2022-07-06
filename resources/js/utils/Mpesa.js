@@ -58,7 +58,7 @@ export default class Mpesa {
         if (stkRequest) {
             console.log(stkRequest);
 
-            if(Number(stkRequest.ResponseCode) !== 0) {
+            if (!stkRequest.checkout_request_id) {
                 return await sweet({
                     type: 'error',
                     message: 'Something went wrong!',

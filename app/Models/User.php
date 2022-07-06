@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification;
 use Laravel\Sanctum\HasApiTokens;
 use Nabcellent\Laraconfig\HasConfig;
+use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -173,6 +174,49 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Notice::class, "notice_recipients");
     }
 
+
+
+    public function hasRole($roles, string $guard = null): bool
+    {
+        if($roles instanceof \App\Enums\Role) $roles = $roles->value;
+
+        if (is_string($roles) && false !== strpos($roles, '|')) {
+            $roles = $this->convertPipeToArray($roles);
+        }
+
+        if (is_string($roles)) {
+            return $guard
+                ? $this->roles->where('guard_name', $guard)->contains('name', $roles)
+                : $this->roles->contains('name', $roles);
+        }
+
+        if (is_int($roles)) {
+            $roleClass = $this->getRoleClass();
+            $key = (new $roleClass())->getKeyName();
+
+            return $guard
+                ? $this->roles->where('guard_name', $guard)->contains($key, $roles)
+                : $this->roles->contains($key, $roles);
+        }
+
+        if ($roles instanceof Role) {
+            return $this->roles->contains($roles->getKeyName(), $roles->getKey());
+        }
+
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if($role instanceof \App\Enums\Role) $role = $role->value;
+
+                if ($this->hasRole($role, $guard)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return $roles->intersect($guard ? $this->roles->where('guard_name', $guard) : $this->roles)->isNotEmpty();
+    }
 
     public function hasApprovedAccount(): bool
     {
