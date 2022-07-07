@@ -64,7 +64,7 @@ const Index = ({ leases }) => {
                             },
                             {
                                 id: 'actions',
-                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>
+                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'lease'}/>
                             }
                         ]} data={leases} onCreateRow={() => Inertia.get(route('dashboard.leases.create'))}/>
                     </Paper>

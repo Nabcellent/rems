@@ -1,5 +1,5 @@
 import { getTelcoFromPhone } from '@/utils/helpers';
-import { Telco } from '@/utils/enums';
+import { Status, Telco } from '@/utils/enums';
 
 export default class Mpesa {
     baseUrl = '/api/mpesa';
@@ -48,33 +48,34 @@ export default class Mpesa {
     init = async ({ phone, amount, reference, description, onSuccess, ...data }) => {
         this.amount = amount;
 
-        const { data: stkRequest } = await axios.post(`${this.baseUrl}/stk/initiate`, {
+        const { data: { stk_request, transaction } } = await axios.post(`${this.baseUrl}/stk/initiate`, {
             phone,
             amount: 1,
             reference, description,
             ...data,
         }, { headers: { 'Accept': 'application/json' } });
 
-        if (stkRequest) {
-            console.log(stkRequest);
+        if (stk_request.checkout_request_id) {
+            console.log(stk_request);
 
-            if (!stkRequest.checkout_request_id) {
-                return await sweet({
-                    type: 'error',
-                    message: 'Something went wrong!',
-                    toast: false,
-                    text: 'Oops...',
-                    position: 'center',
-                    duration: 30,
-                    backdrop: `rgba(150, 0, 0, 0.4)`,
-                    footer: '<a href="/contact-us">Report this issue?</a>'
-                });
-            }
-
-            this.request_id = stkRequest.id;
+            this.request_id = stk_request.id;
             this.onSuccess = onSuccess;
 
             return await this.alert();
+        } else {
+            console.log(transaction);
+            await this.updateTransaction(transaction.id, Status.FAILED);
+
+            await sweet({
+                type: 'error',
+                message: 'Something went wrong!',
+                toast: false,
+                text: 'Oops...',
+                position: 'center',
+                duration: 30,
+                backdrop: `rgba(150, 0, 0, 0.4)`,
+                footer: '<a href="/contact-us">Report this issue?</a>'
+            });
         }
     };
 
@@ -147,4 +148,9 @@ export default class Mpesa {
 
         await sweet({ type, message, showConfirmButton });
     }
+
+    updateTransaction = (id, status) => {
+        return axios.put(`${this.baseUrl}/stk/update-status`, { id, status })
+                    .then(({ data }) => data);
+    };
 };

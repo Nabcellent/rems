@@ -155,9 +155,10 @@ class UserController extends Controller
      */
     public function show(User $user): Response|ResponseFactory
     {
-        if($user->hasRole(Role::TENANT)) {
-            dd('s');
-        }
+        if($user->hasRole(Role::TENANT)) $user->load([
+            "leases:id,unit_id,user_id",
+            "leases.unit:id,unitable_id,unitable_type"
+        ]);
 
         return inertia("dashboard/users/Show", [
             "user"            => $user->load([
@@ -286,7 +287,10 @@ class UserController extends Controller
     public function showProfile(): Response|ResponseFactory
     {
         if(user()->hasRole([Role::TENANT, Role::SUPER_ADMIN])) {
-            user()->load("leases:id,unit_id,user_id");
+            user()->load([
+                "leases:id,unit_id,user_id,status",
+                "leases.unit:id,unitable_id,unitable_type,house_number"
+            ]);
         }
 
         return inertia("dashboard/users/Show", [

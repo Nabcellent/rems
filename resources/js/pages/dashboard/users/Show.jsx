@@ -11,7 +11,7 @@ import {
     Male,
     WorkspacePremium
 } from '@mui/icons-material';
-import { Gender, Morphable } from '@/utils/enums';
+import { Gender } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
 import PhoneChip from '@/components/chips/PhoneChip';
 import MainImage from '@/components/MainImage';
@@ -19,7 +19,7 @@ import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import pluralize from 'pluralize';
-import Units from '@/pages/dashboard/properties/components/Units';
+import Leases from '@/components/crud/Leases';
 
 const Show = ({ errors, user }) => {
     console.log(user);
@@ -96,7 +96,7 @@ const Show = ({ errors, user }) => {
             <Row>
                 <Col lg={8}>
                     <Paper className={'mb-3'}>
-                        <Units units={user.units}/>
+                        <Leases leases={user.leases}/>
                     </Paper>
                 </Col>
             </Row>

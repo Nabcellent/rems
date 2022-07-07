@@ -18,7 +18,7 @@ import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import Images from '@/components/crud/Images';
 import Policies from '@/components/crud/Policies';
-import Units from '@/pages/dashboard/properties/components/Units';
+import Units from '@/components/crud/Units';
 import MainImage from '@/components/MainImage';
 import React from 'react';
 import ChangeOwner from '@/components/crud/ChangeOwner';
