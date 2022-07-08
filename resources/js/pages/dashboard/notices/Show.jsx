@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Avatar, Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import { Link } from '@inertiajs/inertia-react';

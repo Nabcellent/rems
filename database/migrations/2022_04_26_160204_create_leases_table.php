@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string("status")->default(Status::INACTIVE->value);
             $table->timestamp("expires_at");
             $table->timestamps();
+
+            $table->unique(["unit_id", "user_id"]);
         });
     }
 

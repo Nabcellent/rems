@@ -25,7 +25,7 @@ const Index = ({ users }) => {
             <Row>
                 <Col className="col-12">
                     <Paper className={'p-3'}>
-                        <DataTable title={'React Table'} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}
+                        <DataTable title={'Users'} onCreateRow={() => Inertia.get(route("dashboard.users.create"))}
                                     data={users} columns={[
                             {
                                 header: 'Name',

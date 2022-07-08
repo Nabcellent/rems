@@ -48,11 +48,15 @@ class PaymentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia('dashboard/payments/Upsert', [
+            "action" => "create",
+            "wallet" => user()->wallet,
+            "leases" => user()->leases()->with("unit:id,unitable_id,unitable_type,house_number")->get()
+        ]);
     }
 
     /**
@@ -113,16 +117,5 @@ class PaymentController extends Controller
         $payment->update($data);
 
         return back()->with(["toast" => ["message" => "Payment Updated!"]]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Payment $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Payment $payment)
-    {
-        //
     }
 }

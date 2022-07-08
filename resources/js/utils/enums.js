@@ -49,7 +49,8 @@ export const Telco = {
 };
 
 export const Description = {
-    WALLET_DEPOSIT: 'Wallet Deposit'
+    RENT_PAYMENT: 'Rent Payment',
+    WALLET_DEPOSIT: 'Wallet Deposit',
 };
 
 export const NoticeType = {

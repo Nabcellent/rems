@@ -76,8 +76,10 @@ class UnitPolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function updateStatus(User $user)
-    {}
+    public function updateStatus(User $user): Response|bool
+    {
+        return $user->hasRole([Role::PROPERTY_MANAGER, Role::OWNER]);
+    }
 
     /**
      * Determine whether the user can delete the model.

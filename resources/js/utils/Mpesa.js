@@ -31,7 +31,7 @@ export default class Mpesa {
                         description: details.description,
                         user_id: details.user.id,
                         destination_id: details.destinationId,
-                        onSuccess: () => onCompleted({ amount }),
+                        onSuccess: () => onCompleted(),
                     });
                 } catch (err) {
                     const message = err.response.data.message;

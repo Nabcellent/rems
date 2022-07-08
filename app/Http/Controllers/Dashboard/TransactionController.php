@@ -32,7 +32,7 @@ class TransactionController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/transactions/index', [
-            "transactions" => Transaction::select([
+            "transactions"    => Transaction::select([
                 "id",
                 "user_id",
                 "destination_id",
@@ -40,7 +40,7 @@ class TransactionController extends Controller
                 "description",
                 "status",
                 "created_at"
-            ])->with([
+            ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
                 "user:id,last_name,email,phone",
                 "user.roles",
                 "destination.roles",
