@@ -1,6 +1,6 @@
-import { Alert, Button, Grid, MenuItem, Paper, TextField } from '@mui/material';
-import { Create, DeleteSweep, Edit, LocalPoliceTwoTone } from '@mui/icons-material';
-import { Card, Col, Modal } from 'react-bootstrap';
+import { Alert, Button, Grid, MenuItem, Paper, TextField, Tooltip } from '@mui/material';
+import { Create, DeleteSweep, Edit, Grading, LocalPoliceTwoTone } from '@mui/icons-material';
+import { Card, Col, Modal, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
@@ -16,6 +16,7 @@ import pluralize from 'pluralize';
 import LeaderList from '@/components/LeaderList';
 import moment from 'moment';
 import PermitAction from '@/components/PermitAction';
+import { Link } from '@inertiajs/inertia-react';
 
 const Policies = ({ plans, leaseId }) => {
     const [plan, setPlan] = useState(undefined);
@@ -42,7 +43,7 @@ const Policies = ({ plans, leaseId }) => {
             let url = route(`dashboard.payment-plans.store`);
 
             if (plan) {
-                url = route(`dashboard.payment-plans.update`, { payment_plan: plan.id });
+                url = route(`dashboard.payment-plans.update`, plan);
                 values._method = Method.PUT;
             }
 
@@ -78,6 +79,12 @@ const Policies = ({ plans, leaseId }) => {
         setShowModal(true);
     };
 
+    plans.sort(function(a, b) {
+        if(a.is_default) return -1
+        if(b.is_default) return 1
+        return 0;
+    });
+
     return (
         <Paper>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
@@ -86,9 +93,10 @@ const Policies = ({ plans, leaseId }) => {
                     <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
                 </PermitAction>
             </Card.Header>
-            <Card.Body className={'row'}>
-                {
-                    Boolean(!plans.length)
+            <Card.Body>
+                <ValidationErrors errors={errors}/>
+                <Row>
+                    {Boolean(!plans.length)
                         ? (
                             <Alert severity="error">
                                 This lease hasn't any plan yet. {' '}
@@ -107,19 +115,28 @@ const Policies = ({ plans, leaseId }) => {
                                 ]}/>
 
                                 <div className="hover-actions end-0 top-50 translate-middle-y me-2">
+                                    {!plan.is_default && (
+                                        <Tooltip title={'Set as Default'}>
+                                            <Link as={'button'} href={route(`dashboard.payment-plans.update`, plan)}
+                                                  data={{ is_default: true }} method={Method.PUT}
+                                                  className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                <Grading/>
+                                            </Link>
+                                        </Tooltip>
+                                    )}
                                     <button onClick={() => handleUpdate(plan)}
                                             className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                        <Edit fontSize={'small'}/>
+                                        <Edit/>
                                     </button>
                                     <button
                                         onClick={() => handleDelete(route('dashboard.payment-plans.destroy', { payment_plan: plan.id }), 'Payment Plan')}
                                         className="border-300 text-600 btn btn-danger btn-sm">
-                                        <DeleteSweep fontSize={'small'}/>
+                                        <DeleteSweep/>
                                     </button>
                                 </div>
                             </Col>
-                        ))
-                }
+                        ))}
+                </Row>
             </Card.Body>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>

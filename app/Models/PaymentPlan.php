@@ -19,27 +19,14 @@ class PaymentPlan extends Pivot
         "deposit",
         "rent_amount",
         "due_day",
-        "frequency"
+        "frequency",
+        "is_default",
     ];
 
     protected $casts = [
         "frequency"  => Frequency::class,
         "is_default" => "bool"
     ];
-
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ["is_default"];
-
-    public function isDefault(): Attribute
-    {
-        return Attribute::get(function() {
-            return $this->is_default ?? $this->frequency === Frequency::MONTHLY ?? $this->lease->paymentPlans->first()->id === $this->id;
-        });
-    }
 
     public function lease(): BelongsTo
     {

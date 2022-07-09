@@ -91,7 +91,7 @@ class LeasePolicy
      */
     public function delete(User $user, Lease $lease)
     {
-        return $user->id = $lease->unit->user_id;
+        return $user->id === $lease->unit->user_id;
     }
 
     /**

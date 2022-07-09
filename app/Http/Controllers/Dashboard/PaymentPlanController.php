@@ -41,12 +41,15 @@ class PaymentPlanController extends Controller
     public function update(Request $request, PaymentPlan $paymentPlan): RedirectResponse
     {
         $data = $request->validate([
-            "lease_id"    => "required|integer|exists:leases,id",
+            "lease_id"    => "integer|exists:leases,id",
             "deposit"     => "nullable|integer",
-            "rent_amount" => "required|integer",
-            "due_day"     => "required|integer",
+            "rent_amount" => "integer",
+            "due_day"     => "integer",
+            "is_default"  => "boolean",
             "frequency"   => [new Enum(Frequency::class)],
         ]);
+
+        if($request->filled("is_default")) PaymentPlan::whereIsDefault(true)->update(["is_default" => false]);
 
         $paymentPlan->update($data);
 

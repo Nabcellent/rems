@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Frequency;
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLeaseRequest;
 use App\Http\Requests\UpdateLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
-use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -71,7 +70,8 @@ class LeaseController extends Controller
     {
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
-            "users"   => User::select(["id", "email"])->get(),
+            "users"   => User::select(["id", "email", "first_name", "last_name"])->role(Role::TENANT->value)
+                ->oldest("email")->get(),
             "estates" => Estate::select(["id", "name", "service_charge"])
                 ->when(!user()->isAdmin(), function(Builder $qry) {
                     return $qry->whereUserId(user()->id)
@@ -94,7 +94,9 @@ class LeaseController extends Controller
      */
     public function store(StoreLeaseRequest $request): RedirectResponse
     {
-        $data = $request->validated();
+        $data = $this->setDefaultPlan($request);
+
+        $data["plans"] = $data["plans"]->toArray();
 
         $lease = Lease::create($data);
         $lease->paymentPlans()->createMany($data["plans"]);
@@ -162,7 +164,7 @@ class LeaseController extends Controller
      */
     public function update(UpdateLeaseRequest $request, Lease $lease): RedirectResponse
     {
-        $data = $request->validated();
+        $data = $this->setDefaultPlan($request);
 
         $lease->update($data);
         $lease->paymentPlans()->delete();
@@ -188,5 +190,30 @@ class LeaseController extends Controller
         $lease->delete();
 
         return back()->with(["toast" => ["message" => "Lease Deleted!", "type" => "info"]]);
+    }
+
+    /**
+     * @param \App\Http\Requests\StoreLeaseRequest|\App\Http\Requests\UpdateLeaseRequest $request
+     * @return mixed
+     */
+    private function setDefaultPlan(StoreLeaseRequest|UpdateLeaseRequest $request): mixed
+    {
+        $data = $request->validated();
+
+        $plans = [];
+        foreach($data["plans"] as $plan) {
+            $plan["is_default"] = false;
+            if(collect($plans)->contains(fn($val) => isset($val["is_default"]) && $val["is_default"] === true)) {
+                $plan["is_default"] = false;
+            } else if($plan["frequency"] === Frequency::MONTHLY->value) {
+                $plan["is_default"] = true;
+            }
+
+            $plans[] = $plan;
+        }
+
+        $data["plans"] = $plans;
+
+        return $data;
     }
 }
