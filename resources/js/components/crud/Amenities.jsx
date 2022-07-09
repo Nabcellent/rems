@@ -12,8 +12,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingShield } from '@fortawesome/free-solid-svg-icons';
 import { handleDelete } from '@/utils/helpers';
 import map from 'lodash/map';
+import PermitAction from '@/components/PermitAction';
+import { usePage } from '@inertiajs/inertia-react';
 
 const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
+    const { can } = usePage().props;
+
     const [amenity, setAmenity] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
@@ -68,7 +72,9 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
         <>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Amenities</h5>
-                <Button startIcon={<FitnessCenter/>} onClick={() => handleCreate()}>Add</Button>
+                <PermitAction ability={can.create.amenity}>
+                    <Button startIcon={<FitnessCenter/>} onClick={() => handleCreate()}>Add</Button>
+                </PermitAction>
             </Card.Header>
             <Card.Body>
                 {

@@ -33,6 +33,7 @@ import CountUp from 'react-countup';
 import pluralize from 'pluralize';
 import PhoneChip from '@/components/chips/PhoneChip';
 import { Inertia } from '@inertiajs/inertia';
+import PermitAction from '@/components/PermitAction';
 
 const Show = ({ errors, unit, amenities, canChangeOwner }) => {
     console.log(unit);
@@ -143,27 +144,33 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                     <Paper className={'mb-3'}>
                         <Card.Header className={'d-flex justify-content-between'}>
                             <h5 className={'mb-0'}>Tenant History</h5>
-                            <Button startIcon={<Assignment/>} onClick={() => Inertia.get(route('dashboard.leases.create'))}>
-                                New lease
-                            </Button>
+                            <PermitAction ability={can.create.lease}>
+                                <Button startIcon={<Assignment/>}
+                                        onClick={() => Inertia.get(route('dashboard.leases.create'))}>
+                                    New lease
+                                </Button>
+                            </PermitAction>
                         </Card.Header>
                         <Card.Body>
                             {
                                 !unit.leases.length
                                     ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
                                     : unit.leases.map((lease, i) => (
-                                        <Tooltip key={`lease-${lease.id}`} title={`${lease.status === Status.ACTIVE ? 'Active' : 'Past'} Tenant`}>
+                                        <Tooltip key={`lease-${lease.id}`}
+                                                 title={`${lease.status === Status.ACTIVE ? 'Active' : 'Past'} Tenant`}>
                                             <div className={`d-flex ${lease.status === Status.ACTIVE && 'fw-bolder'}`}>
-                                                <Link href="/user/profile#!"><PersonOutlined/></Link>
+                                                <Link
+                                                    href={route('dashboard.users.show', lease.user)}><PersonOutlined/></Link>
                                                 <div className="flex-1 position-relative ps-3">
                                                     <h6 className={`fs-0 mb-0 ${lease.status === Status.ACTIVE && 'text-primary'}`}>
-                                                        <Link href="/user/profile#!">{lease.user.full_name}</Link>
+                                                        <Link
+                                                            href={route('dashboard.users.show', lease.user)}>{lease.user.full_name}</Link>
                                                         {
                                                             lease.status === Status.ACTIVE &&
                                                             <i className={'fas fa-check-circle ps-2'}></i>
                                                         }
                                                     </h6>
-                                                    <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
+                                                    <p className="mb-1">{lease.user.email}</p>
                                                     <p className="text-muted mb-0">
                                                         {moment(lease.start_date).format("LL")}
                                                         &nbsp;-&nbsp;
@@ -187,7 +194,9 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                         <Paper className={'mb-3'}>
                             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                                 <h5 className={'mb-0'}>Rooms</h5>
-                                <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
+                                <PermitAction ability={can.create.room}>
+                                    <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
+                                </PermitAction>
                             </Card.Header>
                             <Card.Body>
                                 {
@@ -232,8 +241,9 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {i < unit.rooms.length - 1 &&
-                                                    <div className={'border-dashed-bottom my-3'}/>}
+                                                {i < unit.rooms.length - 1 && (
+                                                    <div className={'border-dashed-bottom my-3'}/>
+                                                )}
                                             </div>
                                         ))
                                 }

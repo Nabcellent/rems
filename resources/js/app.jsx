@@ -18,6 +18,8 @@ createInertiaApp({
     title: title => `${title && title + ' |'} ${appName}`,
     resolve: name => resolvePageComponent(`./pages/${name}.jsx`, import.meta.glob('./pages/**/*.jsx')),
     setup: ({ el, App, props }) => {
+        window.can = props.initialPage.props.can
+
         const { color, isDarkMode } = props.initialPage.props.theme;
 
         return createRoot(el).render(

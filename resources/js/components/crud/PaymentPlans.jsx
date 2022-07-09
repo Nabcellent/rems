@@ -15,6 +15,7 @@ import { RentFrequency } from '@/utils/enums';
 import pluralize from 'pluralize';
 import LeaderList from '@/components/LeaderList';
 import moment from 'moment';
+import PermitAction from '@/components/PermitAction';
 
 const Policies = ({ plans, leaseId }) => {
     const [plan, setPlan] = useState(undefined);
@@ -81,11 +82,13 @@ const Policies = ({ plans, leaseId }) => {
         <Paper>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Payment {pluralize('Plan', plans.length)}</h5>
-                <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                <PermitAction ability={can.create.payment_plan}>
+                    <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                </PermitAction>
             </Card.Header>
             <Card.Body className={'row'}>
                 {
-                    !plans.length
+                    Boolean(!plans.length)
                         ? (
                             <Alert severity="error">
                                 This lease hasn't any plan yet. {' '}
@@ -95,7 +98,7 @@ const Policies = ({ plans, leaseId }) => {
                             </Alert>
                         ) : plans.map(plan => (
                             <Col lg={plans.length > 1 ? 6 : 12} key={`policy-${plan.id}`}
-                                 className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
+                                 className={`border border-${plan.is_default ? '2 border-primary' : 1} rounded-3 px-3 px-lg-5 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger`}>
                                 <LeaderList items={[
                                     { key: <strong>Deposit</strong>, value: currencyFormat(plan.deposit) },
                                     { key: <strong>Rent Amount</strong>, value: currencyFormat(plan.rent_amount) },

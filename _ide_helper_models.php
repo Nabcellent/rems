@@ -12,25 +12,51 @@
 
 namespace App\Models{
 /**
+ * App\Models\Amenitiable
+ *
+ * @property int $id
+ * @property int $amenity_id
+ * @property string $amenitiable_type
+ * @property int $amenitiable_id
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereAmenitiableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereAmenitiableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereAmenityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenitiable whereUpdatedAt($value)
+ */
+	class IdeHelperAmenitiable {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Amenity
  *
  * @property int $id
- * @property string $property_type
- * @property int $property_id
  * @property string $title
- * @property string $description
+ * @property string|null $icon
+ * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $payable
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Estate[] $estates
+ * @property-read int|null $estates_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
+ * @property-read int|null $units_count
  * @method static \Database\Factories\AmenityFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity query()
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereIcon($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Amenity wherePropertyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Amenity wherePropertyType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereUpdatedAt($value)
  */
@@ -141,13 +167,12 @@ namespace App\Models{
  * @property int $id
  * @property int $unit_id
  * @property int $user_id
- * @property int $deposit
- * @property int $rent_amount
- * @property string $start_date
- * @property string $end_date
- * @property string $status
+ * @property \App\Enums\Status $status
+ * @property \Illuminate\Support\Carbon $expires_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PaymentPlan[] $paymentPlans
+ * @property-read int|null $payment_plans_count
  * @property-read \App\Models\Unit $unit
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|Lease active()
@@ -156,11 +181,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Lease newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Lease query()
  * @method static \Illuminate\Database\Eloquent\Builder|Lease whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Lease whereDeposit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Lease whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Lease whereExpiresAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Lease whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Lease whereRentAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Lease whereStartDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Lease whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Lease whereUnitId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Lease whereUpdatedAt($value)
@@ -208,6 +230,41 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\MpesaStkRequest
+ *
+ * @property int $id
+ * @property string $phone
+ * @property string $amount
+ * @property string $reference
+ * @property string $description
+ * @property string $status
+ * @property string $merchant_request_id
+ * @property string $checkout_request_id
+ * @property int|null $relation_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \DrH\Mpesa\Entities\MpesaStkCallback|null $response
+ * @method static \Database\Factories\MpesaStkRequestFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereCheckoutRequestId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereMerchantRequestId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereRelationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MpesaStkRequest whereUpdatedAt($value)
+ */
+	class IdeHelperMpesaStkRequest {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Notice
  *
  * @property int $id
@@ -246,9 +303,6 @@ namespace App\Models{
  * @property int $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Notice $notice
- * @property-read \App\Models\User $user
- * @method static \Database\Factories\NoticeRecipientFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|NoticeRecipient query()
@@ -291,6 +345,36 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUpdatedAt($value)
  */
 	class IdeHelperPayment {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PaymentPlan
+ *
+ * @property int $id
+ * @property int $lease_id
+ * @property int $deposit
+ * @property int $rent_amount
+ * @property \App\Enums\Frequency $frequency
+ * @property int $due_day
+ * @property bool|null $is_default
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Lease $lease
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDeposit($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereDueDay($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereFrequency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereLeaseId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereRentAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan whereUpdatedAt($value)
+ */
+	class IdeHelperPaymentPlan {}
 }
 
 namespace App\Models{
@@ -388,6 +472,17 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Property whereUserId($value)
  */
 	class IdeHelperProperty {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\PropertyAmenity
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyAmenity newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyAmenity newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyAmenity query()
+ */
+	class IdeHelperPropertyAmenity {}
 }
 
 namespace App\Models{
@@ -597,6 +692,7 @@ namespace App\Models{
  * @property string $purpose For Rent or For Sale
  * @property string $type Furnished or Unfurnished
  * @property string|null $description
+ * @property int|null $price
  * @property string|null $image
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -616,12 +712,14 @@ namespace App\Models{
  * @method static \Database\Factories\UnitFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Unit newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit occupied()
  * @method static \Illuminate\Database\Eloquent\Builder|Unit query()
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereHouseNumber($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePurpose($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereType($value)
@@ -646,6 +744,7 @@ namespace App\Models{
  * @property string $email
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property \Illuminate\Support\Carbon|null $approved_at
  * @property string $password
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -681,6 +780,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereApprovedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)

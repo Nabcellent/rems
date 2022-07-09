@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\RentFrequency;
+use App\Enums\Frequency;
 use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -33,7 +33,7 @@ class StoreLeaseRequest extends FormRequest
             "plans.*.deposit"     => "nullable|integer",
             "plans.*.rent_amount" => "required|integer",
             "plans.*.due_day"    => "required|integer",
-            "plans.*.frequency"   => [new Enum(RentFrequency::class)],
+            "plans.*.frequency"   => [new Enum(Frequency::class)],
             "status"              => [new Enum(Status::class)],
             "expires_at"          => "required|date|after:tomorrow",
         ];

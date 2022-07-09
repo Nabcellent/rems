@@ -6,32 +6,34 @@ import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
 import Flex from '@/components/common/Flex';
 
-const TableActions = ({ entity, entityId, showViewLink = true }) => {
+const TableActions = ({ entity, row, showViewLink = true }) => {
     const entityPlural = pluralize(entity);
 
     return (
         <Flex>
-            <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: entityId })}
-                        color={"primary"}><Edit/>
-            </IconButton>
-            {
-                showViewLink && (
-                    <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: entityId })} className={'mx-1'}>
-                        <ReadMore/>
-                    </Link>
-                )
-            }
-            <IconButton onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
-                [entity]: entityId
-            }), str.ucFirst(entity))} color={"error"}><Delete/>
-            </IconButton>
+            {row.can?.edit && (
+                <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: row.id })}
+                            color={"primary"}><Edit/>
+                </IconButton>
+            )}
+            {row.can?.view && showViewLink && (
+                <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: row.id })} className={'mx-1'}>
+                    <ReadMore/>
+                </Link>
+            )}
+            {row.can?.destroy && (
+                <IconButton onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
+                    [entity]: row.id
+                }), str.ucFirst(entity))} color={"error"}><Delete/>
+                </IconButton>
+            )}
         </Flex>
     );
 };
 
 TableActions.propTypes = {
     entity: PropTypes.string.isRequired,
-    entityId: PropTypes.number.isRequired,
+    row: PropTypes.object.isRequired,
     showViewLink: PropTypes.bool,
 };
 

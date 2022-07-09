@@ -90,7 +90,7 @@ const Index = ({ users }) => {
                                                     </IconButton>
                                                 </Tooltip>
                                             )}
-                                            <TableActions entityId={row.original.id} entity={'user'}/>
+                                            <TableActions row={row.original} entity={'user'}/>
                                         </>
                                     );
                                 }

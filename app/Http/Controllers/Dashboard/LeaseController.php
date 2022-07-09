@@ -43,11 +43,21 @@ class LeaseController extends Controller
                 "expires_at",
                 "status",
                 "created_at"
-            ])->with([
+            ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id)
+                ->orWhereHas("unit", function(Builder $qry) {
+                    return $qry->whereUserId(user()->id);
+                }))->with([
                 "unit.user:id,first_name,last_name,email",
                 "user:id,first_name,last_name,email",
                 "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
-            ])->latest()->get(),
+            ])->latest()->get()->map(fn(Lease $lease) => [
+                ...$lease->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $lease),
+                    "view"    => user()->can("view", $lease),
+                    "destroy" => user()->can("delete", $lease)
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", Lease::class)
         ]);
     }
@@ -112,7 +122,7 @@ class LeaseController extends Controller
                 "unit.user:id,email,phone",
                 "user:id,email,phone",
                 "user.roles:id,name",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default",
             ]),
             "canUpdateStatus" => user()->can("updateStatus", $lease)
         ]);

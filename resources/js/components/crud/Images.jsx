@@ -8,8 +8,12 @@ import { useState } from 'react';
 import ImageModal from '@/components/crud/ImageModal';
 import pluralize from 'pluralize';
 import { handleDelete } from '@/utils/helpers';
+import { usePage } from '@inertiajs/inertia-react';
+import PermitAction from '@/components/PermitAction';
 
 const Images = ({ images, style, imageable, imageableId }) => {
+    const { can } = usePage().props;
+
     const [image, setImage] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
 
@@ -30,18 +34,22 @@ const Images = ({ images, style, imageable, imageableId }) => {
     const handleCreate = () => {
         setImage(undefined);
         setShowModal(true);
-    }
+    };
 
     const handleUpdate = image => {
         setImage(image);
         setShowModal(true);
     };
 
+    if (!can.create.image && !images.length) return <></>;
+
     return (
         <>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Photos</h5>
-                <Button startIcon={<AddAPhoto/>} onClick={() => handleCreate()}>Add</Button>
+                <PermitAction ability={can.create.image}>
+                    <Button startIcon={<AddAPhoto/>} onClick={() => handleCreate()}>Add</Button>
+                </PermitAction>
             </Card.Header>
             <Card.Body>
                 {
@@ -61,7 +69,8 @@ const Images = ({ images, style, imageable, imageableId }) => {
                                             <ImageListItem key={`${style}-${i}`} {...{
                                                 ...imgListItemProps, ...{ rows: sample([1, 2]), cols: sample([1, 2]) }
                                             }} className={'hover-actions-trigger'}>
-                                                <img onClick={() => setImgIndex(i)} src={`/images/${directory}/${image.image}`} alt={image.title}
+                                                <img onClick={() => setImgIndex(i)}
+                                                     src={`/images/${directory}/${image.image}`} alt={image.title}
                                                      loading="lazy"/>
                                                 <div className="hover-actions end-0 top-0 mt-2 me-2">
                                                     <button onClick={() => handleUpdate(image)}

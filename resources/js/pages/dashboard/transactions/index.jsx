@@ -65,7 +65,7 @@ const Index = ({ transactions }) => {
                                 },
                                 {
                                     id: 'actions',
-                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'transaction'}/>
+                                    cell: ({ row }) => <TableActions row={row.original} entity={'transaction'}/>
                                 }
                             ]} data={transactions}/>
                         </Card.Body>

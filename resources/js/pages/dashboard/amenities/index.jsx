@@ -38,8 +38,7 @@ const Index = ({ amenities }) => {
                                 },
                                 {
                                     id: 'actions',
-                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'amenity'}
-                                                                     showViewLink={false}/>
+                                    cell: ({ row }) => <TableActions row={row.original} entity={'amenity'} showViewLink={false}/>
                                 }
                             ]} data={amenities} onCreateRow={() => Inertia.get(route('dashboard.amenities.create'))}/>
                         </Card.Body>

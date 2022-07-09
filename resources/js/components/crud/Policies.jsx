@@ -11,8 +11,12 @@ import * as yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBuildingShield } from '@fortawesome/free-solid-svg-icons';
 import { handleDelete } from '@/utils/helpers';
+import { usePage } from '@inertiajs/inertia-react';
+import PermitAction from '@/components/PermitAction';
 
 const Policies = ({ policies, policeable, policeableId }) => {
+    const { can } = usePage().props;
+
     const [policy, setPolicy] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
@@ -59,7 +63,9 @@ const Policies = ({ policies, policeable, policeableId }) => {
         <>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Policies</h5>
-                <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                <PermitAction ability={can.create.policy}>
+                    <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                </PermitAction>
             </Card.Header>
             <Card.Body>
                 {

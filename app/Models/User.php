@@ -175,39 +175,36 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
-
     public function hasRole($roles, string $guard = null): bool
     {
         if($roles instanceof \App\Enums\Role) $roles = $roles->value;
 
-        if (is_string($roles) && false !== strpos($roles, '|')) {
+        if(is_string($roles) && false !== strpos($roles, '|')) {
             $roles = $this->convertPipeToArray($roles);
         }
 
-        if (is_string($roles)) {
-            return $guard
-                ? $this->roles->where('guard_name', $guard)->contains('name', $roles)
+        if(is_string($roles)) {
+            return $guard ? $this->roles->where('guard_name', $guard)->contains('name', $roles)
                 : $this->roles->contains('name', $roles);
         }
 
-        if (is_int($roles)) {
+        if(is_int($roles)) {
             $roleClass = $this->getRoleClass();
             $key = (new $roleClass())->getKeyName();
 
-            return $guard
-                ? $this->roles->where('guard_name', $guard)->contains($key, $roles)
+            return $guard ? $this->roles->where('guard_name', $guard)->contains($key, $roles)
                 : $this->roles->contains($key, $roles);
         }
 
-        if ($roles instanceof Role) {
+        if($roles instanceof Role) {
             return $this->roles->contains($roles->getKeyName(), $roles->getKey());
         }
 
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
+        if(is_array($roles)) {
+            foreach($roles as $role) {
                 if($role instanceof \App\Enums\Role) $role = $role->value;
 
-                if ($this->hasRole($role, $guard)) {
+                if($this->hasRole($role, $guard)) {
                     return true;
                 }
             }
@@ -216,6 +213,40 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $roles->intersect($guard ? $this->roles->where('guard_name', $guard) : $this->roles)->isNotEmpty();
+    }
+
+    /**
+     * Determine if the model has all of the given role(s).
+     *
+     * @param string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection|\App\Enums\Role $roles
+     * @param string|null                                                                   $guard
+     * @return bool
+     */
+    public function hasAllRoles($roles, string $guard = null): bool
+    {
+        if($roles instanceof \App\Enums\Role) $roles = $roles->value;
+
+        if(is_array($roles)) $roles = array_map(fn(\App\Enums\Role $role) => $role->value, $roles);
+
+        if(is_string($roles) && false !== strpos($roles, '|')) {
+            $roles = $this->convertPipeToArray($roles);
+        }
+
+        if(is_string($roles)) {
+            return $guard ? $this->roles->where('guard_name', $guard)->contains('name', $roles)
+                : $this->roles->contains('name', $roles);
+        }
+
+        if($roles instanceof Role) {
+            return $this->roles->contains($roles->getKeyName(), $roles->getKey());
+        }
+
+        $roles = collect()->make($roles)->map(function($role) {
+            return $role instanceof Role ? $role->name : $role;
+        });
+
+        return $roles->intersect($guard ? $this->roles->where('guard_name', $guard)->pluck('name')
+                : $this->getRoleNames()) == $roles;
     }
 
     public function hasApprovedAccount(): bool

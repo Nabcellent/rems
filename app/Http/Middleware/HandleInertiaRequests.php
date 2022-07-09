@@ -8,7 +8,10 @@ use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\Notice;
 use App\Models\Payment;
+use App\Models\PaymentPlan;
+use App\Models\Policy;
 use App\Models\Property;
+use App\Models\Room;
 use App\Models\Service;
 use App\Models\Setting;
 use App\Models\Ticket;
@@ -67,27 +70,30 @@ class HandleInertiaRequests extends Middleware
             ],
             "can"        => [
                 "access" => [
-                    "properties"   => $request->user()?->can("viewAny", Property::class),
+                    "amenities"    => $request->user()?->can("viewAny", Amenity::class),
                     "estates"      => $request->user()?->can("viewAny", Estate::class),
                     "leases"       => $request->user()?->can("viewAny", Lease::class),
-                    "units"        => $request->user()?->can("viewAny", Unit::class),
-                    "transactions" => $request->user()?->can("viewAny", Transaction::class),
-                    "payments"     => $request->user()?->can("viewAny", Payment::class),
                     "notices"      => $request->user()?->can("viewAny", Notice::class),
+                    "payments"     => $request->user()?->can("viewAny", Payment::class),
+                    "properties"   => $request->user()?->can("viewAny", Property::class),
                     "services"     => $request->user()?->can("viewAny", Service::class),
-                    "amenities"    => $request->user()?->can("viewAny", Amenity::class),
-                    "users"        => $request->user()?->can("viewAny", User::class),
                     "settings"     => $request->user()?->can("viewAny", Setting::class),
                     "tickets"      => $request->user()?->can("viewAny", Ticket::class),
+                    "transactions" => $request->user()?->can("viewAny", Transaction::class),
+                    "units"        => $request->user()?->can("viewAny", Unit::class),
+                    "users"        => $request->user()?->can("viewAny", User::class),
                 ],
                 "create" => [
-                    "user"     => $request->user()?->can("create", User::class),
-                    "lease"    => $request->user()?->can("create", Lease::class),
-                    "service"  => $request->user()?->can("create", Service::class),
-                    "amenity"  => $request->user()?->can("create", Amenity::class),
-                    "property" => $request->user()?->can("create", Property::class),
-                    "estate"   => $request->user()?->can("create", Estate::class),
-                    "unit"     => $request->user()?->can("create", Unit::class),
+                    "amenity"      => $request->user()?->can("create", Amenity::class),
+                    "estate"       => $request->user()?->can("create", Estate::class),
+                    "lease"        => $request->user()?->can("create", Lease::class),
+                    "payment_plan" => $request->user()?->can("create", PaymentPlan::class),
+                    "policy"       => $request->user()?->can("create", Policy::class),
+                    "property"     => $request->user()?->can("create", Property::class),
+                    "service"      => $request->user()?->can("create", Service::class),
+                    "room"         => $request->user()?->can("create", Room::class),
+                    "unit"         => $request->user()?->can("create", Unit::class),
+                    "user"         => $request->user()?->can("create", User::class),
                 ]
             ],
             "greeting"   => Carbon::timelyGreeting(),

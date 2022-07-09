@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use DrH\Mpesa\Entities\MpesaStkRequest as DrHMpesaStkRequest;
 
 /**
- * @mixin IdeHelperMpesaStkCallback
+ * @mixin IdeHelperMpesaStkRequest
  */
 class MpesaStkRequest extends DrHMpesaStkRequest
 {

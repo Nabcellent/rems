@@ -11,8 +11,8 @@ export default class Mpesa {
     static fire = async (details, onCompleted) => {
         await Sweet.fire({
             html:
-                '<small>Amount (min: 100)</small>' +
-                '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
+                `<small>Amount (min: 100)</small>` +
+                `<input id="amount" type="number" class="form-control mb-1" value="${details.amount ?? ''}" placeholder="Enter amount to deposit.">` +
                 `<small>Phone number ${details.user.phone ? '(optional)' : ''}</small>` +
                 `<input id="phone" type="tel" class="form-control" value="${details.user.phone ?? ''}" placeholder="Enter phone to request.">`,
             showLoaderOnConfirm: true,

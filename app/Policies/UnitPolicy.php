@@ -32,7 +32,7 @@ class UnitPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->units->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->leases->isNotEmpty() || $user->units->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
     }
 
     /**
@@ -44,7 +44,7 @@ class UnitPolicy
      */
     public function view(User $user, Unit $unit): Response|bool
     {
-        return $user->id === $unit->user_id;
+        return $user->id === $unit->user_id || $unit->leases->contains("user_id", $user->id);
     }
 
     /**
