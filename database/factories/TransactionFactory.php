@@ -18,20 +18,15 @@ class TransactionFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    #[ArrayShape([
-        "user_id"        => "mixed",
-        "destination_id" => "mixed",
-        "amount"         => "int",
-        "description"    => "mixed",
-        "status"         => "mixed"
-    ])] public function definition(): array
+    public function definition(): array
     {
         return [
             "user_id"        => User::factory(),
             "destination_id" => User::factory(),
             "amount"         => $this->faker->numberBetween(100, 100000),
             "description"    => $this->faker->randomElement(Description::cases()),
-            "status"         => $this->faker->randomElement([Status::COMPLETED, Status::PENDING, Status::FAILED])
+            "status"         => $this->faker->randomElement([Status::COMPLETED, Status::PENDING, Status::FAILED]),
+            "created_at"     => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 }

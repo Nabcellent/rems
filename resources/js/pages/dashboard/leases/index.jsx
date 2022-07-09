@@ -2,14 +2,13 @@ import Dashboard from '@/layouts/Dashboard';
 import { Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { IconButton, Paper } from '@mui/material';
-import { Delete, Edit, ReadMore } from '@mui/icons-material';
+import { Paper } from '@mui/material';
 import { Inertia } from '@inertiajs/inertia';
 import { Link } from '@inertiajs/inertia-react';
-import { currencyFormat, handleDelete } from '@/utils/helpers';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
 import TableActions from '@/components/TableActions';
+import TableDate from '@/components/TableDate';
 
 const Index = ({ leases }) => {
     console.log(leases);
@@ -24,9 +23,9 @@ const Index = ({ leases }) => {
                     <Paper className={'p-3'}>
                         <DataTable title={'Leases'} columns={[
                             {
-                                accessor: 'owner',
-                                Header: 'Owner',
-                                Cell: ({ row }) => (
+                                accessorKey: 'owner',
+                                header: 'Owner',
+                                cell: ({ row }) => (
                                     <span>
                                         {row.original.unit.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.unit.user.id })}>
@@ -36,9 +35,9 @@ const Index = ({ leases }) => {
                                 )
                             },
                             {
-                                accessor: 'tenant',
-                                Header: 'Tenant',
-                                Cell: ({ row }) => (
+                                accessorKey: 'tenant',
+                                header: 'Tenant',
+                                cell: ({ row }) => (
                                     <span>
                                         {row.original.user.full_name} <br/>
                                         <Link href={route('dashboard.users.show', { user: row.original.user.id })}>
@@ -48,25 +47,25 @@ const Index = ({ leases }) => {
                                 )
                             },
                             {
-                                accessor: 'rent_amount',
-                                Header: 'Rent',
-                                Cell: ({ row }) => currencyFormat(row.original.rent_amount)
+                                accessorKey: 'expires_at',
+                                header: 'Expiry',
+                                cell: ({ row }) => moment(row.original.expires_at).format("ddd Do MMM YYYY")
                             },
                             {
-                                accessor: 'expires_at',
-                                Header: 'Expiry',
-                                Cell: ({ row }) => moment(row.original.expires_at).format("ddd MMM YYYY")                            },
+                                accessorKey: 'created_at',
+                                header: 'Date Created',
+                                cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                            },
                             {
-                                accessor: 'status',
-                                Header: 'Status',
-                                Cell: ({ row }) => <StatusChip status={row.original.status} entity={'lease'}
+                                accessorKey: 'status',
+                                header: 'Status',
+                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'lease'}
                                                                entityId={row.original.id}/>
                             },
                             {
-                                accessor: 'actions',
-                                disableSortBy: true,
-                                className: 'text-end',
-                                Cell: ({ row }) => <TableActions entityId={row.original.id} entity={'lease'}/>                            }
+                                id: 'actions',
+                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'estate'}/>
+                            }
                         ]} data={leases} onCreateRow={() => Inertia.get(route('dashboard.leases.create'))}/>
                     </Paper>
                 </Col>

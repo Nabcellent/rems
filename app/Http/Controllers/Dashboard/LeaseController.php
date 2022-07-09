@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLeaseRequest;
+use App\Http\Requests\UpdateLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\Unit;
@@ -35,17 +36,17 @@ class LeaseController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/leases/index', [
-            "leases" => Lease::select([
+            "leases"          => Lease::select([
                 "id",
                 "user_id",
                 "unit_id",
-                "rent_amount",
                 "expires_at",
                 "status",
                 "created_at"
             ])->with([
                 "unit.user:id,first_name,last_name,email",
                 "user:id,first_name,last_name,email",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
             ])->latest()->get(),
             "canUpdateStatus" => user()->can("updateStatus", Lease::class)
         ]);
@@ -61,12 +62,17 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
             "users"   => User::select(["id", "email"])->get(),
-            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
-                return $qry->whereUserId(user()->id)
-                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
-                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
-                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
-            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
+            "estates" => Estate::select(["id", "name", "service_charge"])
+                ->when(!user()->isAdmin(), function(Builder $qry) {
+                    return $qry->whereUserId(user()->id)
+                        ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                            ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+                })->with([
+                    "properties:id,estate_id,name",
+                    "properties.units:id,unitable_id,house_number",
+                    "units:id,unitable_id,house_number"
+                ])->get()
         ]);
     }
 
@@ -81,12 +87,13 @@ class LeaseController extends Controller
         $data = $request->validated();
 
         $lease = Lease::create($data);
+        $lease->paymentPlans()->createMany($data["plans"]);
 
         return redirect()->route("dashboard.leases.index")->with("toast", [
             "message" => "Lease Created!",
             "link"    => [
                 "title" => "View Lease",
-                "href"  => route("dashboard.leases.show", ["lease" => $lease])
+                "href"  => route("dashboard.leases.show", $lease)
             ]
         ]);
     }
@@ -105,6 +112,7 @@ class LeaseController extends Controller
                 "unit.user:id,email,phone",
                 "user:id,email,phone",
                 "user.roles:id,name",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day",
             ]),
             "canUpdateStatus" => user()->can("updateStatus", $lease)
         ]);
@@ -119,15 +127,19 @@ class LeaseController extends Controller
     public function edit(Lease $lease): Response|ResponseFactory
     {
         return inertia("dashboard/leases/Upsert", [
-            "lease"   => $lease,
+            "lease"   => $lease->load([
+                "unit:id,user_id,unitable_id,unitable_type,house_number",
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency"
+            ]),
             "action"  => "update",
             "users"   => User::select(["id", "email"])->get(),
-            "estates" => Estate::select(["id", "name", "service_charge"])->when(!user()->isAdmin(), function(Builder $qry) {
-                return $qry->whereUserId(user()->id)
-                    ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
-                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
-                    ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
-            })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
+            "estates" => Estate::select(["id", "name", "service_charge"])
+                ->when(!user()->isAdmin(), function(Builder $qry) {
+                    return $qry->whereUserId(user()->id)
+                        ->orWhereHas("properties", fn(Builder $qry) => $qry->whereUserId(user()->id)
+                            ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id)))
+                        ->orWhereHas("units", fn(Builder $qry) => $qry->whereUserId(user()->id));
+                })->with(["properties:id,estate_id,name", "properties.units:id,unitable_id,house_number"])->get()
         ]);
     }
 
@@ -138,11 +150,15 @@ class LeaseController extends Controller
      * @param \App\Models\Lease        $lease
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(StoreLeaseRequest $request, Lease $lease): RedirectResponse
+    public function update(UpdateLeaseRequest $request, Lease $lease): RedirectResponse
     {
-        $lease->update($request->validated());
+        $data = $request->validated();
 
-        return redirect()->route("dashboard.leases.index")->with("toast", [
+        $lease->update($data);
+        $lease->paymentPlans()->delete();
+        $lease->paymentPlans()->createMany($data["plans"]);
+
+        return back()->with("toast", [
             "message" => "Lease Updated!",
             "link"    => [
                 "title" => "View Lease",

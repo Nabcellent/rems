@@ -70,6 +70,7 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
             }
 
             Inertia.post(url, values, {
+                preserveState:false,
                 forceFormData: true,
                 onBefore: () => setIsLoading(true),
                 onSuccess: () => formik.resetForm(),

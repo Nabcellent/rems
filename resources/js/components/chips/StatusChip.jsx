@@ -1,10 +1,9 @@
 import { Status } from '@/utils/enums';
 import PropTypes from 'prop-types';
 import { Chip, ListItemIcon, Menu, MenuItem, Tooltip } from '@mui/material';
-import { Check, Error, Info, Pending, TaskAlt } from '@mui/icons-material';
+import { Check, Error, Info, Pending } from '@mui/icons-material';
 import { Inertia } from '@inertiajs/inertia';
-import pluralize from 'pluralize';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Arr } from '@/utils/helpers';
 import { usePage } from '@inertiajs/inertia-react';
 
@@ -39,17 +38,22 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
     }
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
     const handleClose = () => setAnchorEl(null);
     const handleUpdate = status => {
-        Inertia.put(route(`dashboard.${pluralize(entity)}.update`, { [entity]: entityId }), { status }, {
-            preserveState: false
+        Inertia.put(route(`dashboard.status.update`), { entity, entity_id: entityId, status }, {
+            preserveState: false,
+            onError: async errors => {
+                let text = `<small class="fw-bold text-danger">Whoops! Something is invalid.🌚</small><br>`;
+                Object.keys(errors).map((key, i) => text += `<small>${++i}. ${errors[key]}</small><br/>`);
+
+                await sweet({ message: text, type: 'error', duration: 10 });
+            }
         });
     };
 
     let statuses = Arr.removeItems(Object.values(Status), [status]);
 
-    if (['user', 'lease', 'estate'].includes(entity)) {
+    if (['user', 'lease', 'unit', 'property', 'estate'].includes(entity)) {
         statuses = Arr.only(statuses, [Status.ACTIVE, Status.INACTIVE]);
     } else if (['transaction', 'payment'].includes(entity)) {
         statuses = Arr.removeItems(statuses, [Status.ACTIVE, Status.INACTIVE, Status.RESOLVED]);
@@ -70,7 +74,7 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
                       label={<span><b>Status:</b> {status}</span>}
                       icon={icon}/>
             </Tooltip>
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose} onClick={handleClose}
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose} onClick={handleClose}
                   anchorOrigin={{ vertical: 'top', horizontal: 'left', }}
                   transformOrigin={{ vertical: 'top', horizontal: 'left', }}>
                 {

@@ -13,6 +13,14 @@ yarn-error.log
 /.idea
 /.vscode
 
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
+
 y.hide
 
 /public/build
@@ -23,4 +31,4 @@ public/images/estates/*
 !public/images/users/profile-default.jpg
 public/images/properties/*
 public/images/units/*
-database/migrations/2022_04_26_160204_create_leases_table.php
+#database/migrations/2022_04_26_160204_create_leases_table.php

@@ -19,6 +19,8 @@ class DashboardController extends Controller
 {
     public function default(): Response
     {
+        $transactions = Transaction::when(!user()->isAdmin(), fn($qry) => $qry->whereUserId(user()->id));
+
         return Inertia::render('dashboard/index', [
             "new_estates_count"       => Estate::whereDate('created_at', Carbon::today())->count(),
             "new_users_count"         => User::whereDate('created_at', Carbon::today())->count(),
@@ -26,10 +28,9 @@ class DashboardController extends Controller
             "service_providers_count" => ServiceProvider::count(),
             "my_estates_count"        => Request::user()->estates()->count(),
             "wallet_balance"          => Request::user()->wallet?->balance ?? 0,
-            "transactions_count"      => Transaction::when(!user()->isAdmin(), fn($qry) => $qry->whereUserId(user()->id))
-                ->count(),
+            "transactions_count"      => $transactions->count(),
             "revenue"                 => Payment::whereStatus(Status::COMPLETED)->sum("amount"),
-            "latest_transactions"     => Transaction::latest()->take(10)->with([
+            "latest_transactions"     => $transactions->latest()->take(10)->with([
                 "user:id,email,last_name",
                 "destination:id,email,last_name",
                 "payment:id,method"

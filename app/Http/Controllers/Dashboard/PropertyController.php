@@ -35,14 +35,15 @@ class PropertyController extends Controller
     public function index(): Response|ResponseFactory
     {
         return inertia('dashboard/properties/index', [
-            "properties" => Property::select(["id", "estate_id", "user_id", "name", "type"])
+            "properties" => Property::select(["id", "estate_id", "user_id", "name", "type", "status"])
                 ->when(!user()->can("viewAny", Property::class), function(Builder $qry) {
                     return $qry->whereHas("estate", fn(Builder $qry) => $qry->whereUserId(user()->id))
                         ->orWhere("user_id", user()->id);
                 })->with([
                     "user:id,first_name,last_name,email",
                     "estate:id,name,address"
-                ])->withCount(["units"])->latest()->get()
+                ])->withCount(["units"])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Property::class)
         ]);
     }
 

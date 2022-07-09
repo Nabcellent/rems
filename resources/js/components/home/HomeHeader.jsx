@@ -7,7 +7,6 @@ import Box from '@mui/material/Box';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import Logo from '@/components/Logo';
-import { Link } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 
 const HomeHeader = () => {

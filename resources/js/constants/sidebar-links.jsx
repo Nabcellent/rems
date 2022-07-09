@@ -1,7 +1,3 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSliders } from '@fortawesome/free-solid-svg-icons';
-
 export const sidebarLinks = can => {
     return [
         {
@@ -87,6 +83,13 @@ export const sidebarLinks = can => {
             title: 'System',
             menu: [
                 {
+                    authorized: can.access.users,
+                    startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
+                        { authorized: true, link: route('dashboard.users.index'), title: 'List' },
+                        { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
+                    ]
+                },
+                {
                     authorized: can.access.tickets,
                     startIcon: <i className="bx bxs-hand"/>,
                     title: 'Tickets',
@@ -123,19 +126,12 @@ export const sidebarLinks = can => {
                     ]
                 },
                 {
-                    authorized: can.access.users,
-                    startIcon: <i className="bx bxs-user-account"/>, title: 'Users', subMenu: [
-                        { authorized: true, link: route('dashboard.users.index'), title: 'List' },
-                        { authorized: can.create.user, link: route('dashboard.users.create'), title: 'Create' }
-                    ]
-                },
-                {
                     authorized: true,
                     startIcon: <i className="bx bx-user-circle"/>, title: 'Profile', link: route('dashboard.profile')
                 },
                 {
                     authorized: true,
-                    startIcon: <i><FontAwesomeIcon icon={faSliders}/></i>,
+                    startIcon: <i className="bx bxs-cog"/>,
                     title: can.access.settings ? 'User Settings' : 'Settings',
                     link: route('dashboard.users.settings')
                 },

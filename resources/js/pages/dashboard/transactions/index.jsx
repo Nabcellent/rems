@@ -1,13 +1,16 @@
 import Dashboard from '@/layouts/Dashboard';
-import { Card, Col, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
-import { Paper } from '@mui/material';
+import { Paper, Tooltip } from '@mui/material';
 import { ReadMore } from '@mui/icons-material';
 import StatusChip from '@/components/chips/StatusChip';
 import { Link } from '@inertiajs/inertia-react';
 import TableDate from '@/components/TableDate';
 import { Status } from '@/utils/enums';
+import { currencyFormat } from '@/utils/helpers';
+import TableActions from '@/components/TableActions';
+import moment from 'moment';
 
 const Index = ({ transactions }) => {
     return (
@@ -20,65 +23,49 @@ const Index = ({ transactions }) => {
                         <Card.Body>
                             <DataTable title={'Transactions'} columns={[
                                 {
-                                    accessor: 'user',
-                                    Header: 'Billing name',
-                                    Cell: ({ row }) => (
-                                        <OverlayTrigger overlay={<Tooltip>{row.original.user.email}</Tooltip>}>
-                                        <span>
-                                            {row.original.user.last_name} <br/>
-                                            <small>{row.original.user.user_roles_str}</small>
-                                        </span>
-                                        </OverlayTrigger>
+                                    accessorKey: 'user',
+                                    header: 'Initiator',
+                                    accessorFn: row => `${row.user.full_name}: ${row.user.email}`,
+                                    cell: ({ row }) => (
+                                        <Tooltip title={row.original.user.email}>
+                                            <span>{row.original.user.last_name}</span>
+                                        </Tooltip>
                                     )
                                 },
                                 {
-                                    accessor: 'destination',
-                                    Header: 'Destination',
-                                    Cell: ({ row }) => (
-                                        <OverlayTrigger overlay={<Tooltip>{row.original.destination.email}</Tooltip>}>
-                                        <span>
-                                            {row.original.destination.last_name} <br/>
-                                            <small>{row.original.destination.user_roles_str}</small>
-                                        </span>
-                                        </OverlayTrigger>
+                                    accessorKey: 'destination',
+                                    header: 'Destination',
+                                    accessorFn: row => `${row.destination.full_name}: ${row.destination.email}`,
+                                    cell: ({ row }) => (
+                                        <Tooltip title={row.original.destination.email}>
+                                            <span>{row.original.destination.last_name}</span>
+                                        </Tooltip>
                                     )
                                 },
                                 {
-                                    accessor: 'description',
-                                    Header: 'Description',
+                                    accessorKey: 'description',
+                                    header: 'Description',
                                 },
                                 {
-                                    accessor: 'amount',
-                                    Header: 'Amount',
-                                    Cell: ({ row }) => (new Intl.NumberFormat('en-GB', {
-                                        style: 'currency',
-                                        currency: 'KES'
-                                    })).format(row.original.amount)
+                                    accessorKey: 'amount',
+                                    header: 'Amount',
+                                    cell: ({ row }) => currencyFormat(row.original.amount)
                                 },
                                 {
-                                    accessor: 'status',
-                                    Header: 'Status',
-                                    Cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
+                                    accessorKey: 'status',
+                                    header: 'Status',
+                                    cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
                                                                    entityId={row.original.id}/>
                                 },
                                 {
-                                    accessor: 'created_at',
-                                    Header: 'Date',
-                                    className: 'text-end',
-                                    Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                                    accessorKey: 'created_at',
+                                    header: 'Date',
+                                    accessorFn: row => moment(row.created_at).calendar(),
+                                    cell: ({ row }) => <TableDate date={row.original.created_at}/>
                                 },
                                 {
-                                    accessor: 'actions',
-                                    disableSortBy: true,
-                                    className: 'text-end',
-                                    Cell: ({ row }) => (
-                                        <>
-                                            <Link
-                                                href={route('dashboard.transactions.show', { transaction: row.original.id })}>
-                                                <ReadMore fontSize={'small'}/>
-                                            </Link>
-                                        </>
-                                    )
+                                    id: 'actions',
+                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'transaction'}/>
                                 }
                             ]} data={transactions}/>
                         </Card.Body>
