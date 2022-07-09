@@ -139,7 +139,7 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "lease"   => $lease->load([
                 "unit:id,user_id,unitable_id,unitable_type,house_number",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency"
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day"
             ]),
             "action"  => "update",
             "users"   => User::select(["id", "email"])->get(),
