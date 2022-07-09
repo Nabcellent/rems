@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title inertia>{{ config('app.name', 'REMS') }}</title>
+    <link rel="icon" href="{{ asset("images/logo-dark.svg") }}"/>
 
     <!-- Styles -->
     <link href="{{ asset("css/bootstrap.min.css") }}" id="bootstrap-style" rel="stylesheet" type="text/css"/>

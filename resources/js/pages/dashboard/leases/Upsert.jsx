@@ -108,7 +108,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                     preserveState: false,
                                     onBefore: () => setIsLoading(true),
                                     onSuccess: () => resetForm(),
-                                    onError: errors => setServerErrors(errors),
+                                    onError: errors => console.log(errors),
                                     onFinish: () => setIsLoading(false)
                                 }
                             );
@@ -154,9 +154,8 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             )}/>
                                         </Grid>
                                         <Grid item xs={12} lg={4}>
-                                            <ControlledAutoComplete name={'unit'} value={values.unit}
+                                            <ControlledAutoComplete name={'unit'} value={values.unit} options={units}
                                                                     disabled={!units.length}
-                                                                    options={units}
                                                                     getOptionLabel={o => o.house_number ?? o}
                                                                     onChange={(event, value) => {
                                                                         setFieldValue('unit', value, true);
@@ -168,9 +167,15 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             )}/>
                                         </Grid>
                                         <Grid item xs={12} lg={12}>
-                                            <ControlledAutoComplete name={'user'} value={values.user}
-                                                                    getOptionLabel={o => o.email ?? o}
-                                                                    options={users}
+                                            <ControlledAutoComplete name={'user'} value={values.user} options={users}
+                                                                    getOptionLabel={o => {
+                                                                        let label = o.email;
+                                                                        if (label) label += ': ';
+                                                                        label += o.full_name;
+                                                                        if(!label) label = o
+
+                                                                        return label;
+                                                                    }}
                                                                     isOptionEqualToValue={(option, value) => value === undefined || value === "" || option.id === value.id}
                                                                     onChange={(event, value) => {
                                                                         setFieldValue('user', value, true);

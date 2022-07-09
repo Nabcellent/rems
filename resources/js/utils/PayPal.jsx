@@ -38,7 +38,7 @@ export default class PayPal {
                     user_id: details.user.id,
                     destination_id: details.destinationId,
                     description: details.description,
-                    onSuccess: () => onCompleted({ amount }),
+                    onSuccess: () => onCompleted(),
                 });
             },
             allowOutsideClick: () => !Sweet.isLoading()

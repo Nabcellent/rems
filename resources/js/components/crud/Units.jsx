@@ -199,9 +199,9 @@ const Units = ({ unitableId, units, unitable }) => {
 };
 
 Units.propTypes = {
-    unitableId: PropTypes.number.isRequired,
+    unitableId: PropTypes.number,
     units: PropTypes.arrayOf(PropTypes.object).isRequired,
-    unitable: PropTypes.string.isRequired
+    unitable: PropTypes.string
 };
 
 export default Units;

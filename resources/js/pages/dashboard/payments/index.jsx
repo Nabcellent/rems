@@ -60,7 +60,7 @@ const Index = ({ payments }) => {
                                 },
                                 {
                                     id: 'actions',
-                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'payment'}/>
+                                    cell: ({ row }) => <TableActions row={row.original} entity={'payment'}/>
                                 }
                             ]} data={payments}/>
                         </Card.Body>

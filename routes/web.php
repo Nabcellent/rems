@@ -38,7 +38,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::get('/', [HomeController::class, 'home'])->name("home");
 Route::get('/listings', [ListingsController::class, 'listings'])->name("listings");
 Route::get('/listings/{estate}', [ListingsController::class, 'show'])->name("show");
@@ -50,7 +49,7 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
 
         Route::prefix('/wallet')->name('wallet')->group(function() {
             Route::get('/', [WalletController::class, 'index']);
-            Route::post('/deposit/{wallet}', [WalletController::class, 'deposit'])->name('.deposit');
+            Route::post('/deposit/{user}', [WalletController::class, 'deposit'])->name('.deposit');
         });
 
         Route::prefix('/profile')->name('profile')->group(function() {

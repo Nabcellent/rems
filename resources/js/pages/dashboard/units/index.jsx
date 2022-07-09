@@ -64,7 +64,7 @@ const Index = ({ units }) => {
                                 },
                                 {
                                     id: 'actions',
-                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'unit'}/>
+                                    cell: ({ row }) => <TableActions row={row.original} entity={'unit'}/>
                                 }
                             ]} data={units} onCreateRow={() => Inertia.get(route('dashboard.units.create'))}/>
                         </Card.Body>

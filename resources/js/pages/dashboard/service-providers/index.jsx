@@ -65,7 +65,7 @@ const Index = ({ providers }) => {
                                 accessorKey: 'actions',
                                 disableSortBy: true,
                                 className: 'text-end',
-                                cell: ({ row }) => <TableActions entityId={row.original.id} entity={'user'}/>
+                                cell: ({ row }) => <TableActions row={row.original} entity={'user'}/>
                             }
                         ]} data={providers}
                                    onCreateRow={() => Inertia.get(route('dashboard.users.create', { role: Role.SERVICE_PROVIDER }))}/>

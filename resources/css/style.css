@@ -41,6 +41,9 @@
 .text-primary {
     color: var(--rems-primary) !important;
 }
+.border-primary {
+    border-color: var(--rems-primary) !important;
+}
 
 .min-vh-25 {
     min-height: 25vh !important;

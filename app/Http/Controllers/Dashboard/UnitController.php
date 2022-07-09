@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUnitRequest;
 use App\Http\Requests\UpdateUnitRequest;
@@ -47,10 +48,18 @@ class UnitController extends Controller
                 "description",
                 "status",
                 "created_at"
-            ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
+            ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id)
+                ->orWhereHas("leases", fn(Builder $qry) => $qry->whereUserId(user()->id)))->with([
                 "user:id,first_name,last_name,email",
                 "unitable"
-            ])->withCount("rooms")->latest()->get(),
+            ])->withCount("rooms")->latest()->get()->map(fn(Unit $unit) => [
+                ...$unit->toArray(),
+                "can" => [
+                    "edit" => user()->can("update", $unit),
+                    "view" => user()->can("view", $unit),
+                    "destroy" => user()->can("delete", $unit)
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", Unit::class)
         ]);
     }

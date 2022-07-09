@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\Frequency;
 use App\Enums\Status;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -27,6 +29,22 @@ class Lease extends Model
         "status"     => Status::class,
         "expires_at" => "datetime"
     ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ["default_payment_plan"];
+
+    public function defaultPaymentPlan(): Attribute
+    {
+        return Attribute::get(function() {
+            $plans = $this->paymentPlans;
+
+            return $plans->firstWhere("is_default", true) ?? $plans->firstWhere("frequency", Frequency::MONTHLY) ?? $plans->first();
+        });
+    }
 
     /**
      * .....................    _____________________RELATIONSHIPS

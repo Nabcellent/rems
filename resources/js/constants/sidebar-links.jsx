@@ -67,7 +67,7 @@ export const sidebarLinks = can => {
                     authorized: can.access.payments,
                     startIcon: <i className="bx bxs-coin-stack"/>, title: 'Payments', subMenu: [
                         { authorized: true, link: route('dashboard.payments.index'), title: 'List' },
-                        { authorized: true, link: '/notify', title: 'Plans' }
+                        { authorized: true, link: route('dashboard.payments.create'), title: 'Create' }
                     ]
                 },
                 {

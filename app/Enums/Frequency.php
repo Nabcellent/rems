@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum RentFrequency: string
+enum Frequency: string
 {
     case MONTHLY = "MONTHLY";
     case QUARTERLY = "QUARTERLY";

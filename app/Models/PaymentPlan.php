@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
-use App\Enums\RentFrequency;
+use App\Enums\Frequency;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
+/**
+ * @mixin IdeHelperPaymentPlan
+ */
 class PaymentPlan extends Pivot
 {
     protected $table = "payment_plans";
@@ -15,11 +19,13 @@ class PaymentPlan extends Pivot
         "deposit",
         "rent_amount",
         "due_day",
-        "frequency"
+        "frequency",
+        "is_default",
     ];
 
     protected $casts = [
-        "frequency" => RentFrequency::class
+        "frequency"  => Frequency::class,
+        "is_default" => "bool"
     ];
 
     public function lease(): BelongsTo

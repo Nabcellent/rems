@@ -13,6 +13,8 @@ import Pay from '@/components/Pay';
 import { Inertia } from '@inertiajs/inertia';
 import { Description } from '@/utils/enums';
 import PaymentMethodChip from '@/components/chips/PaymentMethodChip';
+import { currencyFormat } from '@/utils/helpers';
+import moment from 'moment';
 
 const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
     console.log(wallet, transactions);
@@ -116,28 +118,26 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                         <Card.Body>
                             <DataTable data={transactions} title={'Latest Wallet Transactions'} perPage={5} columns={[
                                 {
-                                    accessor: 'amount',
-                                    Header: 'Amount',
-                                    Cell: ({ row }) => (new Intl.NumberFormat('en-GB', {
-                                        style: 'currency',
-                                        currency: 'KES'
-                                    })).format(row.original.amount)
+                                    accessorKey: 'amount',
+                                    header: 'Amount',
+                                    cell: ({ row }) => currencyFormat(row.original.amount)
                                 },
                                 {
-                                    accessor: 'method',
-                                    Header: 'Method',
-                                    Cell: ({ row }) => <PaymentMethodChip method={row.original.payment?.method}/>
+                                    accessorKey: 'method',
+                                    header: 'Method',
+                                    cell: ({ row }) => <PaymentMethodChip method={row.original.payment?.method}/>
                                 },
                                 {
-                                    accessor: 'status',
-                                    Header: 'Status',
-                                    Cell: ({ row }) => <StatusChip status={row.original.status}/>
+                                    accessorKey: 'status',
+                                    header: 'Status',
+                                    cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
+                                                                   entityId={row.original.id}/>
                                 },
                                 {
-                                    accessor: 'created_at',
-                                    Header: 'Date',
-                                    className: 'text-end',
-                                    Cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                                    header: 'Date',
+                                    accessorKey: 'created_at',
+                                    accessorFn: row => moment(row.created_at).calendar(),
+                                    cell: ({ row }) => <TableDate date={row.original.created_at}/>,
                                 },
                             ]}/>
                         </Card.Body>
@@ -150,7 +150,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                  setShowModal={setShowPaymentMethodModal}
                  onCompleted={({
                      amount,
-                 }) => Inertia.post(route('dashboard.wallet.deposit', { wallet: wallet.id }), {
+                 }) => Inertia.post(route('dashboard.wallet.deposit', { user: auth.user.id }), {
                      amount
                  }, { preserveState: true })}/>
         </Dashboard>

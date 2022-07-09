@@ -57,13 +57,16 @@ class UserController extends Controller
                 "status",
                 "approved_at",
                 "created_at"
-            ])->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) use ($estateIds) {
-                return $qry->whereHas("roles", fn(Builder $qry) => $qry->whereName(Role::OWNER->value))
-                    ->whereHas("properties", function(Builder $qry) use ($estateIds) {
-                        return $qry->whereIn("estate_id", $estateIds);
-                    })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
-                        return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
+            ])->whereKeyNot(user()->id)->when(!user()->isAdmin(), function(Builder $qry) use ($estateIds) {
+                return $qry->whereHas("properties", function(Builder $qry) use ($estateIds) {
+                    return $qry->whereIn("estate_id", $estateIds);
+                })->orWhereHas("units", function(Builder $qry) use ($estateIds) {
+                    return $qry->where("unitable_type", Estate::class)->whereIn("unitable_id", $estateIds);
+                })->orWhereHas("leases", function(Builder $qry) use ($estateIds) {
+                    return $qry->whereHas("unit", function(Builder $qry) use ($estateIds) {
+                        return $qry->where("user_id", \user()->id);
                     });
+                });
             })->with("roles:id,name")->latest()->get(),
             "canUpdateStatus" => user()->can("updateStatus", User::class)
         ]);
@@ -155,6 +158,11 @@ class UserController extends Controller
      */
     public function show(User $user): Response|ResponseFactory
     {
+        if($user->hasRole(Role::TENANT)) $user->load([
+            "leases:id,unit_id,user_id",
+            "leases.unit:id,unitable_id,unitable_type"
+        ]);
+
         return inertia("dashboard/users/Show", [
             "user"            => $user->load([
                 "wallet:id,user_id,balance"
@@ -281,6 +289,13 @@ class UserController extends Controller
      */
     public function showProfile(): Response|ResponseFactory
     {
+        if(user()->hasRole([Role::TENANT, Role::SUPER_ADMIN])) {
+            user()->load([
+                "leases:id,unit_id,user_id,status",
+                "leases.unit:id,unitable_id,unitable_type,house_number"
+            ]);
+        }
+
         return inertia("dashboard/users/Show", [
             "user" => user()->load([
                 "wallet:id,user_id,balance"
