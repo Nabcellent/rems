@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("name", 100);
             $table->string("address");
-            $table->string("description")->nullable();
+            $table->text("description")->nullable();
             $table->integer("floor_count")->default(1);
             $table->string("image", 30)->nullable();
             $table->double("latitude", 180, 7);
