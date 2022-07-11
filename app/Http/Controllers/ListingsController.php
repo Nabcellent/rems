@@ -17,7 +17,8 @@ class ListingsController extends Controller
         return Inertia::render('Listings', [
             "listings" => Property::select(["id", "estate_id", "user_id", "type"])
                 ->with([
-                    "estate:id,name,address,description,image,status"
+                    "estate:id,name,address,description,image,status",
+                    "units"
                 ])->latest()->get(),
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
@@ -30,7 +31,7 @@ class ListingsController extends Controller
     {
         return Inertia::render("SingleListing", [
             'estate' => $estate->load([
-                "units:id,user_id,unitable_id,house_number,purpose,status,created_at",
+                "units:id,user_id,unitable_id,house_number,floor,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
                 "user:id,first_name,last_name,email,phone",
