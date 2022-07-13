@@ -133,3 +133,6 @@ a:hover {
 .cursor-pointer {
     cursor: pointer;
 }
+.swal2-html-container {
+    font-size: 80%;
+}

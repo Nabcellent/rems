@@ -32,7 +32,7 @@ class EstatePolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->hasRole([Role::PROPERTY_MANAGER, Role::OWNER]);
     }
 
     /**

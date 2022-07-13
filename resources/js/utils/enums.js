@@ -17,6 +17,7 @@ export const RoomType = {
 export const Purpose = {
     SALE: 'SALE',
     RENT: 'RENT',
+    EITHER: 'EITHER',
 };
 
 export const UnitType = {

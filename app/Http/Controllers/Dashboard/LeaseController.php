@@ -9,6 +9,7 @@ use App\Http\Requests\StoreLeaseRequest;
 use App\Http\Requests\UpdateLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
+use App\Models\PaymentPlan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -94,9 +95,9 @@ class LeaseController extends Controller
      */
     public function store(StoreLeaseRequest $request): RedirectResponse
     {
-        $data = $this->setDefaultPlan($request);
+        $data = $request->validated();
 
-        $data["plans"] = $data["plans"]->toArray();
+        if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;
 
         $lease = Lease::create($data);
         $lease->paymentPlans()->createMany($data["plans"]);
@@ -118,15 +119,35 @@ class LeaseController extends Controller
      */
     public function show(Lease $lease): Response|ResponseFactory
     {
+        $lease = $lease->load([
+            "unit",
+            "unit.user:id,email,phone",
+            "user:id,email,phone",
+            "user.roles:id,name",
+            "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default",
+        ]);
+
+        $data = $lease->toArray();
+        $data["default_payment_plan"] += [
+            "can" => [
+                "edit"    => user()->can("update", $lease->default_paymen_plan),
+                "view"    => user()->can("view", $lease->default_paymen_plan),
+                "destroy" => user()->can("delete", $lease->default_paymen_plan)
+            ]
+        ];
+        $data["payment_plans"] = $lease->paymentPlans->map(fn($plan) => [
+            ...$plan->toArray(),
+            "can" => [
+                "edit"    => user()->can("update", $plan),
+                "view"    => user()->can("view", $plan),
+                "destroy" => user()->can("delete", $plan)
+            ]
+        ])->toArray();
+
         return inertia("dashboard/leases/Show", [
-            "lease"           => $lease->load([
-                "unit",
-                "unit.user:id,email,phone",
-                "user:id,email,phone",
-                "user.roles:id,name",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default",
-            ]),
-            "canUpdateStatus" => user()->can("updateStatus", $lease)
+            "lease"           => $data,
+            "canUpdateStatus" => user()->can("updateStatus", $lease),
+            "canEdit"         => user()->can("update", $lease)
         ]);
     }
 
@@ -164,9 +185,12 @@ class LeaseController extends Controller
      */
     public function update(UpdateLeaseRequest $request, Lease $lease): RedirectResponse
     {
-        $data = $this->setDefaultPlan($request);
+        $data = $request->validated();
+
+        if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;
 
         $lease->update($data);
+
         $lease->paymentPlans()->delete();
         $lease->paymentPlans()->createMany($data["plans"]);
 
@@ -190,30 +214,5 @@ class LeaseController extends Controller
         $lease->delete();
 
         return back()->with(["toast" => ["message" => "Lease Deleted!", "type" => "info"]]);
-    }
-
-    /**
-     * @param \App\Http\Requests\StoreLeaseRequest|\App\Http\Requests\UpdateLeaseRequest $request
-     * @return mixed
-     */
-    private function setDefaultPlan(StoreLeaseRequest|UpdateLeaseRequest $request): mixed
-    {
-        $data = $request->validated();
-
-        $plans = [];
-        foreach($data["plans"] as $plan) {
-            $plan["is_default"] = false;
-            if(collect($plans)->contains(fn($val) => isset($val["is_default"]) && $val["is_default"] === true)) {
-                $plan["is_default"] = false;
-            } else if($plan["frequency"] === Frequency::MONTHLY->value) {
-                $plan["is_default"] = true;
-            }
-
-            $plans[] = $plan;
-        }
-
-        $data["plans"] = $plans;
-
-        return $data;
     }
 }

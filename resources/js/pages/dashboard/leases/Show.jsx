@@ -66,7 +66,7 @@ const Show = ({ errors, lease }) => {
 
             <Row>
                 <Col>
-                    <PaymentPlans plans={lease.payment_plans} leaseId={lease.id}/>
+                    <PaymentPlans plans={lease.payment_plans} defaultPlan={lease.default_payment_plan} leaseId={lease.id}/>
                 </Col>
             </Row>
         </Dashboard>
