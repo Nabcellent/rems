@@ -21,7 +21,7 @@ class ServicePolicy
      */
     public function before(User $user, string $ability)
     {
-        if($user->hasRole(Role::ADMIN->value)) return true;
+        if($user->hasRole(Role::ADMIN)) return true;
     }
 
     /**
@@ -55,7 +55,7 @@ class ServicePolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->hasRole([Role::PROPERTY_MANAGER]);
     }
 
     /**

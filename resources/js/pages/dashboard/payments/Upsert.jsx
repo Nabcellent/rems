@@ -85,6 +85,7 @@ const Upsert = ({ leases, payment, action, auth }) => {
                                                         getOptionLabel={o => {
                                                             let label = o?.unit?.estate?.name;
                                                             if (label) label += ': ';
+                                                            label += o?.unit?.unitable?.name ?? null;
                                                             label += o?.unit?.house_number;
                                                             if(!label) label = o
 

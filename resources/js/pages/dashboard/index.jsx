@@ -21,7 +21,7 @@ const Default = ({
             title: "New Tickets",
             iconClass: "bx-news",
             description: <CountUp end={new_tickets_count}/>,
-            col: '4'
+            col: 4
         }
     ];
 
@@ -30,7 +30,7 @@ const Default = ({
             title: "Total Transactions",
             iconClass: "bx-money-withdraw",
             description: <CountUp end={transactions_count} separator={','}/>,
-            col: '4',
+            col: 4,
         });
     }
     if (can.access.estates) {
@@ -38,7 +38,7 @@ const Default = ({
             title: "New Estates",
             iconClass: "bx-home-circle",
             description: <CountUp end={new_estates_count}/>,
-            col: '4',
+            col: 4,
         });
     }
     if (can.access.services) {
@@ -46,7 +46,7 @@ const Default = ({
             title: "Service Providers",
             iconClass: "bx-hard-hat",
             description: <CountUp end={service_providers_count}/>,
-            col: '4'
+            col: 4
         });
     }
     if (can.access.units) {
@@ -54,7 +54,7 @@ const Default = ({
             title: "Revenue",
             iconClass: "bx-archive-in",
             description: <CountUp end={revenue} prefix={'KES.'} separator={','}/>,
-            col: '4'
+            col: 4
         });
     }
     if (can.access.users) {
@@ -62,7 +62,7 @@ const Default = ({
             title: "New Users",
             iconClass: "bx-user-plus",
             description: <CountUp end={new_users_count}/>,
-            col: '4',
+            col: 4,
         });
     }
 
