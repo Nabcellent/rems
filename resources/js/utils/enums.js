@@ -51,6 +51,7 @@ export const Telco = {
 
 export const Description = {
     RENT_PAYMENT: 'Rent Payment',
+    RENT_DEPOSIT: 'Rent Deposit',
     WALLET_DEPOSIT: 'Wallet Deposit',
 };
 

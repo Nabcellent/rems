@@ -39,16 +39,7 @@ class Lease extends Model
 
     public function defaultPaymentPlan(): Attribute
     {
-        return Attribute::get(function() {
-            $plan = $this->paymentPlans->firstWhere("is_default", true);
-            /*$plan["can"] = [
-                "edit"    => user()->can("update", $plan),
-                "view"    => user()->can("view", $plan),
-                "destroy" => user()->can("delete", $plan)
-            ];*/
-
-            return $plan;
-        });
+        return Attribute::get(fn() => $this->paymentPlans->firstWhere("is_default", true));
     }
 
     /**

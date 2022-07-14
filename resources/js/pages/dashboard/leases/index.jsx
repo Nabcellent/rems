@@ -9,6 +9,7 @@ import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
 import TableActions from '@/components/TableActions';
 import TableDate from '@/components/TableDate';
+import { Morphable } from '@/utils/enums';
 
 const Index = ({ leases }) => {
     console.log(leases);
@@ -22,6 +23,24 @@ const Index = ({ leases }) => {
                 <Col className="col-12">
                     <Paper className={'p-3'}>
                         <DataTable title={'Leases'} columns={[
+                            {
+                                accessorKey: 'unit',
+                                header: 'Unit',
+                                cell: ({ row }) => (
+                                    <span>
+                                        {row.original.unit.estate.name} <br/>
+                                        <Link href={route('dashboard.units.show', row.original.unit)}>
+                                            <small>
+                                                HSE NO: {' '}
+                                                <b>
+                                                    {row.original.unit.unitable_name === Morphable.PROPERTY && row.original.unit.unitable.name}
+                                                    {row.original.unit.house_number}
+                                                </b>
+                                            </small>
+                                        </Link>
+                                    </span>
+                                )
+                            },
                             {
                                 accessorKey: 'owner',
                                 header: 'Owner',

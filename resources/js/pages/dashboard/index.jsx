@@ -5,6 +5,7 @@ import CountUp from 'react-countup';
 import LatestTransactions from '@/pages/dashboard/default/LatestTransactions';
 import { Grid, Paper } from '@mui/material';
 import Breadcrumbs from '@/components/common/Breadcrumb';
+import LeaderList from '@/components/LeaderList';
 
 const Default = ({
     can,
@@ -14,7 +15,8 @@ const Default = ({
     new_tickets_count,
     transactions_count,
     revenue,
-    service_providers_count
+    service_providers_count,
+    rent_figures
 }) => {
     const reports = [
         {
@@ -62,6 +64,31 @@ const Default = ({
             title: "New Users",
             iconClass: "bx-user-plus",
             description: <CountUp end={new_users_count}/>,
+            col: 4,
+        });
+    }
+    console.log(rent_figures);
+    if (rent_figures) {
+        reports.push({
+            title: "Rent",
+            iconClass: "bx-user-plus",
+            description: (
+                <LeaderList component={'small'} className={'fs-10'}
+                            items={[
+                                {
+                                    key: 'Invoiced',
+                                    value: <CountUp end={rent_figures.total_invoiced} separator={','} prefix={'KES '}/>
+                                },
+                                {
+                                    key: 'Paid',
+                                    value: <CountUp end={rent_figures.total_paid} separator={','} prefix={'KES '}/>
+                                },
+                                {
+                                    key: 'Arrears',
+                                    value: <CountUp end={rent_figures.arrears} separator={','} prefix={'KES '}/>
+                                },
+                            ]}/>
+            ),
             col: 4,
         });
     }

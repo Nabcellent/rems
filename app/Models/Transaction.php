@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\Description;
 use App\Enums\Status;
 use App\Enums\TransactionType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,5 +48,17 @@ class Transaction extends Model
     public function payment(): HasOne
     {
         return $this->hasOne(Payment::class);
+    }
+
+
+    /**
+     * Scope a query to only include popular users.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRentPayment(Builder $query): Builder
+    {
+        return $query->whereDescription(Description::RENT_PAYMENT)->orWhere("description", Description::RENT_DEPOSIT);
     }
 }

@@ -32,7 +32,7 @@ class UnitPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->leases->isNotEmpty() || $user->units->isNotEmpty() || $user->hasRole([
+        return $user->units->isNotEmpty() || $user->hasRole([
                 Role::PROPERTY_MANAGER,
                 Role::OWNER
             ]);

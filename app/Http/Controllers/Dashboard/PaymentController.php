@@ -54,7 +54,7 @@ class PaymentController extends Controller
     {
         return inertia('dashboard/payments/Upsert', [
             "action" => "create",
-            "wallet" => user()->wallet,
+            "rent_arrears" => user()->rentFigures()["arrears"],
             "leases" => user()->leases()->with("unit:id,unitable_id,unitable_type,house_number")->get()
         ]);
     }
