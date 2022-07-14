@@ -27,8 +27,13 @@ const Index = ({ transactions }) => {
                                     header: 'Initiator',
                                     accessorFn: row => `${row.user.full_name}: ${row.user.email}`,
                                     cell: ({ row }) => (
-                                        <Tooltip title={row.original.user.email}>
-                                            <span>{row.original.user.last_name}</span>
+                                        <Tooltip title={row.original.user.user_roles_str}>
+                                            <span>{row.original.user.full_name} <br/>
+                                                <Link
+                                                    href={route('dashboard.users.show', row.original.user)}>
+                                                    <strong><small>{row.original.user.email}</small></strong>
+                                                </Link>
+                                            </span>
                                         </Tooltip>
                                     )
                                 },
@@ -38,7 +43,13 @@ const Index = ({ transactions }) => {
                                     accessorFn: row => `${row.destination.full_name}: ${row.destination.email}`,
                                     cell: ({ row }) => (
                                         <Tooltip title={row.original.destination.email}>
-                                            <span>{row.original.destination.last_name}</span>
+                                            <span>
+                                                {row.original.destination.full_name}<br/>
+                                                <Link
+                                                    href={route('dashboard.users.show', row.original.destination)}>
+                                                    <strong><small>{row.original.destination.email}</small></strong>
+                                                </Link>
+                                            </span>
                                         </Tooltip>
                                     )
                                 },

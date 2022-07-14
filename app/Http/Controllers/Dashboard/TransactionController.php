@@ -41,10 +41,10 @@ class TransactionController extends Controller
                 "status",
                 "created_at"
             ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
-                "user:id,last_name,email,phone",
+                "user:id,first_name,last_name,email,phone",
                 "user.roles",
                 "destination.roles",
-                "destination:id,last_name,email,phone"
+                "destination:id,first_name,last_name,email,phone"
             ])->latest()->get(),
             "canUpdateStatus" => user()->can("updateStatus", Transaction::class)
         ]);

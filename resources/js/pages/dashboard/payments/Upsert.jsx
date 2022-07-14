@@ -18,8 +18,8 @@ const validationSchema = yup.object().shape({
     description: yup.string().required('Payment type is required'),
 });
 
-const Upsert = ({ auth, leases, payment, action, rent_arrears }) => {
-    console.log(leases, rent_arrears);
+const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
+    console.log(units, rent_arrears);
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
@@ -42,7 +42,9 @@ const Upsert = ({ auth, leases, payment, action, rent_arrears }) => {
         validateOnChange: true,
         onSubmit: values => {
             const paymentDetails = {
-                user: auth.user, description: values.description, amount: [
+                user: auth.user,
+                description: values.description,
+                amount: [
                     Description.RENT_PAYMENT, Description.RENT_DEPOSIT
                 ].includes(values.description) ? rent_arrears : 100
             };
@@ -84,21 +86,20 @@ const Upsert = ({ auth, leases, payment, action, rent_arrears }) => {
                                 </TextField>
                             </Grid>
                             <Grid item xs={12} lg>
-                                <ControlledAutoComplete name={'unit'} value={formik.values.unit} options={leases}
+                                <ControlledAutoComplete name={'unit'} value={formik.values.unit} options={units}
                                                         disabled={![
                                                             Description.RENT_PAYMENT, Description.RENT_DEPOSIT
                                                         ].includes(formik.values.description)}
                                                         getOptionLabel={o => {
-                                                            let label = o?.unit?.estate?.name;
+                                                            let label = o?.estate?.name;
                                                             if (label) label += ': ';
-                                                            label += o?.unit?.unitable?.name ?? null;
-                                                            label += o?.unit?.house_number;
+                                                            label += o?.unitable?.name ?? null;
+                                                            label += o?.house_number;
                                                             if (!label) label = o;
 
                                                             return label;
                                                         }}
                                                         onChange={(event, value) => {
-                                                            console.log(value.unit);
                                                             formik.setFieldValue('unit', value, true);
                                                         }}
                                                         renderInput={(params) => (
