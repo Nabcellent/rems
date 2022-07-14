@@ -20,8 +20,8 @@ const Show = ({ errors, lease }) => {
             <Breadcrumbs title="Leases" breadcrumbItem={`#${lease.id}`}/>
 
             <Banner title={'Lease.'} actions={[
-                <IconButton component={Link} className={'mx-1'}
-                            href={route(`dashboard.leases.edit`, lease)}> <Edit/>
+                <IconButton component={Link} className={'mx-1'} href={route(`dashboard.leases.edit`, lease)}>
+                    <Edit/>
                 </IconButton>
             ]}/>
 
