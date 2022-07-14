@@ -83,13 +83,10 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                         </Col>
                         <Col lg={7}>
                             <div className="d-flex align-items-center mb-1">
-                                <Badge className={'me-2'}/><strong>Unit</strong>
-                            </div>
-                            <Divider sx={{ my: 1 }}/>
-                            <div className="d-flex align-items-center mb-2">
                                 <LocationOn className="me-2"/>
                                 <div className="flex-1"><h6 className="mb-0">{unit.estate.address}</h6></div>
                             </div>
+                            <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
                                 <SupervisorAccount className="me-2"/>
                                 <div className="flex-1">
@@ -100,15 +97,27 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                 <Countertops className="me-2"/>
                                 <div className="flex-1">Type: {unit.type}</div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <MonetizationOn className="me-2"/>
-                                <div className="flex-1">Purpose: {unit.purpose}</div>
-                            </div>
                             {
-                                unit.purpose === Purpose.SALE && (
+                                unit.purpose !== Purpose.EITHER && (
+                                    <div className="d-flex align-items-center mb-2">
+                                        <MonetizationOn className="me-2"/>
+                                        <div className="flex-1">Purpose: {unit.purpose}</div>
+                                    </div>
+                                )
+                            }
+                            {
+                                [Purpose.SALE, Purpose.EITHER].includes(unit.purpose) && (
                                     <div className="d-flex align-items-center mb-2">
                                         <Sell className="me-2"/>
                                         <div className="flex-1">Price: {currencyFormat(unit.price)}</div>
+                                    </div>
+                                )
+                            }
+                            {
+                                [Purpose.RENT, Purpose.EITHER].includes(unit.purpose) && (
+                                    <div className="d-flex align-items-center mb-2">
+                                        <Sell className="me-2"/>
+                                        <div className="flex-1">Rent Amount: {currencyFormat(unit.rent_amount)}/m</div>
                                     </div>
                                 )
                             }

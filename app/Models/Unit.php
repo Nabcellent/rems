@@ -28,6 +28,7 @@ class Unit extends Model
         "purpose",
         "type",
         "price",
+        "rent_amount",
         "description",
         "image",
         "status",

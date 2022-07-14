@@ -78,6 +78,7 @@ namespace App\Models{
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $description
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Amenity[] $amenities
  * @property-read int|null $amenities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
@@ -97,6 +98,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Estate query()
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereAddress($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Estate whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Estate whereLatitude($value)
@@ -361,6 +363,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Lease $lease
+ * @method static \Database\Factories\PaymentPlanFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PaymentPlan query()
@@ -667,6 +670,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Transaction rentPayment()
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Transaction whereDescription($value)
@@ -697,6 +701,7 @@ namespace App\Models{
  * @property string $status
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $rent_amount
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Amenity[] $amenities
  * @property-read int|null $amenities_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Image[] $images
@@ -721,6 +726,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit wherePurpose($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Unit whereRentAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereUnitableId($value)

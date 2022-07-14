@@ -49,7 +49,8 @@ class UnitController extends Controller
                 "status",
                 "created_at"
             ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id)
-                ->orWhereHas("leases", fn(Builder $qry) => $qry->whereUserId(user()->id)))->with([
+                ->orWhereHas("leases", fn(Builder $qry) => $qry->whereUserId(user()->id))
+                ->orWhereHas("unitable", fn(Builder $qry) => $qry->whereUserId(user()->id)))->with([
                 "user:id,first_name,last_name,email",
                 "unitable"
             ])->withCount("rooms")->latest()->get()->map(fn(Unit $unit) => [
@@ -88,6 +89,8 @@ class UnitController extends Controller
     public function store(StoreUnitRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
+        dd($data);
 
         $unitable = match ($request->input(["unitable"])) {
             "estate" => new Estate,

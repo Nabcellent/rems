@@ -5,6 +5,7 @@ import CountUp from 'react-countup';
 import LatestTransactions from '@/pages/dashboard/default/LatestTransactions';
 import { Grid, Paper } from '@mui/material';
 import Breadcrumbs from '@/components/common/Breadcrumb';
+import LeaderList from '@/components/LeaderList';
 
 const Default = ({
     can,
@@ -14,14 +15,15 @@ const Default = ({
     new_tickets_count,
     transactions_count,
     revenue,
-    service_providers_count
+    service_providers_count,
+    rent_figures
 }) => {
     const reports = [
         {
             title: "New Tickets",
             iconClass: "bx-news",
             description: <CountUp end={new_tickets_count}/>,
-            col: '4'
+            col: 4
         }
     ];
 
@@ -30,7 +32,7 @@ const Default = ({
             title: "Total Transactions",
             iconClass: "bx-money-withdraw",
             description: <CountUp end={transactions_count} separator={','}/>,
-            col: '4',
+            col: 4,
         });
     }
     if (can.access.estates) {
@@ -38,7 +40,7 @@ const Default = ({
             title: "New Estates",
             iconClass: "bx-home-circle",
             description: <CountUp end={new_estates_count}/>,
-            col: '4',
+            col: 4,
         });
     }
     if (can.access.services) {
@@ -46,7 +48,7 @@ const Default = ({
             title: "Service Providers",
             iconClass: "bx-hard-hat",
             description: <CountUp end={service_providers_count}/>,
-            col: '4'
+            col: 4
         });
     }
     if (can.access.units) {
@@ -54,7 +56,7 @@ const Default = ({
             title: "Revenue",
             iconClass: "bx-archive-in",
             description: <CountUp end={revenue} prefix={'KES.'} separator={','}/>,
-            col: '4'
+            col: 4
         });
     }
     if (can.access.users) {
@@ -62,7 +64,32 @@ const Default = ({
             title: "New Users",
             iconClass: "bx-user-plus",
             description: <CountUp end={new_users_count}/>,
-            col: '4',
+            col: 4,
+        });
+    }
+    console.log(rent_figures);
+    if (rent_figures) {
+        reports.push({
+            title: "Rent",
+            iconClass: "bx-user-plus",
+            description: (
+                <LeaderList component={'small'} className={'fs-10'}
+                            items={[
+                                {
+                                    key: 'Invoiced',
+                                    value: <CountUp end={rent_figures.total_invoiced} separator={','} prefix={'KES '}/>
+                                },
+                                {
+                                    key: 'Paid',
+                                    value: <CountUp end={rent_figures.total_paid} separator={','} prefix={'KES '}/>
+                                },
+                                {
+                                    key: 'Arrears',
+                                    value: <CountUp end={rent_figures.arrears} separator={','} prefix={'KES '}/>
+                                },
+                            ]}/>
+            ),
+            col: 4,
         });
     }
 

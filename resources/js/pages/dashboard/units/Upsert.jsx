@@ -13,7 +13,7 @@ import {
     TextField
 } from '@mui/material';
 import { Morphable, Purpose, Status, UnitType } from '@/utils/enums';
-import { str } from '@/utils/helpers';
+import { str as Str, str } from '@/utils/helpers';
 import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import React, { useEffect, useState } from 'react';
@@ -56,6 +56,7 @@ const Upsert = ({ unit, action, estates }) => {
             house_number: unit?.house_number ?? '',
             type: unit?.type ?? '',
             price: unit?.price ?? '',
+            rent_amount: unit?.rent_amount ?? '',
             purpose: unit?.purpose ?? '',
             description: unit?.description ?? '',
             estate: unit?.estate ?? '',
@@ -76,6 +77,7 @@ const Upsert = ({ unit, action, estates }) => {
 
             Inertia.post(url, values, {
                 forceFormData: true,
+                preserveState: false,
                 onBefore: () => setIsLoading(true),
                 onSuccess: () => formik.resetForm(),
                 onError: errors => setErrors(errors),
@@ -132,13 +134,6 @@ const Upsert = ({ unit, action, estates }) => {
                                            error={formik.touched.house_number && Boolean(formik.errors.house_number)}
                                            helperText={formik.touched.house_number && formik.errors.house_number}/>
                             </Grid>
-                            <Grid item md={6}>
-                                <TextField label="Unit Price" type={'number'} placeholder="Unit price..."
-                                           name={'price'} value={formik.values.price} fullWidth
-                                           onChange={formik.handleChange}
-                                           error={formik.touched.price && formik.errors.price}
-                                           helperText={formik.errors.price}/>
-                            </Grid>
                             <Grid item xs={12} lg={6}>
                                 <FormControl error={formik.touched.type && Boolean(formik.errors.type)}>
                                     <FormLabel className={'m-0'} id="unit-type">Type</FormLabel>
@@ -160,18 +155,40 @@ const Upsert = ({ unit, action, estates }) => {
                                 <FormControl error={formik.touched.purpose && Boolean(formik.errors.purpose)}>
                                     <FormLabel className={'m-0'} id="unit-purpose">Purpose</FormLabel>
                                     <RadioGroup row aria-labelledby="unit-purpose" name="purpose"
-                                                value={formik.values.purpose}
-                                                onChange={formik.handleChange}>
-                                        <FormControlLabel className={'mb-0'} value={Purpose.RENT} control={<Radio/>}
-                                                          label="Rent"/>
-                                        <FormControlLabel className={'mb-0'} value={Purpose.SALE} control={<Radio/>}
-                                                          label="Sale"/>
+                                                value={formik.values.purpose} onChange={formik.handleChange}>
+                                        {Object.values(Purpose).map((purpose, i) => (
+                                            <FormControlLabel key={`purpose-${i}`} className={'mb-0'} value={purpose} control={<Radio/>}
+                                                              label={Str.headline(purpose)}/>
+                                        ))}
                                     </RadioGroup>
                                     <FormHelperText className={'mt-0'}>
                                         {formik.touched.purpose && formik.errors.purpose}
                                     </FormHelperText>
                                 </FormControl>
                             </Grid>
+                            {
+                                [Purpose.SALE, Purpose.EITHER].includes(formik.values.purpose) && (
+                                    <Grid item md={6}>
+                                        <TextField label={"Unit Price"} type={'number'} placeholder="Unit price..."
+                                                   name={'price'} value={formik.values.price} fullWidth
+                                                   onChange={formik.handleChange}
+                                                   error={formik.touched.price && formik.errors.price}
+                                                   helperText={formik.errors.price}/>
+                                    </Grid>
+                                )
+                            }
+                            {
+                                [Purpose.RENT, Purpose.EITHER].includes(formik.values.purpose) && (
+                                    <Grid item md={6}>
+                                        <TextField label={"Monthly Rent Amount"} type={'number'}
+                                                   placeholder="Monthly rent amount..."
+                                                   name={'rent_amount'} value={formik.values.rent_amount} fullWidth
+                                                   onChange={formik.handleChange}
+                                                   error={formik.touched.rent_amount && formik.errors.rent_amount}
+                                                   helperText={formik.errors.rent_amount}/>
+                                    </Grid>
+                                )
+                            }
                             <Grid item xs={12}>
                                 <TextField label="Description" multiline rows={3} name={'description'}
                                            placeholder="Start describing your brief policy..."

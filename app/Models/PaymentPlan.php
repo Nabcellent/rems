@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use App\Enums\Frequency;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
  * @mixin IdeHelperPaymentPlan
  */
-class PaymentPlan extends Pivot
+class PaymentPlan extends Model
 {
+    use HasFactory;
+
     protected $table = "payment_plans";
 
     protected $fillable = [

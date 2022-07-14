@@ -32,7 +32,10 @@ class UnitPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->leases->isNotEmpty() || $user->units->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->units->isNotEmpty() || $user->hasRole([
+                Role::PROPERTY_MANAGER,
+                Role::OWNER
+            ]);
     }
 
     /**
@@ -90,7 +93,7 @@ class UnitPolicy
      */
     public function delete(User $user, Unit $unit)
     {
-        //
+        return $user->id === $unit->user_id;
     }
 
     /**

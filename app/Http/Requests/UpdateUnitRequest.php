@@ -31,6 +31,7 @@ class UpdateUnitRequest extends FormRequest
             "unitable"     => "required|in:estate,property",
             "house_number" => "required|string",
             "price"        => "nullable|numeric",
+            "rent_amount"  => "nullable|numeric",
             "purpose"      => ["required", new Enum(Purpose::class)],
             "type"         => ["required", new Enum(UnitType::class)],
             "description"  => "nullable|string",

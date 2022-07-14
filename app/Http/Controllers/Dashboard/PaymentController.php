@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\Unit;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -53,9 +55,10 @@ class PaymentController extends Controller
     public function create(): Response|ResponseFactory
     {
         return inertia('dashboard/payments/Upsert', [
-            "action" => "create",
-            "wallet" => user()->wallet,
-            "leases" => user()->leases()->with("unit:id,unitable_id,unitable_type,house_number")->get()
+            "action"       => "create",
+            "rent_arrears" => user()->rentFigures()["arrears"],
+            "units"        => Unit::select(["id", "user_id", "unitable_id", "unitable_type", "house_number"])
+                ->whereHas("leases", fn(Builder $qry) => $qry->whereUserId(user()->id))->get()
         ]);
     }
 

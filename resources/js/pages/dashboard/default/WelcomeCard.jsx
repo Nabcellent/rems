@@ -34,8 +34,6 @@ const WelcomeCard = () => {
                                         src={`/images/users/${user.image}`}>{getInitials(fullName)}
                                 </Avatar>
                             </div>
-                            <h5 className="mt-4 font-size-15 text-truncate">{user.first_name}</h5>
-                            <p className="text-muted mb-0 text-truncate">{user.user_roles_str}</p>
                         </Col>
 
                         <Col sm="8">

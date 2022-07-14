@@ -56,6 +56,8 @@ class MpesaController extends Controller
             $stk->relation_id = $transaction->id;
             $stk->save();
         } catch (Exception $exception) {
+            Log::error($exception);
+
             $stk = [
                 'ResponseCode'        => 900,
                 'ResponseDescription' => 'Invalid request',

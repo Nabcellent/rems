@@ -5,7 +5,7 @@ export default class Mpesa {
     baseUrl = '/api/mpesa';
     request_id = null;
     amount = 0;
-    onSuccess = () => {
+    onCompleted = () => {
     };
 
     static fire = async (details, onCompleted) => {
@@ -22,7 +22,7 @@ export default class Mpesa {
                     phone = document.getElementById('phone').value;
 
                 if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
-                if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid Safaricom Number!');
+                if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid MPESA Number!');
 
                 try {
                     await new Mpesa().init({
@@ -31,7 +31,7 @@ export default class Mpesa {
                         description: details.description,
                         user_id: details.user.id,
                         destination_id: details.destinationId,
-                        onSuccess: () => onCompleted(),
+                        onCompleted: () => onCompleted({amount}),
                     });
                 } catch (err) {
                     const message = err.response.data.message;
@@ -45,7 +45,7 @@ export default class Mpesa {
         });
     };
 
-    init = async ({ phone, amount, reference, description, onSuccess, ...data }) => {
+    init = async ({ phone, amount, reference, description, onCompleted, ...data }) => {
         this.amount = amount;
 
         const { data: { stk_request, transaction } } = await axios.post(`${this.baseUrl}/stk/initiate`, {
@@ -55,15 +55,15 @@ export default class Mpesa {
             ...data,
         }, { headers: { 'Accept': 'application/json' } });
 
-        if (stk_request.checkout_request_id) {
-            console.log(stk_request);
+        console.log(stk_request);
+        console.log(transaction);
 
+        if (stk_request.checkout_request_id) {
             this.request_id = stk_request.id;
-            this.onSuccess = onSuccess;
+            this.onCompleted = onCompleted;
 
             return await this.alert();
         } else {
-            console.log(transaction);
             await this.updateTransaction(transaction.id, Status.FAILED);
 
             await sweet({
@@ -139,7 +139,7 @@ export default class Mpesa {
             type = 'success';
             message = 'Payment Successful!';
 
-            this.onSuccess();
+            this.onCompleted();
         } else {
             type = 'warning';
             message = 'Something went wrong!';

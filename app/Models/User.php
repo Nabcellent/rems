@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Frequency;
+use App\Enums\Status;
 use App\Events\UserCreated;
 use App\Notifications\ApproveAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification;
+use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
 use Nabcellent\Laraconfig\HasConfig;
 use Spatie\Permission\Contracts\Role;
@@ -219,7 +222,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * Determine if the model has all of the given role(s).
      *
      * @param string|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection|\App\Enums\Role $roles
-     * @param string|null                                                                   $guard
+     * @param string|null                                                                                   $guard
      * @return bool
      */
     public function hasAllRoles($roles, string $guard = null): bool
@@ -291,5 +294,26 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin(): bool
     {
         return $this->hasRole([\App\Enums\Role::ADMIN->value, \App\Enums\Role::SUPER_ADMIN->value]);
+    }
+
+    #[ArrayShape([
+        "total_invoiced" => "mixed|null",
+        "total_paid"     => "mixed",
+        "arrears"        => "mixed"
+    ])] public function rentFigures(): array
+    {
+        $totalPaid = $this->transactions()->whereStatus(Status::COMPLETED)->rentPayment()->sum("amount");
+        $totalInvoice = $this->leases->pluck("default_payment_plan")->reduce(function($carry, PaymentPlan $item) {
+            $noOfExpectedPayments = match ($item->frequency) {
+                Frequency::MONTHLY => $item->created_at->diffInMonths(),
+                Frequency::QUARTERLY => $item->created_at->diffInQuarters(),
+                Frequency::HALF_YEARLY => $item->created_at->diffInYears() / 2,
+                Frequency::YEARLY => $item->created_at->diffInYears()
+            };
+
+            return $carry + ($noOfExpectedPayments * $item->rent_amount);
+        });
+
+        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
     }
 }
