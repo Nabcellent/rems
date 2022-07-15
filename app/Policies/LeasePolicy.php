@@ -32,7 +32,7 @@ class LeasePolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->units->isNotEmpty() || $user->leases->isNotEmpty();
+        return $user->units->isNotEmpty() || $user->hasRole(Role::TENANT);
     }
 
     /**
