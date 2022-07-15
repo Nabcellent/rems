@@ -70,7 +70,11 @@ export default class PayPal {
                     payload: details
                 });
 
-                if (status === 200) onCompleted({ amount });
+                if (status === 200) {
+                    onCompleted({ amount });
+
+                    await sweet({ type: 'success', message: 'Payment Successful!' });
+                }
             });
         };
 

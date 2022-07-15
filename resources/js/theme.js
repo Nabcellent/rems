@@ -8,6 +8,10 @@ export const theme = (themeColor, isDarkMode) => {
         palette: {
             primary: {
                 main: themeColor.value
+            },
+            white: {
+                main: '#fff',
+                contrastText: themeColor.value
             }
         },
         typography: {

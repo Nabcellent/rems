@@ -11,17 +11,17 @@ export default class Mpesa {
     static fire = async (details, onCompleted) => {
         await Sweet.fire({
             html:
-                `<small>Amount (min: 100)</small>` +
+                `<small>Amount (min: 100, max: 70,000)</small>` +
                 `<input id="amount" type="number" class="form-control mb-1" value="${details.amount ?? ''}" placeholder="Enter amount to deposit.">` +
                 `<small>Phone number ${details.user.phone ? '(optional)' : ''}</small>` +
                 `<input id="phone" type="tel" class="form-control" value="${details.user.phone ?? ''}" placeholder="Enter phone to request.">`,
             showLoaderOnConfirm: true,
             backdrop: `rgba(150, 0, 0, 0.4)`,
             preConfirm: async () => {
-                const amount = document.getElementById('amount').value,
+                const amount = parseFloat(document.getElementById('amount').value),
                     phone = document.getElementById('phone').value;
 
-                if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
+                if (amount < 100 || amount > 70000) return Sweet.showValidationMessage('Invalid Amount!');
                 if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid MPESA Number!');
 
                 try {
@@ -31,7 +31,7 @@ export default class Mpesa {
                         description: details.description,
                         user_id: details.user.id,
                         destination_id: details.destinationId,
-                        onCompleted: () => onCompleted({amount}),
+                        onCompleted: () => onCompleted({ amount }),
                     });
                 } catch (err) {
                     const message = err.response.data.message;
@@ -113,6 +113,8 @@ export default class Mpesa {
             },
             allowOutsideClick: () => !Sweet.isLoading(),
         }).then(async (result) => {
+            console.log('Stk Status Result: ', result);
+
             if (result.isDismissed && result.dismiss === Sweet.DismissReason.cancel) {
                 await sweet({ type: 'info', message: 'Payment Cancelled' });
             } else if (result.isConfirmed && result.value) {

@@ -42,7 +42,14 @@ class PaymentController extends Controller
             ])->with([
                 "transaction:id,user_id,type,description",
                 "transaction.user:id,first_name,last_name,email",
-            ])->latest()->get(),
+            ])->latest()->get()->map(fn(Payment $payment) => [
+                ...$payment->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $payment),
+                    "view"    => user()->can("view", $payment),
+                    "destroy" => user()->can("delete", $payment)
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", Payment::class)
         ]);
     }
