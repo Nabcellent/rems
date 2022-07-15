@@ -90,8 +90,6 @@ class UnitController extends Controller
     {
         $data = $request->validated();
 
-        dd($data);
-
         $unitable = match ($request->input(["unitable"])) {
             "estate" => new Estate,
             "property" => new Property,

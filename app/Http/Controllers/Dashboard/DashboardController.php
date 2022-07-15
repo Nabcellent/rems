@@ -34,7 +34,8 @@ class DashboardController extends Controller
             "rent_figures"            => user()->hasRole(Role::TENANT) ? user()->rentFigures() : null,
             "latest_transactions"     => $transactions->latest()->take(10)->with([
                 "user:id,email,last_name",
-                "destination:id,email,last_name",
+                "transactionable:id,user_id",
+                "transactionable.user:id,email,last_name",
                 "payment:id,method"
             ])->get(),
             "canUpdateStatus"         => user()->can("updateStatus", Transaction::class)

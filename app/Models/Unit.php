@@ -99,6 +99,11 @@ class Unit extends Model
         return $this->morphToMany(Amenity::class, "amenitiable");
     }
 
+    public function transactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
+    }
+
     /**
      * .....................    _____________________HELPERS
      */

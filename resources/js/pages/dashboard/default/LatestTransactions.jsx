@@ -29,8 +29,8 @@ const LatestTransactions = () => {
                             accessorKey: 'destination',
                             header: 'Destination',
                             cell: ({ row }) => (
-                                <Tooltip title={row.original.destination.email}>
-                                    <span>{row.original.destination.last_name}</span>
+                                <Tooltip title={row.original.transactionable.user.email}>
+                                    <span>{row.original.transactionable.user.last_name}</span>
                                 </Tooltip>
                             )
                         },

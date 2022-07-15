@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Description;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PaymentRequest;
 use App\Models\Payment;
+use App\Models\RentTransaction;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -73,11 +77,13 @@ class PaymentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(PaymentRequest $request): RedirectResponse
     {
-        //
+        $request->validated();
+
+        return back()->with(["toast" => ["message" => "Payment Completed!"]]);
     }
 
     /**

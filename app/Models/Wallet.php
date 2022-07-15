@@ -26,4 +26,9 @@ class Wallet extends Model
     {
         return $this->morphMany(Payment::class, 'payable');
     }
+
+    public function transactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
+    }
 }

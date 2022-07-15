@@ -18,7 +18,7 @@ return new class extends Migration
         Schema::create('transactions', function(Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('destination_id')->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->morphs('transactionable');
             $table->string('type', 50)->default(TransactionType::PAYMENT->value);
             $table->integer("amount");
             $table->string("status", 20)->default(Status::PENDING->value);

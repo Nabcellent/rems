@@ -62,7 +62,8 @@ const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
 Pay.propTypes = {
     details: PropTypes.shape({
         user: PropTypes.object.isRequired,
-        destinationId: PropTypes.number.isRequired,
+        transactionableId: PropTypes.number.isRequired,
+        transactionable: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
     }).isRequired,
     showModal: PropTypes.bool.isRequired,

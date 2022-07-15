@@ -3,7 +3,6 @@ import { Card, Col, Row } from 'react-bootstrap';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import DataTable from '@/components/common/datatable';
 import { Paper, Tooltip } from '@mui/material';
-import { ReadMore } from '@mui/icons-material';
 import StatusChip from '@/components/chips/StatusChip';
 import { Link } from '@inertiajs/inertia-react';
 import TableDate from '@/components/TableDate';
@@ -13,6 +12,8 @@ import TableActions from '@/components/TableActions';
 import moment from 'moment';
 
 const Index = ({ transactions }) => {
+    console.log(transactions);
+
     return (
         <Dashboard title={'Transactions'}>
             <Breadcrumbs title="Transactions" breadcrumbItem="list"/>
@@ -40,14 +41,14 @@ const Index = ({ transactions }) => {
                                 {
                                     accessorKey: 'destination',
                                     header: 'Destination',
-                                    accessorFn: row => `${row.destination.full_name}: ${row.destination.email}`,
+                                    accessorFn: row => `${row.transactionable.user.full_name}: ${row.transactionable.user.email}`,
                                     cell: ({ row }) => (
-                                        <Tooltip title={row.original.destination.email}>
+                                        <Tooltip title={row.original.transactionable.user.email}>
                                             <span>
-                                                {row.original.destination.full_name}<br/>
+                                                {row.original.transactionable.user.full_name}<br/>
                                                 <Link
-                                                    href={route('dashboard.users.show', row.original.destination)}>
-                                                    <strong><small>{row.original.destination.email}</small></strong>
+                                                    href={route('dashboard.users.show', row.original.transactionable.user)}>
+                                                    <strong><small>{row.original.transactionable.user.email}</small></strong>
                                                 </Link>
                                             </span>
                                         </Tooltip>

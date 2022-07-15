@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import { Create } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import ValidationErrors from '@/components/ValidationErrors';
-import { Description } from '@/utils/enums';
+import { Description, Morphable } from '@/utils/enums';
 import ControlledAutoComplete from '@/components/ControlledAutoComplete';
 import Pay from '@/components/Pay';
 
@@ -23,12 +23,13 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
     const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
-    const [url, setUrl] = useState(route('dashboard.payments.create'));
-    const [method, setMethod] = useState(Method.GET);
+    const [url, setUrl] = useState(route('dashboard.payments.store'));
+    const [method, setMethod] = useState(Method.POST);
     const [data, setData] = useState({});
     const [paymentDetails, setPaymentDetails] = useState({
         user: auth.user,
-        destinationId: 0,
+        transactionableId: 0,
+        transactionable: '',
         description: '',
         amount: 10
     });
@@ -44,18 +45,19 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
             const paymentDetails = {
                 user: auth.user,
                 description: values.description,
+                transactionableId: auth.user.id,
+                transactionable: Morphable.WALLET,
                 amount: [
                     Description.RENT_PAYMENT, Description.RENT_DEPOSIT
-                ].includes(values.description) ? rent_arrears : 100
+                ].includes(values.description) && rent_arrears > 100 ? rent_arrears : ''
             };
 
             if (values.description === Description.WALLET_DEPOSIT) {
                 setMethod(Method.POST);
                 setUrl(route('dashboard.wallet.deposit', auth.user));
-
-                paymentDetails.destinationId = auth.user.id;
             } else if ([Description.RENT_PAYMENT, Description.RENT_DEPOSIT].includes(values.description)) {
-                paymentDetails.destinationId = values.unit.user_id;
+                paymentDetails.transactionableId = values.unit.id;
+                paymentDetails.transactionable = Morphable.UNIT;
             }
 
             setData(values);
@@ -93,7 +95,7 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
                                                         getOptionLabel={o => {
                                                             let label = o?.estate?.name;
                                                             if (label) label += ': ';
-                                                            label += o?.unitable?.name ?? null;
+                                                            label += (o?.unitable_name === Morphable.PROPERTY) ? o?.unitable?.name ?? null : '';
                                                             label += o?.house_number;
                                                             if (!label) label = o;
 
@@ -125,9 +127,8 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
 
             <Pay details={paymentDetails} destinationId={auth.user.id} showModal={showPaymentMethodModal}
                  setShowModal={setShowPaymentMethodModal}
-                 onCompleted={({ amount }) => {
-                     Sweet.close();
-                     Inertia[method](url, method !== Method.GET && { ...data, amount }, {
+                 onCompleted={({ amount, transaction_id }) => {
+                     Inertia[method](url, method !== Method.GET && { ...data, amount, transaction_id }, {
                          preserveState: false,
                          onBefore: () => setIsLoading(true),
                          onSuccess: () => formik.resetForm(),

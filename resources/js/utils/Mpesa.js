@@ -30,8 +30,9 @@ export default class Mpesa {
                         reference: 'REMS Wallet',
                         description: details.description,
                         user_id: details.user.id,
-                        destination_id: details.destinationId,
-                        onCompleted: () => onCompleted({ amount }),
+                        transactionable_id: details.transactionableId,
+                        transactionable: details.transactionable,
+                        onCompleted: () => onCompleted,
                     });
                 } catch (err) {
                     const message = err.response.data.message;
@@ -60,7 +61,7 @@ export default class Mpesa {
 
         if (stk_request.checkout_request_id) {
             this.request_id = stk_request.id;
-            this.onCompleted = onCompleted;
+            this.onCompleted = onCompleted({ amount });
 
             return await this.alert();
         } else {
