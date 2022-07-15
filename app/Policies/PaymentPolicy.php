@@ -44,7 +44,7 @@ class PaymentPolicy
      */
     public function view(User $user, Payment $payment)
     {
-        //
+        return in_array($user->id, [$payment->transaction->user_id, $payment->transaction->destination_id]);
     }
 
     /**

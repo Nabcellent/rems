@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { IconButton, Paper } from '@mui/material';
+import { Alert, IconButton, Paper } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
@@ -66,7 +66,14 @@ const Show = ({ errors, lease }) => {
 
             <Row>
                 <Col>
-                    <PaymentPlans plans={lease.payment_plans} defaultPlan={lease.default_payment_plan} leaseId={lease.id}/>
+                    {!lease.default_payment_plan && (
+                        <Alert severity="warning" className={'mb-2'}>
+                            Please select your preferred payment plan.
+                        </Alert>
+                    )}
+
+                    <PaymentPlans plans={lease.payment_plans} defaultPlan={lease.default_payment_plan}
+                                  leaseId={lease.id}/>
                 </Col>
             </Row>
         </Dashboard>

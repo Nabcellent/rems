@@ -116,11 +116,11 @@ const PaymentPlans = ({ plans, leaseId }) => {
                 <Row>
                     {Boolean(!plans.length)
                         ? (
-                            <Alert severity="error">
-                                This lease hasn't any plan yet. {' '}
+                            <Alert severity="error" action={(
                                 <a className={'text-primary'} onClick={() => setShowModal(true)}>
                                     <b>Add a Plan</b>
                                 </a>
+                            )}>This lease hasn't any plan yet. {' '}
                             </Alert>
                         ) : plans.map(plan => (
                             <Col lg={plans.length > 1 ? 6 : 12} key={`policy-${plan.id}`}
@@ -134,7 +134,7 @@ const PaymentPlans = ({ plans, leaseId }) => {
 
                                 <div className="hover-actions end-0 top-50 translate-middle-y me-2">
                                     {!plan.is_default && (
-                                        <Tooltip title={'Set as Default'}>
+                                        <Tooltip title={'Set as Preferred.'}>
                                             <button onClick={() => setDefaultPlan(plan)}
                                                     className="border-300 me-1 text-600 btn btn-light btn-sm">
                                                 <Grading/>

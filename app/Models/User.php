@@ -303,17 +303,20 @@ class User extends Authenticatable implements MustVerifyEmail
     ])] public function rentFigures(): array
     {
         $totalPaid = $this->transactions()->whereStatus(Status::COMPLETED)->rentPayment()->sum("amount");
-        $totalInvoice = $this->leases->pluck("default_payment_plan")->reduce(function($carry, PaymentPlan $item) {
-            $noOfExpectedPayments = match ($item->frequency) {
-                Frequency::MONTHLY => $item->created_at->diffInMonths(),
-                Frequency::QUARTERLY => $item->created_at->diffInQuarters(),
-                Frequency::HALF_YEARLY => $item->created_at->diffInYears() / 2,
-                Frequency::YEARLY => $item->created_at->diffInYears()
-            };
+        $totalInvoice = $this->leases->pluck("default_payment_plan")
+            ->reduce(function($carry, PaymentPlan $item = null) {
+                if(!$item) return $carry + 0;
 
-            return $carry + ($noOfExpectedPayments * $item->rent_amount);
-        });
+                $noOfExpectedPayments = match ($item->frequency) {
+                    Frequency::MONTHLY => $item->created_at->diffInMonths(),
+                    Frequency::QUARTERLY => $item->created_at->diffInQuarters(),
+                    Frequency::HALF_YEARLY => $item->created_at->diffInYears() / 2,
+                    Frequency::YEARLY => $item->created_at->diffInYears()
+                };
 
-        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
+                return $carry + ($noOfExpectedPayments * $item->rent_amount);
+            });
+
+        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => 0 - $totalPaid];
     }
 }

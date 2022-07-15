@@ -128,21 +128,30 @@ class LeaseController extends Controller
         ]);
 
         $data = $lease->toArray();
-        $data["default_payment_plan"] += [
-            "can" => [
-                "edit"    => user()->can("update", $lease->default_paymen_plan),
-                "view"    => user()->can("view", $lease->default_paymen_plan),
-                "destroy" => user()->can("delete", $lease->default_paymen_plan)
-            ]
-        ];
-        $data["payment_plans"] = $lease->paymentPlans->map(fn($plan) => [
-            ...$plan->toArray(),
-            "can" => [
-                "edit"    => user()->can("update", $plan),
-                "view"    => user()->can("view", $plan),
-                "destroy" => user()->can("delete", $plan)
-            ]
-        ])->toArray();
+
+        if($lease->default_payment_plan) {
+            $data["payment_plans"] = [
+                [
+                    ...$lease->default_payment_plan->toArray(),
+                    "can" => [
+                        "edit"    => user()->can("update", $lease->default_paymen_plan),
+                        "view"    => user()->can("view", $lease->default_paymen_plan),
+                        "destroy" => user()->can("delete", $lease->default_paymen_plan)
+                    ]
+                ]
+            ];
+        } else {
+            $data["payment_plans"] = $lease->paymentPlans->map(fn($plan) => [
+                ...$plan->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $plan),
+                    "view"    => user()->can("view", $plan),
+                    "destroy" => user()->can("delete", $plan)
+                ]
+            ])->toArray();
+        }
+
+//        dd($data);
 
         return inertia("dashboard/leases/Show", [
             "lease"           => $data,
