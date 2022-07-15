@@ -5,6 +5,8 @@ import { currencyFormat, parsePhone } from '@/utils/helpers';
 import moment from 'moment';
 
 const PaymentTable = ({ payment }) => {
+    console.log('Payment: ', payment);
+
     return (
         <Row>
             <Col>

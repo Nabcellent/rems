@@ -74,7 +74,7 @@ class MpesaController extends Controller
      */
     public function stkStatus(Request $request): JsonResponse
     {
-        $request->validate(["request_id" => "required", "amount" => "required|numeric|max:200000"]);
+        $request->validate(["request_id" => "required", "amount" => "required|numeric|max:70000"]);
 
         try {
             $status = STK::status($request->input("request_id"));

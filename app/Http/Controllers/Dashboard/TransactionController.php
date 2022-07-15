@@ -45,7 +45,14 @@ class TransactionController extends Controller
                 "user.roles",
                 "destination.roles",
                 "destination:id,first_name,last_name,email,phone"
-            ])->latest()->get(),
+            ])->latest()->get()->map(fn(Transaction $transaction) => [
+                ...$transaction->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $transaction),
+                    "view"    => user()->can("view", $transaction),
+                    "destroy" => user()->can("delete", $transaction)
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", Transaction::class)
         ]);
     }
@@ -85,7 +92,7 @@ class TransactionController extends Controller
                 'user.roles',
                 'destination:id,first_name,last_name,email,phone',
                 'destination.roles',
-                "payment:id,transaction_id,amount,method,status",
+                "payment:id,transaction_id,payable_id,payable_type,amount,method,status",
                 "payment.payable",
             ])
         ]);
