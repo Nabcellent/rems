@@ -317,6 +317,6 @@ class User extends Authenticatable implements MustVerifyEmail
                 return $carry + ($noOfExpectedPayments * $item->rent_amount);
             });
 
-        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => 0 - $totalPaid];
+        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
     }
 }
