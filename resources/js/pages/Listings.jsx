@@ -17,11 +17,33 @@ import { Head } from "@inertiajs/inertia-react";
 
 import { useState, useEffect } from "react";
 import MultipleSelect from "@/components/listings/MultipleSelect";
+import {
+    Button,
+    Card,
+    Checkbox,
+    Chip,
+    Grid,
+    ListItemText,
+    OutlinedInput,
+    Slider,
+    TextField,
+} from "@mui/material";
 
 const amenitiesDef = ["swimming pool", "gym", "garage"];
 
 const Listings = ({ listings }) => {
     console.log(listings);
+
+    const ITEM_HEIGHT = 48;
+    const ITEM_PADDING_TOP = 8;
+    const MenuProps = {
+        PaperProps: {
+            style: {
+                maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                width: 250,
+            },
+        },
+    };
 
     const [filteredListings, setFilteredListings] = useState(listings);
 
@@ -30,7 +52,6 @@ const Listings = ({ listings }) => {
     const [city, setCity] = useState([]);
     const [location, setLocation] = useState([]);
     const [amenities, setAmenities] = useState(amenitiesDef);
-
     const [priceRange, setPriceRange] = useState([20000, 400000]);
     const [keyword, setKeyword] = useState("");
 
@@ -71,8 +92,17 @@ const Listings = ({ listings }) => {
         setAmenities(typeof value === "string" ? value.split(",") : value);
     };
 
-    const submitSearch = () => {
-        console.log(purpose);
+    const submitSearch = (e) => {
+        e.preventDefault();
+        console.log(
+            purpose,
+            bedrooms,
+            city,
+            location,
+            amenities,
+            priceRange,
+            keyword
+        );
     };
 
     useEffect(() => {
@@ -157,7 +187,7 @@ const Listings = ({ listings }) => {
                                     <MenuItem key={i} value={choice}>
                                         <Checkbox
                                             checked={
-                                                choiceName.indexOf(choice) > -1
+                                                purpose.indexOf(choice) > -1
                                             }
                                         />
                                         <ListItemText primary={choice} />
@@ -198,7 +228,7 @@ const Listings = ({ listings }) => {
                                     <MenuItem key={i} value={choice}>
                                         <Checkbox
                                             checked={
-                                                choiceName.indexOf(choice) > -1
+                                                bedrooms.indexOf(choice) > -1
                                             }
                                         />
                                         <ListItemText primary={choice} />
@@ -256,9 +286,7 @@ const Listings = ({ listings }) => {
                                 ].map((choice, i) => (
                                     <MenuItem key={i} value={choice}>
                                         <Checkbox
-                                            checked={
-                                                choiceName.indexOf(choice) > -1
-                                            }
+                                            checked={city.indexOf(choice) > -1}
                                         />
                                         <ListItemText primary={choice} />
                                     </MenuItem>
@@ -316,7 +344,7 @@ const Listings = ({ listings }) => {
                                     <MenuItem key={i} value={choice}>
                                         <Checkbox
                                             checked={
-                                                choiceName.indexOf(choice) > -1
+                                                location.indexOf(choice) > -1
                                             }
                                         />
                                         <ListItemText primary={choice} />
@@ -367,7 +395,7 @@ const Listings = ({ listings }) => {
                                     <MenuItem key={i} value={choice}>
                                         <Checkbox
                                             checked={
-                                                choiceName.indexOf(choice) > -1
+                                                amenities.indexOf(choice) > -1
                                             }
                                         />
                                         <ListItemText primary={choice} />
