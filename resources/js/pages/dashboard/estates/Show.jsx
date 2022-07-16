@@ -27,7 +27,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
 import Policies from '@/components/crud/Policies';
-import Units from '@/pages/dashboard/properties/components/Units';
+import Units from '@/components/crud/Units';
 import Map from '@/components/Map';
 import MainImage from '@/components/MainImage';
 import ChangeOwner from '@/components/crud/ChangeOwner';

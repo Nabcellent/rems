@@ -44,7 +44,7 @@ class PaymentPolicy
      */
     public function view(User $user, Payment $payment)
     {
-        //
+        return in_array($user->id, [$payment->transaction->user_id, $payment->transaction->destination_id]);
     }
 
     /**
@@ -55,7 +55,7 @@ class PaymentPolicy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -77,7 +77,8 @@ class PaymentPolicy
      * @return void
      */
     public function updateStatus(User $user): void
-    {}
+    {
+    }
 
     /**
      * Determine whether the user can delete the model.

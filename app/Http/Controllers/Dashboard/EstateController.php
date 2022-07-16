@@ -38,9 +38,17 @@ class EstateController extends Controller
     {
         return inertia('dashboard/estates/index', [
             "estates"         => Estate::select(["id", "user_id", "name", "address", "status"])
-                ->when(user()->hasAllRoles(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
+                ->when(!user()->isAdmin(), function(Builder $qry) {
                     return $qry->whereBelongsTo(user());
-                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get(),
+                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
+                ->map(fn(Estate $estate) => [
+                    ...$estate->toArray(),
+                    "can" => [
+                        "edit"    => user()->can("update", $estate),
+                        "view"    => user()->can("view", $estate),
+                        "destroy" => user()->can("delete", $estate)
+                    ]
+                ]),
             "canUpdateStatus" => user()->can("updateStatus", Estate::class)
         ]);
     }
@@ -105,7 +113,7 @@ class EstateController extends Controller
             "services"        => Service::select(["id", "name"])->get(),
             "amenities"       => Amenity::select(["id", "title"])->get(),
             "googleMapsKey"   => config("rems.google.maps.api_key"),
-            "canChangeOwner"  => user()->hasRole(Role::ADMIN->value),
+            "canChangeOwner"  => user()->isAdmin(),
             "canUpdateStatus" => user()->can("updateStatus", Estate::class)
         ]);
     }

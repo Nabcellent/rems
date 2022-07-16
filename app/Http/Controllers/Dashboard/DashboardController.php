@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Role;
 use App\Enums\Status;
 use App\Http\Controllers\Controller;
 use App\Models\Estate;
@@ -30,6 +31,7 @@ class DashboardController extends Controller
             "wallet_balance"          => Request::user()->wallet?->balance ?? 0,
             "transactions_count"      => $transactions->count(),
             "revenue"                 => Payment::whereStatus(Status::COMPLETED)->sum("amount"),
+            "rent_figures"            => user()->hasRole(Role::TENANT) ? user()->rentFigures() : null,
             "latest_transactions"     => $transactions->latest()->take(10)->with([
                 "user:id,email,last_name",
                 "destination:id,email,last_name",

@@ -18,6 +18,7 @@ import Filter from '@/components/common/datatable/Filter';
 import IndeterminateCheckbox from '@/components/common/datatable/IndeterminateCheckbox';
 import Header from '@/components/common/datatable/Header';
 import Footer from '@/components/common/datatable/Footer';
+import PropTypes from 'prop-types';
 
 const fuzzyFilter = (row, columnId, value, addMeta) => {
     // Rank the item
@@ -149,6 +150,14 @@ const DataTable = ({ title, data, columns, onCreateRow, viewAllLink }) => {
             <Footer table={table} rowSelection={rowSelection} viewAllLink={viewAllLink}/>
         </>
     );
+};
+
+DataTable.propTypes = {
+    title: PropTypes.string.isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    columns: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onCreateRow: PropTypes.func,
+    viewAllLink: PropTypes.string,
 };
 
 export default DataTable;

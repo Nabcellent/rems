@@ -33,7 +33,7 @@ class PropertyPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->properties->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->estates->isNotEmpty() || $user->properties->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
     }
 
     /**

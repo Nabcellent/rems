@@ -1,18 +1,18 @@
 import { getTelcoFromPhone } from '@/utils/helpers';
-import { Telco } from '@/utils/enums';
+import { Status, Telco } from '@/utils/enums';
 
 export default class Mpesa {
     baseUrl = '/api/mpesa';
     request_id = null;
     amount = 0;
-    onSuccess = () => {
+    onCompleted = () => {
     };
 
     static fire = async (details, onCompleted) => {
         await Sweet.fire({
             html:
-                '<small>Amount (min: 100)</small>' +
-                '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">' +
+                `<small>Amount (min: 100)</small>` +
+                `<input id="amount" type="number" class="form-control mb-1" value="${details.amount ?? ''}" placeholder="Enter amount to deposit.">` +
                 `<small>Phone number ${details.user.phone ? '(optional)' : ''}</small>` +
                 `<input id="phone" type="tel" class="form-control" value="${details.user.phone ?? ''}" placeholder="Enter phone to request.">`,
             showLoaderOnConfirm: true,
@@ -22,7 +22,7 @@ export default class Mpesa {
                     phone = document.getElementById('phone').value;
 
                 if (!(parseFloat(amount) >= 100)) return Sweet.showValidationMessage('Invalid Amount!');
-                if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid Safaricom Number!');
+                if (getTelcoFromPhone(phone) !== Telco.SAFARICOM) return Sweet.showValidationMessage('Invalid MPESA Number!');
 
                 try {
                     await new Mpesa().init({
@@ -31,7 +31,7 @@ export default class Mpesa {
                         description: details.description,
                         user_id: details.user.id,
                         destination_id: details.destinationId,
-                        onSuccess: () => onCompleted({ amount }),
+                        onCompleted: () => onCompleted({amount}),
                     });
                 } catch (err) {
                     const message = err.response.data.message;
@@ -45,22 +45,37 @@ export default class Mpesa {
         });
     };
 
-    init = async ({ phone, amount, reference, description, onSuccess, ...data }) => {
+    init = async ({ phone, amount, reference, description, onCompleted, ...data }) => {
         this.amount = amount;
 
-        const { data: stkRequest } = await axios.post(`${this.baseUrl}/stk/initiate`, {
+        const { data: { stk_request, transaction } } = await axios.post(`${this.baseUrl}/stk/initiate`, {
             phone,
             amount: 1,
             reference, description,
             ...data,
         }, { headers: { 'Accept': 'application/json' } });
 
-        if (stkRequest) {
-            console.log(stkRequest);
-            this.request_id = stkRequest.id;
-            this.onSuccess = onSuccess;
+        console.log(stk_request);
+        console.log(transaction);
+
+        if (stk_request.checkout_request_id) {
+            this.request_id = stk_request.id;
+            this.onCompleted = onCompleted;
 
             return await this.alert();
+        } else {
+            await this.updateTransaction(transaction.id, Status.FAILED);
+
+            await sweet({
+                type: 'error',
+                message: 'Something went wrong!',
+                toast: false,
+                text: 'Oops...',
+                position: 'center',
+                duration: 30,
+                backdrop: `rgba(150, 0, 0, 0.4)`,
+                footer: '<a href="/contact-us">Report this issue?</a>'
+            });
         }
     };
 
@@ -124,7 +139,7 @@ export default class Mpesa {
             type = 'success';
             message = 'Payment Successful!';
 
-            this.onSuccess();
+            this.onCompleted();
         } else {
             type = 'warning';
             message = 'Something went wrong!';
@@ -133,4 +148,9 @@ export default class Mpesa {
 
         await sweet({ type, message, showConfirmButton });
     }
+
+    updateTransaction = (id, status) => {
+        return axios.put(`${this.baseUrl}/stk/update-status`, { id, status })
+                    .then(({ data }) => data);
+    };
 };

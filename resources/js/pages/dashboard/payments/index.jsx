@@ -9,6 +9,7 @@ import TableDate from '@/components/TableDate';
 import TableActions from '@/components/TableActions';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
+import PaymentMethodChip from '@/components/chips/PaymentMethodChip';
 
 const Index = ({ payments }) => {
     console.log(payments);
@@ -40,6 +41,7 @@ const Index = ({ payments }) => {
                                 {
                                     accessorKey: 'method',
                                     header: 'Method',
+                                    cell: ({ row }) => <PaymentMethodChip method={row.original.method}/>
                                 },
                                 {
                                     accessorKey: 'amount',
@@ -60,7 +62,7 @@ const Index = ({ payments }) => {
                                 },
                                 {
                                     id: 'actions',
-                                    cell: ({ row }) => <TableActions entityId={row.original.id} entity={'payment'}/>
+                                    cell: ({ row }) => <TableActions row={row.original} entity={'payment'}/>
                                 }
                             ]} data={payments}/>
                         </Card.Body>

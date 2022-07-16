@@ -27,9 +27,11 @@ class StkPaymentFailed
 
         if($payment->status == Status::FAILED) return;
 
-        $payment->status = Status::FAILED;
+        $status = $event->stkCallback->result_code == 1032 ? Status::CANCELLED : Status::FAILED;
+
+        $payment->status = $status;
         $payment->save();
 
-        $payment->transaction->update(["status" => Status::FAILED]);
+        $payment->transaction->update(["status" => $status]);
     }
 }

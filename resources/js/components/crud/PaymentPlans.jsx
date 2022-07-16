@@ -1,6 +1,6 @@
-import { Alert, Button, Grid, MenuItem, Paper, TextField } from '@mui/material';
-import { Create, DeleteSweep, Edit, LocalPoliceTwoTone } from '@mui/icons-material';
-import { Card, Col, Modal } from 'react-bootstrap';
+import { Alert, Button, Grid, MenuItem, Paper, TextField, Tooltip, useTheme } from '@mui/material';
+import { Create, DeleteSweep, Edit, Grading, LocalPoliceTwoTone } from '@mui/icons-material';
+import { Card, Col, Modal, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
 import PropTypes from 'prop-types';
@@ -15,8 +15,11 @@ import { RentFrequency } from '@/utils/enums';
 import pluralize from 'pluralize';
 import LeaderList from '@/components/LeaderList';
 import moment from 'moment';
+import PermitAction from '@/components/PermitAction';
+import { Link } from '@inertiajs/inertia-react';
+import { theme } from '@/theme';
 
-const Policies = ({ plans, leaseId }) => {
+const PaymentPlans = ({ plans, leaseId }) => {
     const [plan, setPlan] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
@@ -41,7 +44,7 @@ const Policies = ({ plans, leaseId }) => {
             let url = route(`dashboard.payment-plans.store`);
 
             if (plan) {
-                url = route(`dashboard.payment-plans.update`, { payment_plan: plan.id });
+                url = route(`dashboard.payment-plans.update`, plan);
                 values._method = Method.PUT;
             }
 
@@ -77,25 +80,51 @@ const Policies = ({ plans, leaseId }) => {
         setShowModal(true);
     };
 
+    const setDefaultPlan = async plan => {
+        await Sweet.fire({
+            icon: "info",
+            titleText: "Are you sure?",
+            html: 'Kindly note that <b>ONCE</b> you set the payment method, ' +
+                'you will <b>NOT</b> be able to change it until you lias with the unit owner!',
+            showLoaderOnConfirm: true,
+            showCancelButton: true,
+            confirmButtonText: "Yes, I'm sure",
+            cancelButtonText: "Nope, Lemme think some more.",
+            footer: 'REMS',
+            backdrop: `rgba(0, 0, 123, 0.4)`
+        }).then(res => {
+            if (res.isConfirmed) Inertia.put(route(`dashboard.payment-plans.update`, plan), { is_default: true });
+        });
+    };
+
+    plans.sort(function (a, b) {
+        if (a.is_default) return -1;
+        if (b.is_default) return 1;
+        return 0;
+    });
+
     return (
         <Paper>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Payment {pluralize('Plan', plans.length)}</h5>
-                <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                <PermitAction ability={can.create.payment_plan}>
+                    <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                </PermitAction>
             </Card.Header>
-            <Card.Body className={'row'}>
-                {
-                    !plans.length
+            <Card.Body className={'px-lg-4'}>
+                <ValidationErrors errors={errors}/>
+                <Row>
+                    {Boolean(!plans.length)
                         ? (
-                            <Alert severity="error">
-                                This lease hasn't any plan yet. {' '}
+                            <Alert severity="error" action={(
                                 <a className={'text-primary'} onClick={() => setShowModal(true)}>
                                     <b>Add a Plan</b>
                                 </a>
+                            )}>This lease hasn't any plan yet. {' '}
                             </Alert>
                         ) : plans.map(plan => (
                             <Col lg={plans.length > 1 ? 6 : 12} key={`policy-${plan.id}`}
-                                 className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
+                                 className={`border border-${plan.is_default ? '2 border-primary' : 1} rounded-3 px-3 px-lg-5 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger`}>
                                 <LeaderList items={[
                                     { key: <strong>Deposit</strong>, value: currencyFormat(plan.deposit) },
                                     { key: <strong>Rent Amount</strong>, value: currencyFormat(plan.rent_amount) },
@@ -104,19 +133,30 @@ const Policies = ({ plans, leaseId }) => {
                                 ]}/>
 
                                 <div className="hover-actions end-0 top-50 translate-middle-y me-2">
-                                    <button onClick={() => handleUpdate(plan)}
-                                            className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                        <Edit fontSize={'small'}/>
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(route('dashboard.payment-plans.destroy', { payment_plan: plan.id }), 'Payment Plan')}
-                                        className="border-300 text-600 btn btn-danger btn-sm">
-                                        <DeleteSweep fontSize={'small'}/>
-                                    </button>
+                                    {!plan.is_default && (
+                                        <Tooltip title={'Set as Preferred.'}>
+                                            <button onClick={() => setDefaultPlan(plan)}
+                                                    className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                                <Grading/>
+                                            </button>
+                                        </Tooltip>
+                                    )}
+                                    {plan.can?.edit && (
+                                        <button onClick={() => handleUpdate(plan)} className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                            <Edit/>
+                                        </button>
+                                    )}
+                                    {plan.can?.destroy && (
+                                        <button
+                                            onClick={() => handleDelete(route('dashboard.payment-plans.destroy', { payment_plan: plan.id }), 'Payment Plan')}
+                                            className="border-300 text-600 btn btn-danger btn-sm">
+                                            <DeleteSweep/>
+                                        </button>
+                                    )}
                                 </div>
                             </Col>
-                        ))
-                }
+                        ))}
+                </Row>
             </Card.Body>
 
             <Modal show={showModal} onHide={() => setShowModal(false)}>
@@ -184,9 +224,9 @@ const Policies = ({ plans, leaseId }) => {
     );
 };
 
-Policies.propTypes = {
+PaymentPlans.propTypes = {
     plans: PropTypes.array.isRequired,
     leaseId: PropTypes.number.isRequired
 };
 
-export default Policies;
+export default PaymentPlans;

@@ -32,7 +32,10 @@ class UnitPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->units->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->units->isNotEmpty() || $user->hasRole([
+                Role::PROPERTY_MANAGER,
+                Role::OWNER
+            ]);
     }
 
     /**
@@ -44,7 +47,7 @@ class UnitPolicy
      */
     public function view(User $user, Unit $unit): Response|bool
     {
-        return $user->id === $unit->user_id;
+        return $user->id === $unit->user_id || $unit->leases->contains("user_id", $user->id);
     }
 
     /**
@@ -76,8 +79,10 @@ class UnitPolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function updateStatus(User $user)
-    {}
+    public function updateStatus(User $user): Response|bool
+    {
+        return $user->hasRole([Role::PROPERTY_MANAGER, Role::OWNER]);
+    }
 
     /**
      * Determine whether the user can delete the model.
@@ -88,7 +93,7 @@ class UnitPolicy
      */
     public function delete(User $user, Unit $unit)
     {
-        //
+        return $user->id === $unit->user_id;
     }
 
     /**

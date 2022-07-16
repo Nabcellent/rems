@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
+use App\Models\Unit;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
@@ -48,11 +50,16 @@ class PaymentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create()
+    public function create(): Response|ResponseFactory
     {
-        //
+        return inertia('dashboard/payments/Upsert', [
+            "action"       => "create",
+            "rent_arrears" => user()->rentFigures()["arrears"],
+            "units"        => Unit::select(["id", "user_id", "unitable_id", "unitable_type", "house_number"])
+                ->whereHas("leases", fn(Builder $qry) => $qry->whereUserId(user()->id))->get()
+        ]);
     }
 
     /**
@@ -74,7 +81,16 @@ class PaymentController extends Controller
      */
     public function show(Payment $payment): Response|ResponseFactory
     {
-
+        return inertia("dashboard/transactions/Show", [
+            "transaction" => $payment->transaction->load([
+                'user:id,first_name,last_name,email,phone',
+                'user.roles',
+                'destination:id,first_name,last_name,email,phone',
+                'destination.roles',
+                "payment:id,transaction_id,payable_id,payable_type,amount,method,status",
+                "payment.payable",
+            ])
+        ]);
     }
 
     /**
@@ -104,16 +120,5 @@ class PaymentController extends Controller
         $payment->update($data);
 
         return back()->with(["toast" => ["message" => "Payment Updated!"]]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Payment $payment
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Payment $payment)
-    {
-        //
     }
 }

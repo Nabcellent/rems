@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\RentFrequency;
+use App\Enums\Frequency;
 use App\Enums\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string("status")->default(Status::INACTIVE->value);
             $table->timestamp("expires_at");
             $table->timestamps();
+
+            $table->unique(["unit_id", "user_id"]);
         });
     }
 

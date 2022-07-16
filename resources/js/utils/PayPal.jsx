@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
 import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import { Status } from '@/utils/enums';
-import { CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 
 const ButtonWrapper = ({ createOrder, onApprove, onCancel, onError }) => {
     const [{ isPending }] = usePayPalScriptReducer();
 
     return (
-        <>
-            {isPending && <CircularProgress color={'primary'}/>}
+        <Box minHeight={'5rem'} position={'relative'}>
+            {isPending &&
+                <CircularProgress style={{ top: 0, left: 0, transform: 'translate(-50%, -50%)' }} color={'primary'}/>}
             <PayPalButtons style={{ color: 'silver', shape: 'pill', label: 'pay' }}
                            createOrder={(data, actions) => createOrder(data, actions)}
                            onApprove={(data, actions) => onApprove(data, actions)}
                            onCancel={data => onCancel(data)}
                            onError={data => onError(data)}/>
-        </>
+        </Box>
     );
 };
 
@@ -25,7 +26,7 @@ export default class PayPal {
         await Sweet.fire({
             html:
                 '<small>Amount (min: 100)</small>' +
-                '<input id="amount" type="number" class="form-control mb-1" placeholder="Enter amount to deposit.">',
+                `<input id="amount" type="number" value="${details.amount ?? ''}" class="form-control mb-1" placeholder="Enter amount to deposit.">`,
             showLoaderOnConfirm: true,
             backdrop: `rgba(150, 0, 0, 0.4)`,
             preConfirm: async () => {
@@ -38,29 +39,24 @@ export default class PayPal {
                     user_id: details.user.id,
                     destination_id: details.destinationId,
                     description: details.description,
-                    onSuccess: () => onCompleted({ amount }),
+                    onCompleted: onCompleted,
                 });
             },
             allowOutsideClick: () => !Sweet.isLoading()
         });
     };
 
-    init = async ({ amount, onSuccess, ...formData }) => {
+    init = async ({ amount, onCompleted, ...formData }) => {
         const { data: { id: transactionId } } = await axios.post(`${this.baseUrl}/transactions`, {
-            amount,
-            ...formData
+            amount, ...formData
         });
 
         const createOrder = (data, actions) => {
             return actions.order.create({
                 purchase_units: [
                     {
-                        amount: {
-                            value: "0.01",
-                        },
-                        payee: {
-                            email_address: 'sb-kg0wb2320059@business.example.com'
-                        }
+                        amount: { value: "0.01", },
+                        payee: { email_address: 'sb-kg0wb2320059@business.example.com' }
                     },
                 ],
             });
@@ -74,7 +70,7 @@ export default class PayPal {
                     payload: details
                 });
 
-                if (status === 200) onSuccess();
+                if (status === 200) onCompleted({ amount });
             });
         };
 

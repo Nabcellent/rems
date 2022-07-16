@@ -7,8 +7,8 @@ import { CurrencyExchange } from '@mui/icons-material';
 import moment from 'moment';
 import { lazy } from 'react';
 import PhoneChip from '@/components/chips/PhoneChip';
+import { PaymentMethod } from '@/utils/enums';
 
-const TransactionTable = lazy(() => import('@/pages/dashboard/transactions/TransactionTable'));
 const PaymentTable = lazy(() => import('@/pages/dashboard/transactions/PaymentTable'));
 
 const Show = ({ errors, transaction }) => {
@@ -127,8 +127,7 @@ const Show = ({ errors, transaction }) => {
                 </Col>
             </Row>
 
-            <TransactionTable transaction={transaction}/>
-            <PaymentTable transaction={transaction}/>
+            {transaction.payment.method === PaymentMethod.MPESA && <PaymentTable payment={transaction.payment}/>}
         </Dashboard>
     );
 };

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Enums\RentFrequency;
+use App\Enums\Frequency;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentPlan;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +23,7 @@ class PaymentPlanController extends Controller
             "lease_id"    => "required|integer|exists:leases,id",
             "deposit"     => "nullable|integer",
             "rent_amount" => "required|integer",
-            "frequency"   => [new Enum(RentFrequency::class)],
+            "frequency"   => [new Enum(Frequency::class)],
         ]);
 
         PaymentPlan::create($data);
@@ -41,12 +41,15 @@ class PaymentPlanController extends Controller
     public function update(Request $request, PaymentPlan $paymentPlan): RedirectResponse
     {
         $data = $request->validate([
-            "lease_id"    => "required|integer|exists:leases,id",
+            "lease_id"    => "integer|exists:leases,id",
             "deposit"     => "nullable|integer",
-            "rent_amount" => "required|integer",
-            "due_day"     => "required|integer",
-            "frequency"   => [new Enum(RentFrequency::class)],
+            "rent_amount" => "integer",
+            "due_day"     => "integer",
+            "is_default"  => "boolean",
+            "frequency"   => [new Enum(Frequency::class)],
         ]);
+
+        if($request->filled("is_default")) PaymentPlan::whereIsDefault(true)->update(["is_default" => false]);
 
         $paymentPlan->update($data);
 

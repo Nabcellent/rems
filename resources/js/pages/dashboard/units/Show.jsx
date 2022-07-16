@@ -33,6 +33,7 @@ import CountUp from 'react-countup';
 import pluralize from 'pluralize';
 import PhoneChip from '@/components/chips/PhoneChip';
 import { Inertia } from '@inertiajs/inertia';
+import PermitAction from '@/components/PermitAction';
 
 const Show = ({ errors, unit, amenities, canChangeOwner }) => {
     console.log(unit);
@@ -82,13 +83,10 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                         </Col>
                         <Col lg={7}>
                             <div className="d-flex align-items-center mb-1">
-                                <Badge className={'me-2'}/><strong>Unit</strong>
-                            </div>
-                            <Divider sx={{ my: 1 }}/>
-                            <div className="d-flex align-items-center mb-2">
                                 <LocationOn className="me-2"/>
                                 <div className="flex-1"><h6 className="mb-0">{unit.estate.address}</h6></div>
                             </div>
+                            <Divider sx={{ my: 1 }}/>
                             <div className="d-flex align-items-center mb-2">
                                 <SupervisorAccount className="me-2"/>
                                 <div className="flex-1">
@@ -99,15 +97,27 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                 <Countertops className="me-2"/>
                                 <div className="flex-1">Type: {unit.type}</div>
                             </div>
-                            <div className="d-flex align-items-center mb-2">
-                                <MonetizationOn className="me-2"/>
-                                <div className="flex-1">Purpose: {unit.purpose}</div>
-                            </div>
                             {
-                                unit.purpose === Purpose.SALE && (
+                                unit.purpose !== Purpose.EITHER && (
+                                    <div className="d-flex align-items-center mb-2">
+                                        <MonetizationOn className="me-2"/>
+                                        <div className="flex-1">Purpose: {unit.purpose}</div>
+                                    </div>
+                                )
+                            }
+                            {
+                                [Purpose.SALE, Purpose.EITHER].includes(unit.purpose) && (
                                     <div className="d-flex align-items-center mb-2">
                                         <Sell className="me-2"/>
                                         <div className="flex-1">Price: {currencyFormat(unit.price)}</div>
+                                    </div>
+                                )
+                            }
+                            {
+                                [Purpose.RENT, Purpose.EITHER].includes(unit.purpose) && (
+                                    <div className="d-flex align-items-center mb-2">
+                                        <Sell className="me-2"/>
+                                        <div className="flex-1">Rent Amount: {currencyFormat(unit.rent_amount)}/m</div>
                                     </div>
                                 )
                             }
@@ -143,27 +153,33 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                     <Paper className={'mb-3'}>
                         <Card.Header className={'d-flex justify-content-between'}>
                             <h5 className={'mb-0'}>Tenant History</h5>
-                            <Button startIcon={<Assignment/>} onClick={() => Inertia.get(route('dashboard.leases.create'))}>
-                                New lease
-                            </Button>
+                            <PermitAction ability={can.create.lease}>
+                                <Button startIcon={<Assignment/>}
+                                        onClick={() => Inertia.get(route('dashboard.leases.create'))}>
+                                    New lease
+                                </Button>
+                            </PermitAction>
                         </Card.Header>
                         <Card.Body>
                             {
                                 !unit.leases.length
                                     ? <Alert severity="info">This Unit Hasn't had a tenant yet.</Alert>
                                     : unit.leases.map((lease, i) => (
-                                        <Tooltip key={`lease-${lease.id}`} title={`${lease.status === Status.ACTIVE ? 'Active' : 'Past'} Tenant`}>
+                                        <Tooltip key={`lease-${lease.id}`}
+                                                 title={`${lease.status === Status.ACTIVE ? 'Active' : 'Past'} Tenant`}>
                                             <div className={`d-flex ${lease.status === Status.ACTIVE && 'fw-bolder'}`}>
-                                                <Link href="/user/profile#!"><PersonOutlined/></Link>
+                                                <Link
+                                                    href={route('dashboard.users.show', lease.user)}><PersonOutlined/></Link>
                                                 <div className="flex-1 position-relative ps-3">
                                                     <h6 className={`fs-0 mb-0 ${lease.status === Status.ACTIVE && 'text-primary'}`}>
-                                                        <Link href="/user/profile#!">{lease.user.full_name}</Link>
+                                                        <Link
+                                                            href={route('dashboard.users.show', lease.user)}>{lease.user.full_name}</Link>
                                                         {
                                                             lease.status === Status.ACTIVE &&
                                                             <i className={'fas fa-check-circle ps-2'}></i>
                                                         }
                                                     </h6>
-                                                    <p className="mb-1">{lease.user.email} ~ {lease.user.phone}</p>
+                                                    <p className="mb-1">{lease.user.email}</p>
                                                     <p className="text-muted mb-0">
                                                         {moment(lease.start_date).format("LL")}
                                                         &nbsp;-&nbsp;
@@ -187,7 +203,9 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                         <Paper className={'mb-3'}>
                             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                                 <h5 className={'mb-0'}>Rooms</h5>
-                                <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
+                                <PermitAction ability={can.create.room}>
+                                    <Button startIcon={<AddBusiness/>} onClick={() => handleCreateRoom()}>Add</Button>
+                                </PermitAction>
                             </Card.Header>
                             <Card.Body>
                                 {
@@ -232,8 +250,9 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {i < unit.rooms.length - 1 &&
-                                                    <div className={'border-dashed-bottom my-3'}/>}
+                                                {i < unit.rooms.length - 1 && (
+                                                    <div className={'border-dashed-bottom my-3'}/>
+                                                )}
                                             </div>
                                         ))
                                 }

@@ -38,9 +38,7 @@ class PayPalController extends Controller
      */
     public function update(Request $request, Transaction $transaction)
     {
-        $data = $request->validate([
-            "payload" => 'required',
-        ]);
+        $data = $request->validate(["payload" => 'required',]);
 
         $payLoad = $data["payload"];
 

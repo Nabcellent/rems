@@ -1,10 +1,5 @@
 import { Head } from '@inertiajs/inertia-react';
-
-// mui
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
+import { Typography, Grid, Box, Divider } from '@mui/material';
 
 // custom
 import Guest from '@/layouts/Guest';

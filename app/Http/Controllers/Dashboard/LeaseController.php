@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Frequency;
+use App\Enums\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLeaseRequest;
 use App\Http\Requests\UpdateLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
-use App\Models\Unit;
+use App\Models\PaymentPlan;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -43,11 +43,21 @@ class LeaseController extends Controller
                 "expires_at",
                 "status",
                 "created_at"
-            ])->with([
+            ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id)
+                ->orWhereHas("unit", function(Builder $qry) {
+                    return $qry->whereUserId(user()->id);
+                }))->with([
                 "unit.user:id,first_name,last_name,email",
                 "user:id,first_name,last_name,email",
                 "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
-            ])->latest()->get(),
+            ])->latest()->get()->map(fn(Lease $lease) => [
+                ...$lease->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $lease),
+                    "view"    => user()->can("view", $lease),
+                    "destroy" => user()->can("delete", $lease)
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", Lease::class)
         ]);
     }
@@ -61,7 +71,8 @@ class LeaseController extends Controller
     {
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
-            "users"   => User::select(["id", "email"])->get(),
+            "users"   => User::select(["id", "email", "first_name", "last_name"])->role(Role::TENANT->value)
+                ->oldest("email")->get(),
             "estates" => Estate::select(["id", "name", "service_charge"])
                 ->when(!user()->isAdmin(), function(Builder $qry) {
                     return $qry->whereUserId(user()->id)
@@ -86,6 +97,8 @@ class LeaseController extends Controller
     {
         $data = $request->validated();
 
+        if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;
+
         $lease = Lease::create($data);
         $lease->paymentPlans()->createMany($data["plans"]);
 
@@ -106,15 +119,44 @@ class LeaseController extends Controller
      */
     public function show(Lease $lease): Response|ResponseFactory
     {
+        $lease = $lease->load([
+            "unit",
+            "unit.user:id,email,phone",
+            "user:id,email,phone",
+            "user.roles:id,name",
+            "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default",
+        ]);
+
+        $data = $lease->toArray();
+
+        if($lease->default_payment_plan) {
+            $data["payment_plans"] = [
+                [
+                    ...$lease->default_payment_plan->toArray(),
+                    "can" => [
+                        "edit"    => user()->can("update", $lease->default_paymen_plan),
+                        "view"    => user()->can("view", $lease->default_paymen_plan),
+                        "destroy" => user()->can("delete", $lease->default_paymen_plan)
+                    ]
+                ]
+            ];
+        } else {
+            $data["payment_plans"] = $lease->paymentPlans->map(fn($plan) => [
+                ...$plan->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $plan),
+                    "view"    => user()->can("view", $plan),
+                    "destroy" => user()->can("delete", $plan)
+                ]
+            ])->toArray();
+        }
+
+//        dd($data);
+
         return inertia("dashboard/leases/Show", [
-            "lease"           => $lease->load([
-                "unit",
-                "unit.user:id,email,phone",
-                "user:id,email,phone",
-                "user.roles:id,name",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day",
-            ]),
-            "canUpdateStatus" => user()->can("updateStatus", $lease)
+            "lease"           => $data,
+            "canUpdateStatus" => user()->can("updateStatus", $lease),
+            "canEdit"         => user()->can("update", $lease)
         ]);
     }
 
@@ -129,7 +171,7 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "lease"   => $lease->load([
                 "unit:id,user_id,unitable_id,unitable_type,house_number",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency"
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day"
             ]),
             "action"  => "update",
             "users"   => User::select(["id", "email"])->get(),
@@ -154,7 +196,10 @@ class LeaseController extends Controller
     {
         $data = $request->validated();
 
+        if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;
+
         $lease->update($data);
+
         $lease->paymentPlans()->delete();
         $lease->paymentPlans()->createMany($data["plans"]);
 

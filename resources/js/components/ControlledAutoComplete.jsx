@@ -9,6 +9,7 @@ const ControlledAutoComplete = ({
     name,
     value,
     disabled = false,
+    required
 }) => {
     return (
         <Autocomplete name={name} disabled={disabled}

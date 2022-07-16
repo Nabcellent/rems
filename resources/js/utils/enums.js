@@ -17,6 +17,7 @@ export const RoomType = {
 export const Purpose = {
     SALE: 'SALE',
     RENT: 'RENT',
+    EITHER: 'EITHER',
 };
 
 export const UnitType = {
@@ -49,7 +50,9 @@ export const Telco = {
 };
 
 export const Description = {
-    WALLET_DEPOSIT: 'Wallet Deposit'
+    RENT_PAYMENT: 'Rent Payment',
+    RENT_DEPOSIT: 'Rent Deposit',
+    WALLET_DEPOSIT: 'Wallet Deposit',
 };
 
 export const NoticeType = {
