@@ -307,11 +307,13 @@ class User extends Authenticatable implements MustVerifyEmail
             ->reduce(function($carry, PaymentPlan $item = null) {
                 if(!$item) return $carry + 0;
 
+                $dueDay = now()->day($item->due_day);
+
                 $noOfExpectedPayments = match ($item->frequency) {
-                    Frequency::MONTHLY => $item->created_at->diffInMonths(),
-                    Frequency::QUARTERLY => $item->created_at->diffInQuarters(),
-                    Frequency::HALF_YEARLY => $item->created_at->diffInYears() / 2,
-                    Frequency::YEARLY => $item->created_at->diffInYears()
+                    Frequency::MONTHLY => $item->created_at->diffInMonths($dueDay),
+                    Frequency::QUARTERLY => $item->created_at->diffInQuarters($dueDay),
+                    Frequency::HALF_YEARLY => $item->created_at->diffInYears($dueDay) / 2,
+                    Frequency::YEARLY => $item->created_at->diffInYears($dueDay)
                 };
 
                 return $carry + ($noOfExpectedPayments * $item->rent_amount);
