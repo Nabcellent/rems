@@ -32,7 +32,7 @@ class ServicePolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->leases()->active()->exists();
+        return true;
     }
 
     /**

@@ -21,7 +21,7 @@ class EstatePolicy
      */
     public function before(User $user, string $ability)
     {
-        if($user->hasRole(Role::ADMIN->value)) return true;
+        if($user->hasRole(Role::ADMIN)) return true;
     }
 
     /**
@@ -55,7 +55,7 @@ class EstatePolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->hasRole(Role::PROPERTY_MANAGER->value);
+        return $user->hasRole(Role::OWNER);
     }
 
     /**
@@ -78,7 +78,7 @@ class EstatePolicy
      */
     public function updateStatus(User $user)
     {
-        return $user->hasAnyRole(Role::PROPERTY_MANAGER->value, Role::OWNER->value);
+        return $user->hasAnyRole(Role::PROPERTY_MANAGER, Role::OWNER);
     }
 
     /**

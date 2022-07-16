@@ -22,11 +22,27 @@ const Index = ({ estates }) => {
                             <DataTable title={'Estates'} columns={[
                                 {
                                     accessorKey: 'name',
-                                    header: 'Name',
+                                    header: 'Estate',
+                                    cell: ({row}) => (
+                                        <span>
+                                            {row.original.name} <br/>
+                                            <Link href={route('dashboard.estates.show', row.original)}>
+                                                <small>{row.original.address}</small>
+                                            </Link>
+                                        </span>
+                                    )
                                 },
                                 {
-                                    accessorKey: 'address',
-                                    header: 'Address',
+                                    accessorKey: 'manager',
+                                    header: 'Manager',
+                                    cell: ({ row }) => (
+                                        <span>
+                                            {row.original.manager.full_name} <br/>
+                                            <Link href={route('dashboard.users.show', { user: row.original.manager.id })}>
+                                                <small>{row.original.manager.email}</small>
+                                            </Link>
+                                        </span>
+                                    )
                                 },
                                 {
                                     accessorKey: 'owner',

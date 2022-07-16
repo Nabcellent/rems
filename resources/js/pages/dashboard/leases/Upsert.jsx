@@ -108,7 +108,10 @@ const Upsert = ({ lease, action, users, estates }) => {
                                     preserveState: false,
                                     onBefore: () => setIsLoading(true),
                                     onSuccess: () => resetForm(),
-                                    onError: errors => console.log(errors),
+                                    onError: errors => {
+                                        console.log(errors);
+                                        setServerErrors(errors)
+                                    },
                                     onFinish: () => setIsLoading(false)
                                 }
                             );

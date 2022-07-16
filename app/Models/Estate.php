@@ -20,6 +20,7 @@ class Estate extends Model
     protected $fillable = [
         "name",
         "address",
+        "manager_id",
         "image",
         "latitude",
         "longitude",
@@ -38,6 +39,11 @@ class Estate extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, "manager_id");
     }
 
     public function properties(): HasMany

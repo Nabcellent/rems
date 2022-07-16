@@ -37,11 +37,10 @@ class EstateController extends Controller
     public function index(): Response
     {
         return inertia('dashboard/estates/index', [
-            "estates"         => Estate::select(["id", "user_id", "name", "address", "status"])
-                ->when(!user()->isAdmin(), function(Builder $qry) {
-                    return $qry->whereBelongsTo(user());
-                })->with("user:id,first_name,last_name,email")->withCount(["properties", "units"])->latest()->get()
-                ->map(fn(Estate $estate) => [
+            "estates"         => Estate::select(["id", "user_id", "manager_id", "name", "address", "status"])
+                ->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereBelongsTo(user()))
+                ->with(["user:id,first_name,last_name,email", "manager:id,first_name,last_name,email"])
+                ->withCount(["properties", "units"])->latest()->get()->map(fn(Estate $estate) => [
                     ...$estate->toArray(),
                     "can" => [
                         "edit"    => user()->can("update", $estate),
@@ -62,6 +61,8 @@ class EstateController extends Controller
     {
         return inertia("dashboard/estates/Upsert", [
             "action"        => "create",
+            "users"         => User::select(["id", "first_name", "last_name", "email"])->role(Role::PROPERTY_MANAGER)
+                ->get(),
             "googleMapsKey" => config("rems.google.maps.api_key")
         ]);
     }
@@ -75,6 +76,8 @@ class EstateController extends Controller
     public function store(StoreEstateRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
+        if(!isset($data["manager_id"])) $data["manager_id"] = user()->id;
 
         if($request->hasFile("image")) {
             $file = $request->file("image");
@@ -127,8 +130,10 @@ class EstateController extends Controller
     public function edit(Estate $estate): Response|ResponseFactory
     {
         return inertia("dashboard/estates/Upsert", [
-            "estate"        => $estate,
             "action"        => "update",
+            "estate"        => $estate,
+            "users"         => User::select(["id", "first_name", "last_name", "email"])->whereKeyNot($estate->id)
+                ->role(Role::PROPERTY_MANAGER)->get(),
             "googleMapsKey" => config("rems.google.maps.api_key")
         ]);
     }
