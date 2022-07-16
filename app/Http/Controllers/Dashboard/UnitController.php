@@ -133,7 +133,8 @@ class UnitController extends Controller
             ]),
             "amenities"       => Amenity::select(["id", "title"])->get(),
             "canChangeOwner"  => user()->can("changeOwner", Unit::class),
-            "canUpdateStatus" => user()->can("updateStatus", Unit::class)
+            "canUpdateStatus" => user()->can("updateStatus", Unit::class),
+            "canEdit"         => user()->can("update", $unit)
         ]);
     }
 

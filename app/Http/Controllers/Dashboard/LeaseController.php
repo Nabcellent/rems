@@ -151,8 +151,6 @@ class LeaseController extends Controller
             ])->toArray();
         }
 
-//        dd($data);
-
         return inertia("dashboard/leases/Show", [
             "lease"           => $data,
             "canUpdateStatus" => user()->can("updateStatus", $lease),

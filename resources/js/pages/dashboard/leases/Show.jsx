@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, IconButton, Paper } from '@mui/material';
+import { Alert, IconButton, Paper, Tooltip } from '@mui/material';
 import { Card, Col, Row } from 'react-bootstrap';
 import moment from 'moment';
 import StatusChip from '@/components/chips/StatusChip';
@@ -10,9 +10,10 @@ import CardBgCorner from '@/components/CardBgCorner';
 import Banner from '@/components/Banner';
 import PaymentPlans from '@/components/crud/PaymentPlans';
 import { Link } from '@inertiajs/inertia-react';
-import { Edit } from '@mui/icons-material';
+import { Edit, Home } from '@mui/icons-material';
+import PermitAction from '@/components/PermitAction';
 
-const Show = ({ errors, lease }) => {
+const Show = ({ errors, lease, canEdit }) => {
     console.log(lease);
 
     return (
@@ -20,9 +21,18 @@ const Show = ({ errors, lease }) => {
             <Breadcrumbs title="Leases" breadcrumbItem={`#${lease.id}`}/>
 
             <Banner title={'Lease.'} actions={[
-                <IconButton component={Link} className={'mx-1'} href={route(`dashboard.leases.edit`, lease)}>
-                    <Edit/>
-                </IconButton>
+                <Tooltip title={'View Unit'}>
+                    <IconButton component={Link} className={'mx-1'} href={route(`dashboard.units.show`, lease.unit)}>
+                        <Home/>
+                    </IconButton>
+                </Tooltip>,
+                <PermitAction ability={canEdit}>
+                    <Tooltip title={'Edit Lease'}>
+                        <IconButton component={Link} className={'mx-1'} href={route(`dashboard.leases.edit`, lease)}>
+                            <Edit/>
+                        </IconButton>
+                    </Tooltip>
+                </PermitAction>
             ]}/>
 
             <Paper className={'mb-3'}>

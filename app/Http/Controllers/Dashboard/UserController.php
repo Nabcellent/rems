@@ -167,7 +167,8 @@ class UserController extends Controller
             "user"            => $user->load([
                 "wallet:id,user_id,balance"
             ]),
-            "canUpdateStatus" => user()->can("updateStatus", User::class)
+            "canUpdateStatus" => user()->can("updateStatus", User::class),
+            "canEdit"         => user()->can("update", $user)
         ]);
     }
 

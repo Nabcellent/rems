@@ -16,7 +16,7 @@ import {
 } from '@mui/icons-material';
 import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
-import { handleDelete, parsePhone } from '@/utils/helpers';
+import { handleDelete } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';

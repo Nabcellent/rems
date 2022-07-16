@@ -29,7 +29,7 @@ const Leases = ({ leases }) => {
                                     <div className={'d-flex justify-content-between'}>
                                         <small className="mb-1">Hse No: <strong>{lease.unit.house_number}</strong></small>
                                         <small className="text-muted">
-                                            <i>{moment(lease.created_at).format("MMMM D, LT")}</i>
+                                            <b>Since:</b> <i>{moment(lease.created_at).format("MMMM D, LT")}</i>
                                         </small>
                                     </div>
                                 </div>
