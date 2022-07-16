@@ -32,7 +32,7 @@ class AmenityPolicy
      */
     public function viewAny(User $user)
     {
-        //
+
     }
 
     /**

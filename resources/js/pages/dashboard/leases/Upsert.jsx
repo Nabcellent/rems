@@ -116,7 +116,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                 }
                             );
                         }}>
-                        {({ values, handleChange, errors, touched, handleSubmit, setFieldValue }) => (
+                        {({ values, handleChange, dirty, errors, touched, handleSubmit, setFieldValue }) => (
                             <Paper component={'form'} onSubmit={handleSubmit} className={'p-3'}>
                                 <ValidationErrors errors={serverErrors}/>
 
@@ -318,7 +318,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             )}
                                         </FieldArray>
                                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                                            <LoadingButton type={'submit'} size="small" color="primary"
+                                            <LoadingButton disabled={!dirty} type={'submit'} size="small" color="primary"
                                                            loading={isLoading}
                                                            loadingPosition="end" endIcon={<Create/>}
                                                            variant="contained">{action}

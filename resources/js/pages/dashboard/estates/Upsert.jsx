@@ -74,7 +74,7 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
 
             let data = {
                 ...values,
-                manager_id: values.manager.id
+                manager_id: values.manager?.id
             }
 
             Inertia.post(url, data, {
@@ -178,7 +178,7 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                                           onremovefile={() => formik.setFieldValue('image', null)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
                                                loadingPosition="end" onClick={() => formik.submitForm()}
                                                endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>

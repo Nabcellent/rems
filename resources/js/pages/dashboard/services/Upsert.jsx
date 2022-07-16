@@ -71,7 +71,7 @@ const Upsert = ({ service, action }) => {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                            <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                            <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
                                            loadingPosition="end" onClick={() => formik.submitForm()}
                                            endIcon={<Create/>} variant="contained">{action}
                             </LoadingButton>

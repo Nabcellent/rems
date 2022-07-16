@@ -159,7 +159,13 @@ class EstateController extends Controller
 
         $estate->update($data);
 
-        return back()->with("toast", ["message" => "Estate Updated!"]);
+        return back()->with("toast", [
+            "message" => "Estate Updated!",
+            "link"    => [
+                "title" => "View Estate",
+                "href"  => route("dashboard.estates.show", ["estate" => $estate])
+            ]
+        ]);
     }
 
     /**

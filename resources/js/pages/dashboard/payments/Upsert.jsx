@@ -117,7 +117,7 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                            <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                            <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
                                            loadingPosition="end" endIcon={<Create/>} variant="contained">{action}
                             </LoadingButton>
                         </Grid>
