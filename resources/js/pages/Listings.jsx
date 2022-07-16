@@ -29,8 +29,6 @@ import {
     TextField,
 } from "@mui/material";
 
-const amenitiesDef = ["swimming pool", "gym", "garage"];
-
 const Listings = ({ listings }) => {
     console.log(listings);
 
@@ -51,7 +49,7 @@ const Listings = ({ listings }) => {
     const [bedrooms, setBedrooms] = useState([]);
     const [city, setCity] = useState([]);
     const [location, setLocation] = useState([]);
-    const [amenities, setAmenities] = useState(amenitiesDef);
+    const [amenities, setAmenities] = useState([]);
     const [priceRange, setPriceRange] = useState([20000, 400000]);
     const [keyword, setKeyword] = useState("");
 
@@ -94,6 +92,11 @@ const Listings = ({ listings }) => {
 
     const submitSearch = (e) => {
         e.preventDefault();
+        // setFilteredListings(
+        //     filteredListings.filter((listing) => purpose.length == 2 ? listing.units?.find(
+        //         (unit) => unit.purpose == purpose[0] || unit.purpose == purpose[1]
+        //     ).purpose == "RENT")
+        // )
         console.log(
             purpose,
             bedrooms,
@@ -473,9 +476,11 @@ const Listings = ({ listings }) => {
                             : "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"
                     }
                     purpose={
-                        listing.units.find(
-                            (unit) => unit.purpose == "SALE" // pull from searchbox here SALE or RENT
-                        )?.purpose
+                        purpose.length != 1
+                            ? "RENT and SALE"
+                            : listing.units.find(
+                                  (unit) => unit.purpose == purpose[0] // pull from searchbox here SALE or RENT
+                              )?.purpose
                     }
                     price={
                         // listing.units.find(
