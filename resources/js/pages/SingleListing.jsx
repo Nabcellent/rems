@@ -150,6 +150,9 @@ const SingleListing = ({ googleMapsKey, estate }) => {
                             justifyContent={{ xs: "center", md: "flex-end" }}
                             key={i}
                         >
+                            <Typography variant="body2">
+                                {i + 1 == 1 ? "Ground Floor" : `Floor ${i}`}
+                            </Typography>
                             {floor.units_on_floor.map((unit) =>
                                 oc ? (
                                     <Chip
@@ -178,7 +181,7 @@ const SingleListing = ({ googleMapsKey, estate }) => {
                         justifyContent={"center"}
                         alignItems={"center"}
                     >
-                        Selected unit details here
+                        Select a unit to view its details here
                         {/* Or maybe a dialog?? TBD :> */}
                     </Box>
                 </Grid>

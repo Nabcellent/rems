@@ -12,7 +12,7 @@ import { Inertia } from "@inertiajs/inertia";
 const Listing = ({
     id,
     imgSource,
-    status,
+    purpose,
     price,
     location,
     bedrooms,
@@ -57,11 +57,15 @@ const Listing = ({
                             fontWeight={600}
                             fontSize={"1.1rem"}
                         >
-                            STATUS
+                            PURPOSE
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography>{status.toUpperCase()}</Typography>
+                        <Typography>
+                            {purpose
+                                ? `FOR ${purpose.toUpperCase()}`
+                                : "UNSPECIFIED"}
+                        </Typography>
                     </Grid>
 
                     <Grid item xs={6}>
@@ -75,10 +79,14 @@ const Listing = ({
                     </Grid>
                     <Grid item xs={6}>
                         <Typography>
-                            {new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "KSH",
-                            }).format(price)}
+                            {price
+                                ? `FROM ${new Intl.NumberFormat("en-US", {
+                                      style: "currency",
+                                      currency: "KSH",
+                                  }).format(price)}`
+                                : "UNSPECIFIED"}
+                            {/* Says unspecified because price is nullable */}
+                            {console.log(price)}
                         </Typography>
                     </Grid>
 

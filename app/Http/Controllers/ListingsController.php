@@ -9,21 +9,18 @@ use Inertia\Response;
 use Inertia\ResponseFactory;
 use App\Models\Estate;
 use App\Models\Property;
+use App\Models\Unit;
 
 class ListingsController extends Controller
 {
     public function listings(): Response
     {
         return Inertia::render('Listings', [
-            "listings" => Property::select(["id", "estate_id", "user_id", "type"])
+            "listings" => Estate::select()
                 ->with([
-                    "estate:id,name,address,description,image,status",
+                    "properties",
                     "units"
-                ])->latest()->get(),
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
+                ])->latest()->get()
         ]);
     }
 
@@ -31,7 +28,7 @@ class ListingsController extends Controller
     {
         return Inertia::render("SingleListing", [
             'estate' => $estate->load([
-                "units:id,user_id,unitable_id,house_number,floor,purpose,status,created_at",
+                "units:id,user_id,unitable_id,house_number,floor,image,type,description,purpose,status,created_at",
                 "properties:id,estate_id,user_id,type,created_at",
                 "properties.user:id,first_name,last_name,email,phone",
                 "user:id,first_name,last_name,email,phone",

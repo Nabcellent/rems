@@ -26,7 +26,7 @@ return new class extends Migration
             $table->smallInteger("floor")->default(1)->comment("The floor on which the unit is found");
             $table->string("type")->default(UnitType::UNFURNISHED->name)->comment("Furnished or Unfurnished");
             $table->text("description")->nullable();
-            $table->integer("price")->nullable();
+            $table->integer("price");
             $table->string("image", 30)->nullable();
             $table->string("status")->default(Status::INACTIVE->value);
             $table->timestamps();
