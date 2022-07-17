@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Property;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class PropertySeeder extends Seeder
 {
@@ -14,10 +15,14 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Property::truncate();
+        Schema::enableForeignKeyConstraints();
+
         /**
          * .....................    FACTORIES
          */
-        Property::factory(3)->create();
+//        Property::factory(3)->create();
         Property::factory(2)->hasUnits(4)->create();
     }
 }

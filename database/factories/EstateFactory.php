@@ -20,14 +20,15 @@ class EstateFactory extends Factory
     public function definition(): array
     {
         return [
-            "user_id"    => User::factory(),
-            "name"       => $this->faker->streetName(),
-            "address"    => $this->faker->streetAddress(),
+            "user_id"     => User::factory(),
+            "manager_id"  => User::factory(),
+            "name"        => $this->faker->streetName(),
+            "address"     => $this->faker->streetAddress(),
             "description" => $this->faker->text(),
-            "latitude"   => $this->faker->latitude(-0.864785, -1.695412),
-            "longitude"  => $this->faker->longitude(36.384459, 37.466612),
-            "status"     => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
-            "created_at" => $this->faker->dateTimeBetween('-1 years')
+            "latitude"    => $this->faker->latitude(-0.864785, -1.695412),
+            "longitude"   => $this->faker->longitude(36.384459, 37.466612),
+            "status"      => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
+            "created_at"  => $this->faker->dateTimeBetween('-1 years')
         ];
     }
 }

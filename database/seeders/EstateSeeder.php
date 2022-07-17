@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Estate;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class EstateSeeder extends Seeder
 {
@@ -14,6 +15,10 @@ class EstateSeeder extends Seeder
      */
     public function run(): void
     {
+        Schema::disableForeignKeyConstraints();
+        Estate::truncate();
+        Schema::enableForeignKeyConstraints();
+
         /**
          * .....................    FACTORIES
          */

@@ -67,6 +67,11 @@ class Unit extends Model
         return $this->morphTo();
     }
 
+    public function scopeActive(Builder $query)
+    {
+        return $query->whereStatus(Status::ACTIVE);
+    }
+
     /** Owner
      * */
     public function user(): BelongsTo

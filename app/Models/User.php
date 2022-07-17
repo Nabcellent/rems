@@ -139,7 +139,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected function walletBalance(): Attribute
     {
-        return Attribute::get(fn() => $this->wallet->balance);
+        return Attribute::get(fn() => $this->wallet?->balance ?? 0);
     }
 
 

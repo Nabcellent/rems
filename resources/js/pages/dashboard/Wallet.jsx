@@ -16,6 +16,8 @@ import PaymentMethodChip from '@/components/chips/PaymentMethodChip';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
 
+//  TODO: FINISH IMPLEMENTING WALLET PAYMENT
+
 const Wallet = ({ wallet, transactions, last_top_up, auth, total_spent, total_deposited }) => {
     console.log(wallet, transactions);
     const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);

@@ -16,7 +16,7 @@ const Leases = ({ leases }) => {
             <Card.Body>
                 {
                     !leases.length
-                        ? <Alert severity="info">This {unitable} hasn't any unit yet.</Alert>
+                        ? <Alert severity="info">No lease exists.</Alert>
                         : leases.map(lease => (
                             <Link key={`lease-${lease.id}`} className="d-flex align-items-center p-1"
                                   href={route('dashboard.leases.show', { lease: lease.id })}>

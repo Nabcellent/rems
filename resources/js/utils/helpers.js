@@ -51,7 +51,7 @@ export const getTelcoFromPhone = phone => {
 
 export const str = {
     headline: str => {
-        if(!str) return ""
+        if (!str) return "";
 
         str = str.replaceAll('_', ' ').replaceAll('-', ' ');
 
@@ -90,4 +90,21 @@ export const handleDelete = (route, title) => {
             showLoaderOnConfirm: true
         }).then(result => result.isConfirmed && Inertia.delete(route));
     }
+};
+
+export const getFilteredListings = (listings, filters) => {
+    console.log(filters);
+    let filteredListings = [];
+
+    filteredListings.push(...listings.filter(listing => {
+        const bedroomFilters = filters?.bedrooms.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
+        const purposeFilters = filters?.purpose.length ? filters?.purpose?.includes(listing.purpose) : true;
+
+        return purposeFilters && bedroomFilters;
+    }));
+
+    if (!filters) filteredListings = listings;
+
+    console.log(filteredListings);
+    return filteredListings;
 };

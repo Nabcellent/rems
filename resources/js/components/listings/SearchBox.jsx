@@ -1,34 +1,42 @@
 import Card from "@mui/material/Card";
 import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MultipleSelect from "./MultipleSelect";
+import { getFilteredListings } from '@/utils/helpers';
+import { Purpose } from '@/utils/enums';
 
-const SearchBox = () => {
+const SearchBox = ({ listings, setFilteredListings }) => {
+    const [filters, setFilters] = useState(undefined);
     const [priceRange, setPriceRange] = useState([20000, 400000]);
     const [keyword, setKeyword] = useState("");
+
+    const updateFilters = filter => {
+        setFilters({ ...filters, ...filter })
+        console.log(filters);
+    }
+
+    useEffect(() => {
+        setFilteredListings(getFilteredListings(listings, filters));
+    }, [filters]);
 
     return (
         <Card
             variant="outlined"
-            sx={{ background: "#f1f1f1", mt: 1, p: 3 }}
-            component={"form"}
+            sx={{ background: "#f1f1f1", mt: 3, mb: 1, p: 3 }}
         >
             <Grid container spacing={2} alignItems={"center"}>
                 <Grid item xs={12} md={6} lg={4}>
-                    <MultipleSelect
-                        choices={["For Sale", "For Rent"]}
-                        field={"Purpose"}
+                    <MultipleSelect onChange={value => updateFilters({ purpose: value })}
+                                    choices={Object.values(Purpose)} field={"Purpose"}
                     />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
-                    <MultipleSelect
-                        choices={["1", "2", "3", "4", "5+"]}
-                        field={"Bedrooms"}
+                    <MultipleSelect onChange={value => updateFilters({ bedrooms: value })}
+                                    choices={["1", "2", "3", "4", "5+"]} field={"Bedrooms"}
                     />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
@@ -95,11 +103,6 @@ const SearchBox = () => {
                         min={0}
                         max={10000000}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button variant="outlined" fullWidth type="submit">
-                        Search
-                    </Button>
                 </Grid>
             </Grid>
         </Card>

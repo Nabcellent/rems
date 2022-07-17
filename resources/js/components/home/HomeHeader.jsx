@@ -7,9 +7,13 @@ import Box from '@mui/material/Box';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import Logo from '@/components/Logo';
-import { Link } from '@inertiajs/inertia-react';
+import { Link, usePage } from '@inertiajs/inertia-react';
+import { DashboardCustomize, Roofing } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
 
 const HomeHeader = () => {
+    const { auth } = usePage().props;
+
     return (
         <AppBar position="fixed">
             <Container maxWidth={'xl'}>
@@ -17,14 +21,32 @@ const HomeHeader = () => {
                     <Logo/>
 
                     <Box>
-                        <Link href={route("login")}>
-                            <Button variant={'contained'} color={'white'} endIcon={<FollowTheSignsIcon/>}>
-                                Sign In
-                            </Button>
-                        </Link>
+                        {auth.user ? (
+                            <>
+                                <Link href={route('listings')} color={'white'} className={'me-2'}>
+                                    <Button variant={'contained'} color={'white'} endIcon={<Roofing/>}>
+                                        Listings
+                                    </Button>
+                                </Link>
+                                <Link href={route('dashboard.default')} color={'white'}>
+                                    <Button variant={'contained'} color={'white'} endIcon={<DashboardCustomize/>}>
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                            </>
+                        ) : (
+                            <Link href={route("login")}>
+                                <Button variant={'contained'} color={'white'} endIcon={<FollowTheSignsIcon/>}>
+                                    Sign In
+                                </Button>
+                            </Link>
+                        )}
 
-                        <Button variant={'contained'} endIcon={<ContactSupportIcon/>} color={'white'}
-                                sx={{ ml: { xs: 1, sm: 2, md: 3 } }}>Contact Us</Button>
+                        <Tooltip title={'Contact Us'}>
+                            <IconButton color={'white'} size={'medium'} sx={{ ml: { xs: 1, sm: 2, md: 3 } }}>
+                                <ContactSupportIcon/>
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 </Toolbar>
             </Container>
