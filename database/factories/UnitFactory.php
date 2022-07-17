@@ -31,9 +31,9 @@ class UnitFactory extends Factory
             "unitable_type" => $property->modelName(),
             "house_number"  => $this->faker->buildingNumber(),
             "purpose"       => $this->faker->randomElement(Purpose::cases()),
-            "price"         => fn(array $attributes) => match ($attributes["purpose"]) {
+            "price"         => fn (array $attributes) => match ($attributes["purpose"]) {
                 Purpose::SALE->value => $this->faker->numberBetween(10000000, 100000000),
-                default => null,
+                Purpose::RENT->value => $this->faker->numberBetween(10000, 500000)
             },
             "type"          => $this->faker->randomElement(UnitType::cases()),
             "created_at"    => $this->faker->dateTimeBetween('-1 years'),

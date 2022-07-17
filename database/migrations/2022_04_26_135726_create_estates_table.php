@@ -20,7 +20,8 @@ return new class extends Migration
             $table->foreignId("manager_id")->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("name", 100);
             $table->string("address");
-            $table->string("description")->nullable();
+            $table->text("description")->nullable();
+            $table->integer("floor_count")->default(1);
             $table->string("image", 30)->nullable();
             $table->double("latitude", 180, 7);
             $table->double("longitude", 180, 7);
