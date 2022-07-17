@@ -51,6 +51,16 @@ const Listing = ({ unit }) => {
                             fontWeight={600}
                             fontSize={"1.1rem"}
                         >
+                            ESTATE
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}><Typography>{unit.estate.name}</Typography></Grid>
+                    <Grid item xs={6}>
+                        <Typography
+                            variant="body1"
+                            fontWeight={600}
+                            fontSize={"1.1rem"}
+                        >
                             PURPOSE
                         </Typography>
                     </Grid>

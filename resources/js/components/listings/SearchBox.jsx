@@ -81,7 +81,9 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                         label="Keyword"
                         variant="outlined"
                         value={keyword}
-                        onChange={(e) => setKeyword(e.target.value)}
+                        onChange={({ target: { value } }) => {
+                            setTimeout(() => updateFilters({ keyword: value }), 500);
+                        }}
                         sx={{ width: "100%" }}
                     />
                 </Grid>
