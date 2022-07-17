@@ -41,7 +41,12 @@ class UnitFactory extends Factory
             },
             "type"          => $this->faker->randomElement(UnitType::cases()),
             "created_at"    => $this->faker->dateTimeBetween('-1 years'),
-            "status"        => $this->faker->randomElement([Status::ACTIVE, Status::INACTIVE]),
+            "status"        => $this->faker->randomElement([
+                Status::ACTIVE,
+                Status::ACTIVE,
+                Status::ACTIVE,
+                Status::INACTIVE
+            ]),
         ];
     }
 }

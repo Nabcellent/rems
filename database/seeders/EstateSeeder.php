@@ -15,14 +15,14 @@ class EstateSeeder extends Seeder
      */
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Estate::truncate();
-        Schema::enableForeignKeyConstraints();
+//        Schema::disableForeignKeyConstraints();
+//        Estate::truncate();
+//        Schema::enableForeignKeyConstraints();
 
         /**
          * .....................    FACTORIES
          */
         Estate::factory(3)->hasProperties(3)->create();
-        Estate::factory(2)->hasUnits(2)->hasPolicies(2)->create();
+        Estate::factory(2)->hasUnits(6)->hasPolicies(2)->create();
     }
 }

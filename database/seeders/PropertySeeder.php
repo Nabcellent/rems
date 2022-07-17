@@ -15,14 +15,14 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Property::truncate();
-        Schema::enableForeignKeyConstraints();
+//        Schema::disableForeignKeyConstraints();
+//        Property::truncate();
+//        Schema::enableForeignKeyConstraints();
 
         /**
          * .....................    FACTORIES
          */
 //        Property::factory(3)->create();
-        Property::factory(2)->hasUnits(4)->create();
+        Property::factory(2)->hasUnits(6)->create();
     }
 }

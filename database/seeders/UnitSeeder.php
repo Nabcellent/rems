@@ -19,16 +19,16 @@ class UnitSeeder extends Seeder
      */
     public function run(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Unit::truncate();
-        Lease::truncate();
-        Schema::enableForeignKeyConstraints();
+//        Schema::disableForeignKeyConstraints();
+//        Unit::truncate();
+//        Lease::truncate();
+//        Schema::enableForeignKeyConstraints();
 
         /**
          * .....................    FACTORIES
          */
         Unit::factory(3)->for(Estate::factory(), "unitable")->hasLeases(1)->hasAmenities(3)->create();
-        Unit::factory()->for(Property::factory(), "unitable")->hasRooms(2)->hasPolicies(1)->hasAmenities(2)->create();
+        Unit::factory(2)->for(Property::factory(), "unitable")->hasRooms(3)->hasPolicies(1)->hasAmenities(2)->create();
 
         Room::factory(2)->forUnit()->create(); // Same as the above
     }
