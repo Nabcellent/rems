@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('units', function(Blueprint $table) {
+        Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->cascadeOnDelete()->comment(
                 'Property Manager or Owner'
@@ -23,6 +23,7 @@ return new class extends Migration
             $table->morphs('unitable'); // Property ID or Estate ID
             $table->string('house_number');
             $table->string("purpose")->comment("For Rent or For Sale");
+            $table->smallInteger("floor")->default(1)->comment("The floor on which the unit is found");
             $table->string("type")->default(UnitType::UNFURNISHED->name)->comment("Furnished or Unfurnished");
             $table->text("description")->nullable();
             $table->integer("rent_amount")->nullable();
