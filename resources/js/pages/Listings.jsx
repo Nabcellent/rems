@@ -2,9 +2,6 @@
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 // components
@@ -15,19 +12,8 @@ import Guest from "@/layouts/Guest";
 // inertia
 import { Head } from "@inertiajs/inertia-react";
 
-import { useState, useEffect } from "react";
-import MultipleSelect from "@/components/listings/MultipleSelect";
-import {
-    Button,
-    Card,
-    Checkbox,
-    Chip,
-    Grid,
-    ListItemText,
-    OutlinedInput,
-    Slider,
-    TextField,
-} from "@mui/material";
+import { useState } from "react";
+import { TextField, } from "@mui/material";
 import pluralize from 'pluralize';
 
 const Listings = ({ listings }) => {
@@ -36,9 +22,9 @@ const Listings = ({ listings }) => {
     const [filteredListings, setFilteredListings] = useState(listings);
     const [order, setOrder] = useState(1);
 
-/*    useEffect(() => {
-        // setFilteredListings()
-    }, [filteredListings])*/
+    /*    useEffect(() => {
+            // setFilteredListings()
+        }, [filteredListings])*/
 
     return (
         <Guest>
@@ -57,20 +43,20 @@ const Listings = ({ listings }) => {
                 justifyContent={"space-around"}
                 alignItems={"center"}
             >
-                <Typography variant="h5">{filteredListings.length} {pluralize('Listings', filteredListings.length)} Found</Typography>
-                <FormControl sx={{ width: 300 }}>
-                    <InputLabel id="order-by">Order By</InputLabel>
-                    <Select
-                        labelId="order-by"
-                        value={order}
-                        label="Order"
-                        onChange={(e) => setOrder(e.target.value)}
-                    >
-                        <MenuItem value={1}>Most recent</MenuItem>
-                        <MenuItem value={2}>Price: Low to High</MenuItem>
-                        <MenuItem value={3}>Price: High to Low</MenuItem>
-                    </Select>
-                </FormControl>
+                <Typography
+                    variant="h5">{filteredListings.length} {pluralize('Listings', filteredListings.length)} Found</Typography>
+                <TextField label={'Order By'} value={order} select sx={{ width: 300 }}
+                           onChange={({ target: { value } }) => {
+                               setOrder(value);
+
+                               if (value === 'latest') setFilteredListings(_.orderBy(filteredListings, 'id', 'desc'));
+                               if (value === 'price-desc') setFilteredListings(_.orderBy(filteredListings, 'price', 'desc'));
+                               if (value === 'price-asc') setFilteredListings(_.orderBy(filteredListings, 'price'));
+                           }}>
+                    <MenuItem value={'latest'}>Most recent</MenuItem>
+                    <MenuItem value={'price-asc'}>Price: Low to High</MenuItem>
+                    <MenuItem value={'price-desc'}>Price: High to Low</MenuItem>
+                </TextField>
             </Box>
 
             <Divider variant="middle" sx={{ my: 2 }}/>
