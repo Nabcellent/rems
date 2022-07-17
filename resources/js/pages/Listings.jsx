@@ -20,7 +20,7 @@ const Listings = ({ listings }) => {
     console.log(listings);
 
     const [filteredListings, setFilteredListings] = useState(listings);
-    const [order, setOrder] = useState(1);
+    const [order, setOrder] = useState('');
 
     /*    useEffect(() => {
             // setFilteredListings()

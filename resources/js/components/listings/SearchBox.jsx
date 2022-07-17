@@ -9,6 +9,8 @@ import MultipleSelect from "./MultipleSelect";
 import { getFilteredListings } from '@/utils/helpers';
 import { Purpose } from '@/utils/enums';
 import { usePage } from '@inertiajs/inertia-react';
+import { Box, FormControlLabel, Switch } from '@mui/material';
+import Flex from '@/components/common/Flex';
 
 const SearchBox = ({ listings, setFilteredListings }) => {
     const { amenities } = usePage().props;
@@ -17,6 +19,8 @@ const SearchBox = ({ listings, setFilteredListings }) => {
     const [priceRange, setPriceRange] = useState([20000, 400000]);
     const [rentAmountRange, setRentAmountRange] = useState([20000, 400000]);
     const [keyword, setKeyword] = useState("");
+    const [canFilterPrice, setCanFilterPrice] = useState(false);
+    const [canFilterRentAmount, setCanFilterRentAmount] = useState(false);
 
     const updateFilters = filter => setFilters({ ...filters, ...filter });
 
@@ -82,39 +86,50 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Typography gutterBottom textAlign={"center"}>
-                        Price Range
-                    </Typography>
-                    <Slider
-                        getAriaLabel={() => "Price range"}
-                        value={priceRange}
-                        onChange={(e, newRange) => {
-                            setPriceRange(newRange);
-                            setTimeout(() => updateFilters({ priceRange: newRange }), 500);
-                        }}
-                        valueLabelDisplay="auto"
-                        getAriaValueText={(val) => `KSH ${val}`}
-                        step={10000}
-                        min={100000} max={10000000}
+                    <Flex justifyContent={'center'}>
+                        <FormControlLabel label="Price Range"
+                                          control={<Switch checked={canFilterPrice}
+                                                           onChange={() => {
+                                                               setCanFilterPrice(!canFilterPrice);
+                                                               updateFilters({ priceRange: undefined });
+                                                           }}/>}/>
+                    </Flex>
+                    <Slider disabled={!canFilterPrice}
+                            getAriaLabel={() => "Price range"}
+                            value={priceRange}
+                            onChange={(e, newRange) => {
+                                setPriceRange(newRange);
+                                setTimeout(() => updateFilters({ priceRange: newRange }), 500);
+                            }}
+                            valueLabelDisplay="auto"
+                            getAriaValueText={(val) => `KSH ${val}`}
+                            step={10000}
+                            min={100000} max={10000000}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Typography gutterBottom textAlign={"center"}>
-                        Rent Amount Range
-                    </Typography>
-                    <Slider
-                        getAriaLabel={() => "Rent Amount range"}
-                        value={rentAmountRange}
-                        onChange={(e, newRange) => {
-                            setRentAmountRange(newRange);
+                    <Flex justifyContent={'center'}>
+                        <FormControlLabel label="Rent Amount Range"
+                                          control={<Switch checked={canFilterRentAmount}
+                                                           onChange={() => {
+                                                               setCanFilterRentAmount(!canFilterRentAmount);
+                                                               updateFilters({ rentAmountRange: undefined });
+                                                           }}/>}/>
+                    </Flex>
 
-                            setTimeout(() => updateFilters({ rentAmountRange: newRange }), 500);
-                        }}
-                        valueLabelDisplay="auto"
-                        getAriaValueText={(val) => `KSH ${val}`}
-                        step={1000}
-                        min={1000}
-                        max={300000}
+                    <Slider disabled={!canFilterRentAmount}
+                            getAriaLabel={() => "Rent Amount range"}
+                            value={rentAmountRange}
+                            onChange={(e, newRange) => {
+                                setRentAmountRange(newRange);
+
+                                setTimeout(() => updateFilters({ rentAmountRange: newRange }), 500);
+                            }}
+                            valueLabelDisplay="auto"
+                            getAriaValueText={(val) => `KSH ${val}`}
+                            step={1000}
+                            min={1000}
+                            max={300000}
                     />
                 </Grid>
             </Grid>
