@@ -15,6 +15,7 @@ const SearchBox = ({ listings, setFilteredListings }) => {
 
     const [filters, setFilters] = useState(undefined);
     const [priceRange, setPriceRange] = useState([20000, 400000]);
+    const [rentAmountRange, setRentAmountRange] = useState([20000, 400000]);
     const [keyword, setKeyword] = useState("");
 
     const updateFilters = filter => setFilters({ ...filters, ...filter });
@@ -80,19 +81,40 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                         sx={{ width: "100%" }}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                     <Typography gutterBottom textAlign={"center"}>
                         Price Range
                     </Typography>
                     <Slider
                         getAriaLabel={() => "Price range"}
                         value={priceRange}
-                        onChange={(e, newRange) => setPriceRange(newRange)}
+                        onChange={(e, newRange) => {
+                            setPriceRange(newRange);
+                            setTimeout(() => updateFilters({ priceRange: newRange }), 500);
+                        }}
                         valueLabelDisplay="auto"
                         getAriaValueText={(val) => `KSH ${val}`}
                         step={10000}
-                        min={0}
-                        max={10000000}
+                        min={100000} max={10000000}
+                    />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography gutterBottom textAlign={"center"}>
+                        Rent Amount Range
+                    </Typography>
+                    <Slider
+                        getAriaLabel={() => "Rent Amount range"}
+                        value={rentAmountRange}
+                        onChange={(e, newRange) => {
+                            setRentAmountRange(newRange);
+
+                            setTimeout(() => updateFilters({ rentAmountRange: newRange }), 500);
+                        }}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={(val) => `KSH ${val}`}
+                        step={1000}
+                        min={1000}
+                        max={300000}
                     />
                 </Grid>
             </Grid>
