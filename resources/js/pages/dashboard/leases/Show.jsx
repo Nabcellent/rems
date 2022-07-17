@@ -10,7 +10,7 @@ import CardBgCorner from '@/components/CardBgCorner';
 import Banner from '@/components/Banner';
 import PaymentPlans from '@/components/crud/PaymentPlans';
 import { Link } from '@inertiajs/inertia-react';
-import { Edit, Home, ReadMore } from '@mui/icons-material';
+import { AttachMoney, Edit, Home, ReadMore } from '@mui/icons-material';
 import PermitAction from '@/components/PermitAction';
 import CountUp from 'react-countup';
 import LeaderList from '@/components/LeaderList';
@@ -61,6 +61,13 @@ const Show = ({ auth, lease, canEdit }) => {
             <Breadcrumbs title="Leases" breadcrumbItem={`#${lease.id}`}/>
 
             <Banner title={'Lease.'} actions={[
+                (lease.rent_figures.arrears && (
+                    <Tooltip title={'Pay Rent'}>
+                        <IconButton component={Link} className={'mx-1'} href={route(`dashboard.payments.create`)}>
+                            <AttachMoney/>
+                        </IconButton>
+                    </Tooltip>
+                )),
                 <Tooltip title={'View Unit'}>
                     <IconButton component={Link} className={'mx-1'} href={route(`dashboard.units.show`, lease.unit)}>
                         <Home/>

@@ -94,9 +94,15 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
                                                         ].includes(formik.values.description)}
                                                         getOptionLabel={o => {
                                                             let label = o?.estate?.name;
-                                                            if (label) label += ': ';
-                                                            label += (o?.unitable_name === Morphable.PROPERTY) ? o?.unitable?.name ?? null : '';
-                                                            label += o?.house_number;
+
+                                                            if (label) {
+                                                                label += ': ';
+                                                            } else {
+                                                                label = (o?.unitable_name === Morphable.PROPERTY) ? o?.unitable?.name ?? null : '';
+                                                            }
+
+                                                            label = label ? (label += o?.house_number) : undefined;
+
                                                             if (!label) label = o;
 
                                                             return label;
@@ -117,7 +123,8 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                            <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
+                            <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary"
+                                           loading={isLoading}
                                            loadingPosition="end" endIcon={<Create/>} variant="contained">{action}
                             </LoadingButton>
                         </Grid>

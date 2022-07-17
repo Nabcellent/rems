@@ -7,6 +7,7 @@ import Mpesa from '@/utils/Mpesa';
 import PayPal from '@/utils/PayPal';
 import * as yup from 'yup';
 import PropTypes from 'prop-types';
+import Wallet from '@/utils/Wallet';
 
 const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
     const formik = useFormik({
@@ -21,6 +22,8 @@ const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
                 await Mpesa.fire(details, onCompleted);
             } else if (values.method === PaymentMethod.PAYPAL) {
                 await PayPal.fire(details, onCompleted);
+            } else if (values.method === PaymentMethod.WALLET) {
+                await Wallet.fire(details, onCompleted);
             }
         }
     });
@@ -40,6 +43,7 @@ const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
                                            }}>
                             <ToggleButton value={PaymentMethod.MPESA} aria-label="mpesa">M-Pesa</ToggleButton>
                             <ToggleButton value={PaymentMethod.PAYPAL} aria-label="paypal">PayPal</ToggleButton>
+                            <ToggleButton value={PaymentMethod.WALLET} aria-label="wallet">Wallet</ToggleButton>
                         </ToggleButtonGroup>
                         <FormHelperText color={'#990000'} className={'mt-0'}>
                             {formik.touched.method && formik.errors.method}

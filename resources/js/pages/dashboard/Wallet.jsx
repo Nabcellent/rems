@@ -16,7 +16,7 @@ import PaymentMethodChip from '@/components/chips/PaymentMethodChip';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
 
-const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
+const Wallet = ({ wallet, transactions, last_top_up, auth, total_spent, total_deposited }) => {
     console.log(wallet, transactions);
     const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
 
@@ -89,7 +89,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                                             </div>
 
                                             <p className="text-muted mb-2">Spent</p>
-                                            <h5>$ 654.42</h5>
+                                            <h5><CountUp end={total_spent} prefix={'KES '} separator={','}/></h5>
                                         </div>
                                     </Col>
                                     <Col sm={6}>
@@ -99,7 +99,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth }) => {
                                             </div>
 
                                             <p className="text-muted mb-2">Deposited</p>
-                                            <h5>$ 1054.32</h5>
+                                            <h5><CountUp end={total_deposited} prefix={'KES '} separator={','}/></h5>
                                         </div>
                                     </Col>
                                     <Col>

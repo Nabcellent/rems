@@ -45,7 +45,7 @@ const validationSchema = yup.object().shape({
     })).min(1, 'Minimum of 1 payment plan').required("Must have a plan.")
 });
 
-const Upsert = ({ lease, action, users, estates }) => {
+const Upsert = ({ lease, action, users, estates, unit }) => {
     console.log(lease);
     const [isLoading, setIsLoading] = useState(false);
     const [serverErrors, setServerErrors] = useState({});
@@ -71,9 +71,9 @@ const Upsert = ({ lease, action, users, estates }) => {
                 <Grid item xs={12} xl={7}>
                     <Formik
                         initialValues={{
-                            estate: lease?.unit?.estate ?? '',
+                            estate: lease?.unit?.estate ?? unit?.estate ?? '',
                             property: lease?.unit?.unitable_name === Morphable.PROPERTY ? lease?.unit?.unitable : '' ?? '',
-                            unit: lease?.unit ?? '',
+                            unit: lease?.unit ?? unit ?? '',
                             user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
                             expires_at: lease?.expires_at ?? '',
                             status: lease?.status ?? Status.ACTIVE,

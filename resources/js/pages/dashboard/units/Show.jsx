@@ -156,8 +156,8 @@ const Show = ({ errors, unit, amenities, canChangeOwner, canEdit }) => {
                         <Card.Header className={'d-flex justify-content-between'}>
                             <h5 className={'mb-0'}>Tenant History</h5>
                             <PermitAction ability={can.create.lease}>
-                                <Button startIcon={<Assignment/>}
-                                        onClick={() => Inertia.get(route('dashboard.leases.create'))}>
+                                <Button component={Link} href={route('dashboard.leases.create', { unit: unit.id })}
+                                        startIcon={<Assignment/>}>
                                     New lease
                                 </Button>
                             </PermitAction>

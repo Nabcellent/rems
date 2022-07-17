@@ -74,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $appends = ["full_name", "user_roles", "user_roles_str", "initials"];
+    protected $appends = ["full_name", "user_roles", "user_roles_str", "initials", "wallet_balance"];
 
     /**
      * Get the user's full name.
@@ -130,6 +130,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function userRolesStr(): Attribute
     {
         return Attribute::get(fn() => stringifyArr($this->getRoleNames()));
+    }
+
+    /**
+     * Get the user's roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function walletBalance(): Attribute
+    {
+        return Attribute::get(fn() => $this->wallet->balance);
     }
 
 
@@ -338,23 +348,14 @@ class User extends Authenticatable implements MustVerifyEmail
         "arrears"        => "mixed"
     ])] public function rentFigures(): array
     {
-        $totalPaid = $this->transactions()->whereStatus(Status::COMPLETED)->rentPayment()->sum("amount");
-        $totalInvoice = $this->leases->pluck("default_payment_plan")
-            ->reduce(function($carry, PaymentPlan $item = null) {
-                if(!$item) return $carry + 0;
+        $rentFigures = $this->leases->pluck("rent_figures");
+        $totalInvoice = $rentFigures->sum("total_invoiced");
+        $totalPaid = $rentFigures->sum("total_paid");
 
-                $dueDay = now()->day($item->due_day);
-
-                $noOfExpectedPayments = match ($item->frequency) {
-                    Frequency::MONTHLY => $item->created_at->diffInMonths($dueDay),
-                    Frequency::QUARTERLY => $item->created_at->diffInQuarters($dueDay),
-                    Frequency::HALF_YEARLY => $item->created_at->diffInYears($dueDay) / 2,
-                    Frequency::YEARLY => $item->created_at->diffInYears($dueDay)
-                };
-
-                return $carry + ($noOfExpectedPayments * $item->rent_amount);
-            });
-
-        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
+        return [
+            "total_invoiced" => $totalInvoice,
+            "total_paid"     => $totalPaid,
+            "arrears"        => $totalInvoice - $totalPaid
+        ];
     }
 }
