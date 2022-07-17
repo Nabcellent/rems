@@ -10,6 +10,7 @@ use App\Misc\IgnoreSuperScope;
 use App\Models\Estate;
 use App\Models\Property;
 use App\Models\Role as RoleModel;
+use App\Models\Service;
 use App\Models\Unit;
 use App\Models\User;
 use App\Settings\UserSettings;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -51,6 +53,7 @@ class UserController extends Controller
                 "id",
                 "first_name",
                 "last_name",
+                "username",
                 "phone",
                 "email",
                 "image",
@@ -67,7 +70,14 @@ class UserController extends Controller
                         return $qry->where("user_id", \user()->id);
                     });
                 });
-            })->with("roles:id,name")->latest()->get(),
+            })->with("roles:id,name")->latest()->get()->map(fn(User $user) => [
+                ...$user->toArray(),
+                "can" => [
+                    "view"    => user()->can("view", $user),
+                    "edit"    => user()->can("update", $user),
+                    "destroy" => user()->can("delete", $user),
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", User::class)
         ]);
     }
@@ -81,7 +91,7 @@ class UserController extends Controller
     public function create(Request $request): Response|ResponseFactory
     {
         $props = [
-            "roles"           => RoleModel::when(user()->hasRole(Role::SUPER_ADMIN->value), function(Builder $qry) {
+            "roles"           => RoleModel::when(user()->hasRole(Role::SUPER_ADMIN), function(Builder $qry) {
                 return $qry->withoutGlobalScope(IgnoreSuperScope::class);
             })->when(user()->hasRole(Role::PROPERTY_MANAGER->value), function(Builder $qry) {
                 return $qry->whereIn("name", [Role::OWNER->value, Role::SERVICE_PROVIDER->value]);
@@ -89,6 +99,7 @@ class UserController extends Controller
             "action"          => "create",
             "role"            => $request->query("role"),
             "defaultPassword" => app(UserSettings::class)->default_password,
+            "services"        => Service::select(["id", "name"])->get()
         ];
 
         if($request->has("entity")) {
@@ -131,6 +142,9 @@ class UserController extends Controller
         }
 
         $user = User::create($data)->assignRole($data["role"]);
+
+        if($user->hasRole(Role::SERVICE_PROVIDER)) $user->services()
+            ->attach(Arr::map($data["services"], fn(array $service) => ["service_id" => $service["id"]]));
 
         if($request->filled("createsOwnerFor")) {
             $propertyModel = match ($data["createsOwnerFor"]["name"]) {

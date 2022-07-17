@@ -108,6 +108,8 @@ class EstateController extends Controller
                 "properties.user:id,first_name,last_name,email,phone",
                 "user:id,first_name,last_name,email,phone",
                 "user.roles:id,name",
+                "manager:id,first_name,last_name,email,phone",
+                "manager.roles:id,name",
                 "services:id,name,icon,description",
                 "amenities:id,title,icon,description",
                 "policies:id,policeable_id,policeable_type,description",

@@ -40,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         "first_name",
         "last_name",
+        "username",
         "email",
         "phone",
         "gender",
@@ -83,9 +84,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function fullName(): Attribute
     {
         return Attribute::get(function($value, $attributes) {
-            $firstName = $attributes["first_name"] ?? "";
-            $lastName = $attributes["last_name"] ?? "";
-            return str($firstName . $lastName)->headline();
+            $fullName = ($attributes["first_name"] ?? "") . ($attributes["last_name"] ?? "");
+
+            if(!$fullName) $fullName = $attributes["username"] ?? "";
+
+            return str($fullName)->headline();
         });
     }
 
@@ -182,9 +185,9 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Scope the model query to certain roles only.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder                                             $query
      * @param string|int|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
-     * @param string $guard
+     * @param string                                                                            $guard
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
@@ -192,22 +195,22 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if($roles instanceof Role) $roles = $roles->value;
 
-        if ($roles instanceof Collection) $roles = $roles->all();
+        if($roles instanceof Collection) $roles = $roles->all();
 
-        $roles = array_map(function ($role) use ($guard) {
+        $roles = array_map(function($role) use ($guard) {
             if($role instanceof Role) $role = $role->value;
 
-            if ($role instanceof RoleModel) return $role;
+            if($role instanceof RoleModel) return $role;
 
             $method = is_numeric($role) ? 'findById' : 'findByName';
 
-            return $this->getRoleClass()->{$method}($role, $guard ?: $this->getDefaultGuardName());
+            return $this->getRoleClass()->{$method}($role, $guard ? : $this->getDefaultGuardName());
         }, Arr::wrap($roles));
 
-        return $query->whereHas('roles', function (Builder $subQuery) use ($roles) {
+        return $query->whereHas('roles', function(Builder $subQuery) use ($roles) {
             $roleClass = $this->getRoleClass();
             $key = (new $roleClass())->getKeyName();
-            $subQuery->whereIn(config('permission.table_names.roles').".$key", array_column($roles, $key));
+            $subQuery->whereIn(config('permission.table_names.roles') . ".$key", array_column($roles, $key));
         });
     }
 

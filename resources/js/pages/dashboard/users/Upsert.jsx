@@ -1,6 +1,7 @@
 import Dashboard from '@/layouts/Dashboard';
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import {
+    Chip,
     FormControl,
     FormControlLabel,
     FormHelperText,
@@ -33,13 +34,22 @@ import FilePondPluginFileRename from 'filepond-plugin-file-rename';
 import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import ValidationErrors from '@/components/ValidationErrors';
+import ControlledAutoComplete from '@/components/ControlledAutoComplete';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
 
-const validationSchema = yup.object({
-    first_name: yup.string().required('First name is required.'),
-    last_name: yup.string().required('Last name is required.'),
+const validationSchema = yup.object().shape({
+    role: yup.string().oneOf(Object.values(Role), 'Invalid role.'),
+    first_name: yup.string()
+                   .when('role', (role, field) => ![Role.SERVICE_PROVIDER, Role.PROPERTY_MANAGER].includes(role)
+                       ? field.required('First name is required.') : field),
+    last_name: yup.string()
+                  .when('role', (role, field) => ![Role.SERVICE_PROVIDER, Role.PROPERTY_MANAGER].includes(role)
+                      ? field.required('Last name is required.') : field),
+    username: yup.string()
+                 .when('role', (role, field) => [Role.SERVICE_PROVIDER, Role.PROPERTY_MANAGER].includes(role)
+                     ? field.required('Username is required.') : field),
     phone: yup.string().test({
         name: 'is-valid-phone',
         message: 'Invalid phone number',
@@ -47,12 +57,14 @@ const validationSchema = yup.object({
     }),
     gender: yup.string().oneOf(['male', 'female']),
     email: yup.string().email().required('Email is required.'),
-    role: yup.string().oneOf(Object.values(Role), 'Invalid role'),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
     password: yup.string().min(7),
+    services: yup.array().when('role', (role, field) => role === Role.SERVICE_PROVIDER
+        ? field.min(1, 'At least one service is required.').of(yup.object().shape({ id: yup.number().integer(), name: yup.string() })).ensure()
+        : field),
 });
 
-const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword }) => {
+const Upsert = ({ user, createsOwnerFor, action, roles, services, role, defaultPassword }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -60,9 +72,11 @@ const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword })
         initialValues: {
             first_name: user?.first_name ?? '',
             last_name: user?.last_name ?? '',
+            username: user?.username ?? '',
             phone: user?.phone ?? '',
             gender: user?.gender ?? '',
             email: user?.email ?? '',
+            services: user?.services ?? [],
             role: createsOwnerFor ? Role.OWNER : role ?? '',
             status: user?.status ?? Status.ACTIVE,
             image: '',
@@ -72,6 +86,8 @@ const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword })
         validationSchema,
         validateOnChange: true,
         onSubmit: values => {
+            console.log(values);
+
             let url = route(`dashboard.users.store`);
 
             if (user) {
@@ -99,59 +115,66 @@ const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword })
                         <ValidationErrors errors={errors}/>
 
                         <Grid container spacing={2}>
-                            {
-                                action === "create" && (
-                                    <Grid item lg={4}>
-                                        <TextField label="Role" placeholder="Role..." name={'role'} autoFocus select
-                                                   disabled={Boolean(createsOwnerFor)}
-                                                   value={formik.values.role} fullWidth onChange={formik.handleChange}
-                                                   error={formik.touched.role && Boolean(formik.errors.role)}
-                                                   helperText={formik.touched.role && formik.errors.role}>
-                                            {
-                                                roles.map((r, i) => (
-                                                    <MenuItem key={`role-${i}`} value={r}>{str.headline(r)}</MenuItem>
-                                                ))
-                                            }
-                                        </TextField>
+                            {action === "create" && (
+                                <Grid item lg={4}>
+                                    <TextField label="Role" placeholder="Role..." name={'role'} autoFocus select
+                                               disabled={Boolean(createsOwnerFor)}
+                                               value={formik.values.role} onChange={formik.handleChange}
+                                               error={formik.touched.role && Boolean(formik.errors.role)}
+                                               helperText={formik.touched.role && formik.errors.role}>
+                                        {roles.map((r, i) => (
+                                            <MenuItem key={`role-${i}`} value={r}>{str.headline(r)}</MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            )}
+                            {[Role.SERVICE_PROVIDER, Role.PROPERTY_MANAGER].includes(formik.values.role) ? (
+                                <Grid item lg={8}>
+                                    <TextField label="Username" placeholder="Username..." name={'username'} autoFocus
+                                               value={formik.values.username} onChange={formik.handleChange}
+                                               error={formik.touched.username && Boolean(formik.errors.username)}
+                                               helperText={formik.touched.username && formik.errors.username}/>
+                                </Grid>
+                            ) : (
+                                <>
+                                    <Grid item lg={action === "create" ? 4 : 6}>
+                                        <TextField label="First Name" placeholder="First name..." name={'first_name'}
+                                                   autoFocus
+                                                   value={formik.values.first_name} onChange={formik.handleChange}
+                                                   error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                                                   helperText={formik.touched.first_name && formik.errors.first_name}/>
                                     </Grid>
-                                )
-                            }
-                            <Grid item lg={action === "create" ? 4 : 6}>
-                                <TextField label="First Name" placeholder="First name..." name={'first_name'} autoFocus
-                                           value={formik.values.first_name} fullWidth onChange={formik.handleChange}
-                                           error={formik.touched.first_name && Boolean(formik.errors.first_name)}
-                                           helperText={formik.touched.first_name && formik.errors.first_name}/>
-                            </Grid>
-                            <Grid item lg={action === "create" ? 4 : 6}>
-                                <TextField label="Last Name" placeholder="Last name..." name={'last_name'}
-                                           value={formik.values.last_name} fullWidth onChange={formik.handleChange}
-                                           error={formik.touched.last_name && Boolean(formik.errors.last_name)}
-                                           helperText={formik.touched.last_name && formik.errors.last_name}/>
-                            </Grid>
+                                    <Grid item lg={action === "create" ? 4 : 6}>
+                                        <TextField label="Last Name" placeholder="Last name..." name={'last_name'}
+                                                   value={formik.values.last_name} onChange={formik.handleChange}
+                                                   error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                                                   helperText={formik.touched.last_name && formik.errors.last_name}/>
+                                    </Grid>
+                                </>
+                            )}
                             <Grid item xs={12}>
                                 <TextField type={'email'} label="Email" placeholder="Email..." name={'email'}
-                                           value={formik.values.email} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.email} onChange={formik.handleChange}
+                                           autoComplete={'off'}
                                            error={formik.touched.email && Boolean(formik.errors.email)}
                                            helperText={formik.touched.email && formik.errors.email}/>
                             </Grid>
                             <Grid item md={user ? 12 : 6}>
                                 <TextField type={'tel'} label="Phone Number" placeholder="Phone number..."
-                                           name={'phone'} value={formik.values.phone} fullWidth
+                                           name={'phone'} value={formik.values.phone}
                                            onChange={formik.handleChange}
                                            error={formik.touched.phone && Boolean(formik.errors.phone)}
                                            helperText={formik.touched.phone && formik.errors.phone}/>
                             </Grid>
-                            {
-                                !user && (
-                                    <Grid item md={6}>
-                                        <TextField type="password" size={"small"} label="Password" placeholder="Password..."
-                                                   name={'password'} value={formik.values.password}
-                                                   error={formik.touched.password && Boolean(formik.errors.password)}
-                                                   helperText={(formik.touched.password && formik.errors.password) ?? `default - ${defaultPassword}`}
-                                                   onChange={formik.handleChange} autoComplete="off" fullWidth required/>
-                                    </Grid>
-                                )
-                            }
+                            {!user && (
+                                <Grid item md={6}>
+                                    <TextField type="password" size={"small"} label="Password" placeholder="Password..."
+                                               name={'password'} value={formik.values.password}
+                                               error={formik.touched.password && Boolean(formik.errors.password)}
+                                               helperText={(formik.touched.password && formik.errors.password) ?? `default - ${defaultPassword}`}
+                                               onChange={formik.handleChange} autoComplete="off" required/>
+                                </Grid>
+                            )}
                             <Grid item md={6}>
                                 <FormControl error={formik.touched.gender && Boolean(formik.errors.gender)}>
                                     <FormLabel className={'m-0'} id="gender">Gender</FormLabel>
@@ -182,6 +205,24 @@ const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword })
                                     </FormHelperText>
                                 </FormControl>
                             </Grid>
+                            {formik.values.role === Role.SERVICE_PROVIDER && (
+                                <Grid item lg={12}>
+                                    <ControlledAutoComplete multiple name={'services'} value={formik.values.services}
+                                                            options={services}
+                                                            getOptionLabel={o => o.name ?? o}
+                                                            onChange={(event, value) => formik.setFieldValue('services', value)}
+                                                            renderTags={(value, getTagProps) =>
+                                                                value.map((option, i) => (
+                                                                    <Chip label={option} {...getTagProps({ i })}/>
+                                                                ))}
+                                                            renderInput={(params) => (
+                                                                <TextField {...params} label="Services" required
+                                                                           placeholder={'Services...'}
+                                                                           error={formik.touched.services && formik.errors.services}
+                                                                           helperText={formik.touched.services && formik.errors.services}/>
+                                                            )}/>
+                                </Grid>
+                            )}
                             <Grid item xs={12}>
                                 <FilePond maxFiles={3} name="image" maxFileSize={'1MB'} className={'mb-0'}
                                           files={user?.image && `/images/users/${user?.image}`}
@@ -194,7 +235,8 @@ const Upsert = ({ user, createsOwnerFor, action, roles, role, defaultPassword })
                                           onremovefile={() => formik.setFieldValue('image', null, true)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
+                                <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary"
+                                               loading={isLoading}
                                                loadingPosition="end" onClick={() => formik.submitForm()}
                                                endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>

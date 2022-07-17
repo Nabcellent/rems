@@ -10,14 +10,54 @@ import CardBgCorner from '@/components/CardBgCorner';
 import Banner from '@/components/Banner';
 import PaymentPlans from '@/components/crud/PaymentPlans';
 import { Link } from '@inertiajs/inertia-react';
-import { Edit, Home } from '@mui/icons-material';
+import { Edit, Home, ReadMore } from '@mui/icons-material';
 import PermitAction from '@/components/PermitAction';
+import CountUp from 'react-countup';
+import LeaderList from '@/components/LeaderList';
+import DataTable from '@/components/common/datatable';
+import { currencyFormat } from '@/utils/helpers';
+import TableDate from '@/components/TableDate';
 
-const Show = ({ errors, lease, canEdit }) => {
+const UserInfo = ({ auth, user, rentFigures, role }) => {
+    if (auth.user.id === user.id) return (
+        <Col md={6} lg={4}>
+            <h5>Rent</h5>
+            <LeaderList items={[
+                {
+                    key: 'Invoiced',
+                    value: <CountUp end={rentFigures.total_invoiced} separator={','} prefix={'KES '}/>
+                },
+                {
+                    key: 'Paid',
+                    value: <CountUp end={rentFigures.total_paid} separator={','} prefix={'KES '}/>
+                },
+                {
+                    key: 'Arrears',
+                    value: <CountUp end={rentFigures.arrears} separator={','} prefix={'KES '}/>
+                },
+            ]}/>
+        </Col>
+    );
+
+    return (
+        <Col md={6} lg={4} className={'mb-4 mb-lg-0'}>
+            <h5>{role}.</h5>
+            <h6>{role} Address</h6>
+            <p className="mb-0 fs--1">
+                <strong>Email: </strong>
+                <a href={`mailto:${user.email}`}>{user.email}</a>
+            </p>
+            <hr/>
+            <PhoneChip phone={user.phone} link/>
+        </Col>
+    );
+};
+
+const Show = ({ auth, lease, canEdit }) => {
     console.log(lease);
 
     return (
-        <Dashboard errors={errors} title={`Leases #${lease.id}`}>
+        <Dashboard title={`Leases #${lease.id}`}>
             <Breadcrumbs title="Leases" breadcrumbItem={`#${lease.id}`}/>
 
             <Banner title={'Lease.'} actions={[
@@ -50,31 +90,13 @@ const Show = ({ errors, lease, canEdit }) => {
                                 {moment(lease.expires_at).format("MMM Do YYYY")}
                             </p>
                         </Col>
-                        <Col md={6} lg={4} className={'mb-4 mb-lg-0'}>
-                            <h5>Owner.</h5>
-                            <h6>Owner Address</h6>
-                            <p className="mb-0 fs--1">
-                                <strong>Email: </strong>
-                                <a href={`mailto:${lease.unit.user.email}`}>{lease.unit.user.email}</a>
-                            </p>
-                            <hr/>
-                            <PhoneChip phone={lease.unit.user.phone} link/>
-                        </Col>
-                        <Col md={6} lg={4}>
-                            <h5>Tenant.</h5>
-                            <h6>Tenant Address</h6>
-                            <p className="mb-0 fs--1">
-                                <strong>Email: </strong>
-                                <a href={`mailto:${lease.user.email}`}>{lease.user.email}</a>
-                            </p>
-                            <hr/>
-                            <PhoneChip phone={lease.user.phone} link/>
-                        </Col>
+                        <UserInfo user={lease.unit.user} role={'Owner'} auth={auth} rentFigures={lease.rent_figures}/>
+                        <UserInfo user={lease.user} role={'Tenant'} auth={auth} rentFigures={lease.rent_figures}/>
                     </Row>
                 </Card.Body>
             </Paper>
 
-            <Row>
+            <Row className={'mb-3'}>
                 <Col>
                     {!lease.default_payment_plan && (
                         <Alert severity="warning" className={'mb-2'}>
@@ -84,6 +106,44 @@ const Show = ({ errors, lease, canEdit }) => {
 
                     <PaymentPlans plans={lease.payment_plans} defaultPlan={lease.default_payment_plan}
                                   leaseId={lease.id}/>
+                </Col>
+            </Row>
+
+            <Row>
+                <Col>
+                    <Paper className={'p-3'}>
+                        <DataTable title={'Rent Payments'} perPage={5} columns={[
+                            {
+                                accessorKey: 'description',
+                                header: 'Description',
+                            },
+                            {
+                                accessorKey: 'amount',
+                                header: 'Amount',
+                                cell: ({ row }) => currencyFormat(row.original.amount)
+                            },
+                            {
+                                accessorKey: 'status',
+                                header: 'Status',
+                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'transaction'}
+                                                               entityId={row.original.id}/>
+                            },
+                            {
+                                accessorKey: 'created_at',
+                                header: 'Date',
+                                accessorFn: row => moment(row.created_at).calendar(),
+                                cell: ({ row }) => <TableDate date={row.original.created_at}/>
+                            },
+                            {
+                                id: 'actions',
+                                cell: ({ row }) => (
+                                    <Link href={route('dashboard.transactions.show', { transaction: row.original.id })}>
+                                        <ReadMore fontSize={'small'}/>
+                                    </Link>
+                                )
+                            }
+                        ]} data={lease.unit.transactions}/>
+                    </Paper>
                 </Col>
             </Row>
         </Dashboard>

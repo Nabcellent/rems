@@ -8,6 +8,8 @@ import { ReadMore } from '@mui/icons-material';
 import { Link } from '@inertiajs/inertia-react';
 import CardBgCorner from '@/components/CardBgCorner';
 import React from 'react';
+import { Inertia } from '@inertiajs/inertia';
+import { Role } from '@/utils/enums';
 
 const Show = ({ errors, service }) => {
     console.log(service);
@@ -35,33 +37,24 @@ const Show = ({ errors, service }) => {
             </Paper>
 
             <Paper className={'p-3'}>
-                <DataTable title={'Service Providers'} data={service.providers} perPage={5}
-                           viewAll={route('dashboard.service-providers.index')} columns={[
+                <DataTable title={'Service Providers'} data={service.providers} perPage={5} columns={[
                     {
-                        accessor: 'email',
-                        Header: 'Email',
+                        accessorKey: 'email',
+                        header: 'Email',
                     },
                     {
-                        accessor: 'phone',
-                        Header: 'Phone',
+                        accessorKey: 'phone',
+                        header: 'Phone',
                     },
                     {
-                        accessor: 'actions',
-                        disableSortBy: true,
-                        className: 'text-end',
-                        Cell: ({ row }) => {
-                            const serviceProvider = row.original;
-
-                            return (
-                                <>
-                                    <Link href={route('dashboard.services.show', { service: serviceProvider.id })}>
-                                        <ReadMore fontSize={'small'}/>
-                                    </Link>
-                                </>
-                            );
-                        }
+                        id: 'actions',
+                        cell: ({ row }) => (
+                            <Link href={route('dashboard.services.show', row.original)}>
+                                <ReadMore fontSize={'small'}/>
+                            </Link>
+                        )
                     },
-                ]}/>
+                ]} onCreateRow={() => Inertia.get(route('dashboard.users.create', { role: Role.SERVICE_PROVIDER }))}/>
             </Paper>
         </Dashboard>
     );

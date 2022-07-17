@@ -25,19 +25,15 @@ class RegisterRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    #[ArrayShape([
-        "first_name" => "string",
-        "last_name"  => "string",
-        "email"      => "string",
-        "role"       => "array",
-        "password"   => "array"
-    ])] public function rules(): array
+    public function rules(): array
     {
         return [
-            "first_name" => "required|string|max:20",
-            "last_name"  => "required|string|max:20",
+            "first_name" => "required_without:username|nullable|string|max:20",
+            "last_name"  => "required_without:username|nullable|string|max:20",
+            "username"   => "required_without:first_name,last_name|nullable|string|max:50",
             "email"      => "required|string|email|max:100|unique:users",
             "role"       => ["required", new Enum(Role::class)],
+            "services"   => "required_if:role," . Role::SERVICE_PROVIDER->value . "|array",
             "password"   => ["required", "confirmed", Password::defaults()],
         ];
     }

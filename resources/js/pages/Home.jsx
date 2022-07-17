@@ -14,7 +14,7 @@ import serviceImg from '../assets/images/home/house_service.svg';
 import tenantImg from '../assets/images/home/house_tenant.svg';
 import { Inertia } from '@inertiajs/inertia';
 
-const Home = () => {
+const Home = ({canRegisterAsServiceProvider}) => {
     return (
         <>
             <Head><title>Welcome</title></Head>
@@ -64,12 +64,14 @@ const Home = () => {
                     desc={'Apply here to become a tenant. On registration, an applicant waits for an approval from the owner. Managed ment of rental payments is also done on the system.'}
                     onBtnClick={() => Inertia.get(route('register'))}
                 />
-                <SectionBox
-                    image={serviceImg}
-                    title={'Become a Service Provider'}
-                    desc={'Service providers such as electrians, plumbers, carpenters, painters, laundry services and house managers can register from here and offer their services to residents.'}
-                    onBtnClick={() => Inertia.get(route('register', { role: 'provider' }))}
-                />
+                {canRegisterAsServiceProvider && (
+                    <SectionBox
+                        image={serviceImg}
+                        title={'Become a Service Provider'}
+                        desc={'Service providers such as electrians, plumbers, carpenters, painters, laundry services and house managers can register from here and offer their services to residents.'}
+                        onBtnClick={() => Inertia.get(route('register', { role: 'provider' }))}
+                    />
+                )}
                 <SectionBox
                     tint={true}
                     image={searchImg}

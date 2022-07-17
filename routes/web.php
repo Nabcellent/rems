@@ -88,7 +88,6 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
             "services"          => ServiceController::class,
             "amenities"         => AmenityController::class,
             "amenitiable"       => AmenitiableController::class,
-            "service-providers" => ServiceProviderController::class,
             "tickets"           => TicketController::class,
             "transactions"      => TransactionController::class,
             "payments"          => PaymentController::class,

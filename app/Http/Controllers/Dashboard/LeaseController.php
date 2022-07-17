@@ -47,9 +47,9 @@ class LeaseController extends Controller
                 ->orWhereHas("unit", function(Builder $qry) {
                     return $qry->whereUserId(user()->id);
                 }))->with([
-                "unit.user:id,first_name,last_name,email",
-                "user:id,first_name,last_name,email",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
+                "unit.user:id,first_name,last_name,username,email",
+                "user:id,first_name,last_name,username,email",
+                "paymentPlans:id,lease_id,deposit,rent_amount,is_default,frequency",
             ])->latest()->get()->map(fn(Lease $lease) => [
                 ...$lease->toArray(),
                 "can" => [
@@ -122,13 +122,15 @@ class LeaseController extends Controller
         $lease = $lease->load([
             "unit",
             "unit.user:id,email,phone",
+            "unit.transactions:id,transactionable_id,transactionable_type,amount,status,description",
             "user:id,email,phone",
             "user.roles:id,name",
-            "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default",
+            "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default,created_at",
         ]);
 
         $data = $lease->toArray();
 
+//        dd($data);
         if($lease->default_payment_plan) {
             $data["payment_plans"] = [
                 [

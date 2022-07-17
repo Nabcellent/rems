@@ -110,7 +110,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                     onSuccess: () => resetForm(),
                                     onError: errors => {
                                         console.log(errors);
-                                        setServerErrors(errors)
+                                        setServerErrors(errors);
                                     },
                                     onFinish: () => setIsLoading(false)
                                 }
@@ -175,7 +175,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                         let label = o.email;
                                                                         if (label) label += ': ';
                                                                         label += o.full_name;
-                                                                        if(!label) label = o
+                                                                        if (!label) label = o;
 
                                                                         return label;
                                                                     }}
@@ -281,7 +281,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                                value={plan.due_day} fullWidth
                                                                                onChange={handleChange}
                                                                                error={isError(errors, touched, i, 'due_day')}
-                                                                               helperText={errorMessage(errors, i, 'due_day')}>
+                                                                               helperText={isError(errors, touched, i, 'due_day') && errorMessage(errors, i, 'due_day')}>
                                                                         {
                                                                             Array(31).fill(0)
                                                                                      .map((d, i) => (
@@ -318,7 +318,8 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             )}
                                         </FieldArray>
                                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                                            <LoadingButton disabled={!dirty} type={'submit'} size="small" color="primary"
+                                            <LoadingButton disabled={!dirty} type={'submit'} size="small"
+                                                           color="primary"
                                                            loading={isLoading}
                                                            loadingPosition="end" endIcon={<Create/>}
                                                            variant="contained">{action}

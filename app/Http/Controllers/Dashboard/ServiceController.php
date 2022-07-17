@@ -31,7 +31,14 @@ class ServiceController extends Controller
     {
         return inertia('dashboard/services/index', [
             "services" => Service::select(["id", "name", "description", "icon", "created_at"])->withCount(["providers"])
-                ->latest()->get()
+                ->latest()->get()->map(fn(Service $service) => [
+                    ...$service->toArray(),
+                    "can" => [
+                        "edit"    => user()->can("update", $service),
+                        "view"    => user()->can("view", $service),
+                        "destroy" => user()->can("delete", $service),
+                    ]
+                ])
         ]);
     }
 
@@ -103,7 +110,13 @@ class ServiceController extends Controller
     {
         $service->update($request->validated());
 
-        return back()->with("toast", ["message" => "Service Updated!"]);
+        return back()->with("toast", [
+            "message" => "Service Updated!",
+            "link"    => [
+                "title" => "View Service",
+                "href"  => route("dashboard.estates.show", ["estate" => $service])
+            ]
+        ]);
     }
 
     /**
