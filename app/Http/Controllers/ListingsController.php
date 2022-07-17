@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\RoomType;
+use App\Models\Amenity;
 use App\Models\Estate;
 use App\Models\Unit;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,7 +29,8 @@ class ListingsController extends Controller
                 "image"
             ])->with(["unitable", "amenities:id,title,icon"])->withCount(["rooms as bedroom_count" => function(Builder $qry) {
                 return $qry->whereType(RoomType::BEDROOM);
-            }])->active()->latest()->get()
+            }])->active()->latest()->get(),
+            "amenities" => Amenity::select(["id", "title"])->get()
         ]);
     }
 

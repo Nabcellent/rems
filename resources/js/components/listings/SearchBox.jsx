@@ -8,16 +8,16 @@ import { useEffect, useState } from "react";
 import MultipleSelect from "./MultipleSelect";
 import { getFilteredListings } from '@/utils/helpers';
 import { Purpose } from '@/utils/enums';
+import { usePage } from '@inertiajs/inertia-react';
 
 const SearchBox = ({ listings, setFilteredListings }) => {
+    const { amenities } = usePage().props;
+
     const [filters, setFilters] = useState(undefined);
     const [priceRange, setPriceRange] = useState([20000, 400000]);
     const [keyword, setKeyword] = useState("");
 
-    const updateFilters = filter => {
-        setFilters({ ...filters, ...filter })
-        console.log(filters);
-    }
+    const updateFilters = filter => setFilters({ ...filters, ...filter });
 
     useEffect(() => {
         setFilteredListings(getFilteredListings(listings, filters));
@@ -31,13 +31,11 @@ const SearchBox = ({ listings, setFilteredListings }) => {
             <Grid container spacing={2} alignItems={"center"}>
                 <Grid item xs={12} md={6} lg={4}>
                     <MultipleSelect onChange={value => updateFilters({ purpose: value })}
-                                    choices={Object.values(Purpose)} field={"Purpose"}
-                    />
+                                    choices={Object.values(Purpose)} field={"Purpose"}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                     <MultipleSelect onChange={value => updateFilters({ bedrooms: value })}
-                                    choices={["1", "2", "3", "4", "5+"]} field={"Bedrooms"}
-                    />
+                                    choices={["1", "2", "3", "4", "5+"]} field={"Bedrooms"}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                     <MultipleSelect
@@ -70,15 +68,8 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                     />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
-                    <MultipleSelect
-                        choices={[
-                            "Swimming Pool",
-                            "Gym",
-                            "Play Area",
-                            "Garage",
-                        ]}
-                        field={"Amenities"}
-                    />
+                    <MultipleSelect choices={amenities.map(a => a.title)}
+                                    onChange={value => updateFilters({ amenities: value })} field={"Amenities"}/>
                 </Grid>
                 <Grid item xs>
                     <TextField

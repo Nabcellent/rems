@@ -97,10 +97,11 @@ export const getFilteredListings = (listings, filters) => {
     let filteredListings = [];
 
     filteredListings.push(...listings.filter(listing => {
-        const bedroomFilters = filters?.bedrooms.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
-        const purposeFilters = filters?.purpose.length ? filters?.purpose?.includes(listing.purpose) : true;
+        const bedroomFilters = filters?.bedrooms?.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
+        const purposeFilters = filters?.purpose?.length ? filters?.purpose?.includes(listing.purpose) : true;
+        const amenityFilters = filters?.amenities?.length ? listing.amenities?.some(a => filters?.amenities?.includes(a.title)) : true;
 
-        return purposeFilters && bedroomFilters;
+        return purposeFilters && bedroomFilters && amenityFilters;
     }));
 
     if (!filters) filteredListings = listings;
