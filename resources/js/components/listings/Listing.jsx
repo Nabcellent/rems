@@ -129,24 +129,28 @@ const Listing = ({ unit }) => {
                         <Typography>{unit.bedroom_count}</Typography>
                     </Grid>
 
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            fontSize={"1.1rem"}
-                        >
-                            AMENITIES
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <List sx={{ m: 0, p: 0 }}>
-                            {unit.amenities.map((amenity, i) => (
-                                <ListItem key={i} disableGutters disablePadding>
-                                    <ListItemText primary={amenity.title.toUpperCase()}/>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Grid>
+                    {Boolean(unit.amenities.length) && (
+                      <>
+                          <Grid item xs={6}>
+                              <Typography
+                                  variant="body1"
+                                  fontWeight={600}
+                                  fontSize={"1.1rem"}
+                              >
+                                  AMENITIES
+                              </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                              <List sx={{ m: 0, p: 0 }}>
+                                  {unit.amenities.map((amenity, i) => (
+                                      <ListItem key={i} disableGutters disablePadding>
+                                          <ListItemText primary={amenity.title.toUpperCase()}/>
+                                      </ListItem>
+                                  ))}
+                              </List>
+                          </Grid>
+                      </>
+                    )}
                 </Grid>
             </Grid>
 

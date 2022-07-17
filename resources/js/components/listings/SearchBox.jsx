@@ -78,11 +78,12 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                 </Grid>
                 <Grid item xs>
                     <TextField
-                        label="Keyword"
+                        label="Keywords"
                         variant="outlined"
                         value={keyword}
                         onChange={({ target: { value } }) => {
-                            setTimeout(() => updateFilters({ keyword: value }), 500);
+                            setKeyword(value);
+                            setTimeout(() => updateFilters({ keywords: value }), 500);
                         }}
                         sx={{ width: "100%" }}
                     />

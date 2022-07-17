@@ -97,6 +97,13 @@ export const getFilteredListings = (listings, filters) => {
     let filteredListings = [];
 
     filteredListings.push(...listings.filter(listing => {
+        let keywordFilters = true;
+        if (filters?.keywords) {
+            const searchString = listing.estate.name + listing.estate.address;
+
+            keywordFilters = searchString.toLowerCase().includes(filters?.keywords);
+        }
+
         const bedroomFilters = filters?.bedrooms?.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
         const purposeFilters = filters?.purpose?.length ? filters?.purpose?.includes(listing.purpose) : true;
         const amenityFilters = filters?.amenities?.length ? listing.amenities?.some(a => filters?.amenities?.includes(a.title)) : true;
@@ -105,11 +112,10 @@ export const getFilteredListings = (listings, filters) => {
         const rentAmountFilters = filters?.rentAmountRange?.length
             ? listing.rent_amount >= filters.rentAmountRange[0] && listing.rent_amount <= filters.rentAmountRange[1] : true;
 
-        return purposeFilters && bedroomFilters && amenityFilters && priceFilters && rentAmountFilters;
+        return purposeFilters && bedroomFilters && amenityFilters && priceFilters && rentAmountFilters && keywordFilters;
     }));
 
     if (!filters) filteredListings = listings;
 
-    console.log(filteredListings);
     return filteredListings;
 };
