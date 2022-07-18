@@ -12,7 +12,7 @@ import { usePage } from '@inertiajs/inertia-react';
 import PermitAction from '@/components/PermitAction';
 
 const Images = ({ images, style, imageable, imageableId }) => {
-    const { can } = usePage().props;
+    const { canCreateImage } = usePage().props;
 
     const [image, setImage] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
@@ -41,13 +41,11 @@ const Images = ({ images, style, imageable, imageableId }) => {
         setShowModal(true);
     };
 
-    if (!can.create.image && !images.length) return <></>;
-
     return (
         <>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Photos</h5>
-                <PermitAction ability={can.create.image}>
+                <PermitAction ability={Boolean(canCreateImage)}>
                     <Button startIcon={<AddAPhoto/>} onClick={() => handleCreate()}>Add</Button>
                 </PermitAction>
             </Card.Header>
