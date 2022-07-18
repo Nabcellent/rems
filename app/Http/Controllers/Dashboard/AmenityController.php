@@ -31,7 +31,14 @@ class AmenityController extends Controller
     {
         return inertia('dashboard/amenities/index', [
             "amenities" => Amenity::select(["id", "title", "icon", "description"])->withCount(["estates", "units"])
-                ->latest()->get()
+                ->latest()->get()->map(fn(Amenity $amenity) => [
+                    ...$amenity->toArray(),
+                    "can" => [
+                        "edit"    => user()->can("update", $amenity),
+                        "view"    => user()->can("view", $amenity),
+                        "destroy" => user()->can("delete", $amenity)
+                    ]
+                ])
         ]);
     }
 
@@ -83,7 +90,7 @@ class AmenityController extends Controller
     public function edit(Amenity $amenity): Response|ResponseFactory
     {
         return inertia("dashboard/amenities/Upsert", [
-            "action" => "update",
+            "action"  => "update",
             "amenity" => $amenity,
         ]);
     }
