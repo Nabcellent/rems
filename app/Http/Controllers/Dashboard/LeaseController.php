@@ -68,6 +68,7 @@ class LeaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function create(Request $request): Response|ResponseFactory
