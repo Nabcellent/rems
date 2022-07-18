@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -67,6 +68,7 @@ class LeaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param \Illuminate\Http\Request $request
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function create(Request $request): Response|ResponseFactory
@@ -94,16 +96,21 @@ class LeaseController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
+     * @throws \Throwable
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreLeaseRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
-        if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;
+        $lease = DB::transaction(function() use ($data) {
+            if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;
 
-        $lease = Lease::create($data);
-        $lease->paymentPlans()->createMany($data["plans"]);
+            $lease = Lease::create($data);
+            $lease->paymentPlans()->createMany($data["plans"]);
+
+            return $lease;
+        });
 
         return redirect()->route("dashboard.leases.index")->with("toast", [
             "message" => "Lease Created!",
@@ -133,7 +140,6 @@ class LeaseController extends Controller
 
         $data = $lease->toArray();
 
-//        dd($data);
         if($lease->default_payment_plan) {
             $data["payment_plans"] = [
                 [

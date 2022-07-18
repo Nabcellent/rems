@@ -157,7 +157,7 @@ const Wallet = ({ wallet, transactions, last_top_up, auth, total_spent, total_de
                  setShowModal={setShowPaymentMethodModal}
                  onCompleted={({
                      amount,
-                 }) => Inertia.post(route('dashboard.wallet.credit', { user: auth.user.id }), {
+                 }) => Inertia.put(route('dashboard.wallet.credit', { user: auth.user.id }), {
                      amount
                  }, { preserveState: true })}/>
         </Dashboard>
