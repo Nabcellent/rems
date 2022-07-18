@@ -1,16 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    Autocomplete,
-    GoogleMap,
-    InfoWindow,
-    Marker,
-    useJsApiLoader,
-    useLoadScript,
-} from "@react-google-maps/api";
+import { Autocomplete, GoogleMap, Marker, useJsApiLoader, } from "@react-google-maps/api";
 import { CircularProgress, TextField } from "@mui/material";
 import PropTypes from "prop-types";
-
-const libraries = ["places"];
+import { getLocationData } from '@/utils/helpers';
+import { mapsLibraries } from '@/constants/misc';
 
 const Map = ({
     apiKey,
@@ -29,7 +22,7 @@ const Map = ({
     const { isLoaded } = useJsApiLoader({
         id: "google-map-script",
         googleMapsApiKey: apiKey,
-        libraries,
+        libraries: mapsLibraries,
     });
 
     const onLoad = useCallback(function callback(map) {
@@ -40,7 +33,7 @@ const Map = ({
         setMap(null);
     }, []);
 
-    const onPlaceChanged = () => {
+    const onPlaceChanged = async () => {
         if (autocomplete !== null) {
             const place = autocomplete.getPlace(),
                 location = place.geometry.location,
@@ -53,6 +46,7 @@ const Map = ({
                 ...pos,
                 name: place.name,
                 address: place.formatted_address,
+                location: await getLocationData(location)
             });
 
             console.log(place);
@@ -71,38 +65,39 @@ const Map = ({
         infoWindow.open(map);
     };
 
-    const panToCurrentLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                    };
+    // const panToCurrentLocation = () => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 const pos = {
+    //                     lat: position.coords.latitude,
+    //                     lng: position.coords.longitude,
+    //                 };
+    //
+    //                 infoWindow.setPosition(pos);
+    //                 infoWindow.setContent("Current location found.");
+    //                 infoWindow.open(map);
+    //
+    //                 map.setCenter(pos);
+    //                 marker.setCenter(pos);
+    //
+    //                 onLocationChange({
+    //                     lat: pos.lat.toFixed(10),
+    //                     lng: pos.lng.toFixed(10),
+    //                 });
+    //             },
+    //             () => handleLocationError(true, infoWindow, map.getCenter())
+    //         );
+    //     } else {
+    //         handleLocationError(false, infoWindow, map.getCenter()); // Browser doesn't support Geolocation
+    //     }
+    // };
 
-                    infoWindow.setPosition(pos);
-                    infoWindow.setContent("Current location found.");
-                    infoWindow.open(map);
-
-                    map.setCenter(pos);
-                    marker.setCenter(pos);
-
-                    onLocationChange({
-                        lat: pos.lat.toFixed(10),
-                        lng: pos.lng.toFixed(10),
-                    });
-                },
-                () => handleLocationError(true, infoWindow, map.getCenter())
-            );
-        } else {
-            handleLocationError(false, infoWindow, map.getCenter()); // Browser doesn't support Geolocation
-        }
-    };
-
-    const handleLocationChange = (e) => {
+    const handleLocationChange = async (e) => {
         onLocationChange({
             lat: e.latLng.lat().toFixed(10),
             lng: e.latLng.lng().toFixed(10),
+            location: await getLocationData(e.latLng)
         });
     };
 
@@ -158,7 +153,7 @@ const Map = ({
             />
         </GoogleMap>
     ) : (
-        <CircularProgress />
+        <CircularProgress/>
     );
 };
 

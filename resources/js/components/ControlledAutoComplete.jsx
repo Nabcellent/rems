@@ -10,10 +10,11 @@ const ControlledAutoComplete = ({
     value,
     disabled = false,
     multiple = undefined,
+    freeSolo = undefined
 }) => {
     return (
         <Autocomplete name={name} disabled={disabled} multiple={multiple}
-                      value={value}
+                      value={value} freeSolo={freeSolo}
                       getOptionLabel={getOptionLabel}
                       options={options}
                       isOptionEqualToValue={(option, value) => value === undefined || value === "" || option.id === value.id}

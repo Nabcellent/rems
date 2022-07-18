@@ -13,7 +13,7 @@ const Listing = ({ unit }) => {
     return (
         <Grid
             component={CardActionArea}
-            onClick={() => Inertia.get(`/listings/${unit.id}`)}
+            onClick={() => Inertia.get(`/listings/${unit.estate.id}`)}
             container
             spacing={2}
             mt={"2rem"}
