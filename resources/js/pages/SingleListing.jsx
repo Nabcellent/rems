@@ -205,6 +205,7 @@ const SingleListing = ({ googleMapsKey, estate }) => {
                             <Box
                                 width={"100%"}
                                 border={1}
+                                p={2}
                                 borderRadius={4}
                                 display={"flex"}
                                 flexDirection={"column"}
