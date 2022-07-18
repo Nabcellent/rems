@@ -33,12 +33,12 @@ const validationSchema = yup.object().shape({
     property: yup.object(),
     unit: yup.object(),
     user: yup.object().required('Tenant is required.'),
-    expires_at: yup.date('Invalid date.').min(moment().add(1, 'd').toDate(), 'Must be after today.')
+    expires_at: yup.date().min(moment().add(1, 'd').toDate(), 'Must be after today.')
                    .max(moment().add(5, 'y').toDate(), 'Must be within the year.')
                    .required('Start date is required.'),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
     plans: yup.array().of(yup.object().shape({
-        deposit: yup.number(),
+        deposit: yup.number().required('Deposit is required.'),
         rent_amount: yup.number().min(1).required('Amount for rent is required.'),
         due_day: yup.number().min(1).max(31).required('Due date is required.'),
         frequency: yup.string().oneOf(Object.values(RentFrequency), 'Invalid rent frequency.'),
