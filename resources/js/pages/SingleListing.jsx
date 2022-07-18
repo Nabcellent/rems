@@ -20,6 +20,7 @@ import GarageIcon from "@mui/icons-material/Garage";
 
 import { Head } from "@inertiajs/inertia-react";
 import { Carousel } from "react-bootstrap";
+import { useState } from "react";
 
 const images = [
     "https://images.unsplash.com/photo-1570129477492-45c003edd2be?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8aG91c2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
@@ -33,9 +34,27 @@ const iconDictionary = [
     { name: "Garage", icon: <GarageIcon /> },
 ];
 
+const defaultAmenities = [
+    {
+        id: 1,
+        title: "Swimming Pool",
+        description: "Olympic sized heated swimming pool",
+    },
+    {
+        id: 2,
+        title: "Gym",
+        description: "Fully equipped gym for your fitness needs",
+    },
+    {
+        id: 3,
+        title: "Garage",
+        description: "Spacious garage with capacity for two cars",
+    },
+];
+
 const SingleListing = ({ googleMapsKey, estate }) => {
-    const oc = false;
     console.log(estate);
+    const [selectedUnit, setSelectedUnit] = useState(null);
 
     const units = [];
     for (let i = 1; i <= estate.floor_count; i++) {
@@ -84,7 +103,7 @@ const SingleListing = ({ googleMapsKey, estate }) => {
                 spacing={2}
                 justifyContent={{ xs: "none", md: "center" }}
             >
-                {estate.amenities.map((amenity) => (
+                {defaultAmenities.map((amenity) => (
                     <ListItem
                         key={amenity.id}
                         disablePadding
@@ -128,64 +147,113 @@ const SingleListing = ({ googleMapsKey, estate }) => {
                 {new Intl.NumberFormat("en-US", {
                     style: "currency",
                     currency: "KSH",
-                }).format(estate.service_charge)}
+                }).format(
+                    estate.service_charge === 0 ? 10000 : estate.service_charge
+                )}
             </Typography>
 
-            <Typography variant="h6" mt={2} textAlign={"center"}>
-                Availability
-            </Typography>
-            {/* Pull units table here and show available and unavailable units */}
-            <Grid
-                container
-                spacing={1}
-                justifyContent={"flex-start"}
-                alignItems={"center"}
-            >
-                <Grid item xs={12} md={6}>
-                    {units.map((floor, i) => (
-                        <Stack
-                            direction={"row"}
-                            spacing={1}
-                            mt={1}
-                            justifyContent={{ xs: "center", md: "flex-end" }}
-                            key={i}
-                        >
-                            <Typography variant="body2">
-                                {i + 1 == 1 ? "Ground Floor" : `Floor ${i}`}
-                            </Typography>
-                            {floor.units_on_floor.map((unit) =>
-                                oc ? (
-                                    <Chip
-                                        key={unit.id}
-                                        label={unit.house_number}
-                                    />
-                                ) : (
-                                    <Chip
-                                        key={unit.id}
-                                        label={unit.house_number}
-                                        variant="outlined"
-                                        onClick={() => console.log(unit)}
-                                    />
-                                )
-                            )}
-                        </Stack>
-                    ))}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <Box
-                        width={"100%"}
-                        height={200}
-                        border={1}
-                        borderRadius={4}
-                        display={"flex"}
-                        justifyContent={"center"}
+            {estate.units.length !== 0 && (
+                <>
+                    <Typography variant="h6" mt={2} textAlign={"center"}>
+                        Availability
+                    </Typography>
+                    {/* Pull units table here and show available and unavailable units */}
+                    <Grid
+                        container
+                        spacing={1}
+                        justifyContent={"flex-start"}
                         alignItems={"center"}
                     >
-                        Select a unit to view its details here
-                        {/* Or maybe a dialog?? TBD :> */}
-                    </Box>
-                </Grid>
-            </Grid>
+                        <Grid item xs={12} md={6}>
+                            {units.map((floor, i) => (
+                                <Stack
+                                    direction={"row"}
+                                    spacing={1}
+                                    mt={1}
+                                    justifyContent={{
+                                        xs: "center",
+                                        md: "flex-end",
+                                    }}
+                                    key={i}
+                                >
+                                    <Typography variant="body2">
+                                        {i + 1 == 1
+                                            ? "Ground Floor"
+                                            : `Floor ${i}`}
+                                    </Typography>
+                                    {floor.units_on_floor.map((unit) =>
+                                        unit.status !== "ACTIVE" ? (
+                                            <Chip
+                                                key={unit.id}
+                                                label={unit.house_number}
+                                            />
+                                        ) : (
+                                            <Chip
+                                                key={unit.id}
+                                                label={unit.house_number}
+                                                variant="outlined"
+                                                onClick={() =>
+                                                    setSelectedUnit(unit)
+                                                }
+                                            />
+                                        )
+                                    )}
+                                </Stack>
+                            ))}
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Box
+                                width={"100%"}
+                                border={1}
+                                borderRadius={4}
+                                display={"flex"}
+                                flexDirection={"column"}
+                                height={200}
+                                justifyContent={"center"}
+                                alignItems={"center"}
+                            >
+                                {selectedUnit ? (
+                                    <>
+                                        <Typography>
+                                            <strong>HOUSE NUMBER:</strong>
+                                            {selectedUnit.house_number}
+                                        </Typography>
+                                        <br />
+                                        <Typography>
+                                            <strong>PURPOSE:</strong>FOR{" "}
+                                            {selectedUnit.purpose}
+                                        </Typography>
+                                        <br />
+                                        <Typography>
+                                            <strong>STATUS:</strong>
+                                            {selectedUnit.status}
+                                        </Typography>
+                                        <br />
+                                        <Typography>
+                                            <strong>TYPE:</strong>
+                                            {selectedUnit.type}
+                                        </Typography>
+                                        <br />
+                                        {selectedUnit.description && (
+                                            <Typography>
+                                                <strong>DESCRIPTION:</strong>
+                                                {selectedUnit.description}
+                                            </Typography>
+                                        )}
+                                    </>
+                                ) : (
+                                    <Typography>
+                                        <strong>
+                                            Select a unit to view its details
+                                            here
+                                        </strong>
+                                    </Typography>
+                                )}
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </>
+            )}
 
             <Grid container spacing={1} mt={2} justifyItems={"center"}>
                 <Grid item xs={12} md={6}>
