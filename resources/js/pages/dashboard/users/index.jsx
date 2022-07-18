@@ -8,7 +8,7 @@ import PhoneChip from '@/components/chips/PhoneChip';
 import StatusChip from '@/components/chips/StatusChip';
 import { Role } from '@/utils/enums';
 import TableActions from '@/components/TableActions';
-import { HowToReg } from '@mui/icons-material';
+import { HowToReg, MarkEmailRead } from '@mui/icons-material';
 import { useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import moment from 'moment';
@@ -68,14 +68,24 @@ const Index = ({ users }) => {
                             {
                                 id: 'actions',
                                 cell: ({ row }) => {
-                                    const [isLoading, setIsLoading] = useState(false);
+                                    const [isLoadingAcc, setIsLoadingAcc] = useState(false);
+                                    const [isLoadingEmail, setIsLoadingEmail] = useState(false);
 
                                     const handleApproveAccount = () => {
                                         Inertia.get(route(`approve.account`, row.original), {}, {
                                             preserveScroll: true,
-                                            onBefore: () => setIsLoading(true),
+                                            onBefore: () => setIsLoadingAcc(true),
                                             onError: errors => console.log(errors),
-                                            onFinish: () => setIsLoading(false)
+                                            onFinish: () => setIsLoadingAcc(false)
+                                        });
+                                    };
+
+                                    const handleVerifyEmail = () => {
+                                        Inertia.put(route(`verify.email`, row.original), {}, {
+                                            preserveScroll: true,
+                                            onBefore: () => setIsLoadingEmail(true),
+                                            onError: errors => console.log(errors),
+                                            onFinish: () => setIsLoadingEmail(false)
                                         });
                                     };
 
@@ -83,10 +93,17 @@ const Index = ({ users }) => {
                                         <>
                                             {!row.original.approved_at && (
                                                 <Tooltip title={'Approve Account'}>
-                                                    <IconButton component={LoadingButton} loading={isLoading}
+                                                    <IconButton component={LoadingButton} loading={isLoadingAcc}
                                                                 onClick={() => handleApproveAccount()}
-                                                                color={"primary"}>
-                                                        <HowToReg/>
+                                                                color={"primary"}><HowToReg/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                            )}
+                                            {!row.original.email_verified_at && (
+                                                <Tooltip title={'Verify Email'}>
+                                                    <IconButton component={LoadingButton} loading={isLoadingEmail}
+                                                                onClick={() => handleVerifyEmail()} color={"primary"}>
+                                                        <MarkEmailRead/>
                                                     </IconButton>
                                                 </Tooltip>
                                             )}

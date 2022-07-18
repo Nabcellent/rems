@@ -13,6 +13,10 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "status"
+    ];
+
     /**
      * .....................    _____________________RELATIONSHIPS
      */

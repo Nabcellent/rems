@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\Role;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -54,6 +55,17 @@ class TicketPolicy
     public function update(User $user, Ticket $ticket)
     {
         //
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param \App\Models\User $user
+     * @return bool
+     */
+    public function updateStatus(User $user): bool
+    {
+        return $user->hasRole(Role::OWNER);
     }
 
     /**

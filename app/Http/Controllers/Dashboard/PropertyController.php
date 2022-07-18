@@ -50,7 +50,8 @@ class PropertyController extends Controller
                         "destroy" => user()->can("delete", $property)
                     ]
                 ]),
-            "canUpdateStatus" => user()->can("updateStatus", Property::class)
+            "canUpdateStatus" => user()->can("updateStatus", Property::class),
+            "canCreateImage"  => user()->isAdmin() || user()->hasRole([Role::PROPERTY_MANAGER, Role::OWNER])
         ]);
     }
 
@@ -113,7 +114,8 @@ class PropertyController extends Controller
                 "policies:id,policeable_id,policeable_type,description",
                 "images:id,imageable_id,imageable_type,image,title,created_at",
             ])->loadCount(["units"]),
-            "canChangeOwner" => user()->hasRole(Role::PROPERTY_MANAGER->value)
+            "canChangeOwner" => user()->hasRole(Role::PROPERTY_MANAGER->value),
+            "canCreateImage" => user()->isAdmin() || user()->hasRole([Role::PROPERTY_MANAGER, Role::OWNER])
         ]);
     }
 

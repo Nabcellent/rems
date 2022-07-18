@@ -120,7 +120,8 @@ class EstateController extends Controller
             "amenities"       => Amenity::select(["id", "title"])->get(),
             "googleMapsKey"   => config("rems.google.maps.api_key"),
             "canChangeOwner"  => user()->isAdmin(),
-            "canUpdateStatus" => user()->can("updateStatus", Estate::class)
+            "canUpdateStatus" => user()->can("updateStatus", Estate::class),
+            "canCreateImage"  => user()->isAdmin() || user()->hasRole([Role::PROPERTY_MANAGER, Role::OWNER])
         ]);
     }
 

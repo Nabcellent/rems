@@ -61,7 +61,7 @@ class UnitController extends Controller
                     "destroy" => user()->can("delete", $unit)
                 ]
             ]),
-            "canUpdateStatus" => user()->can("updateStatus", Unit::class)
+            "canUpdateStatus" => user()->can("updateStatus", Unit::class),
         ]);
     }
 
@@ -134,7 +134,8 @@ class UnitController extends Controller
             "amenities"       => Amenity::select(["id", "title"])->get(),
             "canChangeOwner"  => user()->can("changeOwner", Unit::class),
             "canUpdateStatus" => user()->can("updateStatus", Unit::class),
-            "canEdit"         => user()->can("update", $unit)
+            "canEdit"         => user()->can("update", $unit),
+            "canCreateImage"  => user()->isAdmin() || user()->hasRole([Role::PROPERTY_MANAGER, Role::OWNER])
         ]);
     }
 

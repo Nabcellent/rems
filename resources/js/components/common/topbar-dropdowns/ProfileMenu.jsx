@@ -54,10 +54,6 @@ const ProfileMenu = () => {
                     <i className="bx bx-wrench font-size-17 align-middle me-1"/>
                     Settings
                 </Dropdown.Item>
-                <Dropdown.Item tag="a" href="auth-lock-screen">
-                    <i className="bx bx-lock-open font-size-16 align-middle me-1"/>
-                    {("Lock screen")}
-                </Dropdown.Item>
                 <div className="dropdown-divider"/>
                 <button onClick={() => handleSignOut()} className="dropdown-item">
                     <i className="bx bx-power-off font-size-16 align-middle me-1 text-danger"/>

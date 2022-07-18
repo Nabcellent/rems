@@ -59,6 +59,7 @@ class UserController extends Controller
                 "image",
                 "status",
                 "approved_at",
+                "email_verified_at",
                 "created_at"
             ])->whereKeyNot(user()->id)->when(!user()->isAdmin(), function(Builder $qry) use ($estateIds) {
                 return $qry->whereHas("properties", function(Builder $qry) use ($estateIds) {
@@ -231,8 +232,6 @@ class UserController extends Controller
             if($user->image && file_exists("images/users/$user->image")) File::delete("images/users/$user->image");
         }
 
-        $user = User::findOrFail($request->userid);
-
         if(!Auth::guard()->validate([
             "email"    => $user->email,
             "password" => $request->oldpassword,
@@ -329,9 +328,4 @@ class UserController extends Controller
             ])
         ]);
     }
-
-    /*public function jobdetails(Job $job)
-    {
-        return view("client.jobdetails", ["jobdetails" => $job->load("user")]);
-    }*/
 }

@@ -57,6 +57,8 @@ const StatusChip = ({ status, bg = true, entity, entityId }) => {
         statuses = Arr.only(statuses, [Status.ACTIVE, Status.INACTIVE]);
     } else if (['transaction', 'payment'].includes(entity)) {
         statuses = Arr.removeItems(statuses, [Status.ACTIVE, Status.INACTIVE, Status.RESOLVED]);
+    } else if(entity === 'ticket') {
+        statuses = Arr.only(statuses, [Status.RESOLVED, Status.PENDING])
     }
 
     const menuItems = statuses.map(status => {

@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Tooltip } from '@mui/material';
 import { Delete, Edit, ReadMore } from '@mui/icons-material';
 import { Link } from '@inertiajs/inertia-react';
 import { handleDelete, str } from '@/utils/helpers';
@@ -12,20 +12,26 @@ const TableActions = ({ entity, row, showViewLink = true }) => {
     return (
         <Flex>
             {row.can?.edit && (
-                <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: row.id })}
-                            color={"primary"}><Edit/>
-                </IconButton>
+                <Tooltip title={`Edit ${entity}`}>
+                    <IconButton component={Link} href={route(`dashboard.${entityPlural}.edit`, { [entity]: row.id })}
+                                color={"primary"}><Edit/>
+                    </IconButton>
+                </Tooltip>
             )}
             {row.can?.view && showViewLink && (
-                <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: row.id })} className={'mx-1'}>
-                    <ReadMore/>
-                </Link>
+                <Tooltip title={`View ${entity}`}>
+                    <Link href={route(`dashboard.${entityPlural}.show`, { [entity]: row.id })} className={'mx-1'}>
+                        <ReadMore/>
+                    </Link>
+                </Tooltip>
             )}
             {row.can?.destroy && (
-                <IconButton onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
-                    [entity]: row.id
-                }), str.ucFirst(entity))} color={"error"}><Delete/>
-                </IconButton>
+                <Tooltip title={`Delete ${entity}`}>
+                    <IconButton onClick={() => handleDelete(route(`dashboard.${entityPlural}.destroy`, {
+                        [entity]: row.id
+                    }), str.ucFirst(entity))} color={"error"}><Delete/>
+                    </IconButton>
+                </Tooltip>
             )}
         </Flex>
     );
