@@ -479,48 +479,6 @@ div.table-responsive > div.dataTables_wrapper > div.row > div[class^=col-]:last-
     margin-bottom: 5px
 }
 
-@font-face {
-    font-family: 'boxicons';
-    font-weight: 400;
-    font-style: normal;
-    src: url(/static/media/boxicons.6829ebb1.eot);
-    src: url(/static/media/boxicons.6829ebb1.eot) format('embedded-opentype'), url(/static/media/boxicons.c6d7d035.woff2) format('woff2'), url(/static/media/boxicons.dcaf6a26.woff) format('woff'), url(/static/media/boxicons.e2ffa5b9.ttf) format('truetype'), url(/static/media/boxicons.5e81160c.svg) format('svg')
-}
-
-.bx {
-    font-family: 'boxicons' !important;
-    font-weight: 400;
-    font-style: normal;
-    -webkit-font-feature-settings: normal;
-    font-feature-settings: normal;
-    font-variant: normal;
-    line-height: 1;
-    display: inline-block;
-    text-transform: none;
-    speak: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale
-}
-
-.bx-ul {
-    margin-left: 2em;
-    padding-left: 0;
-    list-style: none
-}
-
-.bx-ul > li {
-    position: relative
-}
-
-.bx-ul .bx {
-    font-size: inherit;
-    line-height: inherit;
-    position: absolute;
-    left: -2em;
-    width: 2em;
-    text-align: center
-}
-
 @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0);
@@ -10437,10 +10395,6 @@ a {
 
 .dropdown-icon-item:hover {
     border-color: #eff2f7
-}
-
-.fullscreen-enable [data-toggle=fullscreen] .bx-fullscreen:before {
-    content: '\ea3f'
 }
 
 body[data-topbar=dark] #page-topbar {
