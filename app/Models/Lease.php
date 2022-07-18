@@ -39,7 +39,11 @@ class Lease extends Model
 
     public function defaultPaymentPlan(): Attribute
     {
-        return Attribute::get(fn() => $this->paymentPlans->firstWhere("is_default", true));
+        return Attribute::get(function() {
+            $plans = $this->paymentPlans;
+
+            return $plans->firstWhere("is_default", true) ?? $plans->firstWhere("frequency", Frequency::MONTHLY);
+        });
     }
 
     public function rentFigures(): Attribute

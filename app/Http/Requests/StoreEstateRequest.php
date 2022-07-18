@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Status;
 use Illuminate\Foundation\Http\FormRequest;
-use JetBrains\PhpStorm\ArrayShape;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreEstateRequest extends FormRequest
 {
@@ -33,6 +34,7 @@ class StoreEstateRequest extends FormRequest
             "latitude"       => "required|numeric",
             "service_charge" => "nullable|numeric",
             "image"          => "nullable|image|max:1024",
+            "status"         => [new Enum(Status::class)],
         ];
     }
 }

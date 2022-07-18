@@ -73,7 +73,7 @@ class LeaseController extends Controller
     {
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
-            "users"   => User::select(["id", "email", "first_name", "last_name"])->role(Role::TENANT->value)
+            "users"   => User::select(["id", "email", "first_name", "last_name"])->role(Role::TENANT)
                 ->oldest("email")->get(),
             "estates" => Estate::select(["id", "name", "service_charge"])
                 ->when(!user()->isAdmin(), function(Builder $qry) {

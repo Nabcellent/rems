@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\Purpose;
+use App\Enums\Status;
 use App\Enums\UnitType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
@@ -35,6 +36,7 @@ class StoreUnitRequest extends FormRequest
             "purpose"      => ["required", new Enum(Purpose::class)],
             "type"         => ["required", new Enum(UnitType::class)],
             "description"  => "nullable|string",
+            "status"       => [new Enum(Status::class)],
             "image"        => "nullable|image|max:1024",
         ];
     }
