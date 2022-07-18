@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -102,6 +103,10 @@ class LeaseController extends Controller
     public function store(StoreLeaseRequest $request): RedirectResponse
     {
         $data = $request->validated();
+
+        if(Lease::whereUnitId($data["unit_id"])->whereUserId($data["user_id"])->exists()) {
+            return back()->with("toast", ["message" => "A lease already exists for this tenant.", "type" => "info"]);
+        }
 
         $lease = DB::transaction(function() use ($data) {
             if(count($data["plans"]) === 1) $data["plans"][0]["is_default"] = true;

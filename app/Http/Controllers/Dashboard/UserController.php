@@ -329,9 +329,4 @@ class UserController extends Controller
             ])
         ]);
     }
-
-    /*public function jobdetails(Job $job)
-    {
-        return view("client.jobdetails", ["jobdetails" => $job->load("user")]);
-    }*/
 }
