@@ -132,7 +132,7 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
                 </Grid>
             </Grid>
 
-            <Pay details={paymentDetails} destinationId={auth.user.id} showModal={showPaymentMethodModal}
+            <Pay details={paymentDetails} showModal={showPaymentMethodModal}
                  setShowModal={setShowPaymentMethodModal}
                  onCompleted={({ amount, transaction_id }) => {
                      Inertia[method](url, method !== Method.GET && { ...data, amount, transaction_id }, {

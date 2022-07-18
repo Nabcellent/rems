@@ -32,9 +32,11 @@ export default class Mpesa {
                         user_id: details.user.id,
                         transactionable_id: details.transactionableId,
                         transactionable: details.transactionable,
-                        onCompleted: () => onCompleted,
+                        onCompleted: onCompleted,
                     });
                 } catch (err) {
+                    console.error(err);
+
                     const message = err.response.data.message;
 
                     return Sweet.showValidationMessage(message);
@@ -61,7 +63,7 @@ export default class Mpesa {
 
         if (stk_request.checkout_request_id) {
             this.request_id = stk_request.id;
-            this.onCompleted = onCompleted({ amount });
+            this.onCompleted = () => onCompleted({ amount });
 
             return await this.alert();
         } else {
