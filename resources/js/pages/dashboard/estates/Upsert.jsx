@@ -40,7 +40,7 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, F
 const validationSchema = yup.object({
     manager: yup.object(),
     name: yup.string().required('First name is required.'),
-    city: yup.string().required('City is required.'),
+    county: yup.string().required('County is required.'),
     address: yup.string().required('Address is required.'),
     latitude: yup.number().required('Latitude is required.'),
     longitude: yup.number().required('Longitude is required.'),

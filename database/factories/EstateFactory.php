@@ -23,6 +23,7 @@ class EstateFactory extends Factory
             "user_id"     => User::factory(),
             "manager_id"  => User::factory(),
             "name"        => $this->faker->streetName(),
+            "county"      => $this->faker->randomElement(getCountyNames()),
             "address"     => $this->faker->streetAddress(),
             "description" => $this->faker->text(),
             "latitude"    => $this->faker->latitude(-0.864785, -1.695412),

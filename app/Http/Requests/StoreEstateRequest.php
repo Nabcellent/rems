@@ -27,6 +27,7 @@ class StoreEstateRequest extends FormRequest
         return [
             "name"           => "required|string",
             "manager_id"     => "nullable|integer|exists:users,id",
+            "county"         => "required|in:" . implode(',', getCountyNames()),
             "address"        => "required|string",
             "longitude"      => "required|numeric",
             "latitude"       => "required|numeric",

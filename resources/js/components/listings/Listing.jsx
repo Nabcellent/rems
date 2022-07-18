@@ -9,6 +9,23 @@ import { Inertia } from "@inertiajs/inertia";
 import { Purpose } from '@/utils/enums';
 import { currencyFormat } from '@/utils/helpers';
 
+const ListingItem = ({ title, value, valueComponent = 'p' }) => {
+    return (
+        <>
+            <Grid item xs={4}>
+                <Typography
+                    variant="body1"
+                    fontWeight={600}
+                    fontSize={"1.1rem"}
+                >
+                    {title}
+                </Typography>
+            </Grid>
+            <Grid item xs={8}><Typography component={valueComponent}>{value}</Typography></Grid>
+        </>
+    );
+};
+
 const Listing = ({ unit }) => {
     return (
         <Grid
@@ -45,111 +62,29 @@ const Listing = ({ unit }) => {
             </Grid>
             <Grid item xs={12} md={6}>
                 <Grid container spacing={1} columnSpacing={0}>
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            fontSize={"1.1rem"}
-                        >
-                            ESTATE
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}><Typography>{unit.estate.name}</Typography></Grid>
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            fontSize={"1.1rem"}
-                        >
-                            PURPOSE
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography>
-                            {`FOR ${unit.purpose === Purpose.EITHER ? 'RENT OR SALE' : unit.purpose}`}
-                        </Typography>
-                    </Grid>
-
+                    <ListingItem title={'ESTATE'} value={unit.estate.name}/>
+                    <ListingItem title={'PURPOSE'}
+                                 value={`FOR ${unit.purpose === Purpose.EITHER ? 'RENT OR SALE' : unit.purpose}`}/>
                     {[Purpose.EITHER, Purpose.SALE].includes(unit.purpose) && (
-                        <>
-                            <Grid item xs={6}>
-                                <Typography
-                                    variant="body1"
-                                    fontWeight={600}
-                                    fontSize={"1.1rem"}>
-                                    PRICE
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography>{currencyFormat(unit.price)}</Typography>
-                            </Grid>
-                        </>
+                        <ListingItem title={'PRICE'} value={currencyFormat(unit.price)}/>
                     )}
-
                     {[Purpose.EITHER, Purpose.RENT].includes(unit.purpose) && (
-                        <>
-                            <Grid item xs={6}>
-                                <Typography
-                                    variant="body1"
-                                    fontWeight={600}
-                                    fontSize={"1.1rem"}
-                                >
-                                    RENT AMOUNT
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography>{currencyFormat(unit.rent_amount)}</Typography>
-                            </Grid>
-                        </>
+                        <ListingItem title={'RENT AMOUNT'} value={currencyFormat(unit.rent_amount)}/>
                     )}
-
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            fontSize={"1.1rem"}
-                        >
-                            LOCATION
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography>{unit.estate.address.toUpperCase()}</Typography>
-                    </Grid>
-
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            fontSize={"1.1rem"}
-                        >
-                            BEDROOMS
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography>{unit.bedroom_count}</Typography>
-                    </Grid>
+                    <ListingItem title={'LOCATION'} value={unit.estate.address.toUpperCase()}/>
+                    <ListingItem title={'BEDROOMS'} value={unit.bedroom_count}/>
+                    <ListingItem title={'ESTATE'} value={unit.estate.name}/>
 
                     {Boolean(unit.amenities.length) && (
-                      <>
-                          <Grid item xs={6}>
-                              <Typography
-                                  variant="body1"
-                                  fontWeight={600}
-                                  fontSize={"1.1rem"}
-                              >
-                                  AMENITIES
-                              </Typography>
-                          </Grid>
-                          <Grid item xs={6}>
-                              <List sx={{ m: 0, p: 0 }}>
-                                  {unit.amenities.map((amenity, i) => (
-                                      <ListItem key={i} disableGutters disablePadding>
-                                          <ListItemText primary={amenity.title.toUpperCase()}/>
-                                      </ListItem>
-                                  ))}
-                              </List>
-                          </Grid>
-                      </>
+                        <ListingItem title={'AMENITIES'} valueComponent={'div'} value={(
+                            <List sx={{ m: 0, p: 0 }}>
+                                {unit.amenities.map((amenity, i) => (
+                                    <ListItem key={i} disableGutters disablePadding>
+                                        <ListItemText primary={amenity.title.toUpperCase()}/>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        )}/>
                     )}
                 </Grid>
             </Grid>

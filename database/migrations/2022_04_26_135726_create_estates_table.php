@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId("manager_id")->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("name", 100);
+            $table->string("county", 100);
             $table->string("address");
             $table->text("description")->nullable();
             $table->integer("floor_count")->default(1);
