@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function() {
     Route::get('approve-account', [AccountApprovalController::class, '__invoke'])->name("approval.notice");
     Route::get('approve-account/{user}', [AccountApprovalController::class, 'approveAccount'])->name("approve.account");
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])->name('verification.notice');
+    Route::put('verify-email/{user}', [VerifyEmailController::class, 'verifyEmail'])->name('verify.email');
     Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware(
             ['signed', 'throttle:6,1']
         )->name('verification.verify');

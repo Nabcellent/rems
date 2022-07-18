@@ -59,6 +59,7 @@ class UserController extends Controller
                 "image",
                 "status",
                 "approved_at",
+                "email_verified_at",
                 "created_at"
             ])->whereKeyNot(user()->id)->when(!user()->isAdmin(), function(Builder $qry) use ($estateIds) {
                 return $qry->whereHas("properties", function(Builder $qry) use ($estateIds) {
