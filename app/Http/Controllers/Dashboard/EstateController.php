@@ -61,6 +61,7 @@ class EstateController extends Controller
     {
         return inertia("dashboard/estates/Upsert", [
             "action"        => "create",
+            "counties"      => getCountyNames(),
             "users"         => User::select(["id", "first_name", "last_name", "email"])->role(Role::PROPERTY_MANAGER)
                 ->get(),
             "googleMapsKey" => config("rems.google.maps.api_key")
@@ -134,6 +135,7 @@ class EstateController extends Controller
         return inertia("dashboard/estates/Upsert", [
             "action"        => "update",
             "estate"        => $estate,
+            "counties"      => getCountyNames(),
             "users"         => User::select(["id", "first_name", "last_name", "email"])->whereKeyNot($estate->id)
                 ->role(Role::PROPERTY_MANAGER)->get(),
             "googleMapsKey" => config("rems.google.maps.api_key")

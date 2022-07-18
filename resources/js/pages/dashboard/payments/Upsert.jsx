@@ -54,7 +54,7 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
 
             if (values.description === Description.WALLET_DEPOSIT) {
                 setMethod(Method.POST);
-                setUrl(route('dashboard.wallet.deposit', auth.user));
+                setUrl(route('dashboard.wallet.credit', auth.user));
             } else if ([Description.RENT_PAYMENT, Description.RENT_DEPOSIT].includes(values.description)) {
                 paymentDetails.transactionableId = values.unit.id;
                 paymentDetails.transactionable = Morphable.UNIT;
@@ -132,7 +132,7 @@ const Upsert = ({ auth, units, payment, action, rent_arrears }) => {
                 </Grid>
             </Grid>
 
-            <Pay details={paymentDetails} destinationId={auth.user.id} showModal={showPaymentMethodModal}
+            <Pay details={paymentDetails} showModal={showPaymentMethodModal}
                  setShowModal={setShowPaymentMethodModal}
                  onCompleted={({ amount, transaction_id }) => {
                      Inertia[method](url, method !== Method.GET && { ...data, amount, transaction_id }, {

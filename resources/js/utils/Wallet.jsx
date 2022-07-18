@@ -1,5 +1,5 @@
 import React from "react";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { currencyFormat } from '@/utils/helpers';
 import { Status } from '@/utils/enums';
 
 export default class Wallet {
@@ -36,21 +36,34 @@ export default class Wallet {
             amount, ...formData
         });
 
-
-
         await Sweet.fire({
-            html: (
-                <PayPalScriptProvider options={{
-                    "client-id": "AYXp1jXvuBqmHZNm4PigmNrtubq1f0oGGmdIbatPCiF6f_yIStH17cNkb8aXk39596dF6Ut_Bxrm-Zj5",
-                    currency: "USD",
-                }}>
-                    <ButtonWrapper createOrder={(data, actions) => createOrder(data, actions)}
-                                   onApprove={(data, actions) => onApprove(data, actions)}
-                                   onCancel={data => onCancel(data)} onError={data => onError(data)}/>
-                </PayPalScriptProvider>
-            ),
-            showConfirmButton: false,
+            icon: "info",
+            html: <small>{currencyFormat(amount)} will automatically be deducted from your wallet.</small>,
             backdrop: `rgba(150, 0, 0, 0.4)`,
+            showLoaderOnConfirm: true,
+            preConfirm: async () => {
+                return await axios.put(route('dashboard.wallet.debit', {
+                    user: formData.user_id,
+                    transaction: transaction_id
+                }), {
+                    amount,
+                    transaction_id
+                }).then(({ data }) => data);
+            },
+            allowOutsideClick: () => !Sweet.isLoading(),
+            footer: 'REMS',
+        }).then(async ({ value, isDismissed }) => {
+            console.log(value);
+
+            if (value.status === Status.COMPLETED) {
+                onCompleted({ amount });
+
+                await sweet({ type: 'success', message: 'Payment Completed' });
+            }
+
+            if (isDismissed) {
+                await sweet({ type: 'info', message: 'Payment Cancelled!' });
+            }
         });
     };
 }

@@ -9,7 +9,7 @@ import * as yup from 'yup';
 import PropTypes from 'prop-types';
 import Wallet from '@/utils/Wallet';
 
-const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
+const Pay = ({ details, showModal, setShowModal, onCompleted, disableWallet = false }) => {
     const formik = useFormik({
         initialValues: { method: PaymentMethod.MPESA },
         validationSchema: yup.object().shape({
@@ -43,7 +43,8 @@ const Pay = ({ details, showModal, setShowModal, onCompleted }) => {
                                            }}>
                             <ToggleButton value={PaymentMethod.MPESA} aria-label="mpesa">M-Pesa</ToggleButton>
                             <ToggleButton value={PaymentMethod.PAYPAL} aria-label="paypal">PayPal</ToggleButton>
-                            <ToggleButton value={PaymentMethod.WALLET} aria-label="wallet">Wallet</ToggleButton>
+                            {!disableWallet &&
+                                <ToggleButton value={PaymentMethod.WALLET} aria-label="wallet">Wallet</ToggleButton>}
                         </ToggleButtonGroup>
                         <FormHelperText color={'#990000'} className={'mt-0'}>
                             {formik.touched.method && formik.errors.method}
@@ -73,6 +74,7 @@ Pay.propTypes = {
     showModal: PropTypes.bool.isRequired,
     setShowModal: PropTypes.func.isRequired,
     onCompleted: PropTypes.func,
+    disableWallet: PropTypes.bool,
 };
 
 export default Pay;

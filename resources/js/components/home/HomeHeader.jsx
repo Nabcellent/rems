@@ -21,19 +21,17 @@ const HomeHeader = () => {
                     <Logo/>
 
                     <Box>
+                        <Link href={route('listings')} color={'white'} className={'me-2'}>
+                            <Button variant={'contained'} color={'white'} endIcon={<Roofing/>}>
+                                Listings
+                            </Button>
+                        </Link>
                         {auth.user ? (
-                            <>
-                                <Link href={route('listings')} color={'white'} className={'me-2'}>
-                                    <Button variant={'contained'} color={'white'} endIcon={<Roofing/>}>
-                                        Listings
-                                    </Button>
-                                </Link>
-                                <Link href={route('dashboard.default')} color={'white'}>
-                                    <Button variant={'contained'} color={'white'} endIcon={<DashboardCustomize/>}>
-                                        Dashboard
-                                    </Button>
-                                </Link>
-                            </>
+                            <Link href={route('dashboard.default')} color={'white'}>
+                                <Button variant={'contained'} color={'white'} endIcon={<DashboardCustomize/>}>
+                                    Dashboard
+                                </Button>
+                            </Link>
                         ) : (
                             <Link href={route("login")}>
                                 <Button variant={'contained'} color={'white'} endIcon={<FollowTheSignsIcon/>}>

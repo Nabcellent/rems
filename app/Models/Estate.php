@@ -19,6 +19,7 @@ class Estate extends Model
 
     protected $fillable = [
         "name",
+        "county",
         "address",
         "manager_id",
         "image",

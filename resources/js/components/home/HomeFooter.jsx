@@ -10,22 +10,22 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 
 const HomeFooter = () => {
     return (
-        <Box component={'footer'} mt={5} p={5} color='white' bgcolor={(theme) => theme.palette.primary.main}>
+        <Box component={'footer'} mt={5} p={5} bgcolor={(theme) => theme.palette.primary.main}>
             <Box display={'flex'} justifyContent={'center'}>
                 <IconButton>
-                    <FacebookRoundedIcon fontSize="large" sx={{ color: "white" }} />
+                    <FacebookRoundedIcon fontSize="large" />
                 </IconButton>
                 <IconButton>
-                    <TwitterIcon fontSize="large" sx={{ color: "white" }} />
+                    <TwitterIcon fontSize="large" />
                 </IconButton>
                 <IconButton>
-                    <InstagramIcon fontSize="large" sx={{ color: "white" }} />
+                    <InstagramIcon fontSize="large" />
                 </IconButton>
                 <IconButton>
-                    <LinkedInIcon fontSize="large" sx={{ color: "white" }} />
+                    <LinkedInIcon fontSize="large" />
                 </IconButton>
                 <IconButton>
-                    <GitHubIcon fontSize="large" sx={{ color: "white" }} />
+                    <GitHubIcon fontSize="large" />
                 </IconButton>
             </Box>
 

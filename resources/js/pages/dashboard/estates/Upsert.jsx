@@ -40,14 +40,15 @@ registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, F
 const validationSchema = yup.object({
     manager: yup.object(),
     name: yup.string().required('First name is required.'),
-    address: yup.string().required('Last name is required.'),
+    county: yup.string().required('County is required.'),
+    address: yup.string().required('Address is required.'),
     latitude: yup.number().required('Latitude is required.'),
     longitude: yup.number().required('Longitude is required.'),
     service_charge: yup.number(),
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
-const Upsert = ({ estate, action, users, googleMapsKey }) => {
+const Upsert = ({ estate, counties, action, users, googleMapsKey }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -56,6 +57,7 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
             manager: estate?.manager_id ? users.find(u => u.id === estate.manager_id) : '',
             name: estate?.name ?? '',
             address: estate?.address ?? '',
+            county: estate?.county ?? '',
             latitude: estate?.latitude ?? '',
             longitude: estate?.longitude ?? '',
             service_charge: estate?.service_charge ?? 0,
@@ -75,7 +77,7 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
             let data = {
                 ...values,
                 manager_id: values.manager?.id
-            }
+            };
 
             Inertia.post(url, data, {
                 preserveState: false,
@@ -100,7 +102,7 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                         <Grid container spacing={2}>
                             <Grid item lg={6}>
                                 <TextField label="Name" placeholder="Estate name..." name={'name'} autoFocus
-                                           value={formik.values.name} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.name} onChange={formik.handleChange}
                                            error={formik.touched.name && Boolean(formik.errors.name)}
                                            helperText={formik.touched.name && formik.errors.name}/>
                             </Grid>
@@ -110,44 +112,53 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                                                             let label = o.email;
                                                             if (label) label += ': ';
                                                             label += o.full_name;
-                                                            if(!label) label = o
+                                                            if (!label) label = o;
 
                                                             return label;
                                                         }}
-                                                        isOptionEqualToValue={(option, value) => value === undefined || value === "" || option.id === value.id}
-                                                        onChange={(event, value) => {
-                                                            formik.setFieldValue('manager', value, true);
-                                                        }} renderInput={(params) => (
-                                    <TextField {...params} label="Select Manager"
-                                               placeholder={'Select property manager...'}
-                                               error={formik.touched.manager && Boolean(formik.errors.manager)}
-                                               helperText={formik.touched.manager && formik.errors.manager}/>
-                                )}/>
+                                                        onChange={(event, value) => formik.setFieldValue('manager', value)}
+                                                        renderInput={(params) => (
+                                                            <TextField {...params} label="Select Manager"
+                                                                       placeholder={'Select property manager...'}
+                                                                       error={formik.touched.manager && Boolean(formik.errors.manager)}
+                                                                       helperText={formik.touched.manager && formik.errors.manager}/>
+                                                        )}/>
+                            </Grid>
+                            <Grid item lg={6}>
+                                <ControlledAutoComplete options={counties} name={'county'}
+                                                        value={formik.values.county} getOptionLabel={o => o}
+                                                        onChange={(event, value) => formik.setFieldValue('county', value)}
+                                                        renderInput={params => (
+                                                            <TextField {...params} label="County"
+                                                                       placeholder="County..."
+                                                                       error={formik.touched.county && Boolean(formik.errors.county)}
+                                                                       helperText={formik.touched.county && formik.errors.county}/>
+                                                        )}/>
                             </Grid>
                             <Grid item lg={6}>
                                 <TextField label="Address" placeholder="Address..." name={'address'}
-                                           value={formik.values.address} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.address} onChange={formik.handleChange}
                                            error={formik.touched.address && Boolean(formik.errors.address)}
                                            helperText={formik.touched.address && formik.errors.address}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Latitude" placeholder="Latitude..." name={'latitude'}
                                            disabled
-                                           value={formik.values.latitude} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.latitude} onChange={formik.handleChange}
                                            error={formik.touched.latitude && Boolean(formik.errors.latitude)}
                                            helperText={formik.touched.latitude && formik.errors.latitude}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Longitude" placeholder="Longitude..."
                                            name={'longitude'} disabled
-                                           value={formik.values.longitude} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.longitude} onChange={formik.handleChange}
                                            error={formik.touched.longitude && Boolean(formik.errors.longitude)}
                                            helperText={formik.touched.longitude && formik.errors.longitude}/>
                             </Grid>
                             <Grid item xs={6}>
                                 <TextField type={'number'} label="Service charge" placeholder="Service charge..."
                                            name={'service_charge'}
-                                           value={formik.values.service_charge} fullWidth onChange={formik.handleChange}
+                                           value={formik.values.service_charge} onChange={formik.handleChange}
                                            error={formik.touched.service_charge && Boolean(formik.errors.service_charge)}
                                            helperText={formik.touched.service_charge && formik.errors.service_charge}/>
                             </Grid>
@@ -178,7 +189,8 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                                           onremovefile={() => formik.setFieldValue('image', null)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
+                                <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary"
+                                               loading={isLoading}
                                                loadingPosition="end" onClick={() => formik.submitForm()}
                                                endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>
@@ -192,10 +204,11 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                         <Map apiKey={googleMapsKey} searchable={true} editable={true}
                              center={{ lat: estate?.latitude, lng: estate?.longitude }}
                              onLocationChange={pos => {
-                                 pos?.name && formik.setFieldValue('name', pos.name, true);
-                                 pos?.address && formik.setFieldValue('address', pos.address, true);
-                                 formik.setFieldValue('latitude', pos.lat, true);
-                                 formik.setFieldValue('longitude', pos.lng, true);
+                                 pos?.name && formik.setFieldValue('name', pos.name);
+                                 pos?.address && formik.setFieldValue('address', pos.address);
+                                 pos?.location?.city && formik.setFieldValue('county', pos.location.city);
+                                 formik.setFieldValue('latitude', pos.lat);
+                                 formik.setFieldValue('longitude', pos.lng);
                              }}/>
                     </Paper>
                 </Grid>

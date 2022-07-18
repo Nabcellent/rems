@@ -49,7 +49,8 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
 
         Route::prefix('/wallet')->name('wallet')->group(function() {
             Route::get('/', [WalletController::class, 'index']);
-            Route::post('/deposit/{user}', [WalletController::class, 'deposit'])->name('.deposit');
+            Route::put('/credit/{user}', [WalletController::class, 'credit'])->name('.credit');
+            Route::put('/debit/{user}/{transaction}', [WalletController::class, 'debit'])->name('.debit');
         });
 
         Route::prefix('/profile')->name('profile')->group(function() {
@@ -78,6 +79,7 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
         ])->name("images.main");
 
         Route::put("/status", [GlobalController::class, "updateStatus"])->name("status.update");
+        Route::put("/payment-plans/reset/{lease}", [PaymentPlanController::class, "reset"])->name("payment-plans.reset");
 
         Route::resources([
             "users"             => UserController::class,

@@ -27,6 +27,7 @@ class UpdateEstateRequest extends FormRequest
     {
         return [
             "name"           => "string",
+            "county"         => "in:" . implode(',', getCountyNames()),
             "address"        => "string",
             "longitude"      => "numeric",
             "latitude"       => "numeric",

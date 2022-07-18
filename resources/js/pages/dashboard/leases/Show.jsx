@@ -112,7 +112,7 @@ const Show = ({ auth, lease, canEdit }) => {
                     )}
 
                     <PaymentPlans plans={lease.payment_plans} defaultPlan={lease.default_payment_plan}
-                                  leaseId={lease.id}/>
+                                  lease={lease}/>
                 </Col>
             </Row>
 

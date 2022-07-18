@@ -11,7 +11,7 @@ import StatusChip from '@/components/chips/StatusChip';
 import { useState } from 'react';
 import Pay from '@/components/Pay';
 import { Inertia } from '@inertiajs/inertia';
-import { Description } from '@/utils/enums';
+import { Description, Morphable } from '@/utils/enums';
 import PaymentMethodChip from '@/components/chips/PaymentMethodChip';
 import { currencyFormat } from '@/utils/helpers';
 import moment from 'moment';
@@ -147,12 +147,17 @@ const Wallet = ({ wallet, transactions, last_top_up, auth, total_spent, total_de
                 </Col>
             </Row>
 
-            <Pay details={{ user: auth.user, destinationId: auth.user.id, description: Description.WALLET_DEPOSIT }}
-                 destinationId={auth.user.id} showModal={showPaymentMethodModal}
+            <Pay details={{
+                user: auth.user,
+                transactionableId: wallet.id,
+                transactionable: Morphable.WALLET,
+                description: Description.WALLET_DEPOSIT
+            }} disableWallet={true}
+                 showModal={showPaymentMethodModal}
                  setShowModal={setShowPaymentMethodModal}
                  onCompleted={({
                      amount,
-                 }) => Inertia.post(route('dashboard.wallet.deposit', { user: auth.user.id }), {
+                 }) => Inertia.post(route('dashboard.wallet.credit', { user: auth.user.id }), {
                      amount
                  }, { preserveState: true })}/>
         </Dashboard>

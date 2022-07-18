@@ -30,7 +30,8 @@ class ListingsController extends Controller
             ])->with(["unitable", "amenities:id,title,icon"])->withCount(["rooms as bedroom_count" => function(Builder $qry) {
                 return $qry->whereType(RoomType::BEDROOM);
             }])->active()->latest()->get(),
-            "amenities" => Amenity::select(["id", "title"])->get()
+            "amenities" => Amenity::select(["id", "title"])->get(),
+            "counties" => getCountyNames()
         ]);
     }
 
