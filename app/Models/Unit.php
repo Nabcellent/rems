@@ -67,6 +67,11 @@ class Unit extends Model
         return $this->morphTo();
     }
 
+    public function scopeActive(Builder $query)
+    {
+        return $query->whereStatus(Status::ACTIVE);
+    }
+
     /** Owner
      * */
     public function user(): BelongsTo
@@ -97,6 +102,11 @@ class Unit extends Model
     public function amenities(): BelongsToMany
     {
         return $this->morphToMany(Amenity::class, "amenitiable");
+    }
+
+    public function transactions(): MorphMany
+    {
+        return $this->morphMany(Transaction::class, 'transactionable');
     }
 
     /**

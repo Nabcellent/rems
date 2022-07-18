@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('estates', function (Blueprint $table) {
             $table->id();
             $table->foreignId("user_id")->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId("manager_id")->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string("name", 100);
             $table->string("address");
             $table->text("description")->nullable();

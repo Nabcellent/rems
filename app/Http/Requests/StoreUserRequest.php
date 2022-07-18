@@ -29,13 +29,15 @@ class StoreUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "first_name"      => "required|string|max:20",
-            "last_name"       => "required|string|max:20",
+            "first_name"      => "required_without:username|nullable|string|max:20",
+            "last_name"       => "required_without:username|nullable|string|max:20",
+            "username"        => "required_without:first_name,last_name|nullable|string|max:50",
             "gender"          => "nullable|in:male,female",
             "image"           => "nullable|image|max:1024",
             "email"           => "required|string|email|max:100|unique:users",
             "phone"           => "nullable|phone:KE",
-            'password'        => ["required", Password::defaults()],
+            "services"        => "required_if:role," . Role::SERVICE_PROVIDER->value . "|array",
+            "password"        => ["required", Password::defaults()],
             "role"            => ["required", new Enum(Role::class)],
             "status"          => [new Enum(Status::class)],
             "createsOwnerFor" => "nullable|array:id,name"

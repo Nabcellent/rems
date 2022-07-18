@@ -1,6 +1,6 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Divider, IconButton, Paper } from '@mui/material';
+import { Divider, IconButton, Paper, Tooltip } from '@mui/material';
 import {
     AlternateEmail,
     Badge,
@@ -8,7 +8,7 @@ import {
     Edit,
     Female,
     LocalPhone,
-    Male,
+    Male, Settings,
     WorkspacePremium
 } from '@mui/icons-material';
 import { Gender } from '@/utils/enums';
@@ -21,7 +21,7 @@ import { Link } from '@inertiajs/inertia-react';
 import pluralize from 'pluralize';
 import Leases from '@/components/crud/Leases';
 
-const Show = ({ errors, user }) => {
+const Show = ({ errors, user, canEdit }) => {
     console.log(user);
 
     return (
@@ -40,9 +40,12 @@ const Show = ({ errors, user }) => {
                             <div className="d-flex justify-content-between">
                                 <h5 className="mb-0">{user.full_name}</h5>
                                 <div>
-                                    <IconButton component={Link} className={'mx-1'}
-                                                href={route(`dashboard.users.edit`, user)}> <Edit/>
-                                    </IconButton>
+                                    <Tooltip title={canEdit ? 'Edit User' : 'Settings'}>
+                                        <IconButton component={Link} className={'mx-1'}
+                                                    href={canEdit ? route(`dashboard.users.edit`, user) : route('dashboard.users.settings')}>
+                                            {canEdit ? <Edit/> : <Settings/>}
+                                        </IconButton>
+                                    </Tooltip>
                                     <StatusChip status={user.status} entity={'user'} entityId={user.id}/>
                                 </div>
                             </div>

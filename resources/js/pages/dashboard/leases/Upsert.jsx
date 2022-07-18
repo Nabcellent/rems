@@ -45,7 +45,7 @@ const validationSchema = yup.object().shape({
     })).min(1, 'Minimum of 1 payment plan').required("Must have a plan.")
 });
 
-const Upsert = ({ lease, action, users, estates }) => {
+const Upsert = ({ lease, action, users, estates, unit }) => {
     console.log(lease);
     const [isLoading, setIsLoading] = useState(false);
     const [serverErrors, setServerErrors] = useState({});
@@ -71,9 +71,9 @@ const Upsert = ({ lease, action, users, estates }) => {
                 <Grid item xs={12} xl={7}>
                     <Formik
                         initialValues={{
-                            estate: lease?.unit?.estate ?? '',
+                            estate: lease?.unit?.estate ?? unit?.estate ?? '',
                             property: lease?.unit?.unitable_name === Morphable.PROPERTY ? lease?.unit?.unitable : '' ?? '',
-                            unit: lease?.unit ?? '',
+                            unit: lease?.unit ?? unit ?? '',
                             user: lease?.user_id ? users.find(u => u.id === lease.user_id) : '',
                             expires_at: lease?.expires_at ?? '',
                             status: lease?.status ?? Status.ACTIVE,
@@ -108,12 +108,15 @@ const Upsert = ({ lease, action, users, estates }) => {
                                     preserveState: false,
                                     onBefore: () => setIsLoading(true),
                                     onSuccess: () => resetForm(),
-                                    onError: errors => console.log(errors),
+                                    onError: errors => {
+                                        console.log(errors);
+                                        setServerErrors(errors);
+                                    },
                                     onFinish: () => setIsLoading(false)
                                 }
                             );
                         }}>
-                        {({ values, handleChange, errors, touched, handleSubmit, setFieldValue }) => (
+                        {({ values, handleChange, dirty, errors, touched, handleSubmit, setFieldValue }) => (
                             <Paper component={'form'} onSubmit={handleSubmit} className={'p-3'}>
                                 <ValidationErrors errors={serverErrors}/>
 
@@ -172,7 +175,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                         let label = o.email;
                                                                         if (label) label += ': ';
                                                                         label += o.full_name;
-                                                                        if(!label) label = o
+                                                                        if (!label) label = o;
 
                                                                         return label;
                                                                     }}
@@ -278,7 +281,7 @@ const Upsert = ({ lease, action, users, estates }) => {
                                                                                value={plan.due_day} fullWidth
                                                                                onChange={handleChange}
                                                                                error={isError(errors, touched, i, 'due_day')}
-                                                                               helperText={errorMessage(errors, i, 'due_day')}>
+                                                                               helperText={isError(errors, touched, i, 'due_day') && errorMessage(errors, i, 'due_day')}>
                                                                         {
                                                                             Array(31).fill(0)
                                                                                      .map((d, i) => (
@@ -315,7 +318,8 @@ const Upsert = ({ lease, action, users, estates }) => {
                                             )}
                                         </FieldArray>
                                         <Grid item xs={12} textAlign={'right'} mt={2}>
-                                            <LoadingButton type={'submit'} size="small" color="primary"
+                                            <LoadingButton disabled={!dirty} type={'submit'} size="small"
+                                                           color="primary"
                                                            loading={isLoading}
                                                            loadingPosition="end" endIcon={<Create/>}
                                                            variant="contained">{action}

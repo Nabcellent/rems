@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Enums\Frequency;
 use App\Enums\Status;
-use App\Events\UserCreated;
+use App\Enums\Role;
 use App\Notifications\ApproveAccount;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -14,12 +15,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Notification;
 use JetBrains\PhpStorm\ArrayShape;
 use Laravel\Sanctum\HasApiTokens;
 use Nabcellent\Laraconfig\HasConfig;
-use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\Contracts\Role as RoleModel;
 use Spatie\Permission\Traits\HasRoles;
+use function array_column;
 
 /**
  * @mixin IdeHelperUser
@@ -36,6 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         "first_name",
         "last_name",
+        "username",
         "email",
         "phone",
         "gender",
@@ -69,7 +74,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
-    protected $appends = ["full_name", "user_roles", "user_roles_str", "initials"];
+    protected $appends = ["full_name", "user_roles", "user_roles_str", "initials", "wallet_balance"];
 
     /**
      * Get the user's full name.
@@ -79,9 +84,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function fullName(): Attribute
     {
         return Attribute::get(function($value, $attributes) {
-            $firstName = $attributes["first_name"] ?? "";
-            $lastName = $attributes["last_name"] ?? "";
-            return str($firstName . $lastName)->headline();
+            $fullName = ($attributes["first_name"] ?? "") . ($attributes["last_name"] ?? "");
+
+            if(!$fullName) $fullName = $attributes["username"] ?? "";
+
+            return str($fullName)->headline();
         });
     }
 
@@ -125,6 +132,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return Attribute::get(fn() => stringifyArr($this->getRoleNames()));
     }
 
+    /**
+     * Get the user's roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function walletBalance(): Attribute
+    {
+        return Attribute::get(fn() => $this->wallet?->balance ?? 0);
+    }
+
 
     /**
      * .....................    _____________________RELATIONSHIPS
@@ -149,9 +166,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Lease::class);
     }
 
-    /**
-     * The services that belong to the user(provider).
-     */
     public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class, 'service_providers');
@@ -178,9 +192,41 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
 
+    /**
+     * Scope the model query to certain roles only.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder                                             $query
+     * @param string|int|array|\Spatie\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     * @param string                                                                            $guard
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeRole(Builder $query, $roles, $guard = null): Builder
+    {
+        if($roles instanceof Role) $roles = $roles->value;
+
+        if($roles instanceof Collection) $roles = $roles->all();
+
+        $roles = array_map(function($role) use ($guard) {
+            if($role instanceof Role) $role = $role->value;
+
+            if($role instanceof RoleModel) return $role;
+
+            $method = is_numeric($role) ? 'findById' : 'findByName';
+
+            return $this->getRoleClass()->{$method}($role, $guard ? : $this->getDefaultGuardName());
+        }, Arr::wrap($roles));
+
+        return $query->whereHas('roles', function(Builder $subQuery) use ($roles) {
+            $roleClass = $this->getRoleClass();
+            $key = (new $roleClass())->getKeyName();
+            $subQuery->whereIn(config('permission.table_names.roles') . ".$key", array_column($roles, $key));
+        });
+    }
+
     public function hasRole($roles, string $guard = null): bool
     {
-        if($roles instanceof \App\Enums\Role) $roles = $roles->value;
+        if($roles instanceof Role) $roles = $roles->value;
 
         if(is_string($roles) && false !== strpos($roles, '|')) {
             $roles = $this->convertPipeToArray($roles);
@@ -199,13 +245,13 @@ class User extends Authenticatable implements MustVerifyEmail
                 : $this->roles->contains($key, $roles);
         }
 
-        if($roles instanceof Role) {
+        if($roles instanceof RoleModel) {
             return $this->roles->contains($roles->getKeyName(), $roles->getKey());
         }
 
         if(is_array($roles)) {
             foreach($roles as $role) {
-                if($role instanceof \App\Enums\Role) $role = $role->value;
+                if($role instanceof Role) $role = $role->value;
 
                 if($this->hasRole($role, $guard)) {
                     return true;
@@ -227,9 +273,9 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasAllRoles($roles, string $guard = null): bool
     {
-        if($roles instanceof \App\Enums\Role) $roles = $roles->value;
+        if($roles instanceof Role) $roles = $roles->value;
 
-        if(is_array($roles)) $roles = array_map(fn(\App\Enums\Role $role) => $role->value, $roles);
+        if(is_array($roles)) $roles = array_map(fn(Role $role) => $role->value, $roles);
 
         if(is_string($roles) && false !== strpos($roles, '|')) {
             $roles = $this->convertPipeToArray($roles);
@@ -240,12 +286,12 @@ class User extends Authenticatable implements MustVerifyEmail
                 : $this->roles->contains('name', $roles);
         }
 
-        if($roles instanceof Role) {
+        if($roles instanceof RoleModel) {
             return $this->roles->contains($roles->getKeyName(), $roles->getKey());
         }
 
         $roles = collect()->make($roles)->map(function($role) {
-            return $role instanceof Role ? $role->name : $role;
+            return $role instanceof RoleModel ? $role->name : $role;
         });
 
         return $roles->intersect($guard ? $this->roles->where('guard_name', $guard)->pluck('name')
@@ -270,8 +316,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendAccountApprovalNotification()
     {
         Notification::send(User::role([
-            \App\Enums\Role::ADMIN->value,
-            \App\Enums\Role::SUPER_ADMIN->value
+            Role::ADMIN->value,
+            Role::SUPER_ADMIN->value
         ])->get(), new ApproveAccount($this));
     }
 
@@ -293,7 +339,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isAdmin(): bool
     {
-        return $this->hasRole([\App\Enums\Role::ADMIN->value, \App\Enums\Role::SUPER_ADMIN->value]);
+        return $this->hasRole([Role::ADMIN->value, Role::SUPER_ADMIN->value]);
     }
 
     #[ArrayShape([
@@ -302,21 +348,14 @@ class User extends Authenticatable implements MustVerifyEmail
         "arrears"        => "mixed"
     ])] public function rentFigures(): array
     {
-        $totalPaid = $this->transactions()->whereStatus(Status::COMPLETED)->rentPayment()->sum("amount");
-        $totalInvoice = $this->leases->pluck("default_payment_plan")
-            ->reduce(function($carry, PaymentPlan $item = null) {
-                if(!$item) return $carry + 0;
+        $rentFigures = $this->leases->pluck("rent_figures");
+        $totalInvoice = $rentFigures->sum("total_invoiced");
+        $totalPaid = $rentFigures->sum("total_paid");
 
-                $noOfExpectedPayments = match ($item->frequency) {
-                    Frequency::MONTHLY => $item->created_at->diffInMonths(),
-                    Frequency::QUARTERLY => $item->created_at->diffInQuarters(),
-                    Frequency::HALF_YEARLY => $item->created_at->diffInYears() / 2,
-                    Frequency::YEARLY => $item->created_at->diffInYears()
-                };
-
-                return $carry + ($noOfExpectedPayments * $item->rent_amount);
-            });
-
-        return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
+        return [
+            "total_invoiced" => $totalInvoice,
+            "total_paid"     => $totalPaid,
+            "arrears"        => $totalInvoice - $totalPaid
+        ];
     }
 }

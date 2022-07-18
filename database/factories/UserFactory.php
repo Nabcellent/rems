@@ -29,6 +29,7 @@ class UserFactory extends Factory
         return [
             "first_name"        => $this->faker->firstName($gender),
             "last_name"         => $this->faker->lastName,
+            "username"          => $this->faker->userName,
             "gender"            => $gender,
             "phone"             => ltrim($phone, '+'),
             "email"             => $this->faker->unique()->safeEmail(),

@@ -3,12 +3,11 @@
 namespace App\Policies;
 
 use App\Enums\Role;
-use App\Models\Unit;
+use App\Models\Room;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Auth\Access\Response;
 
-class UnitPolicy
+class RoomPolicy
 {
     use HandlesAuthorization;
 
@@ -30,24 +29,21 @@ class UnitPolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user): Response|bool
+    public function viewAny(User $user)
     {
-        return $user->units->isNotEmpty() || $user->hasRole([
-                Role::PROPERTY_MANAGER,
-                Role::OWNER
-            ]);
+        //
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\Room $room
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Unit $unit): Response|bool
+    public function view(User $user, Room $room)
     {
-        return $user->id === $unit->user_id || $unit->leases->contains("user_id", $user->id);
+        //
     }
 
     /**
@@ -56,54 +52,43 @@ class UnitPolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function create(User $user): Response|bool
+    public function create(User $user)
     {
-        return $user->estates()->exists();
+        return $user->hasRole(Role::OWNER);
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\Room $room
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Unit $unit): Response|bool
+    public function update(User $user, Room $room)
     {
-        return $user->id === $unit->user_id;
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param \App\Models\User $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function updateStatus(User $user): Response|bool
-    {
-        return $user->hasRole([Role::PROPERTY_MANAGER, Role::OWNER]);
+        //
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\Room $room
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Unit $unit)
+    public function delete(User $user, Room $room)
     {
-        return $user->id === $unit->user_id;
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\Room $room
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Unit $unit)
+    public function restore(User $user, Room $room)
     {
         //
     }
@@ -112,22 +97,11 @@ class UnitPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param \App\Models\User $user
-     * @param \App\Models\Unit $unit
+     * @param \App\Models\Room $room
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Unit $unit)
+    public function forceDelete(User $user, Room $room)
     {
         //
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param \App\Models\User $user
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function changeOwner(User $user): Response|bool
-    {
-        return $user->hasRole([Role::PROPERTY_MANAGER]);
     }
 }

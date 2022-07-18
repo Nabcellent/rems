@@ -49,10 +49,6 @@ const Index = ({ units }) => {
                                     header: 'Rent / Sale',
                                 },
                                 {
-                                    accessorKey: 'type',
-                                    header: 'Type',
-                                },
-                                {
                                     accessorKey: 'rooms_count',
                                     header: 'Rooms',
                                 },

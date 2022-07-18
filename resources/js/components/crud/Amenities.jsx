@@ -1,5 +1,5 @@
 import { Alert, Autocomplete, Button, Grid, TextField } from '@mui/material';
-import { Create, DeleteSweep, Edit, FitnessCenter, LocalPoliceTwoTone } from '@mui/icons-material';
+import { Create, DeleteSweep, Edit, FitnessCenter } from '@mui/icons-material';
 import { Card, Modal } from 'react-bootstrap';
 import { useState } from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
@@ -9,11 +9,12 @@ import { useFormik } from 'formik';
 import { Inertia, Method } from '@inertiajs/inertia';
 import * as yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBuildingShield } from '@fortawesome/free-solid-svg-icons';
 import { handleDelete } from '@/utils/helpers';
 import map from 'lodash/map';
 import PermitAction from '@/components/PermitAction';
 import { usePage } from '@inertiajs/inertia-react';
+import { faTreeCity } from '@fortawesome/free-solid-svg-icons';
+import ControlledAutoComplete from '@/components/ControlledAutoComplete';
 
 const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
     const { can } = usePage().props;
@@ -84,7 +85,7 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
                             <div key={`amenity-${amenity.id}`}
                                  className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
                                 <div className="d-flex align-items-center mb-1">
-                                    <FontAwesomeIcon icon={faBuildingShield} className={'text-primary'} role={'img'}/>
+                                    <FontAwesomeIcon icon={faTreeCity} className={'text-primary'} role={'img'}/>
                                     <a className="stretched-link text-decoration-none">
                                         <h6 className="fs--1 text-600 mb-0 ps-3">{amenity.title}</h6>
                                     </a>
@@ -95,7 +96,7 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
                                         <Edit fontSize={'small'}/>
                                     </button>
                                     <button
-                                        onClick={() => handleDelete(route('dashboard.amenities.destroy', { amenity: amenity.id }), 'Amenity')}
+                                        onClick={() => handleDelete(route('dashboard.amenitiable.destroy', { amenitiable: amenity.pivot.id }), 'Amenity')}
                                         className="border-300 text-600 btn btn-danger btn-sm">
                                         <DeleteSweep fontSize={'small'}/>
                                     </button>
@@ -115,7 +116,7 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
 
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Autocomplete name={'amenity_id'} getOptionLabel={opt => opt?.title ?? ''}
+                            <ControlledAutoComplete name={'amenity_id'} getOptionLabel={opt => opt?.title ?? ''}
                                           options={allAmenities} value={formik.values.amenity}
                                           onChange={(event, value) => {
                                               formik.setFieldValue('amenity_id', value?.id, true);
@@ -139,7 +140,7 @@ const Amenities = ({ amenities, allAmenities, amenitiable, amenitiableId }) => {
                             color={'inherit'}>Cancel</Button>
                     <LoadingButton size="small" color="primary" loading={isLoading} loadingPosition="end"
                                    onClick={() => formik.submitForm()} endIcon={<Create/>} variant="contained">
-                        {amenity ? "Update" : "Create"}
+                        {amenity ? "Update" : "Add"}
                     </LoadingButton>
                 </Modal.Footer>
             </Modal>

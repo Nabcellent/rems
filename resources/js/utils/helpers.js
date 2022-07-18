@@ -51,7 +51,7 @@ export const getTelcoFromPhone = phone => {
 
 export const str = {
     headline: str => {
-        if(!str) return ""
+        if (!str) return "";
 
         str = str.replaceAll('_', ' ').replaceAll('-', ' ');
 
@@ -90,4 +90,32 @@ export const handleDelete = (route, title) => {
             showLoaderOnConfirm: true
         }).then(result => result.isConfirmed && Inertia.delete(route));
     }
+};
+
+export const getFilteredListings = (listings, filters) => {
+    console.log(filters);
+    let filteredListings = [];
+
+    filteredListings.push(...listings.filter(listing => {
+        let keywordFilters = true;
+        if (filters?.keywords) {
+            const searchString = listing.estate.name + listing.estate.address;
+
+            keywordFilters = searchString.toLowerCase().includes(filters?.keywords);
+        }
+
+        const bedroomFilters = filters?.bedrooms?.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
+        const purposeFilters = filters?.purpose?.length ? filters?.purpose?.includes(listing.purpose) : true;
+        const amenityFilters = filters?.amenities?.length ? listing.amenities?.some(a => filters?.amenities?.includes(a.title)) : true;
+        const priceFilters = filters?.priceRange?.length
+            ? listing.price >= filters.priceRange[0] && listing.price <= filters.priceRange[1] : true;
+        const rentAmountFilters = filters?.rentAmountRange?.length
+            ? listing.rent_amount >= filters.rentAmountRange[0] && listing.rent_amount <= filters.rentAmountRange[1] : true;
+
+        return purposeFilters && bedroomFilters && amenityFilters && priceFilters && rentAmountFilters && keywordFilters;
+    }));
+
+    if (!filters) filteredListings = listings;
+
+    return filteredListings;
 };

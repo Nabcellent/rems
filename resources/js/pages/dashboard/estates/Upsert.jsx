@@ -32,11 +32,13 @@ import 'filepond/dist/filepond.min.css';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import ValidationErrors from '@/components/ValidationErrors';
 import Map from '@/components/Map';
+import ControlledAutoComplete from '@/components/ControlledAutoComplete';
 
 // Register filepond plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType, FilePondPluginFileValidateSize, FilePondPluginFileRename);
 
 const validationSchema = yup.object({
+    manager: yup.object(),
     name: yup.string().required('First name is required.'),
     address: yup.string().required('Last name is required.'),
     latitude: yup.number().required('Latitude is required.'),
@@ -45,12 +47,13 @@ const validationSchema = yup.object({
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
-const Upsert = ({ estate, action, googleMapsKey }) => {
+const Upsert = ({ estate, action, users, googleMapsKey }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
     const formik = useFormik({
         initialValues: {
+            manager: estate?.manager_id ? users.find(u => u.id === estate.manager_id) : '',
             name: estate?.name ?? '',
             address: estate?.address ?? '',
             latitude: estate?.latitude ?? '',
@@ -69,8 +72,13 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                 values._method = Method.PUT;
             }
 
-            Inertia.post(url, values, {
-                preserveState:false,
+            let data = {
+                ...values,
+                manager_id: values.manager?.id
+            }
+
+            Inertia.post(url, data, {
+                preserveState: false,
                 forceFormData: true,
                 onBefore: () => setIsLoading(true),
                 onSuccess: () => formik.resetForm(),
@@ -95,6 +103,26 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                                            value={formik.values.name} fullWidth onChange={formik.handleChange}
                                            error={formik.touched.name && Boolean(formik.errors.name)}
                                            helperText={formik.touched.name && formik.errors.name}/>
+                            </Grid>
+                            <Grid item xs={12} lg={6}>
+                                <ControlledAutoComplete name={'manager'} value={formik.values.manager} options={users}
+                                                        getOptionLabel={o => {
+                                                            let label = o.email;
+                                                            if (label) label += ': ';
+                                                            label += o.full_name;
+                                                            if(!label) label = o
+
+                                                            return label;
+                                                        }}
+                                                        isOptionEqualToValue={(option, value) => value === undefined || value === "" || option.id === value.id}
+                                                        onChange={(event, value) => {
+                                                            formik.setFieldValue('manager', value, true);
+                                                        }} renderInput={(params) => (
+                                    <TextField {...params} label="Select Manager"
+                                               placeholder={'Select property manager...'}
+                                               error={formik.touched.manager && Boolean(formik.errors.manager)}
+                                               helperText={formik.touched.manager && formik.errors.manager}/>
+                                )}/>
                             </Grid>
                             <Grid item lg={6}>
                                 <TextField label="Address" placeholder="Address..." name={'address'}
@@ -150,7 +178,7 @@ const Upsert = ({ estate, action, googleMapsKey }) => {
                                           onremovefile={() => formik.setFieldValue('image', null)}/>
                             </Grid>
                             <Grid item xs={12} textAlign={'right'} mt={2}>
-                                <LoadingButton type={'submit'} size="small" color="primary" loading={isLoading}
+                                <LoadingButton disabled={!formik.dirty} type={'submit'} size="small" color="primary" loading={isLoading}
                                                loadingPosition="end" onClick={() => formik.submitForm()}
                                                endIcon={<Create/>} variant="contained">{action}
                                 </LoadingButton>

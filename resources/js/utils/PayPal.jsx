@@ -37,8 +37,9 @@ export default class PayPal {
                 return await new PayPal().init({
                     amount,
                     user_id: details.user.id,
-                    destination_id: details.destinationId,
                     description: details.description,
+                    transactionable_id: details.transactionableId,
+                    transactionable: details.transactionable,
                     onCompleted: onCompleted,
                 });
             },
@@ -47,7 +48,7 @@ export default class PayPal {
     };
 
     init = async ({ amount, onCompleted, ...formData }) => {
-        const { data: { id: transactionId } } = await axios.post(`${this.baseUrl}/transactions`, {
+        const { data: { id: transaction_id } } = await axios.post(`${this.baseUrl}/transactions`, {
             amount, ...formData
         });
 
@@ -66,17 +67,23 @@ export default class PayPal {
             return actions.order.capture().then(async details => {
                 console.log(details);
 
-                const { status } = await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
+                const { status } = await axios.put(`${this.baseUrl}/transactions/${transaction_id}`, {
                     payload: details
                 });
 
-                if (status === 200) onCompleted({ amount });
+                if (status === 200) {
+                    // Sweet.isVisible() && Sweet.close();
+
+                    onCompleted({ amount, transaction_id });
+
+                    // await sweet({ type: 'success', message: 'Payment Successful!' });
+                }
             });
         };
 
         const onCancel = async (data) => {
             console.log(data);
-            await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
+            await axios.put(`${this.baseUrl}/transactions/${transaction_id}`, {
                 payload: { status: Status.CANCELLED, amount, ...data }
             });
 
@@ -85,7 +92,7 @@ export default class PayPal {
 
         const onError = async (data) => {
             console.log(data);
-            await axios.put(`${this.baseUrl}/transactions/${transactionId}`, {
+            await axios.put(`${this.baseUrl}/transactions/${transaction_id}`, {
                 payload: { status: Status.FAILED, amount, ...data }
             });
 

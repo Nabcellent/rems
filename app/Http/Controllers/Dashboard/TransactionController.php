@@ -35,7 +35,8 @@ class TransactionController extends Controller
             "transactions"    => Transaction::select([
                 "id",
                 "user_id",
-                "destination_id",
+                "transactionable_id",
+                "transactionable_type",
                 "amount",
                 "description",
                 "status",
@@ -43,9 +44,17 @@ class TransactionController extends Controller
             ])->when(!user()->isAdmin(), fn(Builder $qry) => $qry->whereUserId(user()->id))->with([
                 "user:id,first_name,last_name,email,phone",
                 "user.roles",
-                "destination.roles",
-                "destination:id,first_name,last_name,email,phone"
-            ])->latest()->get(),
+                "transactionable:id,user_id",
+                "transactionable.user:id,first_name,last_name,email,phone",
+                "transactionable.user.roles",
+            ])->latest()->get()->map(fn(Transaction $transaction) => [
+                ...$transaction->toArray(),
+                "can" => [
+                    "edit"    => user()->can("update", $transaction),
+                    "view"    => user()->can("view", $transaction),
+                    "destroy" => user()->can("delete", $transaction)
+                ]
+            ]),
             "canUpdateStatus" => user()->can("updateStatus", Transaction::class)
         ]);
     }
@@ -81,11 +90,12 @@ class TransactionController extends Controller
     {
         return inertia("dashboard/transactions/Show", [
             "transaction" => $transaction->load([
-                'user:id,first_name,last_name,email,phone',
-                'user.roles',
-                'destination:id,first_name,last_name,email,phone',
-                'destination.roles',
-                "payment:id,transaction_id,amount,method,status",
+                "user:id,first_name,last_name,email,phone",
+                "user.roles",
+                "transactionable:id,user_id",
+                "transactionable.user:id,first_name,last_name,email,phone",
+                "transactionable.user.roles",
+                "payment:id,transaction_id,payable_id,payable_type,amount,method,status",
                 "payment.payable",
             ])
         ]);

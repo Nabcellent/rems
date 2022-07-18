@@ -67,6 +67,7 @@ export const Morphable = {
     PROPERTY: 'property',
     UNIT: 'unit',
     ROOM: 'room',
+    WALLET: 'wallet',
 };
 
 export const PaymentMethod = {

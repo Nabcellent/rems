@@ -21,7 +21,7 @@ class EstatePolicy
      */
     public function before(User $user, string $ability)
     {
-        if($user->hasRole(Role::ADMIN->value)) return true;
+        if($user->hasRole(Role::ADMIN)) return true;
     }
 
     /**
@@ -42,7 +42,7 @@ class EstatePolicy
      * @param \App\Models\Estate $estate
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Estate $estate)
+    public function view(User $user, Estate $estate): Response|bool
     {
         return $estate->user_id === $user->id;
     }
@@ -55,7 +55,7 @@ class EstatePolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->hasRole(Role::PROPERTY_MANAGER->value);
+        return $user->hasRole(Role::OWNER);
     }
 
     /**
@@ -76,9 +76,9 @@ class EstatePolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function updateStatus(User $user)
+    public function updateStatus(User $user): Response|bool
     {
-        return $user->hasAnyRole(Role::PROPERTY_MANAGER->value, Role::OWNER->value);
+        return $user->hasAnyRole(Role::PROPERTY_MANAGER, Role::OWNER);
     }
 
     /**
@@ -88,9 +88,9 @@ class EstatePolicy
      * @param \App\Models\Estate $estate
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Estate $estate)
+    public function delete(User $user, Estate $estate): Response|bool
     {
-        //
+        return $user->id === $estate->user_id;
     }
 
     /**

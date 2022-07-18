@@ -5,23 +5,15 @@ import Grid from "@mui/material/Grid";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-
-import { Carousel } from "react-bootstrap";
 import { Inertia } from "@inertiajs/inertia";
+import { Purpose } from '@/utils/enums';
+import { currencyFormat } from '@/utils/helpers';
 
-const Listing = ({
-    id,
-    imgSource,
-    purpose,
-    price,
-    location,
-    bedrooms,
-    amenities,
-}) => {
+const Listing = ({ unit }) => {
     return (
         <Grid
             component={CardActionArea}
-            onClick={() => Inertia.get(`/listings/${id}`)}
+            onClick={() => Inertia.get(`/listings/${unit.id}`)}
             container
             spacing={2}
             mt={"2rem"}
@@ -41,7 +33,9 @@ const Listing = ({
                 </Carousel> */}
                 <Box
                     component={"img"}
-                    src={imgSource}
+                    src={unit.image
+                        ? unit.image
+                        : "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"}
                     display={"block"}
                     width={"100%"}
                     height={"330px"}
@@ -57,38 +51,57 @@ const Listing = ({
                             fontWeight={600}
                             fontSize={"1.1rem"}
                         >
-                            PURPOSE
+                            ESTATE
                         </Typography>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Typography>
-                            {purpose
-                                ? `FOR ${purpose.toUpperCase()}`
-                                : "UNSPECIFIED"}
-                        </Typography>
-                    </Grid>
-
+                    <Grid item xs={6}><Typography>{unit.estate.name}</Typography></Grid>
                     <Grid item xs={6}>
                         <Typography
                             variant="body1"
                             fontWeight={600}
                             fontSize={"1.1rem"}
                         >
-                            PRICE
+                            PURPOSE
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
                         <Typography>
-                            {price
-                                ? `FROM ${new Intl.NumberFormat("en-US", {
-                                      style: "currency",
-                                      currency: "KSH",
-                                  }).format(price)}`
-                                : "UNSPECIFIED"}
-                            {/* Says unspecified because price is nullable */}
-                            {console.log(price)}
+                            {`FOR ${unit.purpose === Purpose.EITHER ? 'RENT OR SALE' : unit.purpose}`}
                         </Typography>
                     </Grid>
+
+                    {[Purpose.EITHER, Purpose.SALE].includes(unit.purpose) && (
+                        <>
+                            <Grid item xs={6}>
+                                <Typography
+                                    variant="body1"
+                                    fontWeight={600}
+                                    fontSize={"1.1rem"}>
+                                    PRICE
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography>{currencyFormat(unit.price)}</Typography>
+                            </Grid>
+                        </>
+                    )}
+
+                    {[Purpose.EITHER, Purpose.RENT].includes(unit.purpose) && (
+                        <>
+                            <Grid item xs={6}>
+                                <Typography
+                                    variant="body1"
+                                    fontWeight={600}
+                                    fontSize={"1.1rem"}
+                                >
+                                    RENT AMOUNT
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Typography>{currencyFormat(unit.rent_amount)}</Typography>
+                            </Grid>
+                        </>
+                    )}
 
                     <Grid item xs={6}>
                         <Typography
@@ -100,7 +113,7 @@ const Listing = ({
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography>{location.toUpperCase()}</Typography>
+                        <Typography>{unit.estate.address.toUpperCase()}</Typography>
                     </Grid>
 
                     <Grid item xs={6}>
@@ -113,29 +126,31 @@ const Listing = ({
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography>{bedrooms}</Typography>
+                        <Typography>{unit.bedroom_count}</Typography>
                     </Grid>
 
-                    <Grid item xs={6}>
-                        <Typography
-                            variant="body1"
-                            fontWeight={600}
-                            fontSize={"1.1rem"}
-                        >
-                            AMENITIES
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <List sx={{ m: 0, p: 0 }}>
-                            {amenities.map((amenity, i) => (
-                                <ListItem key={i} disableGutters disablePadding>
-                                    <ListItemText
-                                        primary={amenity.toUpperCase()}
-                                    />
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Grid>
+                    {Boolean(unit.amenities.length) && (
+                      <>
+                          <Grid item xs={6}>
+                              <Typography
+                                  variant="body1"
+                                  fontWeight={600}
+                                  fontSize={"1.1rem"}
+                              >
+                                  AMENITIES
+                              </Typography>
+                          </Grid>
+                          <Grid item xs={6}>
+                              <List sx={{ m: 0, p: 0 }}>
+                                  {unit.amenities.map((amenity, i) => (
+                                      <ListItem key={i} disableGutters disablePadding>
+                                          <ListItemText primary={amenity.title.toUpperCase()}/>
+                                      </ListItem>
+                                  ))}
+                              </List>
+                          </Grid>
+                      </>
+                    )}
                 </Grid>
             </Grid>
 

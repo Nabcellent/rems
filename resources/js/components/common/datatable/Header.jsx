@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
 import pluralize from 'pluralize';
 import PropTypes from 'prop-types';
+import { Link } from '@inertiajs/inertia-react';
 
 const Header = ({
     table, rowSelection, filtering = false, setFiltering = () => {
@@ -59,14 +60,16 @@ const Header = ({
                 ) : (
                     <>
                         {onCreateRow && (
-                            <Button size="small" startIcon={<Add/>} transform="shrink-3" className="me-2"
-                                    onClick={onCreateRow} variant={'contained'}>
+                            <Button size="small" startIcon={<Add/>} transform="shrink-3"
+                                    className="me-2" onClick={() => onCreateRow()} variant={'contained'}>
                                 <span className="d-none d-sm-inline-block ms-1">New</span>
                             </Button>
                         )}
-                        <Tooltip title={`${filtering ? 'Disable' : 'Enable'} Filtering`}>
-                            <Switch checked={filtering} onChange={() => setFiltering(!filtering)}/>
-                        </Tooltip>
+                        {Boolean(table.getCoreRowModel().rows.length) && (
+                            <Tooltip title={`${filtering ? 'Disable' : 'Enable'} Filtering`}>
+                                <Switch checked={filtering} onChange={() => setFiltering(!filtering)}/>
+                            </Tooltip>
+                        )}
                         <Button id="demo-positioned-button"
                                 aria-controls={Boolean(anchorEl) ? 'demo-positioned-menu' : undefined}
                                 aria-haspopup="true" aria-expanded={Boolean(anchorEl) ? 'true' : undefined}

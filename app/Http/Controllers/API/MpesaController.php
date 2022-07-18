@@ -7,6 +7,8 @@ use App\Enums\Status;
 use App\Enums\TransactionType;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
+use App\Models\Unit;
+use App\Models\Wallet;
 use DrH\Mpesa\Entities\MpesaStkCallback;
 use DrH\Mpesa\Events\StkPushPaymentFailedEvent;
 use DrH\Mpesa\Events\StkPushPaymentSuccessEvent;
@@ -27,17 +29,24 @@ class MpesaController extends Controller
     public function initiatePush(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'user_id'        => 'required|integer|exists:users,id',
-            'destination_id' => 'required|integer|exists:users,id',
-            'amount'         => 'required|numeric',
-            'phone'          => 'required',
-            'reference'      => 'required',
-            'description'    => 'required',
+            "user_id"            => "required|integer|exists:users,id",
+            "transactionable_id" => "required|integer",
+            "transactionable"    => "required|in:unit,wallet",
+            "amount"             => "required|numeric",
+            "phone"              => "required",
+            "reference"          => "required",
+            "description"        => "required",
         ]);
 
-        $transaction = Transaction::create([
+        $transactionable = match ($request->input("transactionable")) {
+            "unit" => new Unit,
+            "wallet" => new Wallet,
+        };
+
+        $transactionable = $transactionable->findOrFail($request->input("transactionable_id"));
+
+        $transaction = $transactionable->transactions()->create([
             "user_id"        => $data["user_id"],
-            "destination_id" => $data["destination_id"],
             "type"           => TransactionType::PAYMENT,
             "amount"         => $data["amount"],
             "description"    => $data["description"]
@@ -74,7 +83,7 @@ class MpesaController extends Controller
      */
     public function stkStatus(Request $request): JsonResponse
     {
-        $request->validate(["request_id" => "required"]);
+        $request->validate(["request_id" => "required", "amount" => "required|numeric|max:70000"]);
 
         try {
             $status = STK::status($request->input("request_id"));

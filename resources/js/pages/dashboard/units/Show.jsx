@@ -35,7 +35,7 @@ import PhoneChip from '@/components/chips/PhoneChip';
 import { Inertia } from '@inertiajs/inertia';
 import PermitAction from '@/components/PermitAction';
 
-const Show = ({ errors, unit, amenities, canChangeOwner }) => {
+const Show = ({ errors, unit, amenities, canChangeOwner, canEdit }) => {
     console.log(unit);
     const theme = useTheme();
     const [room, setRoom] = useState(undefined);
@@ -72,9 +72,11 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                                     : Hse No. {unit.house_number}
                                 </h5>
                                 <div>
-                                    <IconButton component={Link} className={'mx-1'}
-                                                href={route(`dashboard.units.edit`, unit)}> <Edit/>
-                                    </IconButton>
+                                    <PermitAction ability={canEdit}>
+                                        <IconButton component={Link} className={'mx-1'}
+                                                    href={route(`dashboard.units.edit`, unit)}> <Edit/>
+                                        </IconButton>
+                                    </PermitAction>
                                     {canChangeOwner && <ChangeOwner entity={'unit'} entityId={unit.id}/>}
                                     <StatusChip status={unit.status} entity={'unit'} entityId={unit.id}/>
                                 </div>
@@ -154,8 +156,8 @@ const Show = ({ errors, unit, amenities, canChangeOwner }) => {
                         <Card.Header className={'d-flex justify-content-between'}>
                             <h5 className={'mb-0'}>Tenant History</h5>
                             <PermitAction ability={can.create.lease}>
-                                <Button startIcon={<Assignment/>}
-                                        onClick={() => Inertia.get(route('dashboard.leases.create'))}>
+                                <Button component={Link} href={route('dashboard.leases.create', { unit: unit.id })}
+                                        startIcon={<Assignment/>}>
                                     New lease
                                 </Button>
                             </PermitAction>

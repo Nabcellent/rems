@@ -35,11 +35,34 @@ class Lease extends Model
      *
      * @var array
      */
-    protected $appends = ["default_payment_plan"];
+    protected $appends = ["default_payment_plan", "rent_figures"];
 
     public function defaultPaymentPlan(): Attribute
     {
         return Attribute::get(fn() => $this->paymentPlans->firstWhere("is_default", true));
+    }
+
+    public function rentFigures(): Attribute
+    {
+        return Attribute::get(function() {
+            $transactions = $this->user->transactions()->whereTransactionableType(Unit::class)
+                ->whereTransactionableId($this->unit->id)->whereStatus(Status::COMPLETED)->rentPayment()->get();
+            $totalPaid = $transactions->sum("amount");
+            $plan = $this->defaultPaymentPlan;
+            $dueDay = now()->day($plan->due_day);
+            $createdAt = $plan->created_at ?? $this->created_at;
+
+            $noOfExpectedPayments = match ($plan->frequency) {
+                Frequency::MONTHLY => $createdAt->diffInMonths($dueDay),
+                Frequency::QUARTERLY => $createdAt->diffInQuarters($dueDay),
+                Frequency::HALF_YEARLY => $createdAt->diffInYears($dueDay) / 2,
+                Frequency::YEARLY => $createdAt->diffInYears($dueDay)
+            };
+
+            $totalInvoice = ($noOfExpectedPayments * $plan->rent_amount) + $plan->deposit;
+
+            return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
+        });
     }
 
     /**

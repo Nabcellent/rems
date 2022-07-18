@@ -26,6 +26,7 @@ class StoreEstateRequest extends FormRequest
     {
         return [
             "name"           => "required|string",
+            "manager_id"     => "nullable|integer|exists:users,id",
             "address"        => "required|string",
             "longitude"      => "required|numeric",
             "latitude"       => "required|numeric",

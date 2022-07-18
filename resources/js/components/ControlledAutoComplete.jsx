@@ -9,10 +9,10 @@ const ControlledAutoComplete = ({
     name,
     value,
     disabled = false,
-    required
+    multiple = undefined,
 }) => {
     return (
-        <Autocomplete name={name} disabled={disabled}
+        <Autocomplete name={name} disabled={disabled} multiple={multiple}
                       value={value}
                       getOptionLabel={getOptionLabel}
                       options={options}

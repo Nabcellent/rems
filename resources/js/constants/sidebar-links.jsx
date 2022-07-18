@@ -109,19 +109,9 @@ export const sidebarLinks = can => {
                     startIcon: <i className="bi bi-tools"/>, title: 'Services', subMenu: [
                         { authorized: true, link: route('dashboard.services.index'), title: 'List Services' },
                         {
-                            authorized: true,
-                            link: route('dashboard.service-providers.index'),
-                            title: 'List Service Providers'
-                        },
-                        {
                             authorized: can.create.service,
                             link: route('dashboard.services.create'),
                             title: 'Create Service'
-                        },
-                        {
-                            authorized: can.create.service_provider,
-                            link: route('dashboard.service-providers.create'),
-                            title: 'Create Service Provider'
                         }
                     ]
                 },

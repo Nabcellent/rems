@@ -10,9 +10,11 @@ use App\Http\Requests\UpdateLeaseRequest;
 use App\Models\Estate;
 use App\Models\Lease;
 use App\Models\PaymentPlan;
+use App\Models\Unit;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
@@ -47,9 +49,9 @@ class LeaseController extends Controller
                 ->orWhereHas("unit", function(Builder $qry) {
                     return $qry->whereUserId(user()->id);
                 }))->with([
-                "unit.user:id,first_name,last_name,email",
-                "user:id,first_name,last_name,email",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency",
+                "unit.user:id,first_name,last_name,username,email",
+                "user:id,first_name,last_name,username,email",
+                "paymentPlans:id,lease_id,deposit,rent_amount,is_default,frequency",
             ])->latest()->get()->map(fn(Lease $lease) => [
                 ...$lease->toArray(),
                 "can" => [
@@ -67,7 +69,7 @@ class LeaseController extends Controller
      *
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function create(): Response|ResponseFactory
+    public function create(Request $request): Response|ResponseFactory
     {
         return inertia("dashboard/leases/Upsert", [
             "action"  => "create",
@@ -83,7 +85,8 @@ class LeaseController extends Controller
                     "properties:id,estate_id,name",
                     "properties.units:id,unitable_id,house_number",
                     "units:id,unitable_id,house_number"
-                ])->get()
+                ])->get(),
+            "unit"    => $request->has("unit") ? Unit::find($request->query("unit")) : null
         ]);
     }
 
@@ -122,13 +125,15 @@ class LeaseController extends Controller
         $lease = $lease->load([
             "unit",
             "unit.user:id,email,phone",
+            "unit.transactions:id,transactionable_id,transactionable_type,amount,status,description",
             "user:id,email,phone",
             "user.roles:id,name",
-            "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default",
+            "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day,is_default,created_at",
         ]);
 
         $data = $lease->toArray();
 
+//        dd($data);
         if($lease->default_payment_plan) {
             $data["payment_plans"] = [
                 [
@@ -151,8 +156,6 @@ class LeaseController extends Controller
             ])->toArray();
         }
 
-//        dd($data);
-
         return inertia("dashboard/leases/Show", [
             "lease"           => $data,
             "canUpdateStatus" => user()->can("updateStatus", $lease),
@@ -171,7 +174,7 @@ class LeaseController extends Controller
         return inertia("dashboard/leases/Upsert", [
             "lease"   => $lease->load([
                 "unit:id,user_id,unitable_id,unitable_type,house_number",
-                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,due_day"
+                "paymentPlans:id,lease_id,deposit,rent_amount,frequency,is_default,due_day"
             ]),
             "action"  => "update",
             "users"   => User::select(["id", "email"])->get(),

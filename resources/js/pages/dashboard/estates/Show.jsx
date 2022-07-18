@@ -1,14 +1,12 @@
 import Breadcrumbs from '@/components/common/Breadcrumb';
 import Dashboard from '@/layouts/Dashboard';
-import { Alert, Avatar, Button, Divider, IconButton, Paper } from '@mui/material';
+import { Alert, Avatar, Divider, IconButton, Paper } from '@mui/material';
 import {
     AlternateEmail,
     Apartment,
     Badge,
     CurrencyPound,
-    DeleteSweep,
     Edit,
-    HomeRepairService,
     LocalPhone,
     LocationOn,
     OtherHouses,
@@ -16,16 +14,12 @@ import {
 } from '@mui/icons-material';
 import { Morphable } from '@/utils/enums';
 import StatusChip from '@/components/chips/StatusChip';
-import { handleDelete, parsePhone } from '@/utils/helpers';
 import CountUp from 'react-countup';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/crud/Images';
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
-import ServiceModal from '@/pages/dashboard/estates/components/ServiceModal';
 import Policies from '@/components/crud/Policies';
 import Units from '@/components/crud/Units';
 import Map from '@/components/Map';
@@ -33,23 +27,12 @@ import MainImage from '@/components/MainImage';
 import ChangeOwner from '@/components/crud/ChangeOwner';
 import Amenities from '@/components/crud/Amenities';
 import PhoneChip from '@/components/chips/PhoneChip';
+import Services from '@/components/crud/Services';
 
 const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwner }) => {
     console.log(estate);
-    const [service, setService] = useState(undefined);
-    const [showServiceModal, setShowServiceModal] = useState(false);
 
     const assetCount = estate.properties_count + estate.units_count;
-
-    const handleCreateService = () => {
-        setService(undefined);
-        setShowServiceModal(true);
-    };
-
-    const handleUpdateService = service => {
-        setService(service);
-        setShowServiceModal(true);
-    };
 
     return (
         <Dashboard errors={errors} title={'Estates'}>
@@ -76,7 +59,7 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                             </div>
                             <Divider sx={{ my: 2 }}/>
                         </Col>
-                        <Col md={7} className={'mb-3 mb-lg-0'}>
+                        <Col md={6} className={'mb-3 mb-lg-0'}>
                             <div className="d-flex align-items-center mb-1">
                                 <Badge className={'me-2'}/><strong>Estate</strong>
                             </div>
@@ -101,7 +84,7 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                                 </div>
                             </div>
                         </Col>
-                        <Col md={5}>
+                        <Col md={3}>
                             <div className="d-flex align-items-center mb-1">
                                 <Badge className={'me-2'}/><strong>Owner</strong>
                             </div>
@@ -120,6 +103,27 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                             <div className="d-flex align-items-center mb-2">
                                 <LocalPhone className="me-2"/>
                                 <PhoneChip textOnly phone={estate.user.phone}/>
+                            </div>
+                        </Col>
+                        <Col md={3}>
+                            <div className="d-flex align-items-center mb-1">
+                                <Badge className={'me-2'}/><strong>Manager</strong>
+                            </div>
+                            <Divider sx={{ my: 1 }}/>
+                            <div className="d-flex align-items-center mb-2">
+                                <Person className="me-2"/>
+                                <Link href={route('dashboard.users.show', estate.manager)}>
+                                    {estate.manager.full_name} -
+                                    <i><small className="text-secondary">{estate.manager.user_roles_str}</small></i>
+                                </Link>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <AlternateEmail className="me-2"/>
+                                <a href={`mailto:${estate.manager.email}`} className="mb-0">{estate.manager.email}</a>
+                            </div>
+                            <div className="d-flex align-items-center mb-2">
+                                <LocalPhone className="me-2"/>
+                                <PhoneChip textOnly phone={estate.manager.phone}/>
                             </div>
                         </Col>
                     </Row>
@@ -184,45 +188,7 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                 <Col sm={5}>
                     <div className="sticky-sidebar">
                         <Paper className={'ask-analytics mb-3'}>
-                            <Card.Header className={'d-flex justify-content-between align-items-center'}>
-                                <h5 className={'m-0'}>Services</h5>
-                                <Button startIcon={<HomeRepairService/>}
-                                        onClick={() => handleCreateService()}>Add</Button>
-                            </Card.Header>
-                            <Card.Body>
-                                {
-                                    !estate.services.length
-                                        ? <Alert severity="info">This Estate Hasn't any service(s) yet.</Alert>
-                                        : estate.services.map(service => (
-                                            <div key={`service-${service.id}`}
-                                                 className="border border-1 rounded-2 px-3 py-2 ask-analytics-item position-relative mb-3 hover-actions-trigger">
-                                                <div className="d-flex align-items-center mb-3">
-                                                    {service.icon ??
-                                                        <FontAwesomeIcon icon={faScrewdriverWrench}
-                                                                         className={'text-primary'}
-                                                                         role={'img'}/>}
-                                                    <Link className="stretched-link text-decoration-none" href="#">
-                                                        <h5 className="fs--1 text-600 mb-0 ps-3">{service.name}</h5>
-                                                    </Link>
-                                                </div>
-                                                <h6 className="fs--1 text-800">
-                                                    {service.pivot.description ?? service.description}
-                                                </h6>
-                                                <div className="hover-actions end-0 top-50 translate-middle-y me-2">
-                                                    <button onClick={() => handleUpdateService(service)}
-                                                            className="border-300 me-1 text-600 btn btn-light btn-sm">
-                                                        <Edit/>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDelete(route('dashboard.estate-services.destroy', { estate_service: service.pivot.id }), 'Service')}
-                                                        className="border-300 text-600 btn btn-danger btn-sm">
-                                                        <DeleteSweep/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        ))
-                                }
-                            </Card.Body>
+                            <Services estateServices={estate.services} allServices={services} estateId={estate.id}/>
                         </Paper>
 
                         <Paper className={'mb-3'}>
@@ -236,9 +202,6 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                     </div>
                 </Col>
             </Row>
-
-            <ServiceModal showModal={showServiceModal} setShowModal={setShowServiceModal} estateId={estate.id}
-                          service={service} services={services}/>
         </Dashboard>
     );
 };
