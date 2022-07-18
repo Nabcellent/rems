@@ -96,13 +96,15 @@ const Show = ({ errors, user, canEdit }) => {
                 </Card.Body>
             </Paper>
 
-            <Row>
-                <Col lg={8}>
-                    <Paper className={'mb-3'}>
-                        <Leases leases={user.leases}/>
-                    </Paper>
-                </Col>
-            </Row>
+            {user?.leases && (
+                <Row>
+                    <Col lg={8}>
+                        <Paper className={'mb-3'}>
+                            <Leases leases={user.leases}/>
+                        </Paper>
+                    </Col>
+                </Row>
+            )}
         </Dashboard>
     );
 };
