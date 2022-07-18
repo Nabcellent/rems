@@ -25,6 +25,5 @@
 
 @inertia
 
-{{--<a href="{{ "/jobdetails/{$job->id}" }}"></a>--}}
 </body>
 </html>
