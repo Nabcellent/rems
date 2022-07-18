@@ -51,10 +51,10 @@ const Show = ({ errors, transaction }) => {
                                     </div>
 
                                     <div className={'col-xl-5 text-end'}>
-                                        <h5 className="">{transaction.destination.full_name}</h5>
-                                        <p className="text-muted mb-2 text-truncate">{transaction.destination.email}</p>
-                                        <PhoneChip phone={transaction.destination.phone}/>
-                                        <p className="text-muted mt-2">{transaction.destination.user_roles_str}</p>
+                                        <h5 className="">{transaction.transactionable.user.full_name}</h5>
+                                        <p className="text-muted mb-2 text-truncate">{transaction.transactionable.user.email}</p>
+                                        <PhoneChip phone={transaction.transactionable.user.phone}/>
+                                        <p className="text-muted mt-2">{transaction.transactionable.user.user_roles_str}</p>
                                     </div>
                                 </div>
                             </div>

@@ -63,6 +63,11 @@ class UserSeeder extends Seeder
                 "last_name"  => "Tenant",
                 "email"      => "tenant.rems@yopmail.com",
                 "role"       => Role::TENANT
+            ], [
+                "first_name" => "Service",
+                "last_name"  => "Provider",
+                "email"      => "provider.rems@yopmail.com",
+                "role"       => Role::SERVICE_PROVIDER
             ],
         ];
 

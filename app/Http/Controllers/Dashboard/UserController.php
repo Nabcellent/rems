@@ -231,6 +231,18 @@ class UserController extends Controller
             if($user->image && file_exists("images/users/$user->image")) File::delete("images/users/$user->image");
         }
 
+        $user = User::findOrFail($request->userid);
+
+        if(!Auth::guard()->validate([
+            "email"    => $user->email,
+            "password" => $request->oldpassword,
+        ])) {
+            return back()->with("error", "Old password doesnt...");
+        }
+
+        $user->password = Hash::make($request->newpassword);
+        $user->save();
+
         if($request->filled("password")) {
             if(!Auth::guard()->validate([
                 "email"    => $user->email,
@@ -317,4 +329,9 @@ class UserController extends Controller
             ])
         ]);
     }
+
+    /*public function jobdetails(Job $job)
+    {
+        return view("client.jobdetails", ["jobdetails" => $job->load("user")]);
+    }*/
 }
