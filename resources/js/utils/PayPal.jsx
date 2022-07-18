@@ -71,13 +71,7 @@ export default class PayPal {
                     payload: details
                 });
 
-                if (status === 200) {
-                    // Sweet.isVisible() && Sweet.close();
-
-                    onCompleted({ amount, transaction_id });
-
-                    // await sweet({ type: 'success', message: 'Payment Successful!' });
-                }
+                if (status === 200) onCompleted({ amount, transaction_id })
             });
         };
 
