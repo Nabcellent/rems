@@ -106,6 +106,7 @@ export const getFilteredListings = (listings, filters) => {
 
         const bedroomFilters = filters?.bedrooms?.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
         const purposeFilters = filters?.purpose?.length ? filters?.purpose?.includes(listing.purpose) : true;
+        const typeFilters = filters?.type?.length ? filters?.type?.includes(listing.type) : true;
         const countyFilters = filters?.counties?.length ? filters?.counties?.includes(listing.estate.county) : true;
         const amenityFilters = filters?.amenities?.length ? listing.amenities?.some(a => filters?.amenities?.includes(a.title)) : true;
         const priceFilters = filters?.priceRange?.length
@@ -113,7 +114,9 @@ export const getFilteredListings = (listings, filters) => {
         const rentAmountFilters = filters?.rentAmountRange?.length
             ? listing.rent_amount >= filters.rentAmountRange[0] && listing.rent_amount <= filters.rentAmountRange[1] : true;
 
-        return purposeFilters && bedroomFilters && amenityFilters && priceFilters && rentAmountFilters && keywordFilters && countyFilters;
+        return purposeFilters && bedroomFilters && amenityFilters
+            && priceFilters && rentAmountFilters && keywordFilters
+            && countyFilters && typeFilters;
     }));
 
     if (!filters) filteredListings = listings;

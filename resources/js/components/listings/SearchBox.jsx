@@ -6,7 +6,7 @@ import Slider from "@mui/material/Slider";
 import { useEffect, useState } from "react";
 import MultipleSelect from "./MultipleSelect";
 import { getFilteredListings } from '@/utils/helpers';
-import { Purpose } from '@/utils/enums';
+import { Purpose, UnitType } from '@/utils/enums';
 import { usePage } from '@inertiajs/inertia-react';
 import { FormControlLabel, Switch } from '@mui/material';
 import Flex from '@/components/common/Flex';
@@ -38,6 +38,10 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                                     choices={Object.values(Purpose)} field={"Purpose"}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
+                    <MultipleSelect onChange={value => updateFilters({ type: value })}
+                                    choices={Object.values(UnitType)} field={"Type"}/>
+                </Grid>
+                <Grid item xs={12} md={6} lg={4}>
                     <MultipleSelect onChange={value => updateFilters({ bedrooms: value })}
                                     choices={["1", "2", "3", "4", "5+"]} field={"Bedrooms"}/>
                 </Grid>
@@ -46,21 +50,6 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                         onChange={value => updateFilters({ counties: value })}
                         choices={counties}
                         field={"County"}
-                    />
-                </Grid>
-                <Grid item xs={12} md={6} lg={4}>
-                    <MultipleSelect
-                        choices={[
-                            "Kileleshwa",
-                            "Kilimani",
-                            "Lavington",
-                            "Madaraka",
-                            "Runda",
-                            "South C",
-                            "South B",
-                            "Parklands",
-                        ]}
-                        field={"Location"}
                     />
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>

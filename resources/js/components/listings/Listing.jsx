@@ -73,7 +73,7 @@ const Listing = ({ unit }) => {
                     )}
                     <ListingItem title={'LOCATION'} value={unit.estate.address.toUpperCase()}/>
                     <ListingItem title={'BEDROOMS'} value={unit.bedroom_count}/>
-                    <ListingItem title={'ESTATE'} value={unit.estate.name}/>
+                    <ListingItem title={'TYPE'} value={unit.type}/>
 
                     {Boolean(unit.amenities.length) && (
                         <ListingItem title={'AMENITIES'} valueComponent={'div'} value={(
