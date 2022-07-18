@@ -1,5 +1,5 @@
 import { Alert, Button, Grid, MenuItem, Paper, TextField, Tooltip, useTheme } from '@mui/material';
-import { Create, DeleteSweep, Edit, Grading, LocalPoliceTwoTone } from '@mui/icons-material';
+import { Create, DeleteSweep, Edit, Grading, LocalPoliceTwoTone, RestartAlt } from '@mui/icons-material';
 import { Card, Col, Modal, Row } from 'react-bootstrap';
 import React, { useState } from 'react';
 import ValidationErrors from '@/components/ValidationErrors';
@@ -19,7 +19,7 @@ import PermitAction from '@/components/PermitAction';
 import { Link } from '@inertiajs/inertia-react';
 import { theme } from '@/theme';
 
-const PaymentPlans = ({ plans, leaseId }) => {
+const PaymentPlans = ({ plans, lease }) => {
     const [plan, setPlan] = useState(undefined);
     const [showModal, setShowModal] = useState(false);
     const [errors, setErrors] = useState({});
@@ -27,7 +27,7 @@ const PaymentPlans = ({ plans, leaseId }) => {
 
     const formik = useFormik({
         initialValues: {
-            lease_id: leaseId,
+            lease_id: lease.id,
             deposit: plan?.deposit ?? 0,
             rent_amount: plan?.rent_amount ?? '',
             frequency: RentFrequency.MONTHLY,
@@ -71,7 +71,7 @@ const PaymentPlans = ({ plans, leaseId }) => {
     const handleUpdate = plan => {
         setPlan(plan);
         formik.setValues({
-            lease_id: leaseId,
+            lease_id: lease.id,
             deposit: plan.deposit,
             rent_amount: plan.rent_amount,
             frequency: plan.frequency,
@@ -97,7 +97,7 @@ const PaymentPlans = ({ plans, leaseId }) => {
         });
     };
 
-    plans.sort(function (a, b) {
+    plans.sort((a, b) => {
         if (a.is_default) return -1;
         if (b.is_default) return 1;
         return 0;
@@ -107,9 +107,15 @@ const PaymentPlans = ({ plans, leaseId }) => {
         <Paper>
             <Card.Header className={'d-flex justify-content-between align-items-center'}>
                 <h5 className={'mb-0'}>Payment {pluralize('Plan', plans.length)}</h5>
-                <PermitAction ability={can.create.payment_plan}>
-                    <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
-                </PermitAction>
+                <div>
+                    <PermitAction ability={can.create.payment_plan && lease.default_payment_plan}>
+                        <Button as={Link} method={Method.PUT} href={route('dashboard.payment-plans.reset', lease)}
+                                startIcon={<RestartAlt/>}>Reset Plans</Button>
+                    </PermitAction>
+                    <PermitAction ability={can.create.payment_plan}>
+                        <Button startIcon={<LocalPoliceTwoTone/>} onClick={() => handleCreate()}>Add</Button>
+                    </PermitAction>
+                </div>
             </Card.Header>
             <Card.Body className={'px-lg-4'}>
                 <ValidationErrors errors={errors}/>
@@ -142,7 +148,8 @@ const PaymentPlans = ({ plans, leaseId }) => {
                                         </Tooltip>
                                     )}
                                     {plan.can?.edit && (
-                                        <button onClick={() => handleUpdate(plan)} className="border-300 me-1 text-600 btn btn-light btn-sm">
+                                        <button onClick={() => handleUpdate(plan)}
+                                                className="border-300 me-1 text-600 btn btn-light btn-sm">
                                             <Edit/>
                                         </button>
                                     )}
@@ -226,7 +233,7 @@ const PaymentPlans = ({ plans, leaseId }) => {
 
 PaymentPlans.propTypes = {
     plans: PropTypes.array.isRequired,
-    leaseId: PropTypes.number.isRequired
+    lease: PropTypes.object.isRequired
 };
 
 export default PaymentPlans;

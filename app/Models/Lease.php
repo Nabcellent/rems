@@ -26,7 +26,7 @@ class Lease extends Model
     ];
 
     protected $casts = [
-        "status"     => Status::class,
+        "status" => Status::class,
         "expires_at" => "datetime"
     ];
 
@@ -39,11 +39,7 @@ class Lease extends Model
 
     public function defaultPaymentPlan(): Attribute
     {
-        return Attribute::get(function() {
-            $plans = $this->paymentPlans;
-
-            return $plans->firstWhere("is_default", true) ?? $plans->firstWhere("frequency", Frequency::MONTHLY);
-        });
+        return Attribute::get(fn() => $this->paymentPlans->firstWhere("is_default", true));
     }
 
     public function rentFigures(): Attribute
@@ -53,6 +49,13 @@ class Lease extends Model
                 ->whereTransactionableId($this->unit->id)->whereStatus(Status::COMPLETED)->rentPayment()->get();
             $totalPaid = $transactions->sum("amount");
             $plan = $this->defaultPaymentPlan;
+
+            if(!$plan) return [
+                "total_invoiced" => 0,
+                "total_paid"     => 0,
+                "arrears"        => 0
+            ];
+
             $dueDay = now()->day($plan->due_day);
             $createdAt = $plan->created_at ?? $this->created_at;
 
@@ -65,7 +68,11 @@ class Lease extends Model
 
             $totalInvoice = ($noOfExpectedPayments * $plan->rent_amount) + $plan->deposit;
 
-            return ["total_invoiced" => $totalInvoice, "total_paid" => $totalPaid, "arrears" => $totalInvoice - $totalPaid];
+            return [
+                "total_invoiced" => $totalInvoice,
+                "total_paid"     => $totalPaid,
+                "arrears"        => $totalInvoice - $totalPaid
+            ];
         });
     }
 

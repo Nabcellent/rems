@@ -78,6 +78,7 @@ Route::middleware(["auth", "verified", "approved"])->group(function() {
         ])->name("images.main");
 
         Route::put("/status", [GlobalController::class, "updateStatus"])->name("status.update");
+        Route::put("/payment-plans/reset/{lease}", [PaymentPlanController::class, "reset"])->name("payment-plans.reset");
 
         Route::resources([
             "users"             => UserController::class,

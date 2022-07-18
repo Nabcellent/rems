@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\Frequency;
 use App\Http\Controllers\Controller;
+use App\Models\Lease;
 use App\Models\PaymentPlan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -53,7 +54,14 @@ class PaymentPlanController extends Controller
 
         $paymentPlan->update($data);
 
-        return back()->with("toast", ["message" => "Plan Update!",]);
+        return back()->with("toast", ["message" => "Plan Update!"]);
+    }
+
+    public function reset(Lease $lease)
+    {
+        $lease->paymentPlans()->update(["is_default" => false]);
+
+        return back()->with("toast", ["message" => "All payment plans have been reset!"]);
     }
 
     /**
