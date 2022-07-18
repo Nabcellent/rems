@@ -61,6 +61,7 @@ class EstateController extends Controller
     {
         return inertia("dashboard/estates/Upsert", [
             "action"        => "create",
+            "counties"      => collect(json_decode(file_get_contents(base_path() . "/counties.json"), true))->pluck("name"),
             "users"         => User::select(["id", "first_name", "last_name", "email"])->role(Role::PROPERTY_MANAGER)
                 ->get(),
             "googleMapsKey" => config("rems.google.maps.api_key")

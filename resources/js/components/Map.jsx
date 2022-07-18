@@ -16,7 +16,6 @@ const Map = ({
     const [autocomplete, setAutocomplete] = useState(null);
     const [map, setMap] = useState(null);
     const [marker, setMarker] = useState(null);
-    const [infoWindow, setInfoWindow] = useState(null);
     const [markerPosition, setMarkerPosition] = useState(mapCenter);
 
     const { isLoaded } = useJsApiLoader({
@@ -54,44 +53,6 @@ const Map = ({
             console.log("Autocomplete is not loaded yet!");
         }
     };
-
-    const handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(
-            browserHasGeolocation
-                ? "Error: The Geolocation service failed."
-                : "Error: Your browser doesn't support geolocation."
-        );
-        infoWindow.open(map);
-    };
-
-    // const panToCurrentLocation = () => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 const pos = {
-    //                     lat: position.coords.latitude,
-    //                     lng: position.coords.longitude,
-    //                 };
-    //
-    //                 infoWindow.setPosition(pos);
-    //                 infoWindow.setContent("Current location found.");
-    //                 infoWindow.open(map);
-    //
-    //                 map.setCenter(pos);
-    //                 marker.setCenter(pos);
-    //
-    //                 onLocationChange({
-    //                     lat: pos.lat.toFixed(10),
-    //                     lng: pos.lng.toFixed(10),
-    //                 });
-    //             },
-    //             () => handleLocationError(true, infoWindow, map.getCenter())
-    //         );
-    //     } else {
-    //         handleLocationError(false, infoWindow, map.getCenter()); // Browser doesn't support Geolocation
-    //     }
-    // };
 
     const handleLocationChange = async (e) => {
         onLocationChange({

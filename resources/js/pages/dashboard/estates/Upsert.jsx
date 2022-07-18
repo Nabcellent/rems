@@ -48,7 +48,7 @@ const validationSchema = yup.object({
     status: yup.string().oneOf(Object.values(Status), 'Invalid status.'),
 });
 
-const Upsert = ({ estate, action, users, googleMapsKey }) => {
+const Upsert = ({ estate, counties, action, users, googleMapsKey }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [errors, setErrors] = useState({});
 
@@ -125,7 +125,7 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                                                         )}/>
                             </Grid>
                             <Grid item lg={6}>
-                                <ControlledAutoComplete options={['Nairobi', 'Mombasa']} name={'county'}
+                                <ControlledAutoComplete options={counties} name={'county'}
                                                         value={formik.values.county} getOptionLabel={o => o}
                                                         onChange={(event, value) => formik.setFieldValue('county', value)}
                                                         renderInput={params => (
@@ -204,10 +204,9 @@ const Upsert = ({ estate, action, users, googleMapsKey }) => {
                         <Map apiKey={googleMapsKey} searchable={true} editable={true}
                              center={{ lat: estate?.latitude, lng: estate?.longitude }}
                              onLocationChange={pos => {
-                                 console.log(pos);
                                  pos?.name && formik.setFieldValue('name', pos.name);
                                  pos?.address && formik.setFieldValue('address', pos.address);
-                                 formik.setFieldValue('county', pos.location.city);
+                                 pos?.location?.city && formik.setFieldValue('county', pos.location.city);
                                  formik.setFieldValue('latitude', pos.lat);
                                  formik.setFieldValue('longitude', pos.lng);
                              }}/>
