@@ -60,7 +60,7 @@ const Index = ({ tickets }) => {
                             {
                                 accessorKey: 'status',
                                 header: 'Status',
-                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'payment'}
+                                cell: ({ row }) => <StatusChip status={row.original.status} entity={'ticket'}
                                                                entityId={row.original.id}/>
                             },
                             {

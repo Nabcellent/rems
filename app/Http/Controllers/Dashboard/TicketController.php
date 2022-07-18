@@ -20,7 +20,8 @@ class TicketController extends Controller
     {
         return inertia('dashboard/tickets/index', [
             "tickets" => Ticket::select(["id", "user_id", "title", "description", "status", "created_at"])
-                ->with(["user:id,first_name,last_name,email"])->latest()->get()
+                ->with(["user:id,first_name,last_name,email"])->latest()->get(),
+            "canUpdateStatus" => user()->can("updateStatus", Ticket::class)
         ]);
     }
 
