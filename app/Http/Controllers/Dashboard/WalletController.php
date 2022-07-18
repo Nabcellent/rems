@@ -68,7 +68,9 @@ class WalletController extends Controller
         $user->wallet->save();
 
         $transaction->status = Status::COMPLETED;
+        $transaction->payment->status = Status::COMPLETED;
         $transaction->save();
+        $transaction->payment->save();
 
         return response()->json(["status" => Status::COMPLETED]);
     }

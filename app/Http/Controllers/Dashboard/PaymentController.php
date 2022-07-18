@@ -94,10 +94,11 @@ class PaymentController extends Controller
     {
         return inertia("dashboard/transactions/Show", [
             "transaction" => $payment->transaction->load([
-                'user:id,first_name,last_name,email,phone',
-                'user.roles',
-                'destination:id,first_name,last_name,email,phone',
-                'destination.roles',
+                "user:id,first_name,last_name,email,phone",
+                "user.roles",
+                "transactionable:id,user_id",
+                "transactionable.user:id,first_name,last_name,email,phone",
+                "transactionable.user.roles",
                 "payment:id,transaction_id,payable_id,payable_type,amount,method,status",
                 "payment.payable",
             ])
