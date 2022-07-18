@@ -99,7 +99,7 @@ export const getFilteredListings = (listings, filters) => {
     filteredListings.push(...listings.filter(listing => {
         let keywordFilters = true;
         if (filters?.keywords) {
-            const searchString = listing.estate.name + listing.estate.address;
+            const searchString = listing.estate.name + listing.estate.address + listing.estate.county;
 
             keywordFilters = searchString.toLowerCase().includes(filters?.keywords);
         }
