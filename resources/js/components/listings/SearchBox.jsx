@@ -12,11 +12,12 @@ import { FormControlLabel, Switch } from '@mui/material';
 import Flex from '@/components/common/Flex';
 
 const SearchBox = ({ listings, setFilteredListings }) => {
-    const { amenities, counties } = usePage().props;
+    const { amenities, counties, priceRanges } = usePage().props;
+    console.log(priceRanges);
 
     const [filters, setFilters] = useState(undefined);
-    const [priceRange, setPriceRange] = useState([20000, 400000]);
-    const [rentAmountRange, setRentAmountRange] = useState([20000, 400000]);
+    const [priceRange, setPriceRange] = useState([200000, 700000]);
+    const [rentAmountRange, setRentAmountRange] = useState([20000, 70000]);
     const [keyword, setKeyword] = useState("");
     const [canFilterPrice, setCanFilterPrice] = useState(false);
     const [canFilterRentAmount, setCanFilterRentAmount] = useState(false);
@@ -43,7 +44,8 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                     <MultipleSelect onChange={value => updateFilters({ bedrooms: value })}
-                                    choices={["1", "2", "3", "4", "5+"]} field={"Bedrooms"}/>
+                                    choices={["1", "1+", "2", "2+", "3", "3+", "4", "4+", "5", "5+"]}
+                                    field={"Bedrooms"}/>
                 </Grid>
                 <Grid item xs={12} md={6} lg={4}>
                     <MultipleSelect
@@ -87,7 +89,7 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                             valueLabelDisplay="auto"
                             getAriaValueText={(val) => `KSH ${val}`}
                             step={10000}
-                            min={100000} max={10000000}
+                            min={priceRanges.min_price} max={priceRanges.max_price}
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -111,8 +113,8 @@ const SearchBox = ({ listings, setFilteredListings }) => {
                             valueLabelDisplay="auto"
                             getAriaValueText={(val) => `KSH ${val}`}
                             step={1000}
-                            min={1000}
-                            max={300000}
+                            min={priceRanges.min_rent_amount}
+                            max={priceRanges.max_rent_amount}
                     />
                 </Grid>
             </Grid>

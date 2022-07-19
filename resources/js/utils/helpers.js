@@ -97,14 +97,26 @@ export const getFilteredListings = (listings, filters) => {
     let filteredListings = [];
 
     filteredListings.push(...listings.filter(listing => {
-        let keywordFilters = true;
+        let keywordFilters = true, bedroomFilters = true;
         if (filters?.keywords) {
             const searchString = listing.estate.name + listing.estate.address + listing.estate.county;
 
             keywordFilters = searchString.toLowerCase().includes(filters?.keywords);
         }
 
-        const bedroomFilters = filters?.bedrooms?.length ? filters?.bedrooms.includes(String(listing.bedroom_count)) : true;
+        if (filters?.bedrooms?.length) {
+            bedroomFilters = filters?.bedrooms.some(b => {
+                let bedroomCount = String(listing.bedroom_count)
+
+                if (b.includes('+')) {
+                    b = b.replace('+', '');
+
+                    return bedroomCount >= b;
+                }
+
+                return b === bedroomCount;
+            });
+        }
         const purposeFilters = filters?.purpose?.length ? filters?.purpose?.includes(listing.purpose) : true;
         const typeFilters = filters?.type?.length ? filters?.type?.includes(listing.type) : true;
         const countyFilters = filters?.counties?.length ? filters?.counties?.includes(listing.estate.county) : true;
