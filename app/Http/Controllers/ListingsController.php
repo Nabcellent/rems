@@ -31,7 +31,8 @@ class ListingsController extends Controller
                 return $qry->whereType(RoomType::BEDROOM);
             }])->active()->latest()->get(),
             "amenities" => Amenity::select(["id", "title"])->get(),
-            "counties" => getCountyNames()
+            "counties" => getCountyNames(),
+            "priceRanges" => Unit::selectRaw("MAX(rent_amount) as max_rent_amount, MIN(rent_amount) as min_rent_amount, MAX(price) as max_price, MIN(price) as min_price")->first()
         ]);
     }
 

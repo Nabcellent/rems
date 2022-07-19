@@ -14,19 +14,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-//            RoleSeeder::class,
-//            UserSeeder::class,
-//            EstateSeeder::class,
-//            PropertySeeder::class,
-//            UnitSeeder::class,
-//            RoomSeeder::class,
+            RoleSeeder::class,
+            UserSeeder::class,
+            ServiceSeeder::class,
+            AmenitySeeder::class,
+            EstateSeeder::class,
+            PropertySeeder::class,
+            UnitSeeder::class,
+            RoomSeeder::class,
 //            LeaseSeeder::class,
-//            ServiceSeeder::class,
-//            AmenitySeeder::class,
 //            ServiceProviderSeeder::class,
 //            TransactionSeeder::class,
 //            PaymentSeeder::class,
-            TicketSeeder::class,
+//            TicketSeeder::class,
 //            NoticeSeeder::class,
         ]);
     }

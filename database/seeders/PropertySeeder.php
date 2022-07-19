@@ -23,6 +23,6 @@ class PropertySeeder extends Seeder
          * .....................    FACTORIES
          */
 //        Property::factory(3)->create();
-        Property::factory(2)->hasUnits(6)->create();
+        Property::factory(20)->hasUnits(10)->create();
     }
 }

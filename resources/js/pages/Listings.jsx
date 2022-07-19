@@ -12,9 +12,12 @@ import Guest from "@/layouts/Guest";
 // inertia
 import { Head } from "@inertiajs/inertia-react";
 
-import { useState } from "react";
-import { TextField, } from "@mui/material";
+import { useEffect, useState } from "react";
+import { IconButton, TextField, } from "@mui/material";
 import pluralize from 'pluralize';
+import ReactPaginate from 'react-paginate';
+import { NavigateBefore, NavigateNext } from '@mui/icons-material';
+import Flex from '@/components/common/Flex';
 
 const Listings = ({ listings }) => {
     console.log(listings);
@@ -22,9 +25,29 @@ const Listings = ({ listings }) => {
     const [filteredListings, setFilteredListings] = useState(listings);
     const [order, setOrder] = useState('');
 
-    /*    useEffect(() => {
-            // setFilteredListings()
-        }, [filteredListings])*/
+    // We start with an empty list of items.
+    const [currentItems, setCurrentItems] = useState(null);
+    const [pageCount, setPageCount] = useState(0);
+    // Here we use item offsets; we could also use page offsets following the API or data you're working with.
+    const [itemOffset, setItemOffset] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+
+    // Invoke when user click to request another page.
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % filteredListings.length;
+        console.log(
+            `User requested page number ${event.selected}, which is offset ${newOffset}`
+        );
+        setItemOffset(newOffset);
+    };
+
+    useEffect(() => {
+        // Fetch items from another resources.
+        const endOffset = itemOffset + itemsPerPage;
+        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+        setCurrentItems(filteredListings.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(filteredListings.length / itemsPerPage));
+    }, [filteredListings, itemOffset, itemsPerPage]);
 
     return (
         <Guest>
@@ -43,26 +66,49 @@ const Listings = ({ listings }) => {
                 justifyContent={"space-around"}
                 alignItems={"center"}
             >
-                <Typography
-                    variant="h5">{filteredListings.length} {pluralize('Listings', filteredListings.length)} Found</Typography>
-                <TextField label={'Order By'} value={order} select sx={{ width: 300 }}
-                           onChange={({ target: { value } }) => {
-                               setOrder(value);
+                <Typography variant="h5">{filteredListings.length} {pluralize('Listings', filteredListings.length)} Found</Typography>
+                <Flex>
+                    <TextField label={'Order By'} value={order} select sx={{ width: 300, mr:1 }}
+                               onChange={({ target: { value } }) => {
+                                   setOrder(value);
 
-                               if (value === 'latest') setFilteredListings(_.orderBy(filteredListings, 'id', 'desc'));
-                               if (value === 'price-desc') setFilteredListings(_.orderBy(filteredListings, 'price', 'desc'));
-                               if (value === 'price-asc') setFilteredListings(_.orderBy(filteredListings, 'price'));
-                           }}>
-                    <MenuItem value={'latest'}>Most recent</MenuItem>
-                    <MenuItem value={'price-asc'}>Price: Low to High</MenuItem>
-                    <MenuItem value={'price-desc'}>Price: High to Low</MenuItem>
-                </TextField>
+                                   if (value === 'latest') setFilteredListings(_.orderBy(filteredListings, 'id', 'desc'));
+                                   if (value === 'price-desc') setFilteredListings(_.orderBy(filteredListings, 'price', 'desc'));
+                                   if (value === 'price-asc') setFilteredListings(_.orderBy(filteredListings, 'price'));
+                               }}>
+                        <MenuItem value={'latest'}>Most recent</MenuItem>
+                        <MenuItem value={'price-asc'}>Price: Low to High</MenuItem>
+                        <MenuItem value={'price-desc'}>Price: High to Low</MenuItem>
+                    </TextField>
+                    <TextField label={'Per Page'} value={itemsPerPage} select sx={{ width: 70 }}
+                               onChange={({ target: { value } }) => setItemsPerPage(Number(value))}>
+                        {[5, 10, 20, 50].map(c => <MenuItem key={`per-page-${c}`} value={c}>{c}</MenuItem>)}
+                    </TextField>
+                </Flex>
             </Box>
 
             <Divider variant="middle" sx={{ my: 2 }}/>
 
             {/* Listings */}
-            {filteredListings.map((listing) => <Listing key={listing.id} unit={listing}/>)}
+            {currentItems && currentItems.map(listing => <Listing key={listing.id} unit={listing}/>)}
+
+            <Flex justifyContent={'center'} className={'mt-4'}>
+                <ReactPaginate
+                    breakLabel="..."
+                    containerClassName={'pagination'}
+                    pageClassName={'py-2 px-3 d-flex align-items-center'}
+                    activeClassName={'active text-primary fw-bolder'}
+                    breakClassName={'p-2'}
+                    previousLabel={<IconButton size={'medium'}><NavigateBefore fontSize={'medium'}/></IconButton>}
+                    nextLabel={<IconButton size={'medium'}><NavigateNext fontSize={'medium'}/></IconButton>}
+                    disabledClassName={'Mui-disabled'}
+
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    onPageChange={handlePageClick}
+                    renderOnZeroPageCount={null}
+                />
+            </Flex>
         </Guest>
     );
 };

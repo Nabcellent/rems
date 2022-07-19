@@ -14,7 +14,7 @@ class AmenitySeeder extends Seeder
      */
     public function run(): void
     {
-        Amenity::factory(7)->create();
+        Amenity::factory(10)->create();
 
         Amenity::insert([
             ["title" => "Swimming Pool"],
