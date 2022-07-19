@@ -30,8 +30,8 @@ class ListingsController extends Controller
             ])->with(["unitable", "amenities:id,title,icon"])->withCount(["rooms as bedroom_count" => function(Builder $qry) {
                 return $qry->whereType(RoomType::BEDROOM);
             }])->active()->latest()->get(),
-            "amenities" => Amenity::select(["id", "title"])->get(),
-            "counties" => getCountyNames(),
+            "amenities" => Amenity::select(["id", "title"])->whereHas("units")->get(),
+            "counties" => Estate::select("county")->distinct()->oldest("county")->pluck("county"),
             "priceRanges" => Unit::selectRaw("MAX(rent_amount) as max_rent_amount, MIN(rent_amount) as min_rent_amount, MAX(price) as max_price, MIN(price) as min_price")->first()
         ]);
     }
