@@ -6,8 +6,10 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { Purpose } from '@/utils/enums';
-import { currencyFormat } from '@/utils/helpers';
+import { currencyFormat, str as Str } from '@/utils/helpers';
 import { Link } from '@inertiajs/inertia-react';
+import { ListItemIcon } from '@mui/material';
+import { SportsGymnastics } from '@mui/icons-material';
 
 const ListingItem = ({ title, value, valueComponent = 'i' }) => {
     return (
@@ -68,25 +70,31 @@ const Listing = ({ unit }) => {
                         <ListingItem title={'PURPOSE'}
                                      value={`FOR ${unit.purpose === Purpose.EITHER ? 'RENT OR SALE' : unit.purpose}`}/>
                         {[Purpose.EITHER, Purpose.SALE].includes(unit.purpose) && (
-                            <ListingItem title={'PRICE'} value={currencyFormat(unit.price)}/>
+                            <ListingItem title={'PRICE'} value={<b>{currencyFormat(unit.price)}</b>}/>
                         )}
                         {[Purpose.EITHER, Purpose.RENT].includes(unit.purpose) && (
-                            <ListingItem title={'RENT AMOUNT'} value={currencyFormat(unit.rent_amount)}/>
+                            <ListingItem title={'RENT AMOUNT'} value={<b>{currencyFormat(unit.rent_amount)}</b>}/>
                         )}
                         <ListingItem title={'LOCATION'} value={unit.estate.address.toUpperCase()}/>
                         <ListingItem title={'BEDROOMS'} value={unit.bedroom_count}/>
                         <ListingItem title={'TYPE'} value={unit.type}/>
 
                         {Boolean(unit.amenities.length) && (
-                            <ListingItem title={'AMENITIES'} valueComponent={'div'} value={(
-                                <List sx={{ m: 0, p: 0 }}>
-                                    {unit.amenities.map((amenity, i) => (
-                                        <ListItem key={i} disableGutters disablePadding>
-                                            <ListItemText primary={amenity.title.toUpperCase()}/>
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            )}/>
+                            <>
+                                <Grid item xs={12}>
+                                    <div className={'border-dashed-bottom'}/>
+                                </Grid>
+                                <ListingItem title={'AMENITIES'} valueComponent={'div'} value={(
+                                    <List sx={{ m: 0, p: 0 }}>
+                                        {unit.amenities.map((amenity, i) => (
+                                            <ListItem key={i} disableGutters disablePadding>
+                                                <ListItemIcon><SportsGymnastics/></ListItemIcon>
+                                                <ListItemText className={'m-0'} primary={<small>{Str.headline(amenity.title)}</small>}/>
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                )}/>
+                            </>
                         )}
                     </Grid>
                 </Grid>
