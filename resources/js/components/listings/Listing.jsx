@@ -9,19 +9,21 @@ import { Purpose } from '@/utils/enums';
 import { currencyFormat } from '@/utils/helpers';
 import { Link } from '@inertiajs/inertia-react';
 
-const ListingItem = ({ title, value, valueComponent = 'p' }) => {
+const ListingItem = ({ title, value, valueComponent = 'i' }) => {
     return (
         <>
             <Grid item xs={4}>
                 <Typography
-                    variant="body1"
+                    variant="body2"
                     fontWeight={600}
-                    fontSize={"1.1rem"}
+                    fontSize={".9rem"}
                 >
-                    {title}
+                    <b>{title}</b>
                 </Typography>
             </Grid>
-            <Grid item xs={8}><Typography component={valueComponent}>{value}</Typography></Grid>
+            <Grid item xs={8}>
+                <Typography component={valueComponent} fontSize={'.8rem'}>{value}</Typography>
+            </Grid>
         </>
     );
 };
@@ -40,7 +42,7 @@ const Listing = ({ unit }) => {
                 pb={2}
                 boxShadow={2}
             >
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={5}>
                     {/* <Carousel fade>
                     {imgSources.map((imgSource, i) => (
                         <Carousel.Item key={i}>
@@ -55,12 +57,12 @@ const Listing = ({ unit }) => {
                             : "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-scaled-1150x647.png"}
                         display={"block"}
                         width={"100%"}
-                        height={"330px"}
+                        height={"250px"}
                         borderRadius={"4px"}
                         sx={{ objectFit: "cover" }}
                     />
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={7}>
                     <Grid container spacing={1} columnSpacing={0}>
                         <ListingItem title={'ESTATE'} value={unit.estate.name}/>
                         <ListingItem title={'PURPOSE'}

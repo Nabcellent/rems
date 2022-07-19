@@ -66,34 +66,37 @@ const Listings = ({ listings }) => {
                 justifyContent={"space-around"}
                 alignItems={"center"}
             >
-                <Typography
-                    variant="h5">{filteredListings.length} {pluralize('Listings', filteredListings.length)} Found</Typography>
-                <TextField label={'Order By'} value={order} select sx={{ width: 300 }}
-                           onChange={({ target: { value } }) => {
-                               setOrder(value);
+                <Typography variant="h5">{filteredListings.length} {pluralize('Listings', filteredListings.length)} Found</Typography>
+                <Flex>
+                    <TextField label={'Order By'} value={order} select sx={{ width: 300, mr:1 }}
+                               onChange={({ target: { value } }) => {
+                                   setOrder(value);
 
-                               if (value === 'latest') setFilteredListings(_.orderBy(filteredListings, 'id', 'desc'));
-                               if (value === 'price-desc') setFilteredListings(_.orderBy(filteredListings, 'price', 'desc'));
-                               if (value === 'price-asc') setFilteredListings(_.orderBy(filteredListings, 'price'));
-                           }}>
-                    <MenuItem value={'latest'}>Most recent</MenuItem>
-                    <MenuItem value={'price-asc'}>Price: Low to High</MenuItem>
-                    <MenuItem value={'price-desc'}>Price: High to Low</MenuItem>
-                </TextField>
+                                   if (value === 'latest') setFilteredListings(_.orderBy(filteredListings, 'id', 'desc'));
+                                   if (value === 'price-desc') setFilteredListings(_.orderBy(filteredListings, 'price', 'desc'));
+                                   if (value === 'price-asc') setFilteredListings(_.orderBy(filteredListings, 'price'));
+                               }}>
+                        <MenuItem value={'latest'}>Most recent</MenuItem>
+                        <MenuItem value={'price-asc'}>Price: Low to High</MenuItem>
+                        <MenuItem value={'price-desc'}>Price: High to Low</MenuItem>
+                    </TextField>
+                    <TextField label={'Per Page'} value={itemsPerPage} select sx={{ width: 70 }}
+                               onChange={({ target: { value } }) => setItemsPerPage(Number(value))}>
+                        {[5, 10, 20, 50].map(c => <MenuItem key={`per-page-${c}`} value={c}>{c}</MenuItem>)}
+                    </TextField>
+                </Flex>
             </Box>
 
             <Divider variant="middle" sx={{ my: 2 }}/>
 
-            {currentItems && currentItems.map(listing => <Listing key={listing.id} unit={listing}/>)}
             {/* Listings */}
-            {/*{filteredListings.map((listing) => <Listing key={listing.id} unit={listing}/>)}*/}
+            {currentItems && currentItems.map(listing => <Listing key={listing.id} unit={listing}/>)}
 
             <Flex justifyContent={'center'} className={'mt-4'}>
                 <ReactPaginate
                     breakLabel="..."
                     containerClassName={'pagination'}
                     pageClassName={'py-2 px-3 d-flex align-items-center'}
-                    // pageLinkClassName={'page-link'}
                     activeClassName={'active text-primary fw-bolder'}
                     breakClassName={'p-2'}
                     previousLabel={<IconButton size={'medium'}><NavigateBefore fontSize={'medium'}/></IconButton>}
