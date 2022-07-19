@@ -12,9 +12,12 @@ import Guest from "@/layouts/Guest";
 // inertia
 import { Head } from "@inertiajs/inertia-react";
 
-import { useState } from "react";
-import { TextField, } from "@mui/material";
+import { useEffect, useState } from "react";
+import { IconButton, TextField, } from "@mui/material";
 import pluralize from 'pluralize';
+import ReactPaginate from 'react-paginate';
+import { NavigateBefore, NavigateNext } from '@mui/icons-material';
+import Flex from '@/components/common/Flex';
 
 const Listings = ({ listings }) => {
     console.log(listings);
@@ -22,9 +25,29 @@ const Listings = ({ listings }) => {
     const [filteredListings, setFilteredListings] = useState(listings);
     const [order, setOrder] = useState('');
 
-    /*    useEffect(() => {
-            // setFilteredListings()
-        }, [filteredListings])*/
+    // We start with an empty list of items.
+    const [currentItems, setCurrentItems] = useState(null);
+    const [pageCount, setPageCount] = useState(0);
+    // Here we use item offsets; we could also use page offsets following the API or data you're working with.
+    const [itemOffset, setItemOffset] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+
+    // Invoke when user click to request another page.
+    const handlePageClick = (event) => {
+        const newOffset = (event.selected * itemsPerPage) % filteredListings.length;
+        console.log(
+            `User requested page number ${event.selected}, which is offset ${newOffset}`
+        );
+        setItemOffset(newOffset);
+    };
+
+    useEffect(() => {
+        // Fetch items from another resources.
+        const endOffset = itemOffset + itemsPerPage;
+        console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+        setCurrentItems(filteredListings.slice(itemOffset, endOffset));
+        setPageCount(Math.ceil(filteredListings.length / itemsPerPage));
+    }, [filteredListings, itemOffset, itemsPerPage]);
 
     return (
         <Guest>
@@ -61,8 +84,28 @@ const Listings = ({ listings }) => {
 
             <Divider variant="middle" sx={{ my: 2 }}/>
 
+            {currentItems && currentItems.map(listing => <Listing key={listing.id} unit={listing}/>)}
             {/* Listings */}
-            {filteredListings.map((listing) => <Listing key={listing.id} unit={listing}/>)}
+            {/*{filteredListings.map((listing) => <Listing key={listing.id} unit={listing}/>)}*/}
+
+            <Flex justifyContent={'center'} className={'mt-4'}>
+                <ReactPaginate
+                    breakLabel="..."
+                    containerClassName={'pagination'}
+                    pageClassName={'py-2 px-3 d-flex align-items-center'}
+                    // pageLinkClassName={'page-link'}
+                    activeClassName={'active text-primary fw-bolder'}
+                    breakClassName={'p-2'}
+                    previousLabel={<IconButton size={'medium'}><NavigateBefore fontSize={'medium'}/></IconButton>}
+                    nextLabel={<IconButton size={'medium'}><NavigateNext fontSize={'medium'}/></IconButton>}
+                    disabledClassName={'Mui-disabled'}
+
+                    pageRangeDisplayed={5}
+                    pageCount={pageCount}
+                    onPageChange={handlePageClick}
+                    renderOnZeroPageCount={null}
+                />
+            </Flex>
         </Guest>
     );
 };

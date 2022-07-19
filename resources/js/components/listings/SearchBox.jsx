@@ -13,7 +13,6 @@ import Flex from '@/components/common/Flex';
 
 const SearchBox = ({ listings, setFilteredListings }) => {
     const { amenities, counties, priceRanges } = usePage().props;
-    console.log(priceRanges);
 
     const [filters, setFilters] = useState(undefined);
     const [priceRange, setPriceRange] = useState([200000, 700000]);

@@ -3325,6 +3325,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-paginate@npm:^8.1.3":
+  version: 8.1.3
+  resolution: "react-paginate@npm:8.1.3"
+  dependencies:
+    prop-types: ^15.6.1
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+  checksum: c947127f972f42ae2e8717d84fd6bd698d4b657231b75263cbcedab7aa10d9c77ca16969383804490c771eed8313d43123f08a541e9bc567868ab189e2de6cfb
+  languageName: node
+  linkType: hard
+
 "react-redux@npm:^8.0.2":
   version: 8.0.2
   resolution: "react-redux@npm:8.0.2"
@@ -3634,6 +3645,7 @@ __metadata:
     react-filepond: ^7.1.2
     react-i18next: ^11.17.4
     react-image-lightbox: ^5.1.4
+    react-paginate: ^8.1.3
     react-redux: ^8.0.2
     react-router-dom: ^6.3.0
     react-table: ^7.7.0
