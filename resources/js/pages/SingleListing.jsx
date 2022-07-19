@@ -208,7 +208,7 @@ const SingleListing = ({ googleMapsKey, estate }) => {
                                 borderRadius={4}
                                 display={"flex"}
                                 flexDirection={"column"}
-                                height={200}
+                                height={selectedUnit ? undefined : 200}
                                 justifyContent={"center"}
                                 alignItems={"center"}
                             >
