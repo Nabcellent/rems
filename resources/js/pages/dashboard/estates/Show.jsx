@@ -19,7 +19,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from '@inertiajs/inertia-react';
 import moment from 'moment';
 import Images from '@/components/crud/Images';
-import React, { useState } from 'react';
+import React from 'react';
 import Policies from '@/components/crud/Policies';
 import Units from '@/components/crud/Units';
 import Map from '@/components/Map';
@@ -144,7 +144,7 @@ const Show = ({ errors, estate, services, amenities, googleMapsKey, canChangeOwn
                                                 <div key={`property-${property.id}`}
                                                      className="d-flex align-items-center px-1 py-2">
                                                     <Avatar sx={{ width: 30, height: 30 }} className="me-3">
-                                                        <Apartment color={'primary'}/>
+                                                        <Apartment/>
                                                     </Avatar>
                                                     <div className="w-100">
                                                         <Link className="mb-0"

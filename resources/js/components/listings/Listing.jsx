@@ -6,8 +6,10 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { Purpose } from '@/utils/enums';
-import { currencyFormat } from '@/utils/helpers';
+import { currencyFormat, str as Str } from '@/utils/helpers';
 import { Link } from '@inertiajs/inertia-react';
+import { ListItemIcon } from '@mui/material';
+import { SportsGymnastics } from '@mui/icons-material';
 
 const ListingItem = ({ title, value, valueComponent = 'i' }) => {
     return (
@@ -77,12 +79,16 @@ const Listing = ({ unit }) => {
                         <ListingItem title={'BEDROOMS'} value={unit.bedroom_count}/>
                         <ListingItem title={'TYPE'} value={unit.type}/>
 
+                        <Grid item xs={12}>
+                            <div className={'border-dashed-bottom'}/>
+                        </Grid>
                         {Boolean(unit.amenities.length) && (
                             <ListingItem title={'AMENITIES'} valueComponent={'div'} value={(
                                 <List sx={{ m: 0, p: 0 }}>
                                     {unit.amenities.map((amenity, i) => (
                                         <ListItem key={i} disableGutters disablePadding>
-                                            <ListItemText primary={amenity.title.toUpperCase()}/>
+                                            <ListItemIcon><SportsGymnastics/></ListItemIcon>
+                                            <ListItemText className={'m-0'} primary={<small>{Str.headline(amenity.title)}</small>}/>
                                         </ListItem>
                                     ))}
                                 </List>
