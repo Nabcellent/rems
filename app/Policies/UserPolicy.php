@@ -64,9 +64,9 @@ class UserPolicy
      * @param \App\Models\User $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, User $model)
+    public function update(User $user, User $model): Response|bool
     {
-
+        return $user->id === $model->id;
     }
 
     /**
@@ -75,7 +75,7 @@ class UserPolicy
      * @param \App\Models\User $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function updateStatus(User $user)
+    public function updateStatus(User $user): Response|bool
     {
     }
 

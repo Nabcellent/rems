@@ -49,7 +49,7 @@ const ProfileSettings = ({ user }) => {
         validationSchema,
         validateOnChange: true,
         onSubmit: values => {
-            let url = route(`dashboard.users.update`, { user: user.id });
+            let url = route(`dashboard.users.update`, user);
 
             Inertia.post(url, values, {
                 preserveState: false,

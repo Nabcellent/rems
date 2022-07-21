@@ -33,10 +33,10 @@ class UnitFactory extends Factory
             "purpose"       => $this->faker->randomElement(Purpose::cases()),
             "rent_amount"   => fn(array $attributes) => match ($attributes["purpose"]) {
                 Purpose::SALE => null,
-                Purpose::RENT, Purpose::EITHER => $this->faker->numberBetween(10000, 500000),
+                Purpose::RENT, Purpose::EITHER => $this->faker->numberBetween(10000, 150000),
             },
             "price"         => fn(array $attributes) => match ($attributes["purpose"]) {
-                Purpose::SALE, Purpose::EITHER => $this->faker->numberBetween(10000000, 100000000),
+                Purpose::SALE, Purpose::EITHER => $this->faker->numberBetween(1000000, 100000000),
                 Purpose::RENT => null
             },
             "type"          => $this->faker->randomElement(UnitType::cases()),
