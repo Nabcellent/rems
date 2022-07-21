@@ -28,5 +28,6 @@ class UnitSeeder extends Seeder
         Unit::factory(20)->for(Property::factory(), "unitable")->hasRooms(3)->hasAmenities(2)->create();
         Unit::factory(10)->for(Property::factory(), "unitable")->hasRooms(5)->hasAmenities(2)->create();
         Unit::factory(5)->for(Property::factory(), "unitable")->hasRooms(7)->hasAmenities(2)->create();
+        Unit::factory(5)->for(Estate::factory(), "unitable")->hasRooms(4)->hasAmenities(1)->create();
     }
 }
