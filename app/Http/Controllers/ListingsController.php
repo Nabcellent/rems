@@ -17,7 +17,7 @@ class ListingsController extends Controller
     public function listings(): Response
     {
         return Inertia::render('Listings', [
-            "listings" => Unit::select([
+            "listings"    => Unit::select([
                 "id",
                 "unitable_id",
                 "unitable_type",
@@ -27,12 +27,13 @@ class ListingsController extends Controller
                 "type",
                 "created_at",
                 "image"
-            ])->with(["unitable", "amenities:id,title,icon"])->withCount(["rooms as bedroom_count" => function(Builder $qry) {
-                return $qry->whereType(RoomType::BEDROOM);
-            }])->active()->latest()->get(),
-            "amenities" => Amenity::select(["id", "title"])->whereHas("units")->get(),
-            "counties" => Estate::select("county")->distinct()->oldest("county")->pluck("county"),
-            "priceRanges" => Unit::selectRaw("MAX(rent_amount) as max_rent_amount, MIN(rent_amount) as min_rent_amount, MAX(price) as max_price, MIN(price) as min_price")->first()
+            ])->with(["unitable", "amenities:id,title,icon"])->withCount([
+                "rooms as bedroom_count" => fn(Builder $qry) => $qry->whereType(RoomType::BEDROOM)
+            ])->active()->latest()->get(),
+            "amenities"   => Amenity::select(["id", "title"])->whereHas("units")->oldest("title")->get(),
+            "counties"    => Estate::select("county")->distinct()->oldest("county")->pluck("county"),
+            "priceRanges" => Unit::selectRaw("MAX(rent_amount) as max_rent_amount, MIN(rent_amount) as min_rent_amount, MAX(price) as max_price, MIN(price) as min_price")
+                ->first()
         ]);
     }
 

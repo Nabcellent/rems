@@ -3,12 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Estate;
-use App\Models\Lease;
 use App\Models\Property;
-use App\Models\Room;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Schema;
 
 class UnitSeeder extends Seeder
 {
@@ -27,7 +24,10 @@ class UnitSeeder extends Seeder
         /**
          * .....................    FACTORIES
          */
-        Unit::factory(30)->for(Estate::factory(), "unitable")->hasLeases(1)->hasAmenities(3)->create();
-        Unit::factory(20)->for(Property::factory(), "unitable")->hasRooms(3)->hasPolicies(1)->hasAmenities(2)->create();
+        Unit::factory(30)->for(Estate::factory(), "unitable")->hasRooms(2)->hasLeases(1)->hasAmenities(3)->create();
+        Unit::factory(20)->for(Property::factory(), "unitable")->hasRooms(3)->hasAmenities(2)->create();
+        Unit::factory(10)->for(Property::factory(), "unitable")->hasRooms(5)->hasAmenities(2)->create();
+        Unit::factory(5)->for(Property::factory(), "unitable")->hasRooms(7)->hasAmenities(2)->create();
+        Unit::factory(5)->for(Estate::factory(), "unitable")->hasRooms(4)->hasAmenities(1)->create();
     }
 }

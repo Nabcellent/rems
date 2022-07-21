@@ -15,26 +15,6 @@ use Illuminate\Http\Request;
 class PolicyController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
@@ -52,28 +32,6 @@ class PolicyController extends Controller
         $policeable->policies()->create($request->validated());
 
         return back()->with("toast", ["message" => "Policy Created!"]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Policy $policy
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Policy $policy)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Policy $policy
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Policy $policy)
-    {
-        //
     }
 
     /**
