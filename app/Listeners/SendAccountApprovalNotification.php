@@ -3,8 +3,9 @@
 namespace App\Listeners;
 
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendAccountApprovalNotification
+class SendAccountApprovalNotification implements ShouldQueue
 {
     /**
      * Handle the event.

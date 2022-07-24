@@ -8,8 +8,9 @@ import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import ContactSupportIcon from '@mui/icons-material/ContactSupport';
 import Logo from '@/components/Logo';
 import { Link, usePage } from '@inertiajs/inertia-react';
-import { DashboardCustomize, Roofing } from '@mui/icons-material';
+import { DashboardCustomize, Logout, MeetingRoom, PowerOff, Roofing } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
+import { Method } from '@inertiajs/inertia';
 
 const HomeHeader = () => {
     const { auth } = usePage().props;
@@ -27,11 +28,20 @@ const HomeHeader = () => {
                             </Button>
                         </Link>
                         {auth.user ? (
-                            <Link href={route('dashboard.default')} color={'white'}>
-                                <Button variant={'contained'} color={'white'} endIcon={<DashboardCustomize/>}>
-                                    Dashboard
-                                </Button>
-                            </Link>
+                            <>
+                                <Link href={route('dashboard.default')} color={'white'}>
+                                    <Button variant={'contained'} color={'white'} endIcon={<DashboardCustomize/>}>
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <Tooltip title={'Sign Out'}>
+                                    <Link as={'span'} href={route('logout')} method={Method.POST}>
+                                        <IconButton color={'white'} sx={{ ml: { xs: 1, sm: 2, md: 3 } }}>
+                                            <MeetingRoom/>
+                                        </IconButton>
+                                    </Link>
+                                </Tooltip>
+                            </>
                         ) : (
                             <Link href={route("login")}>
                                 <Button variant={'contained'} color={'white'} endIcon={<FollowTheSignsIcon/>}>

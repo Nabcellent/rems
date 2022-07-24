@@ -1,4 +1,21 @@
 {
+    "name": "rems",
+    "packageManager": "yarn@3.2.0",
+    "version": "1.0.0",
+    "description": "A real estate management system.",
+    "repository": "https://github.com/nabcellent/rems",
+    "contributors": [
+        {
+            "name": "Nabcellent",
+            "email": "nabcellent.dev@gmail.com",
+            "url": "https://nabcellent.herokuapp.com"
+        },
+        {
+            "name": "Ifatos",
+            "url": "https://github.com/khalifa47"
+        }
+    ],
+    "license": "MIT",
     "private": true,
     "scripts": {
         "dev": "vite",
@@ -67,5 +84,8 @@
         "postcss": "^8.4.6",
         "postcss-import": "^14.0.2",
         "vite": "^2.9.13"
+    },
+    "engines": {
+        "node": "16.15.0"
     }
 }

@@ -1,8 +1,6 @@
-import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
-import logo from '@/assets/images/logo-dark.svg';
-import logoLight from '@/assets/images/logo-light.svg';
 import logoDark from '@/assets/images/logo-dark.svg';
+import logoLight from '@/assets/images/logo-light.svg';
 import logoLightFull from '@/assets/images/logo-light-full.svg';
 import logoDarkFull from '@/assets/images/logo-dark-full.svg';
 import { Link } from '@inertiajs/inertia-react';
