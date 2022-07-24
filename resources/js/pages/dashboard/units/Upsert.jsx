@@ -62,6 +62,7 @@ const Upsert = ({ unit, action, estates }) => {
             estate: unit?.estate ?? '',
             property: unit?.unitable_name === Morphable.PROPERTY ? unit.unitable : '',
             unitable: unit?.unitable_name ?? '',
+            status: unit?.status ?? Status.INACTIVE,
         },
         validationSchema,
         validateOnChange: true,
