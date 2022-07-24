@@ -22,7 +22,7 @@ class PropertyPolicy
      */
     public function before(User $user, string $ability)
     {
-        if($user->hasRole(Role::ADMIN->value)) return true;
+        if($user->hasRole(Role::ADMIN)) return true;
     }
 
     /**
@@ -33,7 +33,7 @@ class PropertyPolicy
      */
     public function viewAny(User $user): Response|bool
     {
-        return $user->estates->isNotEmpty() || $user->properties->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER->value]);
+        return $user->estates->isNotEmpty() || $user->properties->isNotEmpty() || $user->hasRole([Role::PROPERTY_MANAGER]);
     }
 
     /**
@@ -56,7 +56,7 @@ class PropertyPolicy
      */
     public function create(User $user): Response|bool
     {
-        return $user->hasRole(Role::PROPERTY_MANAGER->value);
+        return $user->hasRole([Role::OWNER, Role::PROPERTY_MANAGER]);
     }
 
     /**
