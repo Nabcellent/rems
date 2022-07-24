@@ -18,6 +18,6 @@ class ServiceSeeder extends Seeder
          * .....................    FACTORIES
          */
         Service::factory(3)->create();
-        Service::factory(5)->hasProviders(10)->create();
+        Service::factory(5)->hasProviders(3)->create();
     }
 }
