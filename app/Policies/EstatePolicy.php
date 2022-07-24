@@ -19,7 +19,7 @@ class EstatePolicy
      * @param string           $ability
      * @return void|bool
      */
-    public function before(User $user, string $ability)
+    public function before(User $user)
     {
         if($user->hasRole(Role::ADMIN)) return true;
     }
