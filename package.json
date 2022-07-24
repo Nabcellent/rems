@@ -68,5 +68,8 @@
         "postcss": "^8.4.6",
         "postcss-import": "^14.0.2",
         "vite": "^2.9.13"
+    },
+    "engines": {
+        "node": "16.15.0"
     }
 }
